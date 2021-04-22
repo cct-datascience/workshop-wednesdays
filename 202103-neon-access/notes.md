@@ -23,7 +23,9 @@ packages: dplyr and neonstore. Can do these while going over data. Will
 stop a lot for questions and such, ask any time by unmuting or in the
 chat.
 
-The notes are online already.
+The
+[notes](https://github.com/az-digitalag/CALS-workshops/blob/main/202103-neon-access/notes.md)
+are online already.
 
 This is only a brief introduction, we’ll only have time to start to
 scratch the surface of this immense resource.
@@ -33,6 +35,10 @@ the NEON API.
 
 ## NEON overview
 
+We have just recently started using NEON data for our own research,
+though have known about it for quite a while. While we are by no means
+experts, we hope our experiences can help others get started\!
+
 NEON is National Ecological Observatory Network. The idea is to collect
 ecological data, across diverse components of ecosystems, in a
 systematic way at many diverse sites across the United States. This is a
@@ -40,17 +46,30 @@ large and novel undertaking with no other similar attempts. Was
 initially started well over a decade ago, with federal funding from NSF
 and currently run by Battelle.
 
+These data can be used to answer a broad range of questions about
+climate impacts, invasive species, and land use change, amongst many
+others. NEON data is particularly useful for some of these questions
+because they can be assessed across a continental scale, and there are
+so many data types collected in the same locations that can get at
+mechanistic understanding.
+
 So what about the actual data? There are 81 sites across North America,
-and include both terrestrial and aquatic sampling. The data is diverse,
-from weather data collected by sensors to hand-collected plant and
-animal data to data collected by remote sensing on planes.
+and include both terrestrial and aquatic sampling. See [field sites
+map](https://www.neonscience.org/field-sites/explore-field-sites).
+
+The data is diverse, from weather data collected by sensors to
+hand-collected plant and animal data to data collected by remote sensing
+on planes.
 
 Data types are organized into three kinds:
 
 1.  Observational - human-collected data that may have been analyzed in
     a lab
-2.  Instrumentation - sensor-collected data
-3.  Remote sensing - collected by an airborne platform
+2.  Instrumentation - sensor-collected data, often collecting data
+    around the clock, include soil information and flux towers
+3.  Remote sensing - collected by an airborne platform; they fly a plane
+    with instruments for collect lidar, hyperspectral, and rgb images;
+    get topography and ecosystem structure
 
 Won’t really discuss the last type here, but it includes LIDAR-type
 data.
@@ -180,7 +199,8 @@ neon_download(product = mammals_products$productCode[1],
 
 If you run this again, it will not re-download anything that you’ve
 already downloaded. Downloaded data is stored in a local database on
-your computer.
+your computer. Also don’t have to worry about where data is located,
+file paths, etc. using `neonstore`.
 
 Useful to have a record of how and what was downloaded, as opposed to
 pointing and clicking in the GUI portal and maybe not remembering later
@@ -259,3 +279,8 @@ Combine:
   - target: `/DP1.10072.001/HARV/2018-07` (product code, site, and date)
 
 This API is what the two R packages are using to get data.
+
+## Wrapup
+
+  - EFI Forecasting Challenge for NEON data, lasts throughout summer
+  - Office hours every Tuesday from 8-10am in Gathertown
