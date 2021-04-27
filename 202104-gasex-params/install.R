@@ -1,0 +1,6 @@
+install.packages("tidyverse")
+install.packages("udunits2")
+install.packages("plantecophys")
+install.packages("photosynthesis")
+devtools::install_github("ebimodeling/biocro")
+devtools::install_github("PecanProject/pecan", subdir = "modules/photosynthesis", ref = "develop")
