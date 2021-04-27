@@ -26,7 +26,7 @@ ggplot(c3_gs, aes(x = VPDleaf, y = gsw, color = factor(ShrubID))) +
 c3_gs[which(c3_gs$gsw < -.025),] <- NA
 
 # Ball Berry, fit single curve (to multiple individuals)
-fit_gs <- fitBB(untibble(c3_gs), 
+fit_bb <- fitBB(untibble(c3_gs), 
                 varnames = list(ALEAF = "A",
                                 GS = "gsw",
                                 Ca = "Ca",
@@ -34,19 +34,44 @@ fit_gs <- fitBB(untibble(c3_gs),
                 gsmodel = "BallBerry",
                 fitg0 = TRUE)
 
-summary(fit_gs$fit)
-coef(fit_gs)
+summary(fit_bb$fit)
+coef(fit_bb)
 
-# Fit multiple curves
-fits_gs <- fitBBs(untibble(c3_gs),
+# Ball Berry Leuning, fit single curve (to multiple individuals)
+fit_bbl <- fitBB(untibble(c3_gs), 
+                varnames = list(ALEAF = "A",
+                                GS = "gsw",
+                                Ca = "Ca",
+                                VPD = "VPDleaf"),
+                gsmodel = "BBLeuning",
+                fitg0 = TRUE,
+                D0 = 1.6) # ED2 standard for C4 grasses, tropical trees. D0 = 1 kPa for temperate trees
+
+summary(fit_bbl$fit)
+coef(fit_bbl)
+
+# Medlyn, fit single curve (to multiple individuals)
+fit_m <- fitBB(untibble(c3_gs), 
+                 varnames = list(ALEAF = "A",
+                                 GS = "gsw",
+                                 Ca = "Ca",
+                                 VPD = "VPDleaf"),
+                 gsmodel = "BBOpti",
+                 fitg0 = TRUE) 
+
+summary(fit_m$fit)
+coef(fit_m)
+
+# Medlyn, fit multiple curves example
+fits_m <- fitBBs(untibble(c3_gs),
                   varnames = list(ALEAF = "A",
                                   GS = "gsw",
                                   Ca = "Ca",
                                   VPD = "VPDleaf"),
                   group = "ShrubID",
-                  gsmodel = "BBOpti",
+                  gsmodel = "BBOpti", # aka Medlyn model
                   fitg0 = TRUE)
 
-length(fits_gs) # 9 for 9 shrubs
-summary(fits_gs[[1]]$fit)
-coef(fits_gs[[1]])
+length(fits_m) # 9 for 9 shrubs
+summary(fits_m[[1]]$fit)
+coef(fits_m[[1]])
