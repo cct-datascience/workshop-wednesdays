@@ -12,7 +12,7 @@ Software,data, and scripts needed in this workshop are already loaded.
 
 ### Contents
 
-All workshop data and code are contained in this repository:  
+All workshop data and code are contained in this repository.    
 - `data` Four subfolders of `ACi`, `AQ`, `Bayesian`, and `Gs` containing csv or ASCII files of Licor data (6800 and 6400)  
 - `scripts` Three scripts for fitting parameters:  
   - `script_photo.R` Fitting CO2 and light response curves for C3 ('photosynthesis') and C4 ('BioCro')  
