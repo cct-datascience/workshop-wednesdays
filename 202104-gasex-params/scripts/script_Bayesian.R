@@ -9,8 +9,8 @@
 library(PEcAn.photosynthesis)
 
 ## AQ and ACi 6400 data, ASCII format
-file_names <- list.files("../data/Bayesian")
-file_paths <- paste0("../data/Bayesian/", file_names)
+file_names <- list.files("data/Bayesian")
+file_paths <- paste0("data/Bayesian/", file_names)
 tot <- lapply(file_paths, read_Licor) # read in as a list of 2 Licor files
 # Combine into single dataframe
 both <- do.call(rbind, tot)

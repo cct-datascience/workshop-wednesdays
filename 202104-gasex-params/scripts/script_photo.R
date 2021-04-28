@@ -5,7 +5,6 @@
 # Load and clean data for fitting
 library(dplyr)
 library(ggplot2)
-library(plantecophys)
 library(photosynthesis)
 library(udunits2)
 library(BioCro)
@@ -20,10 +19,10 @@ untibble <- function(tibble) {
 ## ACi 6800 for C3
 
 # Read in for column names
-cnames <- readr::read_csv("../data/ACi/PIPO_20190823.csv", skip = 13, n_max = 0) %>%
+cnames <- readr::read_csv("data/ACi/PIPO_20190823.csv", skip = 13, n_max = 0) %>%
   names()
 # Read in data and rename columns
-c3_aci <- readr::read_csv("../data/ACi/PIPO_20190823.csv", skip = 16, col_names = cnames)
+c3_aci <- readr::read_csv("data/ACi/PIPO_20190823.csv", skip = 16, col_names = cnames)
 
 # Plot
 ggplot(c3_aci, aes(x = Ci, y = A)) +
@@ -45,8 +44,8 @@ fit[[2]]
 
 
 # C4
-c4_aci <- readr::read_csv("../data/ACi/SEVI_20200304.csv")
-c4_aq <- readr::read_csv("../data/AQ/SEVI_20200304.csv")
+c4_aci <- readr::read_csv("data/ACi/SEVI_20200304.csv")
+c4_aq <- readr::read_csv("data/AQ/SEVI_20200304.csv")
 
 # plot
 ggplot(c4_aci, aes(x = Ci, y = A, color = factor(rep))) +
@@ -67,7 +66,7 @@ fit_c4
 
 
 # Light Response Curve
-c4_aq <- readr::read_csv("../data/AQ/SEVI_20200304.csv")
+c4_aq <- readr::read_csv("data/AQ/SEVI_20200304.csv")
 # Group by CO2
 c4_aq$C_s <- (round(c4_aq$CO2_s, digits = 0))
 

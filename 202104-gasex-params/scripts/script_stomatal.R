@@ -16,7 +16,7 @@ untibble <- function(tibble) {
 }
 
 # Read in data and rename columns
-c3_gs <- readr::read_csv("../data/Gs/ARTR_20190927.csv")
+c3_gs <- readr::read_csv("data/Gs/ARTR_20190927.csv")
 
 # plot
 ggplot(c3_gs, aes(x = VPDleaf, y = gsw, color = factor(ShrubID))) +
