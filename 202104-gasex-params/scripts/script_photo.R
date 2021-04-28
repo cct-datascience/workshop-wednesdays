@@ -53,6 +53,8 @@ ggplot(c4_aci, aes(x = Ci, y = A, color = factor(rep))) +
 
 ggplot(c4_aq, aes(x = Qin, y = A, color = factor(rep))) +
   geom_point()
+# consider dropping plant 1 data?
+
 
 # Format for optimization function
 df <- data.frame(A = c(c4_aci$A, c4_aq$A),
@@ -74,9 +76,9 @@ c4_aq$C_s <- (round(c4_aq$CO2_s, digits = 0))
 fit2 <- fit_aq_response(untibble(c4_aq[c4_aq$C_s == 400, ]), 
                        varnames = list(A_net = "A",
                                        PPFD = "Qin"))
-summary(fit2[[1]])
-fit2[[2]]
-fit2[[3]]
+summary(fit2$Model)
+fit2$Parameters
+fit2$Graph
 
 # Fit multiple curves
 fits <- fit_many(data = untibble(c4_aq),
@@ -87,5 +89,5 @@ fits <- fit_many(data = untibble(c4_aq),
                  group = "rep")
 length(fits)
 names(fits)
-summary(fits[[1]][[1]])
-fits[[1]][[3]]
+summary(fits$plant_1$Model))
+fit2$Graph
