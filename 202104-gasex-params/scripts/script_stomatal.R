@@ -23,22 +23,25 @@ ggplot(c3_gs, aes(x = VPDleaf, y = gsw, color = factor(ShrubID))) +
   geom_point()
 
 # Remove outlier
-c3_gs[which(c3_gs$gsw < -.025),] <- NA
+c3_gs <- c3_gs %>%
+  filter(gsw > -.025) %>%
+  untibble()
 
 # Ball Berry, fit single curve (to multiple individuals)
-fit_bb <- fitBB(untibble(c3_gs), 
+fit_bb <- fitBB(c3_gs, 
                 varnames = list(ALEAF = "A",
                                 GS = "gsw",
                                 Ca = "Ca",
                                 RH = "RHcham"),
                 gsmodel = "BallBerry",
                 fitg0 = TRUE)
-
+names(fit_bb)
+length(fit_bb)
 summary(fit_bb$fit)
 coef(fit_bb)
 
 # Ball Berry Leuning, fit single curve (to multiple individuals)
-fit_bbl <- fitBB(untibble(c3_gs), 
+fit_bbl <- fitBB(c3_gs, 
                 varnames = list(ALEAF = "A",
                                 GS = "gsw",
                                 Ca = "Ca",
@@ -51,7 +54,7 @@ summary(fit_bbl$fit)
 coef(fit_bbl)
 
 # Medlyn, fit single curve (to multiple individuals)
-fit_m <- fitBB(untibble(c3_gs), 
+fit_m <- fitBB(c3_gs, 
                  varnames = list(ALEAF = "A",
                                  GS = "gsw",
                                  Ca = "Ca",
@@ -62,8 +65,11 @@ fit_m <- fitBB(untibble(c3_gs),
 summary(fit_m$fit)
 coef(fit_m)
 
-# Medlyn, fit multiple curves example
-fits_m <- fitBBs(untibble(c3_gs),
+# Medlyn, fit multiple curves example 
+# (but does the data justify this?)
+table(c3_gs$ShrubID)
+# Probably too few points for many of these, but showing code example here anyhow 
+fits_m <- fitBBs(c3_gs,
                   varnames = list(ALEAF = "A",
                                   GS = "gsw",
                                   Ca = "Ca",
@@ -72,6 +78,6 @@ fits_m <- fitBBs(untibble(c3_gs),
                   gsmodel = "BBOpti", # aka Medlyn model
                   fitg0 = TRUE)
 
-length(fits_m) # 9 for 9 shrubs
-summary(fits_m[[1]]$fit)
-coef(fits_m[[1]])
+names(fits_m) # 9 for 9 shrubs
+summary(fits_m$'1'$fit)
+coef(fits_m$'1')
