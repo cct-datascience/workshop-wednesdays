@@ -58,6 +58,8 @@ ggplot(c4_aci, aes(x = Ci, y = A, color = factor(rep))) +
 
 ggplot(c4_aq, aes(x = Qin, y = A, color = factor(rep))) +
   geom_point()
+# consider dropping plant 1 data?
+
 
 # Format for optimization function
 df <- data.frame(A = c(c4_aci$A, c4_aq$A),
@@ -83,6 +85,7 @@ c4_aq <- c4_aq %>%
 fit2 <- fit_aq_response(c4_aq, 
                        varnames = list(A_net = "A",
                                        PPFD = "Qin"))
+
 names(fit2)
 summary(fit2$Model)
 fit2$Parameters
