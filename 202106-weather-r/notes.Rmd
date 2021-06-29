@@ -1,0 +1,112 @@
+---
+title: "Weather Data in R"
+output: github_document
+urlcolor: blue
+---
+
+## Workshop intro
+
+Date: 6/30/2021
+Time: 11am - 1pm (AZ)
+
+We will be recording this workshop. 
+
+### Who are we
+
+We are in the Data Science Institute at UA. Our group is called DIAG, we work on computational tools and training for agricultural and ecological data. We want to enable researchers with their work, through training and consulting, so let us know if we could help you in any way! 
+
+Kristina and Jessica introduce ourselves. 
+
+### Workshop overview/logistics
+
+
+## Weather data overview
+
+## Demos
+
+### 1. Station data
+
+AZMET weather stations [page](https://cals.arizona.edu/azmet/az-data.htm)
+
+2020 Daily Raw Data, copy paste and save in csv
+
+See explanations of raw data file formats links for metadata
+
+```{r}
+azmet_tucson <- read.csv("raw_data/azmet_tucson.csv")
+
+plot(azmet_tucson$X1, azmet_tucson$X16)
+```
+
+### 2. NA gridded data
+(brief intro to rasters)
+
+Documentation from [GitHub repo README](https://github.com/bluegreen-labs/daymetr)
+
+Daily mean values; colnames have variable and units
+```{r}
+library(daymetr)
+library(dplyr)
+
+daymet_tucson <- download_daymet(site = "Tucson", 
+                                 lat = 32.25, 
+                                 lon = -110.91, 
+                                 start = 2000, 
+                                 end = 2015, 
+                                 internal = TRUE)
+daymet_tucson_2010 <- daymet_tucson$data %>% 
+  filter(year == 2010)
+plot(daymet_tucson_2010$yday, daymet_tucson_2010$tmax..deg.c.)
+```
+
+Can do many locations by creating a csv with site name, lat, and lon
+
+```{r, eval=FALSE}
+download_daymet_batch(file_location = 'my_sites.csv',
+                      start = 1980,
+                      end = 2010,
+                      internal = TRUE)
+```
+
+download as gridded raster files
+```{r}
+download_daymet_tiles(location = c(32.25, -110.91), start = 2010, end = 2011, param = "prcp", path = "raw_data/")
+```
+
+
+### 3. Predictions data
+
+Worldclim cmip? 
+
+### 4. Climatological normals data
+
+Part of Worldclim products
+[Bioclim main landing page](https://www.worldclim.org/data/bioclim.html)
+Annual, seasonal, and extreme trends for biologically relevant variables
+
+Download all the variables for lone location at 10 degrees resolution
+```{r}
+library(raster)
+
+bioclim_all <- getData(name = "worldclim", var = "bio", res = 10, path = "raw_data/")
+nlayers(bioclim_all)
+
+## see names for variables, match to website page
+unlist(bioclim_all)
+
+## this is annual mean temp (/10)
+plot(bioclim_all$bio1)
+
+coords <- data.frame(long = -72, lat = 44)
+points <- SpatialPoints(coords)
+bioclim_points <- extract(bioclim_all, points)
+all <- cbind.data.frame(coords, bioclim_points)
+```
+
+
+
+
+
+
+
+
