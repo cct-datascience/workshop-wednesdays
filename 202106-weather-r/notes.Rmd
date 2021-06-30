@@ -9,7 +9,7 @@ urlcolor: blue
 Date: 6/30/2021
 Time: 11am - 1pm (AZ)
 
-We will be recording this workshop. 
+We will record this workshop and make the recording available on YouTube. 
 
 ### Who are we
 
@@ -23,11 +23,11 @@ Schedule:
 
 - Presentation on data sources, types, etc. (David)
 - Demos on a handful of weather data sources (Kristina)
-- Attendee weather data questions
+- Address attendee questions and discuss weather data sources
 
 ## Weather data overview
 
-See David's [presentation](https://docs.google.com/presentation/d/1799wmDy5jPHjJNgmreqRswL0GzcRdGJL190ZeLIqdlg/edit#slide=id.ge290865284_0_20)
+See [workshop slides here](https://docs.google.com/presentation/d/e/2PACX-1vQg26WZj2vV2E_TnihD5v9pv4RG_69ssXlo4ucTfM98zHy-bNMjR9vDHn_jNAaVntZmSMTznkyCDOHa/pub?start=false&loop=true&delayms=3000). 
 
 ## Demos
 
@@ -48,7 +48,7 @@ See David's [presentation](https://docs.google.com/presentation/d/1799wmDy5jPHjJ
   - First column is year
   - Fourth column is max daily temp
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 azmet_tucson <- read.csv("raw_data/azmet_tucson.csv")
 
 plot(azmet_tucson$X1, azmet_tucson$X16)
@@ -73,7 +73,7 @@ plot(azmet_tucson$X1, azmet_tucson$X16)
   - Column names include variable and units
   - Similar to AZMet data
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(daymetr)
 library(dplyr)
 
@@ -107,13 +107,15 @@ download_daymet_batch(file_location = 'my_sites.csv',
   - Need to do more complicated stuff to plot on, e.g., Arizona map
   - Projections
 
-```{r}
+```{r, results='hide', message=FALSE, warning=FALSE}
 download_daymet_tiles(location = c(32.25, -110.91), 
                       start = 2010, 
                       end = 2011, 
                       param = "prcp", 
                       path = "raw_data/")
+```
 
+```{r, message=FALSE, warning=FALSE}
 library(raster)
 daymet_raster <- raster("raw_data/prcp_2010_11015.nc")
 plot(daymet_raster)
@@ -144,7 +146,7 @@ plot(daymet_raster)
   - Storing values as integers instead of decimals decreases size
   - Check scale_factor in `param_meta$maca` for correction
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 #remotes::install_github("mikejohnson51/AOI")
 #remotes::install_github("mikejohnson51/climateR")
 library(AOI)
@@ -177,7 +179,7 @@ plot(maca_raster)
   - Need to do scale factor correction to temp too
   - Example of extracting values for Tucson
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 bioclim_all <- getData(name = "worldclim", 
                        var = "bio", 
                        res = 10, 
