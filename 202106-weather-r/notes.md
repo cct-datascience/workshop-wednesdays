@@ -1,0 +1,233 @@
+Weather Data in R
+================
+
+## Workshop intro
+
+Date: 6/30/2021 Time: 11am - 1pm (AZ)
+
+We will record this workshop and make the recording available on
+YouTube.
+
+### Who are we
+
+We are in the Data Science Institute at UA. Our group is called DIAG, we
+work on computational tools and training for agricultural and ecological
+data. We want to enable researchers with their work, through training
+and consulting, so let us know if we could help you in any way!
+
+Kristina and David introduce ourselves.
+
+### Workshop overview/logistics
+
+Schedule:
+
+-   Presentation on data sources, types, etc. (David)
+-   Demos on a handful of weather data sources (Kristina)
+-   Address attendee questions and discuss weather data sources
+
+## Weather data overview
+
+See [workshop slides
+here](https://docs.google.com/presentation/d/e/2PACX-1vQg26WZj2vV2E_TnihD5v9pv4RG_69ssXlo4ucTfM98zHy-bNMjR9vDHn_jNAaVntZmSMTznkyCDOHa/pub?start=false&loop=true&delayms=3000).
+
+## Demos
+
+### 1. Observation data from weather stations
+
+-   Find by Googling state/city/location
+-   Not standardized, will have to do some sleuthing
+-   Example: AZMet weather stations
+-   Referred to in presentation
+-   [Main informational
+    page](https://cals.arizona.edu/azmet/az-data.htm)
+-   Download data manually
+    -   From page
+    -   Select Tucson Active Station
+    -   Click Raw Data, 2020, Daily
+    -   Copy data, paste into text file, and save as `azmet_tucson.csv`
+-   API is being developed
+-   Explanations of data format in “Raw Hourly and Daily Data Formats”
+    -   First column is year
+    -   Fourth column is max daily temp
+
+``` r
+azmet_tucson <- read.csv("raw_data/azmet_tucson.csv")
+
+plot(azmet_tucson$X1, azmet_tucson$X16)
+```
+
+![](notes_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+### 2. Interpolated gridded data
+
+-   Reanalysis data
+-   Lots of weather/climate sources combined
+-   Coverage across large areas, e.g., North America, global
+-   Example: Daymet
+    -   [Home page](https://daymet.ornl.gov/)
+    -   1km x 1km grids
+    -   North America
+    -   1950 - 2020
+    -   Daily values
+-   Download using `daymetr` R package
+    -   Documentation in [GitHub repo
+        README](https://github.com/bluegreen-labs/daymetr)
+    -   Download for single coordinate, many coordinates, and sets of
+        grids
+-   First for single location in Tucson
+    -   Have to do some cleaning to use
+    -   Column names include variable and units
+    -   Similar to AZMet data
+
+``` r
+library(daymetr)
+library(dplyr)
+
+daymet_tucson <- download_daymet(site = "Tucson", 
+                                 lat = 32.25, 
+                                 lon = -110.91, 
+                                 start = 2000, 
+                                 end = 2015, 
+                                 internal = TRUE)
+
+daymet_tucson_2010 <- daymet_tucson$data %>% 
+  filter(year == 2010)
+plot(daymet_tucson_2010$yday, daymet_tucson_2010$tmax..deg.c.)
+```
+
+![](notes_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+-   Code for getting multiple locations
+    -   Would need to create site csv
+
+``` r
+download_daymet_batch(file_location = 'my_sites.csv',
+                      start = 1980,
+                      end = 2010,
+                      internal = TRUE)
+```
+
+-   Download as gridded raster files
+    -   NetCDF like in presentation
+    -   One file per year
+-   Read back in to plot
+    -   Plotting rasters can be tricky
+    -   Need to do more complicated stuff to plot on, e.g., Arizona map
+    -   Projections
+
+``` r
+download_daymet_tiles(location = c(32.25, -110.91), 
+                      start = 2010, 
+                      end = 2011, 
+                      param = "prcp", 
+                      path = "raw_data/")
+```
+
+``` r
+library(raster)
+daymet_raster <- raster("raw_data/prcp_2010_11015.nc")
+plot(daymet_raster)
+```
+
+![](notes_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
+# library(ggplot2)
+# az_map <- map_data("state")
+# ggplot() +
+#   geom_polygon(data = az_map, aes(x = long, y = lat, group = group)) +
+#   geom_raster(data = daymet_raster, aes(fill = z))
+```
+
+### 3. Forecasted climate dataset
+
+-   Different climate scenarios to choose from
+-   Also past forecasts, such as TerraClimate
+-   Example: MACA
+    -   [Home page](http://www.climatologylab.org/maca.html)
+    -   Downscale higher spatial resolution climate model predictions
+    -   CMIP: coupled model intercomparison project, suite of climate
+        models
+    -   RCP: representative concentration pathways, have to do with
+        radiative forcing
+    -   Daily data
+-   Use `climateR` R package to download
+    -   Not on CRAN
+    -   Get boundaries from `AOI` package
+    -   Turn list into RasterStack to plot
+-   Weird high temp values?
+    -   Rasters can get really big, really fast
+    -   Storing values as integers instead of decimals decreases size
+    -   Check scale\_factor in `param_meta$maca` for correction
+
+``` r
+#remotes::install_github("mikejohnson51/AOI")
+#remotes::install_github("mikejohnson51/climateR")
+library(AOI)
+library(climateR)
+
+maca <- getMACA(AOI = aoi_get(state = "AZ"), 
+                model = "CCSM4", 
+                param = "tmax", 
+                scenario = "rcp45", 
+                startDate = "2050-06-01", 
+                endDate = "2050-06-06")
+
+maca_raster <- stack(maca)
+plot(maca_raster)
+```
+
+![](notes_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+### 4. Climatological normals data
+
+-   Averages across time to get general assessment of climate conditions
+-   Useful for biological questions, e.g., characterizing habitat
+-   Example: bioclim
+    -   Part of Worldclim products
+    -   [main landing page](https://www.worldclim.org/data/bioclim.html)
+    -   Annual, seasonal, and extreme trends for biologically relevant
+        variables
+    -   By year
+    -   Several spatial resolutions
+-   Download using `getData` from `raster` R package
+    -   These are shape files
+    -   Plot temps
+    -   Need to do scale factor correction to temp too
+    -   Example of extracting values for Tucson
+
+``` r
+bioclim_all <- getData(name = "worldclim", 
+                       var = "bio", 
+                       res = 10, 
+                       path = "raw_data/")
+nlayers(bioclim_all)
+```
+
+    ## [1] 19
+
+``` r
+unlist(bioclim_all)
+```
+
+    ## class      : RasterStack 
+    ## dimensions : 900, 2160, 1944000, 19  (nrow, ncol, ncell, nlayers)
+    ## resolution : 0.1666667, 0.1666667  (x, y)
+    ## extent     : -180, 180, -60, 90  (xmin, xmax, ymin, ymax)
+    ## crs        : +proj=longlat +datum=WGS84 +no_defs 
+    ## names      :  bio1,  bio2,  bio3,  bio4,  bio5,  bio6,  bio7,  bio8,  bio9, bio10, bio11, bio12, bio13, bio14, bio15, ... 
+    ## min values :  -269,     9,     8,    72,   -59,  -547,    53,  -251,  -450,   -97,  -488,     0,     0,     0,     0, ... 
+    ## max values :   314,   211,    95, 22673,   489,   258,   725,   375,   364,   380,   289,  9916,  2088,   652,   261, ...
+
+``` r
+plot(bioclim_all$bio1)
+```
+
+![](notes_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+tucson_coords <- data.frame(long = -110.91, lat = 32.25)
+tucson_points <- SpatialPoints(tucson_coords)
+bioclim_tucson_extract <- extract(bioclim_all, tucson_points)
+bioclim_tucson <- cbind.data.frame(tucson_coords, bioclim_tucson_extract)
+```
