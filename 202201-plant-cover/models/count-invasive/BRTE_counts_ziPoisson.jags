@@ -1,0 +1,91 @@
+# Poisson-only count model
+# ANOVA model to predict theta, 2-way interactions included
+# theta has random effects only for block (paddock within block is confounded with grazing + block)
+
+model{
+  for(i in 1:N){
+    # Likelihood
+    counts[i] ~ dpois(mu[i])
+    p[i] ~ dbern(psi)
+    
+    # replicated data
+    counts.rep[i] ~ dpois(mu[i])
+    
+    # Mean model of zero-inflated Poisson
+    mu[i] <- theta[i]*area[i]*p[i] + 0.00001
+    
+    # Regression model for theta (proportion) with random effects
+    theta[i] <- exp(alpha + beta[1]*fall[i] + beta[2]*spring[i] +
+    beta[3]*herbicide[i] + 
+    beta[4]*greenstrip[i] + beta[5]*fall_herbicide[i] + beta[6]*spring_herbicide[i] + 
+    beta[7]*fall_greenstrip[i] + beta[8]*spring_greenstrip[i] + 
+    eps[block[i]])
+    
+    # Part of Dsum calculation
+    Sqdiff[i] <- pow(counts.rep[i] - counts[i], 2)
+  }
+  
+  # Identifiable intercept, post sweeping random effect means into intercept
+  alpha.star <- alpha + mean(eps[]) 
+  
+  # Relatively non-informative priors
+  
+  # random effects of block
+  for(b in 1:Nb){ # number of blocks
+    eps[b] ~ dnorm(0, tau.eps)
+    
+    # Identifiable random effects - post-sweeping of mean REs by block
+    eps.star[b] <- eps[b] - mean(eps[])
+  }
+  
+  # Block level precisions with folded T priors
+  tau.Eps ~ dt(0, Bb, 2)
+  sig.eps <- abs(tau.Eps)
+  tau.eps <- pow(sig.eps, -2)
+  
+  # dt parameters (set as data)
+  Bb <- 1/(Ab*Ab)
+  
+  # Coefficient root notes
+  alpha ~ dnorm(0, 0.0001)
+
+  for(l in 1:nL){ # Number of treatment offsets
+    beta[l] ~ dnorm(0, 0.0001)
+  }
+  
+  # Probability of BRTE presence
+  psi ~ dunif(0, 1)
+  
+  # Calculations to monitor, only two-way combinations
+  int_Beta[1] <- beta[1] + beta[3] + beta[5] # fall:herbicide
+  int_Beta[2] <- beta[2] + beta[3] + beta[6] # spring:herbicide
+  int_Beta[3] <- beta[1] + beta[4] + beta[7] # fall:greenstrip
+  int_Beta[4] <- beta[2] + beta[4] + beta[8] # spring:greenstrip
+  
+  # Calculations to monitor, only two-way combinations
+  Diff_Beta[1] <- exp(alpha.star + beta[1]) - exp(alpha.star) # fall
+  Diff_Beta[2] <- exp(alpha.star + beta[2]) - exp(alpha.star) # spring
+  Diff_Beta[3] <- exp(alpha.star + beta[3]) - exp(alpha.star) # herbicide
+  Diff_Beta[4] <- exp(alpha.star + beta[4]) - exp(alpha.star) # greenstrip
+
+  diff_Beta[1] <- exp(alpha.star + beta[1] + beta[3] + beta[5]) - exp(alpha.star) # fall:herbicide
+  diff_Beta[2] <- exp(alpha.star + beta[2] + beta[3] + beta[6]) - exp(alpha.star) # spring:herbicide
+  diff_Beta[3] <- exp(alpha.star + beta[1] + beta[4] + beta[7]) - exp(alpha.star) # fall:greenstrip
+  diff_Beta[4] <- exp(alpha.star + beta[2] + beta[4] + beta[8]) - exp(alpha.star) # spring:greenstrip
+  
+  # Monitor the mean of each group
+  m.ungrazed.control <- exp(alpha.star) 
+  m.ungrazed.herbicide <- exp(alpha.star + beta[3]) 
+  m.ungrazed.greenstrip <- exp(alpha.star + beta[4]) 
+  
+  m.fall.control <- exp(alpha.star + beta[1]) 
+  m.fall.herbicide <- exp(alpha.star + beta[1] + beta[3] + beta[5]) 
+  m.fall.greenstrip <- exp(alpha.star + beta[1] + beta[4] + beta[7]) 
+    
+  m.spring.control <- exp(alpha.star + beta[2])  
+  m.spring.herbicide <- exp(alpha.star + beta[2] + beta[3] + beta[6]) 
+  m.spring.greenstrip <- exp(alpha.star + beta[2] + beta[4] + beta[8])  
+  
+  # Dsum: posterior predictive loss
+  Dsum <- sum(Sqdiff)
+}
