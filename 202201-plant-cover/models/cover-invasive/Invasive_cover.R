@@ -1,4 +1,4 @@
-# BRTE cover modeled as zero-or-1 inflated beta
+# Invasive grass cover modeled as zero-or-1 inflated beta
 # cover proportions collected on 1x1 m quadrats
 
 library(rjags)
@@ -17,30 +17,15 @@ ilogit <- function(x){
 }
 
 # read in data
-load("../../../cleaned_data/cover_all.Rdata") # cover_all
-# convert to proportions
-dat <- cover_all %>%
-  mutate(BRTE = BRTE/100,
-         intro_forbs = intro_forbs/100,
-         native_grass = native_grass/100,
-         native_forbs = native_forbs/100)
-str(dat)
-
-
-# plot
-ggplot(dat, aes(x = grazing, y = BRTE, color = block)) +
-  geom_point()
-
-ggplot(dat, aes(x = fuelbreak, y = BRTE, color = block)) +
-  geom_point() +
-  facet_wrap(~grazing)
+dat <- read.csv("data/cover.csv")
 
 # model matrix
 X <- model.matrix( ~ grazing * fuelbreak, data = dat) 
 colnames(X)
 
 # split the data into discrete and continuous components
-y.temp <- with(dat, ifelse(BRTE == 1 | BRTE == 0, BRTE, NA))
+y.temp <- with(dat, ifelse(invasive_grass == 1 | invasive_grass == 0, 
+                           invasive_grass, NA))
 y.discrete <- ifelse(is.na(y.temp), 0, 1)
 
 # group discrete response + predictors
@@ -51,7 +36,7 @@ block.d <- as.numeric(dat$block)[y.discrete == 1]
 
 # group continuous response + predictors
 which.cont <- which(y.discrete == 0)
-y.c <- dat$BRTE[which.cont]
+y.c <- dat$invasive_grass[which.cont]
 x.c <- X[which.cont,]
 n.cont <- length(y.c)
 block.c <- as.numeric(dat$block)[which.cont]
@@ -88,8 +73,7 @@ datlist <- list(N = nrow(dat),
 base <- dat %>%
   filter(grazing == "ungrazed",
          fuelbreak == "control")
-hist(base$BRTE, breaks = 30)
-logit(median(base$BRTE))
+logit(median(base$invasive_grass))
 
 # generate random initials
 inits <- function(){
@@ -97,18 +81,18 @@ inits <- function(){
        beta = rnorm(ncol(X) - 1, 0, 10),
        tau = runif(1, 0, 1),
        tau.eps = runif(1, 0, 1),
-       psi = runif(1, 0, 1))
+       rho = runif(1, 0, 1))
 }
 initslist <- list(inits(), inits(), inits())
 
 # Or, use previous starting values + set seed
-load("inits/inits.Rdata")# saved.state, second element is inits
+load("models/cover-invasive/inits/inits.Rdata")# saved.state, second element is inits
 initslist <- list(append(saved.state[[2]][[1]], list(.RNG.name = array("base::Super-Duper"), .RNG.seed = array(13))),
                   append(saved.state[[2]][[2]], list(.RNG.name = array("base::Wichmann-Hill"), .RNG.seed = array(89))),
                   append(saved.state[[2]][[3]], list(.RNG.name = array("base::Mersenne-Twister"), .RNG.seed = array(18))))
 
 # model
-jm <- jags.model(file = "BRTE_cover_zoib.jags",
+jm <- jags.model(file = "models/cover-invasive/Invasive_cover_zoib.jags",
                  inits = initslist,
                  n.chains = 3,
                  data = datlist)
@@ -116,25 +100,27 @@ jm <- jags.model(file = "BRTE_cover_zoib.jags",
 
 # params to monitor
 params <- c("deviance", # evaluate fit
-            "psi", "alpha", "beta", # parameters
+            "rho", "alpha", "beta", # parameters
             "tau", "sig", "tau.eps", "sig.eps", # precision/variance terms
-            "alpha.star", "eps.star", # identifiable intercept and random effects
-            "int_Beta", "Diff_Beta", "diff_Beta", # monitored main and two-way treatment effects
-            "m.ungrazed.control", "m.ungrazed.herbicide", "m.ungrazed.greenstrip",
-            "m.fall.control", "m.fall.herbicide", "m.fall.greenstrip",
-            "m.spring.control", "m.spring.herbicide", "m.spring.greenstrip") 
+            "alpha.star", "eps.star") # identifiable intercept and random effects
+           
 
 coda.out <- coda.samples(jm, variable.names = params,
-                         n.iter = 15000, thin = 5)
+                         n.iter = 5000, thin = 5)
 
 # plot chains
-mcmcplot(coda.out, parms = c("deviance", "psi", "beta",
+mcmcplot(coda.out, parms = c("deviance", "rho", "beta",
                              "alpha.star",  "eps.star", 
                              "sig", "sig.eps"))
+
+traplot(coda.out, parms = "beta")
+traplot(coda.out, parms = "alpha.star")
+traplot(coda.out, parms = "sig.eps")
+traplot(coda.out, parms = "sig")
+traplot(coda.out, parms = "eps.star")
+
 caterplot(coda.out, parms = "eps.star", reorder = FALSE)
 caterplot(coda.out, parms = "beta", reorder = FALSE)
-caterplot(coda.out, parms = "Diff_Beta", reorder = FALSE)
-caterplot(coda.out, parms = "diff_Beta", reorder = FALSE)
 
 # dic samples
 dic.out <- dic.samples(jm, n.iter = 5000)
@@ -151,12 +137,9 @@ gel
 # saved.state[[1]]
 # save(saved.state, file = "inits/inits.Rdata")
 
-save(coda.out, file = "coda/coda.Rdata")
-
 
 # Model fit
 params <- c("y.discrete.rep", "y.d.rep", "y.c.rep") #monitor replicated data
 coda.rep <- coda.samples(jm, variable.names = params,
                          n.iter = 15000, thin = 5)
-save(coda.rep, file = "coda/coda_rep.Rdata")
 

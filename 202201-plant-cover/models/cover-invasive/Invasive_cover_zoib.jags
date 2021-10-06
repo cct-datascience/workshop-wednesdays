@@ -1,0 +1,74 @@
+# two-way ANOVA for zero-inflated beta cover model
+model{
+  
+  for(i in 1:N){ # loop through all observations
+    #likelihood for rho, mixture parameter, indicating proportion of discrete observations
+    y.discrete[i] ~ dbern(rho)
+    # replicated data
+    y.discrete.rep[i] ~ dbern(rho)
+  }
+  
+
+  for(i in 1:n.discrete){ # loop through discrete observations
+    # likelihood for gamma, probability of presence
+    y.d[i] ~ dbern(mu[i])
+    # replicated data
+    y.d.rep[i] ~ dbern(mu[i])
+    
+    # mean ANOVA model 
+    logit(mu[i]) <- alpha + beta[1]*fall[i] + beta[2]*spring[i] +
+    beta[3]*herbicide[i] + 
+    beta[4]*greenstrip[i] + beta[5]*fall_herbicide[i] + beta[6]*spring_herbicide[i] + 
+    beta[7]*fall_greenstrip[i] + beta[8]*spring_greenstrip[i] +
+    eps[block.d[i]]
+  }
+   
+  
+  for(i in 1:n.cont){ # loop through continuous (0,1) observations
+  # likelihood for mu, tau (beta parameters)
+    y.c[i] ~ dbeta(p[i], q[i])
+    # replicated data
+    y.c.rep[i] ~ dbeta(p[i], q[i])
+    
+    # reparameterization to mean and precision
+    p[i] <- mu2[i] * tau
+    q[i] <- (1 - mu2[i]) * tau
+    
+    # mean ANOVA model 
+    logit(mu2[i]) <- alpha + beta[1]*fall2[i] + beta[2]*spring2[i] +
+    beta[3]*herbicide2[i] + 
+    beta[4]*greenstrip2[i] + beta[5]*fall_herbicide2[i] + beta[6]*spring_herbicide2[i] + 
+    beta[7]*fall_greenstrip2[i] + beta[8]*spring_greenstrip2[i] +
+    eps[block.c[i]]
+  } 
+    
+  # Identifiable intercept, post sweeping random effect means into intercept
+  alpha.star <- alpha + mean(eps[])
+  
+  # Relatively non-informative priors
+  
+  # random effects of block
+  for(b in 1:Nb){ # number of blocks
+    eps[b] ~ dnorm(0, tau.eps)
+    
+    # Identifiable random effects - post-sweeping of mean REs by block
+    eps.star[b] <- eps[b] - mean(eps[])
+  }
+  
+  # Block level precisions with folded T priors
+  tau.eps ~ dt(0, 10, 2)T(0, )
+  
+  # Coefficient root notes
+  alpha ~ dnorm(0, 0.0001)
+
+  for(l in 1:nL){ # Number of treatment offsets
+    beta[l] ~ dnorm(0, 0.0001)
+  }
+  
+  # General priors
+  rho ~ dunif(0, 1)
+  tau ~ dt(0, 10, 2)T(0, )
+  sig <- pow(tau, -0.5)
+  sig.eps <- pow(tau.eps, -0.5)
+
+}
