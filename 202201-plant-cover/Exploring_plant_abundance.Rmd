@@ -1,0 +1,183 @@
+---
+title: "Exploring plant abundance distributions"
+author: "Jessica Guo"
+date: "9/29/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+```
+
+## Plant abundance metrics
+
+Plant abundance data here refer to individual counts and proportional cover, either at the species or functional group level. One limitation of frequentist approaches for analyzing plant abundance data is that the response variables (count, cover) usually do not meet the standard assumptions for linear regression, such as normally distributed and homoscedastic. Transformations can be employed, but standard transformation such as log() cannot be applied to the zeros that are common in plant abundance datasets. 
+
+Bayesian methods can be more flexibly specified to account for the unique features of plant abundance data. Here, we explore a invasive grass count and cover dataset and customize Bayesian models to suit the data. 
+
+### Counts of invasive grass
+This dataset contains counts of individual grasses within different quadrat areas in square centimeters. Here is a histogram of counts, with quadrat size on the color axis. 
+
+```{r, echo = FALSE, cache = TRUE, warning = FALSE}
+count <- read.csv("data/count.csv")
+
+ggplot(count, aes(x = invasive_grass, fill = factor(quadrat))) +
+  geom_histogram(bins = 30) +
+  theme_bw()
+```
+
+The vast majority of plots were surveyed with 10 cm by 10 cm quadrats, with larger quadrats used only if there were no invasive grasses within the smaller sizes. 
+
+Counts are a discrete random variable (can only be 0 or positive integers) that arise from a Poisson distribution, which expresses the probability of a given number of events occurring in an interval of time or space. Unlike the normal distribution, which is described by two parameters (mean and variance), the Poisson distribution is described by a single rate parameter $\lambda$. The interval of time or, in our case, space can be specified for each observation. 
+
+```{r, echo = FALSE}
+ggplot() +
+  geom_histogram(data = count, 
+                 aes(x = invasive_grass,
+                     y = ..density..),
+                 bins = 30,
+                 fill = "white",
+                 color = "black") +
+  geom_point(data = data.frame(x = 0:150,
+                               y = dpois(0:150, 
+                                         lambda = mean(count$invasive_grass))),
+             aes(x = x, y = y)) +
+  theme_bw()
+```
+
+The rate parameter $\lambda$ describes both the mean and the variance of the distribution, but our count data has a greater variance than mean. The above figure shows the distribution of all observations as bars and the probability mass function with the same mean as the observations as points. The invasive grass count data is overdispersed relative to the Poisson distribution. In some cases, overdispersion can be caused by zero-inflation, e.g., for a rare species, in which case we would want to use a mixture model to describe the separate processes of occurrence and frequency. 
+
+But in this case, the overdispersion is not associated with a disproportionately large number of zero observations. Rather, there is simply more variability in the data than can be accounted for by a Poisson distribution alone, owing to the clumped  nature of plant abundance. To account for overdispersion here, we will add observation-level random effects, allowing variation among observations to be attributed to either treatment factors or to random noise. 
+
+Next, we will plot the data with respect to factors suspected to influence invasive grass counts. 
+
+```{r, echo = FALSE}
+count %>%
+  mutate(grazing = factor(grazing, levels = c("ungrazed",
+                                              "fall", 
+                                              "spring")),
+         fuelbreak = factor(fuelbreak, levels = c("control",
+                                                  "herbicide", 
+                                                  "greenstrip"))) %>%
+  ggplot(aes(x = fuelbreak, y = invasive_grass, color = grazing)) +
+  geom_point(position = position_jitterdodge(dodge.width = 0.8, 
+                                             jitter.width = 0.2),
+             alpha = 0.4) +
+  geom_boxplot(fill = "transparent",
+               position = position_dodge(width = 0.8)) +
+  scale_y_continuous("Counts") +
+  theme_bw()
+```
+
+From visual inspection, it looks like both fuelbreak and grazing have an effect on invasive grass counts, and the two factors appear to interact. For example, the effect of fall grazing seems particularly effective at reducing counts in combination with herbicide. So, we will use an ANOVA style design with two factors, 3 levels for each factor, and the two-way interactions. The default of `lm()` and `aov()` is to fit a reference-coding model, which we will also adopt in the Bayesian model. The ungrazed control will be the reference level, and we will monitor the significance of the offset parameters for each level of the factors. 
+
+Typically, we apply the ANOVA linear model to the mean of a normal distribution, which can take on any value along the whole real line. Here, we will be applying the linear model to the $\lambda$ rate parameter, which can only take on positive values. Therefore, we will utilize a log link function, and apply the linear model to $log(\lambda)$. 
+
+Finally, the experimental design includes a random effect of block. 
+
+```{r, echo = FALSE}
+count %>%
+  mutate(grazing = factor(grazing, levels = c("ungrazed",
+                                              "fall", 
+                                              "spring")),
+         fuelbreak = factor(fuelbreak, levels = c("control",
+                                                  "herbicide", 
+                                                  "greenstrip"))) %>%
+  ggplot(aes(x = factor(block), y = invasive_grass)) +
+  geom_jitter(alpha = 0.4) +
+  geom_boxplot(fill = "transparent",
+               position = position_dodge(width = 0.8)) +
+  # facet_wrap(vars(fuelbreak)) +
+  scale_y_continuous("Counts") +
+  theme_bw()
+```
+
+It seems like blocks 2 and 3 may have higher counts on average than block one. We want to account for these random effects separately from the treatment effects, as we don't want natural spatial variation to be confounded with the treatments. Ultimately, we will describe two levels of random effects (RE), with observation-level RE nested within block RE. Both sets of RE terms will be added to the linear model; to distinguish the intercept from the RE, we will be employing some sum-to-zero constraints to ensure that both the intercept and the RE are identifiable. 
+
+### Counts of invasive grass
+The cover dataset contains fractional cover of invasive and  native grasses determined for a 1x1 m quadrat. Here is a histogram of cover for both functional groups. 
+
+```{r, echo = FALSE, cache = TRUE}
+cover <- read.csv("data/cover.csv")
+
+ggplot(cover) +
+  geom_histogram(aes(x = invasive_grass), 
+                 alpha = 0.2, 
+                 fill = "blue",
+                 bins = 30) +
+    geom_histogram(aes(x = native_grass), 
+                 alpha = 0.2, 
+                 fill = "forestgreen",
+                 bins = 30) +
+  theme_bw()
+```
+
+Perhaps unsurprisingly, there are many quadrats with no cover of native grasses. Even the invasive grass is absent from some plots. 
+
+Proportions that fall between 0 and 1 can be described by a beta distribution, which is describe by two separate parameters that can be reconfigured to represent the mean and variance. This means we don't have to worry about overdispersion, as the variance parameter will account for the variation. 
+
+But there is a separate problem, which is that beta distributions do not include either 0 or 1, just the proportions in between them. Therefore, we will need a mixture model to fully describe our data:
+
+$\phi \sim Bern(\rho)$ where $\rho=Pr(\phi=0)$. 
+
+The conditional random variables are defined as:
+
+$[Y|\phi=1] \sim beta(p, q)$ 
+
+$[Y|\phi=0] \sim Bern(\phi)$ 
+
+Thus, the marginal distribution is $[Y|\phi=0]\rho + [Y|\phi=1](1-\rho)$, where $\rho$ represents the probability of being of the observed cover being 0 or 1. 
+
+Here, we will separate out the data that are 0 or 1 from the other, but model both likelihoods with the same ANOVA model. Conveniently, the expected value (or mean) of a Bernoulli distribution is $\phi$, and the standard parameters of a beta distribution can be reparameterized from the mean and precision. Since the domain of $\phi$ and the domain of the beta distribution are limited to (0, 1), we will use a logit link function to apply the linear model to a variable that can occupy the whole real line. 
+
+Again, we can examine the effect of grazing and fuelbreak treatments on cover. 
+
+```{r, echo = FALSE, cache = TRUE}
+cover %>%
+  tidyr::pivot_longer(4:5, names_to = "PFT", values_to = "cover") %>%
+  mutate(grazing = factor(grazing, levels = c("ungrazed",
+                                              "fall", 
+                                              "spring")),
+         fuelbreak = factor(fuelbreak, levels = c("control",
+                                                  "herbicide", 
+                                                  "greenstrip"))) %>%
+  ggplot(aes(x = fuelbreak, y = cover, color = grazing)) +
+  geom_point(position = position_jitterdodge(dodge.width = 0.8, 
+                                             jitter.width = 0.2),
+             alpha = 0.4) +
+  geom_boxplot(fill = "transparent",
+               position = position_dodge(width = 0.8)) +
+  scale_y_continuous("Cover") +
+  facet_wrap(~PFT, ncol = 1, scales = "free_y") +
+  theme_bw()
+```
+
+Fuelbreak treatments, particularly herbicide, and grazing strongly influence the cover of both invasive and native grasses. We will emply the same two-factor ANOVA with two-way interactions as above. 
+
+Finally, we check the random effect of block. 
+
+```{r, echo = FALSE, cache = TRUE}
+cover %>%
+  tidyr::pivot_longer(4:5, names_to = "PFT", values_to = "cover") %>%
+  mutate(grazing = factor(grazing, levels = c("ungrazed",
+                                              "fall", 
+                                              "spring")),
+         fuelbreak = factor(fuelbreak, levels = c("control",
+                                                  "herbicide", 
+                                                  "greenstrip"))) %>%
+  ggplot(aes(x = factor(block), y = cover)) +
+  geom_jitter(alpha = 0.2) +
+  geom_boxplot(fill = "transparent",
+               position = position_dodge(width = 0.8)) +
+  facet_wrap(vars(fuelbreak)) +
+  scale_y_continuous("Counts") +
+  facet_wrap(~PFT, ncol = 1, scales = "free_y") +
+  theme_bw()
+```
+
+Block 2 has lower cover than average for invasive grasses and block 3 has lower cover than average for native grasses, so we will include block as a random effect (RE) in the model. Again we will have to distinguish between the intercept and the RE using sum-to-zero constraints, but this will be much simpler with only one set of RE. 
+
