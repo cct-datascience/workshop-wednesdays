@@ -2,4 +2,8 @@
 scripts/
  
 # Suppress the original .Rdata
-*.Rdata
+data/*.Rdata
+
+# Suppress files created by knitting the Rmd
+*.html
+Exploring_plant_abundance_files/
