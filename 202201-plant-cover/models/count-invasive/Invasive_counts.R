@@ -96,7 +96,7 @@ dic.out
 # convergence?
 gel <- gelman.diag(coda.out, multivariate = FALSE)
 gel
-
+g
 
 # Model fit
 params <- c("counts.rep") #monitor replicated data
