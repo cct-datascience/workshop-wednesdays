@@ -1,0 +1,79 @@
+# Poisson-only count model
+# ANOVA model to predict theta, 2-way interactions included
+# theta has random effects for block and observation
+# OLRE is  nested within block RE
+
+model{
+  for(i in 1:N){
+    # Likelihood
+    counts[i] ~ dpois(mu[i])
+    
+    # replicated data
+    counts.rep[i] ~ dpois(mu[i])
+    
+    # Mean model of zero-inflated Poisson
+    mu[i] <- theta[i]*area[i]
+    
+    # Regression model for theta (proportion) with block and observation random effects
+    theta[i] <- exp(alpha + beta[1]*fall[i] + beta[2]*spring[i] +
+    beta[3]*herbicide[i] + 
+    beta[4]*greenstrip[i] + beta[5]*fall_herbicide[i] + beta[6]*spring_herbicide[i] + 
+    beta[7]*fall_greenstrip[i] + beta[8]*spring_greenstrip[i] +
+    eps[block[i]] + OLRE[i])
+    
+    # Part of Dsum calculation
+    Sqdiff[i] <- pow(counts.rep[i] - counts[i], 2)
+  }
+  
+  # Identifiable intercept, post sweeping random effect means into intercept
+  alpha.star <- alpha + grand.mean.OLRE + eps.avg
+  
+  # Compute average block random effect and mean of mean paddock random effects
+  eps.avg <- mean(eps[])
+  grand.mean.OLRE <- mean(OLRE.avg[])
+  
+  # Relatively non-informative priors
+  
+  # random effects of block
+  for(b in 1:Nb){ # number of blocks
+    eps[b] ~ dnorm(0, tau.eps)
+    
+    # Identifiable random effects - post-sweeping of mean REs by block
+    eps.star[b] <- eps[b] + OLRE.avg[b] - grand.mean.OLRE - eps.avg
+    
+  }
+  
+  # Manually compute average OLRE within each block
+  OLRE.avg[1] <- mean(OLRE[1:156])
+  OLRE.avg[2] <- mean(OLRE[157:288])
+  OLRE.avg[3] <- mean(OLRE[289:460])
+
+  # Block level precisions with folded T priors
+  tau.Eps ~ dt(0, Bb, 2)
+  sig.eps <- abs(tau.Eps)
+  tau.eps <- pow(sig.eps, -2)
+  
+  # dt parameters (set as data)
+  Bb <- 1/(Ab*Ab)
+  
+  # Observation-level random effects nested within block
+  for(i in 1:N) {
+    # Random effect for each plot
+    OLRE[i] ~ dnorm(0, tau)
+    
+    # Identifiable OLRE
+    OLRE.star[i] <- OLRE[i] - OLRE.avg[block[i]]
+  }
+  tau ~ dgamma (0.01, 0.01)
+  sig <- pow(tau, -0.5)
+   
+  # Coefficient root notes
+  alpha ~ dnorm(0, 0.0001)
+
+  for(l in 1:nL){ # Number of treatment offsets
+    beta[l] ~ dnorm(0, 0.0001)
+  }
+  
+  # Dsum: posterior predictive loss
+  Dsum <- sum(Sqdiff)
+}
