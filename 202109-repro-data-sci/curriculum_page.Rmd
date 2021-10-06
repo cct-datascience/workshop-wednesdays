@@ -1,0 +1,418 @@
+---
+title: "Reproducibility & Data Science Skills for Ecologists Workshop Curriculum"
+author: "Jessica Guo & Kristina Riemer"
+date: "10/6/2021"
+output: html_document
+---
+
+
+## Workshop purpose
+
+To introduce ecologists and other life scientists to better practices for sharing their code and results, managing their projects, and improving reproducility of their computational work. No prerequisite knowledge is necessary. 
+
+## Instructional objectives
+
+**Share & collaborate**: Learn how to do version control for code and data files
+- Tools: shell, git & GitHub via the RStudio terminal pane
+
+**Project management & reproducibility**: learn how to organize projects, use coding better practices, and intermediate R skills (for loops, functions)
+- Tools: RStudio projects, dplyr/tidyr/ggplot2
+
+**Documentation & publication**: learn how to write project READMEs and publicly publish reports
+- Tools: markdown, Rmarkdown files, RPubs
+
+## General structure
+This workshop was taught as a series of 8 two-hour virtual sessions, meeting twice a week for four weeks. This content could be taught in two 8-hour long days, or split up in various other ways to total 16 hours of instructional time. 
+
+Relatively small workshop size(< 15) helped keep one-on-one troubleshooting manageable for two instructors and an occasional helper. 
+
+The workshop format is code-along, and we use R/RStudio for the entire workshop. Students should install [R](https://cran.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/#download) prior to the first class. 
+
+
+## Lesson table of contents
+
+| Lesson  | Theme | Topic   |  Instructor	 |
+|---|---|---|---|
+| 1  | Share & collaborate | [Shell scripting](#lesson-1)  | Kristina |
+| 2 | Share & collaborate | [Version control with git](#lesson-2) | Jessica | 
+| 3  | Share & collaborate | [Sharing with GitHub](#lesson-3)  | Jessica |
+| 4  | Project management & reproducibility | [Project management and coding best practices](#lesson-4) | Kristina |
+| 5 | Project management & reproducibility | [Data manipulation](#lesson-5)  | Jessica |
+| 6 | Project management & reproducibility | [Reproducibility of R code part 1](#lesson-6)  | Kristina |
+| 7 | Project management & reproducibility | [Reproducibility of R code part 2 and plotting part 1](#lesson-7) | Jessica |
+| 8 | Documentation & publication | [Plotting part 2 and documentation](#lesson-8)  | Kristina |
+
+## Definitions of lesson section headers
+
+**"Installation & materials"**: links to all lesson materials used, which were various Carpentries lessons
+
+**"Modifications"**: notes about how we changed the lesson materials so that lessons all worked together and to fit the 2 hour lesson time limit. Includes what we left out, when order was changed, and when we did something different. 
+
+**"Teaching notes"**: information and tips about how we taught the material, including troubleshooting installation instructions
+
+**"Homework"**: additional exercises and tasks to prepare for the next lesson; these were occasional and optional, just for reinforcing and practicing material
+
+---
+
+## Lesson 1
+
+### Topic
+
+Shell scripting
+
+### Objective
+
+Learners should be comfortable with their file structure and navigating around it using command line commands in RStudio Terminal pane
+
+### Installation & materials
+
+1. [MacOS git installation](https://sourceforge.net/projects/git-osx-installer/files/)
+2. [Windows git installation](https://git-scm.com/download/win)
+3. [Software Carpentry Unix Shell episode #1 ](https://swcarpentry.github.io/shell-novice/01-intro/index.html) 
+4. [Software Carpentry Unix Shell episode #2](https://swcarpentry.github.io/shell-novice/01-intro/index.html) 
+
+#### Modifications
+
+ - Use terminal window within RStudio as command line interface
+     - Start with a brief overview of RStudio panes
+     - Only need to use Terminal and Files tabs
+     - Emphasize that Files tab is analogous to file finder
+ - Skip all exercises, including "Nelle" example
+
+### Teaching notes
+
+- If not already installed, learners should install R and RStudio
+- Need to install git initially for Windows users to have shell commands
+     - Separate into 2 breakout rooms to install git/GitBash for Windows and Macs
+     - Restart RStudio after installation
+     - For Windows, open RStudio Tools/Global Options/Terminal and make sure GitBash is selected
+- Download shell-lesson-data.zip into temporary location, this won't be referenced in later lessons
+- Emphasize purposes for learning shell
+     - Helpful for using git and GitHub
+     - Easier to deal with installation problems
+     - Understanding file structure and file paths
+- If there's additional time, can also cover [Software Carpentry Unix Shell episode #3](https://swcarpentry.github.io/shell-novice/03-create/index.html) 
+
+### Homework
+
+Exercises in shell lesson #2
+
+---
+
+## Lesson 2
+
+### Topic
+
+Version control with git
+
+### Objective
+Learners will practice how changes to code are tracked with version control and become familiar with command-line git within the RStudio IDE. 
+
+### Installation & materials
+
+- [Software Carpentry Version Control with Git](https://swcarpentry.github.io/git-novice/) lessons #2, #3, & #4
+
+#### Modifications
+ - Use `mkdir` to make a new folder and name it pilot-analyses
+ - Use RStudio interface to create a new/blank R file (rather than using the planets example)
+ - Add R pseudocode or comments to blank R file
+ - Skip #5 exploring history
+
+### Teaching notes
+ - When setting up git for the first time, remind students to use the same email as their existing GitHub account or to select an email that will be used for GitHub
+ - Reinforce using `cd` and `ls -al` to move around the file structure and see contents
+
+### Homework
+ - Create a GitHub account if you don't already have one
+
+---
+
+## Lesson 3
+
+Sharing with GitHub
+
+### Objective
+
+Learners will share their local repository on GitHub and learn how to sync some files while ignoring others systematically. 
+
+### Installation & materials
+
+- [Software Carpentry Version Control with Git](https://swcarpentry.github.io/git-novice/) lessons #6, #7, & #8
+
+#### Modifications
+ - Provide a large .csv file, ask students to move into pilot-analyses repo within a data folder
+ - Use RStudio interface to create a new text file, save as .gitignore; explore how to suppress a specific file, files within a folder, and a specifc kind of file extensions
+ - Start #7 with SSH setup. `ssh-keygen -t ed25519 -C "username@laptop"` will create a .ssh file if one does not already exist
+ - Then proceed to connecting local repository to GitHub repository
+ - The only part of #8 that was taught was cloning a forked repository. Ask students to fork an instructor-created repository, then clone locally. This will be the repo for downstream files. 
+ - Use `git remote add upstream xxxx` to connect repo to upstream. If time permits, demonstrate a pull request (PR).
+
+### Teaching notes
+ - Practice an add-commit cycle after creating the .gitignore 
+ - If `ssh -T git@github.com` doesn't work, could be an issue with OpenSSH. Try a different ssh flavor:
+     - `which -a ssh`
+     - Use a non OpenSSH version, e.g., `/usr/bin/ssh -T git@github.com`
+- Easy to check on learner progress by looking for who has and hasn't forked repo
+
+### Homework
+ - Skim [tidyverse R style guide](https://style.tidyverse.org/index.html)
+
+---
+
+## Lesson 4
+
+### Topic
+
+Project management and coding best practices
+
+### Objective
+
+Learners will learn about and practice managing their projects using file structure and RStudio projects, and about current best practices and style guides for R coding
+
+They will also get more comfortable with versional control through learning and doing pull requests and reinforcement of git cycle
+
+### Installation & materials
+
+1. [Software Carpentry Introduction to R and RStudio episode](https://swcarpentry.github.io/r-novice-gapminder/01-rstudio-intro/index.html)
+2. [Software Carpentry Project Management with RStudio episode](https://swcarpentry.github.io/r-novice-gapminder/02-project-intro/index.html)
+3. [Software Carpentry Best Practices for Writing R Code](http://swcarpentry.github.io/r-novice-inflammation/06-best-practices-R/index.html)
+#### Modifications
+
+- RStudio
+    - Cover only "Introduction to RStudio" section unless learners need a refresher on R
+    - Additional keyboard shortcuts from [RStudio's reference list](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts)
+- Project management
+    - Do "Best practices for project organization" including yellow "Tip: Good Enough Practices for Scientific Computing" box
+    - Then "A possible solution" section about R projects
+- Coding best practices
+    - Condensed into a [single slide](https://docs.google.com/presentation/d/1WNNHQtzq2IUMA0RPz9pwgDCTMLzMIxqQhQsTuR0m_BY/edit#slide=id.geda00d7b2c_0_0)
+
+### Teaching notes
+
+- After introducing concept of R projects, walk through turning their local copy of forked repo into on
+- To practice git, add `*.Rproj` to `.gitignore`, then commit and push to remote repo
+- Discuss what new concepts learners discovered in tidyverse style guide
+- Can start homework during session
+- Then add, commit, push these changes and then walk through [opening a pull request](https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) to the upstream (instructor's) repo
+    - This is another nice way to keep track of learners' progress
+
+### Homework
+
+Fix up example R script in forked repo
+
+---
+
+## Lesson 5
+
+### Topic
+
+Data manipulation
+
+### Objective
+
+### Installation & materials
+
+- Install R packages 'dplyr', 'tidyr', 'readr' and 'udunits2'
+- [Data carpentry R ecology lesson](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html) - #3 'Manipulating, analyzing, and exporting data'
+
+
+#### Modifications
+ - Introduced `readr::read_csv()` in lieu of `read.csv()`, which reads character strings as characters (not factors) and imports time/date columns
+ - Introduced `ud.convert()` as a less error-prone way of performing conversions, compatible within `mutate()`
+ - Updated to the more modern `tidyr::pivot_longer()` and `tidyr::pivot_wider()`
+     - `surveys_gw <- surveys %>% filter(!is.na(weight)) %>% group_by(plot_id, genus) %>% summarize(mean_weight = mean(weight))`
+     - `surveys_wide <- surveys_gw %>% pivot_wider(names_from(genus), values_from = mean_weight)`
+     - `surveys_long <- surveys_wide %>%
+  pivot_longer(-plot_id, names_to = "genus", values_to = "mean_weight")`
+ - Used `readr::write_csv()`, which eliminates need for `row.names = FALSE`
+ - Ended with saving script and doing an add-commit-push cycle to sync local repository with GitHub repository
+
+### Teaching notes
+ - Have students install each library separately rather than as the tidyverse - can be important to know which functions come from which packages
+ 
+### Homework
+ - None
+
+---
+
+## Lesson 6
+
+### Topic
+
+Reproducibility of R code
+
+### Objective
+
+Learners will learn how to make their R code more reproducible using functions and control flow approaches
+
+### Installation & materials
+
+1. [Data Carpentry for Biologists functions lecture](https://datacarpentry.org/semester-biology/materials/functions-R/)
+2. [Data Carpentry for Biologists conditionals lecture](https://datacarpentry.org/semester-biology/materials/conditionals-R/)
+
+#### Modifications
+
+- For functions lecture, had them do only the "Use and Modify" exercise
+- From conditionals lecture, only did "if statements" section
+- From latter, only did "Basic If Statements" #2 exercise
+- Added on brief explanation of `ifelse`, using the example of `ifelse(length == 5, "correct", "incorrect")`
+
+### Teaching notes
+
+- Showed learners how to use issues so they could use for homework assignment
+    - Forked repos don't have issues included by default, change in repo settings
+- Create new R script for functions content, and another new R script for control flow (ifelse and for loops) content
+- Demonstrate git add, commit, and push files or file changes at the end of each set of material
+
+### Homework
+
+Start to create a list of at least three specific ways to implement the skills learned here in research projects
+
+Examples: 
+
+- “I will rewrite the code on lines 16-25 of analysis.R into a function”
+- “I will turn my plotting script into an Rmarkdown file with descriptions of the plots”
+
+---
+
+## Lesson 7
+
+### Topic
+
+Reproducibility of R code part 2 and plotting part 1
+
+### Objective
+Learners will learn how to make their R code more reproducible using control flow approaches and understand the components of creating data visualizations with ggplot. 
+
+### Installation & materials
+
+1. [Data Carpentry for Biologists for loop lecture](https://datacarpentry.org/semester-biology/materials/for-loops-R/)
+2. [Data Carpentry R ecology lesson](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) - #4 'Data visualization'
+3. Install 'ggplot2'
+
+#### Modifications
+
+- For for loops lecture:
+    - At "Do Tasks 3-4...", do "Basic For Loop" exercises #2 & #3
+    - Skip sections "Looping over multiple values" and "Looping with functions"
+    - If sufficient time, do "Storing loop results in a data frame", otherwise stop there
+- Use the end of [#3](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) (creating surveys_complete dataframe) at the start of plotting part of lesson
+- Demonstrate the hindfoot_length vs. weight scatter plot within a for loop, using ggsave
+
+### Teaching notes
+
+- ggplot content took about an hour in this lesson and an hour in the next lesson
+- Currently getting warnings from "Looping over files section" but wasn't able to troubleshoot, so used as a teaching opportunity to discuss warnings vs. errors
+- Show how to create a new `plots` folder in the RStudio interface for the for loop outputs
+ - Good time to troubleshoot and reinforce the syntax of a for loop
+
+### Homework
+
+None
+
+---
+
+## Lesson 8
+
+### Topic
+
+Plotting part 2 and documentation
+
+### Objective
+Learners will practice different ways to make multiple plots (for loops, faceting) and learn how and why to document their repositories and code
+
+### Installation & materials
+1. [Data carpentry R ecology lesson](https://datacarpentry.org/R-ecology-lesson/04-visualization-ggplot2.html) - #4 'Data visualization'
+2. [Data Carpentry for Biologists knitr lecture](https://datacarpentry.org/semester-biology/materials/knitr/)
+3. Install R packages `rmarkdown` and `knitr`
+
+#### Modifications
+
+Plotting: 
+- Make a time series plot, but with mean weights across a particular species (`species_id == "DM"`)
+     - Reinforce the `group_by()` and `summarize()` functions from an earlier lesson
+     - Demonstrate piping datasets into `ggplot()`
+ - Challenge students to filter by and plot all members of the genus *Dipodomys*; what are some choices for differentiating between species
+     - Students may have used `color = species_id` within `aes()`
+     - Show `facet_wrap()` as an option, particularly with `scales = 'free_y'`
+ - Additional challenge of adding a third factor of sex (in addition to year and species_id)
+     - Show `facet_grid()` as an option, with species by row and sex by column
+     - What are the advantages and disadvantages of plotting together versus separately?
+ - Final note of caution: it can be important to depict the number of samples that when into the sample mean and sd
+     - Can be added with `geom_text()` to the graph itself
+     - Or as a color axis when combined with `facet_grid()`
+Documentation: 
+- No lesson materials for first section about READMEs
+- For Rmarkdown lesson: 
+    - Simplify text used to spend less time typing
+    - Save .Rmd file in newly created `docs` folder (to demonstrate project management)
+    - Skip "Citations" section
+    - Stop at "R Presentations" section
+
+### Teaching notes
+
+Plotting: 
+- Students may be familiar with the basics of ggplot already, this portion of the lesson emphasizes how to build plots and customize viewing options to maximize students' own understanding of their data (as opposed to how to make publication-quality graphs)
+
+Documentation: 
+- Define README
+    - Come from software engineering
+    - File that introduces and explains a project
+    - Contains info about other files and folders in a repo
+    - Also package versions and installation instructions, how to contribute
+    - Should go in main folder of project
+    - Usually a plain text file
+    - Name is in all upper case
+- Show an example of a README
+- GitHub encourages use of README
+    - Automatically asks to include one when creating new repo
+    - Automatically displays one on repo main page if there is one
+- Either have them create a new README from scratch, or we included one in the repo they forked so we had them open up the README in RStudio to edit later
+- Explanation of markdown
+    - What we can use to format README files and other plain text files
+    - History
+        - https://en.wikipedia.org/wiki/Markdown
+        - https://daringfireball.net/projects/markdown/
+    - Plain text formatting, can be converted to HTML
+    - Compare file in RStudio to GitHub render
+    - GUI vs. command line type approach
+        - Can do same things in Word/Google Doc but is more explicit and less point and click
+        - Also better for version control
+    - Simple and easy to read and format
+    - GitHub markdown specifically: https://guides.github.com/features/mastering-markdown/
+- Practice markdown and README concepts by adding a "Project files" section to their forked local repo README
+
+```
+ ### Project files
+ 
+ - `data_raw` folder
+   - `portal_data_joined.csv`: example data from [Portal project](https://portal.weecology.org/)
+ - `scripts` folder
+   - `01-data-manipulation.R`: introduction to dplyr
+ - `plots` folder
+```
+
+- Switch to introducing Rmarkdown
+    - Purpose is to share results as report, and possibly turn into manuscripts
+    - Combines markdown-formatted text with code
+- Do DC Rmarkdown lesson
+- Add, commit, and push .Rmd file
+- If time, demonstrate publishing Rmarkdowns on RPubs
+    - Show an example
+    - In RStudio, click blue publish button and select RPubs option
+
+### Homework
+
+None
+
+## Technical notes
+ - One early problem occurred when students were unsure of which 'Documents' or 'Desktop' folder they were saving to, which made navigating filepaths tricky. Note that on some PCs, the Windows OneDrive backup folders are saved to by default, but students should navigate to `C:/Users/username/Documents` or `C:/Users/username/Desktop`
+- R packages sometimes did not install properly. 
+    - One reason was that some usernames included special characters, which were not interpreted correctly. 
+    - Another included R being installed on a remote server, rather directly on the local machine
+
+
+## Acknowlegements
+
+ESA, Teresa, Frank, NEON, Carpentries
+
