@@ -4,7 +4,6 @@
 library(rjags)
 load.module('dic')
 library(mcmcplots)
-library(postjags)
 library(ggplot2)
 library(dplyr)
 
@@ -129,13 +128,6 @@ dic.out
 # convergence?
 gel <- gelman.diag(coda.out, multivariate = FALSE)
 gel
-
-# If not converged, restart model from final iterations
-# newinits <-  initfind(coda.out)
-# newinits[[1]]
-# saved.state <- removevars(newinits, variables = c(2, 4, 6:7))
-# saved.state[[1]]
-# save(saved.state, file = "models/cover-native/inits/inits.Rdata")
 
 
 # Model fit
