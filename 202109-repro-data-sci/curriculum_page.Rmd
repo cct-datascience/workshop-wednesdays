@@ -155,7 +155,8 @@ Learners will share their local repository on GitHub and learn how to sync some 
  - If `ssh -T git@github.com` doesn't work, could be an issue with OpenSSH. Try a different ssh flavor:
      - `which -a ssh`
      - Use a non OpenSSH version, e.g., `/usr/bin/ssh -T git@github.com`
-- Easy to check on learner progress by looking for who has and hasn't forked repo
+ - Easy to check on learner progress by looking for who has and hasn't forked repo
+ - Here is a good [figure and blog post](https://www.tomasbeuzen.com/post/git-fork-branch-pull/) on the relationship, vocabulary, and workflow of working with forked repositories
 
 #### Homework
 Skim [tidyverse R style guide](https://style.tidyverse.org/index.html)
@@ -320,7 +321,7 @@ Plotting:
 - Make a time series plot, but with mean weights across a particular species (`species_id == "DM"`)
      - Reinforce the `group_by()` and `summarize()` functions from an earlier lesson
      - Demonstrate piping datasets into `ggplot()`
- - Challenge students to filter by and plot all members of the genus *Dipodomys*; what are some choices for differentiating between species
+ - Challenge students to filter by and plot all members of the genus *Dipodomys*; what are some choices for differentiating between species?
      - Students may have used `color = species_id` within `aes()`
      - Show `facet_wrap()` as an option, particularly with `scales = 'free_y'`
  - Additional challenge of adding a third factor of sex (in addition to year and species_id)
@@ -404,4 +405,4 @@ None
 
 ## Acknowlegements
 
-Thanks to the Ecological Society of America, and in particular Teresa Mourad and Frank Abbott, for inviting us to teach the first half of the [Critical Skills to Scale Up Ecology workshop](https://www.esa.org/seeds/meetings/2021-gradstudent-critical-skills-workshop/), which resulted in this set of curriculum. A huge thanks to [The Carpentries organization](https://carpentries.org/) for generating all of the volunteer-created content we used here, and for training both of us in pedagogy. 
+Thanks to the Ecological Society of America, and in particular Teresa Mourad and Fred Abbott, for inviting us to teach the first half of the [Critical Skills to Scale Up Ecology workshop](https://www.esa.org/seeds/meetings/2021-gradstudent-critical-skills-workshop/), which resulted in this set of curriculum. A huge thanks to [The Carpentries organization](https://carpentries.org/) for generating all of the volunteer-created content we used here, and for training both of us in pedagogy. 
