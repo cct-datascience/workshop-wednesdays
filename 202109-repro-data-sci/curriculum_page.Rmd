@@ -212,7 +212,7 @@ Learn how to reproducibly clean up dataframes using tidyverse R packages.
 #### Installation & materials
 
 1. Install R packages 'dplyr', 'tidyr', 'readr' and 'udunits2'
-2. [Data carpentry R ecology lesson](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html) - #3 'Manipulating, analyzing, and exporting data'
+2. [Data carpentry R ecology episode #3](https://datacarpentry.org/R-ecology-lesson/03-dplyr.html)
 
 ##### Modifications
  - Introduced `readr::read_csv()` in lieu of `read.csv()`, which reads character strings as characters (not factors) and imports time/date columns

@@ -5,9 +5,9 @@ account: kristinariemer
 server: viz.datascience.arizona.edu
 hostUrl: https://viz.datascience.arizona.edu/__api__
 appId: 16
-bundleId: 26
+bundleId: 27
 url: https://viz.datascience.arizona.edu:443/content/61e325a4-b005-4cc6-b090-fbb2d939429e/
-when: 1634846467.22814
-lastSyncTime: 1634846467.22815
+when: 1634847594.61529
+lastSyncTime: 1634847594.6153
 asMultiple: FALSE
 asStatic: FALSE
