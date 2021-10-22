@@ -349,7 +349,7 @@ Plotting:
 Documentation: 
 
 - Define README
-    - Come from software engineering
+    - Comes from software engineering
     - File that introduces and explains a project
     - Contains info about other files and folders in a repo
     - Also package versions and installation instructions, how to contribute
