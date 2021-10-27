@@ -1,0 +1,82 @@
+---
+title: "Publishing Reports Using R and R Markdown"
+author: "Kristina Riemer"
+date: "10/27/2021"
+output: html_document
+---
+
+## Overview
+
+- End goal: each participant have a published Rmarkdown report on their research
+- Steps: 
+  - Intros
+  - Defining Rmarkdown and markdown
+  - Creating example Rmarkdown
+  - Turning R script into Rmarkdown
+  - Options for publishing
+  - Publish created Rmarkdown
+
+## Curriculum & notes
+
+#### 1. Rmarkdown introduction
+
+- Walkthrough of [Data Carpentry for Biologists knitr lecture](https://datacarpentry.org/semester-biology/materials/knitr/)
+  - Can also add images, math equations, and tables to text using markdown
+- Other ways to use Rmarkdowns
+  - Code chunks of other programming languages like Python
+  - Create books with R package `bookdown`
+  - Create websites with R package `blogdown`
+  - Make presentations
+  - Automatically generate in-text citations from bibliography
+  - Include interactive components with R package `htmlwidgets` or with Shiny
+  - Create dashboard using R package `flexdashboard`
+- Example of dashboard with Shiny component using rodent example data
+
+#### 2. Create new Rmarkdown
+
+- Purpose is to create an Rmarkdown from existing R code or script
+- Spend half an hour working, discussing, and troubleshooting
+- Folks discussed what they were going to work on
+
+#### 3. Publish Rmarkdown
+
+- Publish so that have a publicly available document with a URL that can be shared with anyone
+- Two methods with their own pros and cons
+  - RStudio Connect
+    - Need license, which UA got this year
+    - Limited to research-related products (no class assignments or toy examples)
+    - Can add collaborators to update
+    - Can schedule regular updates and send automated emails about them to list of email addresses
+  - RPubs
+    - Free for anyone to use
+    - Can post any kind of content, not limited to research
+    - Can't collaboratively update
+    - Updating can be a bit finicky
+- Walkthrough of publishing through RStudio Connect
+  - Register UA account for RStudio Connect
+  - Connect RStudio to RStudio Connect
+    - Tools -> Global Options -> Publishing -> Connect...
+    - Input UA server address -> Next
+    - Some folks had to install R packages before RStudio Connect was an option
+  - Click blue publish button while .Rmd is open and select RStudio Connect option
+  - Select "Publish document with source code" (takes longer if big files, but renders on the fly) or "Publish finished document only" (faster but requires most recently knit html)
+  - Show [example published Rmarkdown](https://viz.datascience.arizona.edu/connect/#/apps/61e325a4-b005-4cc6-b090-fbb2d939429e/access/3)
+- Walkthrough of publishing through RPubs
+
+## Resources
+
+- [Workshop recording]()
+- [R Markdown book](https://bookdown.org/yihui/rmarkdown/)
+- [Markdown syntax](https://www.markdownguide.org/basic-syntax/)
+- [Markdown cheat sheet](https://www.markdownguide.org/cheat-sheet/)
+- [GitHub-flavored markdown](https://guides.github.com/features/mastering-markdown/)
+- [Rmarkdown cheat sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/master/rmarkdown.pdf)
+- [UA RStudio Connect signup](https://datascience.arizona.edu/RSConnect)
+- [RStudio Connect user guide](https://docs.rstudio.com/connect/1.7.4/user/index.html)
+- [RStudio Connect server](https://viz.datascience.arizona.edu/)
+
+## Help
+
+Feel free to drop by the [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours), which happen every Tuesday morning. We would love to help you with your Rmarkdown-specific, and general R, questions! 
+
+You can also [make an appointment with Kristina](https://calendar.google.com/calendar/u/0/selfsched?sstoken=UU83LWZEMmhrdWxUfGRlZmF1bHR8N2NkYWViOThjOGZlZjFhMTQyNzIyNDIxYjJkODc0Yjg) to discuss this content and get troubleshooting help. 
