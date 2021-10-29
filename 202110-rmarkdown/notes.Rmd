@@ -22,15 +22,133 @@ output: html_document
 
 - Walkthrough of [Data Carpentry for Biologists knitr lecture](https://datacarpentry.org/semester-biology/materials/knitr/)
   - Can also add images, math equations, and tables to text using markdown
-- Other ways to use Rmarkdowns
-  - Code chunks of other programming languages like Python
-  - Create books with R package `bookdown`
-  - Create websites with R package `blogdown`
-  - Make presentations
-  - Automatically generate in-text citations from bibliography
-  - Include interactive components with R package `htmlwidgets` or with Shiny
-  - Create dashboard using R package `flexdashboard`
-- Example of dashboard with Shiny component using rodent example data
+
+Final content from example Rmarkdown: 
+
+````
+---
+title: "Rodent Report"
+author: "Kristina Riemer"
+date: "10/27/2021"
+output: html_document
+---
+
+## Purpose
+
+Exploring rodent population data at the **Portal Project**. 
+
+List of tasks: 
+
+1. Load data from [database](http://figshare.com/articles/Portal_Project_Teaching_Database/1314459)
+2. Clean data into time series
+3. Make plot
+
+## Read in packages
+
+```{r, message=FALSE}`r ''`
+library(dplyr)
+library(ggplot2)
+```
+
+## Read in data
+
+```{r}`r ''`
+data <- read.csv("https://ndownloader.figshare.com/files/2292172")
+head(data)
+```
+
+The data includes `r knitr::inline_expr('length(unique(data$species_id))')` species. 
+
+## Clean up data and plot
+
+Summarizing data for number of occurrences per year and per species. Removed zero values and NAs, and species x because they went extinct. 
+
+```{r}`r ''`
+#generate time series data with dplyr
+time_series <- data %>% 
+  group_by(species_id, year) %>% 
+  summarize(count = n())
+head(time_series)
+```
+
+```{r, message=FALSE, echo=FALSE}`r ''`
+ggplot(time_series, aes(x = year, y = count)) +
+  geom_line() +
+  facet_wrap(~species_id)
+```
+
+````
+
+#### 2. Other uses for Rmarkdowns
+
+1. Code chunks of other programming languages like Python
+2. Create books with R package `bookdown`
+3. Create websites with R package `blogdown`
+4. Make presentations
+5. Automatically generate in-text citations from bibliography
+6. Include interactive components with R package `htmlwidgets` or with Shiny
+7. Create dashboard using R package `flexdashboard`
+
+Example of dashboard with Shiny component using rodent example data:
+
+````
+---
+title: "Rodent Dashboard"
+author: "Kristina Riemer"
+date: "10/27/2021"
+output: flexdashboard::flex_dashboard
+runtime: shiny
+---
+
+```{r}`r ''`
+library(flexdashboard)
+library(dplyr)
+library(ggplot2)
+library(shiny)
+```
+
+```{r}`r ''`
+data <- read.csv("https://ndownloader.figshare.com/files/2292172")
+time_series <- data %>% 
+  group_by(species_id, year) %>% 
+  summarize(count = n())
+```
+
+Column 2
+--------------------------------------------------
+
+### Number of species
+
+```{r}`r ''`
+valueBox(length(unique(data$species_id)), icon = "fa-tag")
+```
+
+### Time series plot
+
+```{r}`r ''`
+ggplot(time_series, aes(x = year, y = count)) +
+  geom_line() +
+  facet_wrap(~species_id)
+```
+
+Column 1
+--------------------------------------------------
+
+### About rodents
+
+This is some example content from the **Portal Project** to demonstrate how to create a dashboard from an Rmarkdown. 
+
+### Rodent dataset by year
+
+```{r}`r ''`
+numericInput("chosen_year", "Input year", 1980)
+
+renderTable({
+  head(filter(data, year == input$chosen_year))
+})
+```
+
+````
 
 #### 2. Create new Rmarkdown
 
