@@ -183,7 +183,7 @@ renderTable({
 
 ## Resources
 
-- [Workshop recording]()
+- [Workshop recording](https://youtube.com/watch?v=WaX2uocJ_2M)
 - [R Markdown book](https://bookdown.org/yihui/rmarkdown/)
 - [Markdown syntax](https://www.markdownguide.org/basic-syntax/)
 - [Markdown cheat sheet](https://www.markdownguide.org/cheat-sheet/)
