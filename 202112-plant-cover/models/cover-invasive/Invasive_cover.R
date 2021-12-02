@@ -1,4 +1,4 @@
-# Native grass cover modeled as zero-or-1 inflated beta
+# Invasive grass cover modeled as zero-or-1 inflated beta
 # cover proportions collected on 1x1 m quadrats
 
 library(rjags)
@@ -16,44 +16,39 @@ ilogit <- function(x){
 }
 
 # read in data
-dat <- read.csv("data/cover.csv")
+dat <- read.csv("data/cover.csv") %>% 
+  mutate(grazing = factor(grazing, levels = c("ungrazed",
+                                              "fall", 
+                                              "spring")),
+         fuelbreak = factor(fuelbreak, levels = c("control",
+                                                  "herbicide", 
+                                                  "greenstrip")))
 
 # model matrix
 X <- model.matrix( ~ grazing * fuelbreak, data = dat) 
 colnames(X)
 
-# split the data into discrete and continuous components
-y.temp <- with(dat, ifelse(native_grass == 1 | native_grass == 0, 
-                           native_grass, NA))
-y.discrete <- ifelse(is.na(y.temp), 0, 1)
+# split the data into 0 and continuous components
+y.temp <- with(dat, ifelse(invasive_grass == 0, 
+                           invasive_grass, NA))
+y.0 <- ifelse(is.na(y.temp), 0, 1)
 
 # group discrete response + predictors
 y.d <- y.temp[!is.na(y.temp)]
-x.d <- X[y.discrete == 1,]
-n.discrete <- length(y.d)
-block.d <- as.numeric(dat$block)[y.discrete == 1]
+x.d <- X[y.0 == 1,]
+n.0 <- length(y.d)
+# block.d <- as.numeric(dat$block)[y.0 == 1]
 
 # group continuous response + predictors
-which.cont <- which(y.discrete == 0)
-y.c <- dat$native_grass[which.cont]
+which.cont <- which(y.0 == 0)
+y.c <- dat$invasive_grass[which.cont]
 x.c <- X[which.cont,]
 n.cont <- length(y.c)
 block.c <- as.numeric(dat$block)[which.cont]
 
 # Assemble model inputs
 datlist <- list(N = nrow(dat),
-                y.discrete = y.discrete,
-                n.discrete = n.discrete,
-                y.d = y.d, 
-                fall = x.d[,2],
-                spring = x.d[,3],
-                herbicide = x.d[,4],
-                greenstrip = x.d[,5],
-                fall_herbicide = x.d[,6],
-                spring_herbicide = x.d[,7],
-                fall_greenstrip = x.d[,8],
-                spring_greenstrip = x.d[,9],
-                block.d = block.d,
+                y.0 = y.0,
                 n.cont = n.cont,
                 y.c = y.c,
                 fall2 = x.c[,2],
@@ -72,7 +67,7 @@ datlist <- list(N = nrow(dat),
 base <- dat %>%
   filter(grazing == "ungrazed",
          fuelbreak == "control")
-logit(median(base$native_grass))
+logit(median(base$invasive_grass))
 
 # generate random initials
 inits <- function(){
@@ -91,7 +86,7 @@ initslist <- list(append(saved.state[[2]][[1]], list(.RNG.name = array("base::Su
                   append(saved.state[[2]][[3]], list(.RNG.name = array("base::Mersenne-Twister"), .RNG.seed = array(18))))
 
 # model
-jm <- jags.model(file = "models/cover-native/Native_cover_zoib.jags",
+jm <- jags.model(file = "models/cover-invasive/Invasive_cover_zib.jags",
                  inits = initslist,
                  n.chains = 3,
                  data = datlist)
@@ -129,8 +124,11 @@ dic.out
 gel <- gelman.diag(coda.out, multivariate = FALSE)
 gel
 
+# If not converged, restart model from final iterations
+# newinits <-  initfind(coda.out)
+# newinits[[1]]
+# saved.state <- removevars(newinits, variables = c(2, 4, 6:7))
+# saved.state[[1]]
+# save(saved.state, file = "models/cover-invasive/inits/inits.Rdata")
 
-# Model fit
-params <- c("y.discrete.rep", "y.d.rep", "y.c.rep") #monitor replicated data
-coda.rep <- coda.samples(jm, variable.names = params,
-                         n.iter = 15000, thin = 5)
+save(coda.out, file = "models/cover-invasive/coda/coda.Rdata")

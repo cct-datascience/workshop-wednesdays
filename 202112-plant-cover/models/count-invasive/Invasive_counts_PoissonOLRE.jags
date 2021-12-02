@@ -11,15 +11,15 @@ model{
     # replicated data
     counts.rep[i] ~ dpois(mu[i])
     
-    # Mean model of zero-inflated Poisson
+    # Mean model of a Poisson
     mu[i] <- theta[i]*area[i]
     
     # Regression model for theta (proportion) with block and observation random effects
-    theta[i] <- exp(alpha + beta[1]*fall[i] + beta[2]*spring[i] +
+    log(theta[i]) <- alpha + beta[1]*fall[i] + beta[2]*spring[i] +
     beta[3]*herbicide[i] + 
     beta[4]*greenstrip[i] + beta[5]*fall_herbicide[i] + beta[6]*spring_herbicide[i] + 
     beta[7]*fall_greenstrip[i] + beta[8]*spring_greenstrip[i] +
-    eps[block[i]] + OLRE[i])
+    eps[block[i]] + OLRE[i]
     
     # Part of Dsum calculation
     Sqdiff[i] <- pow(counts.rep[i] - counts[i], 2)
