@@ -15,7 +15,8 @@ untibble <- function(tibble) {
              check.names = FALSE,
              stringsAsFactors = FALSE)
 }
-
+# check that you are in the correct directory
+# grepl('202104-gasex-params$', getwd())
 ## ACi 6800 for C3
 
 # Read in for column names
@@ -39,8 +40,8 @@ fit <- fit_aci_response(c3_aci[c3_aci$Q_2 == 1500, ],
                                         C_i = "Ci",
                                         PPFD = "Qin"),
                         fitTPU = FALSE)
-fit[[1]]
-fit[[2]]
+fit$`Fitted Parameters`
+fit$Plot
 
 
 # C4
@@ -50,6 +51,8 @@ c4_aq <- readr::read_csv("data/AQ/SEVI_20200304.csv")
 # plot
 ggplot(c4_aci, aes(x = Ci, y = A, color = factor(rep))) +
   geom_point()
+
+# consider dropping plant 1 data?
 
 ggplot(c4_aq, aes(x = Qin, y = A, color = factor(rep))) +
   geom_point()
@@ -74,9 +77,9 @@ c4_aq$C_s <- (round(c4_aq$CO2_s, digits = 0))
 fit2 <- fit_aq_response(untibble(c4_aq[c4_aq$C_s == 400, ]), 
                        varnames = list(A_net = "A",
                                        PPFD = "Qin"))
-summary(fit2[[1]])
-fit2[[2]]
-fit2[[3]]
+summary(fit2$Model)
+fit2$Parameters
+fit2$Graph
 
 # Fit multiple curves
 fits <- fit_many(data = untibble(c4_aq),
@@ -87,5 +90,5 @@ fits <- fit_many(data = untibble(c4_aq),
                  group = "rep")
 length(fits)
 names(fits)
-summary(fits[[1]][[1]])
-fits[[1]][[3]]
+summary(fits$plant_1$Model)
+fits$plant_1$Graph
