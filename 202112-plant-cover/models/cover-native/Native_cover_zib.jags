@@ -1,0 +1,123 @@
+# two-way ANOVA for zero-inflated beta cover model
+model{
+  
+  for(i in 1:N){ # loop through all observations
+    #likelihood for rho, mixture parameter, indicating proportion of zero observations
+    y.0[i] ~ dbern(rho[i])
+    # replicated data
+    y.0.rep[i] ~ dbern(rho[i])
+    
+    # Simple main-effects model of absence
+    logit(rho[i]) <- a + b[1]*fall[i] + b[2]*spring[i] + 
+    b[3]*herbicide[i] + b[4]*greenstrip[i] +
+    b[5]*fall_herbicide[i] + b[6]*spring_herbicide[i] + 
+    b[7]*fall_greenstrip[i] + b[8]*spring_greenstrip[i] +
+    eps[block[i]]
+  }
+  
+
+  for(i in 1:n.cont){ # loop through continuous (0,1) observations
+  # likelihood for mu, tau (beta parameters)
+    y.c[i] ~ dbeta(p[i], q[i])
+    # replicated data
+    y.c.rep[i] ~ dbeta(p[i], q[i])
+    
+    # reparameterization to mean and precision
+    p[i] <- mu2[i] * tau
+    q[i] <- (1 - mu2[i]) * tau
+    
+    # mean ANOVA model 
+    logit(mu2[i]) <- alpha + beta[1]*fall2[i] + beta[2]*spring2[i] +
+    beta[3]*herbicide2[i] + 
+    beta[4]*greenstrip2[i] + beta[5]*fall_herbicide2[i] + beta[6]*spring_herbicide2[i] + 
+    beta[7]*fall_greenstrip2[i] + beta[8]*spring_greenstrip2[i] +
+    eps.c[block.c[i]]
+  } 
+    
+  # Identifiable intercept, post sweeping random effect means into intercept
+  a.star <- a + mean(eps[])
+  alpha.star <- alpha + mean(eps.c[])
+  
+  # Relatively non-informative priors
+  
+  # random effects of block
+  for(b in 1:Nb){ # number of blocks
+    eps[b] ~ dnorm(0, tau.eps)
+    eps.c[b] ~ dnorm(0, tau.eps.c)
+    
+    # Identifiable random effects - post-sweeping of mean REs by block
+    eps.star[b] <- eps[b] - mean(eps[])
+    eps.star.c[b] <- eps.c[b] - mean(eps.c[])
+  }
+  
+  # Block level precisions with folded T priors
+  tau.eps ~ dt(0, 10, 2)T(0, )
+  tau.eps.c ~ dt(0, 10, 2)T(0, )
+  
+  # Coefficient root notes
+  a ~ dnorm(0, 0.0001)
+  alpha ~ dnorm(0, 0.0001)
+  
+  for(l in 1:nL){ # Number of treatment offsets
+    b[l] ~ dnorm(0, 0.0001)
+    beta[l] ~ dnorm(0, 0.0001)
+  }
+  
+  # General priors
+  tau ~ dt(0, 10, 2)T(0, )
+  
+  # Convert tau to sig for monitoring
+  sig <- pow(tau, -0.5)
+  sig.eps <- pow(tau.eps, -0.5)
+  sig.eps.c <- pow(tau.eps.c, -0.5)
+  
+  # Calculated parameters to monitor
+  # Unscaled differences relative to reference level
+  Diff_b[1] <- ilogit(a.star + b[1]) - ilogit(a.star) # fall
+  Diff_b[2] <- ilogit(a.star + b[2]) - ilogit(a.star) # spring
+  Diff_b[3] <- ilogit(a.star + b[3]) - ilogit(a.star) # herbicide
+  Diff_b[4] <- ilogit(a.star + b[4]) - ilogit(a.star) # greenstrip
+
+  diff_b[1] <- ilogit(a.star + b[1] + b[3] + b[5]) - ilogit(a.star) # fall:herbicide
+  diff_b[2] <- ilogit(a.star + b[2] + b[3] + b[6]) - ilogit(a.star) # spring:herbicide
+  diff_b[3] <- ilogit(a.star + b[1] + b[4] + b[7]) - ilogit(a.star) # fall:greenstrip
+  diff_b[4] <- ilogit(a.star + b[2] + b[4] + b[8]) - ilogit(a.star) # spring:greenstrip
+  
+  
+  Diff_Beta[1] <- ilogit(alpha.star + beta[1]) - ilogit(alpha.star) # fall
+  Diff_Beta[2] <- ilogit(alpha.star + beta[2]) - ilogit(alpha.star) # spring
+  Diff_Beta[3] <- ilogit(alpha.star + beta[3]) - ilogit(alpha.star) # herbicide
+  Diff_Beta[4] <- ilogit(alpha.star + beta[4]) - ilogit(alpha.star) # greenstrip
+
+  diff_Beta[1] <- ilogit(alpha.star + beta[1] + beta[3] + beta[5]) - ilogit(alpha.star) # fall:herbicide
+  diff_Beta[2] <- ilogit(alpha.star + beta[2] + beta[3] + beta[6]) - ilogit(alpha.star) # spring:herbicide
+  diff_Beta[3] <- ilogit(alpha.star + beta[1] + beta[4] + beta[7]) - ilogit(alpha.star) # fall:greenstrip
+  diff_Beta[4] <- ilogit(alpha.star + beta[2] + beta[4] + beta[8]) - ilogit(alpha.star) # spring:greenstrip
+  
+  
+  # Mean values of rho and mu
+  rho.ungrazed.control <- ilogit(a.star)
+  rho.ungrazed.herbicide <- ilogit(a.star + b[3])
+  rho.ungrazed.greenstrip <- ilogit(a.star + b[4])
+  
+  rho.fall.control <- ilogit(a.star + b[1])
+  rho.fall.herbicide <- ilogit(a.star + b[1] + b[3] + b[5])
+  rho.fall.greenstrip <- ilogit(a.star + b[1] + b[4] + b[7])
+  
+  rho.spring.control <- ilogit(a.star + b[2])
+  rho.spring.herbicide <- ilogit(a.star + b[2] + b[3] + b[6])
+  rho.spring.greenstrip <- ilogit(a.star + b[2] + b[4] + b[8])
+  
+  m.ungrazed.control <- ilogit(alpha.star)*(1-rho.ungrazed.control)
+  m.ungrazed.herbicide <- ilogit(alpha.star + beta[3])*(1-rho.ungrazed.herbicide) 
+  m.ungrazed.greenstrip <- ilogit(alpha.star + beta[4])*(1-rho.ungrazed.greenstrip) 
+  
+  m.fall.control <- ilogit(alpha.star + beta[1])*(1-rho.fall.control) 
+  m.fall.herbicide <- ilogit(alpha.star + beta[1] + beta[3] + beta[5])*(1-rho.fall.herbicide) 
+  m.fall.greenstrip <- ilogit(alpha.star + beta[1] + beta[4] + beta[7])*(1-rho.fall.greenstrip) 
+    
+  m.spring.control <- ilogit(alpha.star + beta[2])*(1-rho.spring.control)  
+  m.spring.herbicide <- ilogit(alpha.star + beta[2] + beta[3] + beta[6])*(1-rho.spring.herbicide) 
+  m.spring.greenstrip <- ilogit(alpha.star + beta[2] + beta[4] + beta[8])*(1-rho.spring.greenstrip) 
+
+}

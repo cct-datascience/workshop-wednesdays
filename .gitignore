@@ -37,3 +37,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# rsconnect
+202109-repro-data-sci/rsconnect/
