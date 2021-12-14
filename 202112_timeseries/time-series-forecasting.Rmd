@@ -1,18 +1,13 @@
 ---
 author: "David LeBauer"
 date: "2021-12-15"
-title: "Time Series and Forecasting"
-output: github_document
+title: "Time Series and Forecasting in R"
+output: html_document
+
+
 urlcolor: blue
 ---
 
-```{r message=FALSE, warning=FALSE}
-library(forecast)
-library(dplyr)
-library(lubridate)
-library(broom)
-set.seed(103)
-```
 
 ## Learning Objectives
 
@@ -28,6 +23,21 @@ As a reminder, these lessons are intended to provide a high level introduction t
 For further reading, I recommend starting with the  ["Forecasting Principles and Practice v2"](https://otexts.com/fpp2/) by Rob Hyndman who wrote the R `forecast` package.
 
 Also, note that Hydnman et al. are creating the successor to the forecast package called 'feasts'. The feasts package will align more closely with the 'tidymodels' and 'tidyverse' ecosystems. The next version of the Hyndman text has code using the feasts package https://otexts.com/fpp3/. We are using the forecasts package because, at the time of writing, the forecast package is both more stable and more widely used. The same concepts will apply to both packages.
+
+## Requirements
+
+To follow along, you should have the following 
+```{r message=FALSE, warning=FALSE}
+# libraries:
+library(forecast)
+library(dplyr)
+library(lubridate)
+library(broom)
+library(daymetr)
+# consistent results from random number generator
+set.seed(103) 
+```
+
 
 ## Linear regression, with time as a predictor
 
@@ -156,9 +166,11 @@ P <= 0.05. How often is the slope significant? How often is the intercept signif
 This is rather straightforward with the 'stats' data.frame we created above:
 
 ```{r}
+# frequency of significant intercept:
+sum(stats$p_i > 0.05)/nrow(stats)
 
-sum(intercept_ps > 0.05)/length(day_ps)
-sum(day_ps > 0.05)/length(day_ps)
+# frequency of significant slope:
+sum(stats$p_s > 0.05)/nrow(stats)
 ```
 
 
@@ -222,8 +234,6 @@ R has a specific type of 'object' that it uses for time series. It is called a t
 Lets create time series objects so that we can use some of the basic functions for time series analysis.
 
 **How to make a time series object.**
-
-Last week when we learned about the `imputeTS` package, we skipped over what we actually did to make a time series object. 
 
 We set the start and end by year and index, and then either a time step 'deltat' or frequency. 
 
@@ -325,9 +335,15 @@ Lets simulate the number of times the fish sees a twig float by, and see if that
 
 ```{r}
 r <- rpois(n = length(dec$random), lambda = 4)
-tidy(lm(dec$random ~ r, data = dec_df))
+tidy(lm(dec$random ~ r))
 ```
-No, there is no relation!(as expect since this random number generating process is unrelated to the time series)
+No, there is no relation! 
+
+Was this expected?
+
+<details>
+Yes ... this is as expect since this random number generating process is unrelated to the time series)
+</details>
 
 Or, you may want to test whether the trend is positive by regressing it against the months:
 
@@ -337,6 +353,8 @@ Or, you may want to test whether the trend is positive by regressing it against 
 tidy(lm(dec$trend ~ months))
 
 ```
+
+
 ### Seasonal Trend with Loess smoothing (STL) decomposition
 
 The seasonal component of the decomposed time series is very regular. The `acf()` function creates a seasonal component using the means, so if you have a monthly data set, the seasonal component for January will be the mean of all historical Januarys. 
@@ -389,29 +407,35 @@ You will often see time series models specified as **ARIMA(p,d,q)**
 
 The `forecast::auto.arima` function automatically fits these parameters. See https://otexts.com/fpp2/arima-r.html for an explanation of how this function works.
 
-**STL** Seasonal Seasonal Decomposition of Time Series by Loess. Extracts trend, seasonal, and locally smoothed moving average (described above). 
+**STL** Seasonal Decomposition of Time Series by Loess. Extracts trend, seasonal, and locally smoothed moving average (described above). 
 
 **ETS** Exponential smoothing state space model. These forecast based on previous observations, but the importance of the prior observations are weighted using exponential smoothing such that more recent observations have more weight. See https://otexts.com/fpp2/expsmooth.html
 
+## Forecasting
 
 ### Tools for forecasting
 
-As we discussed last week, there are some simple or 'naiive' ways to forecast - using the historical means from a seasonal trend, or using the overall mean. These approaches are useful, sometimes because they perform well and other times because they provide a reasonable null hypothesis. Some use the same methods that we used to interpolate.
+As we discussed last week, there are some simple or 'naive' ways to forecast - using the historical means from a seasonal trend, or using the overall mean. These approaches are useful, sometimes because they perform well and other times because they provide a reasonable null hypothesis. Some use the same methods that we used to interpolate.
 
 The `forecast` package has a lot of handy functions for the analysis of time series data, and the fitting of complex models including components described above. Here are some that may be useful:
 
-There are also functions `ets`, `stlm`, `ma`, `spline`, `meanf`, and `snaive` for ETS, STL, Moving Average, Spline, and Naive forecasts. 
+There are also functions `ets`, `stlm`, `ma`, `spline`, `meanf`, and `snaive` for ETS, STL, Moving Average, Spline, and Naive forecasts, respectively.
 
-The `tslm` function uses `lm` and adds the ability to automatically specify trend and season componets as predictors (even if they aren't in the data frame). The funciton fits a linear regression to trend, season, and other factors. This has special terms 'trend' and 'season' that don't actually have to be in the data frame - they are automatically fit and added. The result will include one estimate for the trend, and another for each time step (in this case, an intercept for the first month and a parameter for each subsequent month):  
+The `tslm` function is relatively simple. It uses the base `lm` function provided for linear regression in base R, and then adds the ability to automatically specify trend and season components as predictors (even if they aren't in the data frame). The function fits a linear regression to trend, season, and other factors. This has special terms 'trend' and 'season' that don't actually have to be in the data frame - they are automatically fit and added. The result will include one estimate for the trend, and another for each time step (in this case, an intercept for the first month and a parameter for each subsequent month):  
 
 ```{r}
 ts_fit <- tslm(all[,'seasonal_trend'] ~ trend + season)
-plot(forecast(ts_fit, h = 20))
 tidy(ts_fit)
 
 ```
 
-Another handy funciton is `auto.arima`. This function will evaluate a large number of candidate models (e.g. with different parameters for the STL and ETS components) and select the best based on AIC or other criteria. Note that this takes a long time because it has to evaluate so many candidate models. 
+Now that we have fit this model, we can use it to forecast the next set of observations.
+
+```{r}
+plot(forecast(ts_fit, h = 20))
+```
+
+Another handy function is `auto.arima`. This function will evaluate a large number of candidate models (e.g. with different parameters for the STL and ETS components) and select the best based on AIC or other criteria. Note that this takes a long time because it has to evaluate so many candidate models. 
 
 
 ```{r}
@@ -430,15 +454,15 @@ Indeed, whatever is used to actually measure - often boils down to changes in an
 
 A common application of state space modeling is to the study of dynamical systems. Often such a model is a set of equations that describe how a system evolves in time. 
 
-As a simple example, consider a model of a pendulum (see [Wikipedia](https://en.wikipedia.org/wiki/Pendulum_(mechanics)). This model has terms for the force of gravity and the length of the pendulum. The observatino might be the location of the pendulum at multiple points in time. It is then possible to estimate the force of gravity, the torque, velocity, and potential and kinetic energy at any point in time by fitting the observations of position to the dynamical model of pendulum dynamics.
+As a simple example, consider a model of a pendulum (see [Wikipedia](https://en.wikipedia.org/wiki/Pendulum_(mechanics)). 
+This model has terms for the force of gravity and the length of the pendulum. 
+The observation might be the location of the pendulum at multiple points in time. It is then possible to estimate the force of gravity, the torque, velocity, and potential and kinetic energy at any point in time by fitting the observations of position to the dynamical model of pendulum dynamics.
 
 Such a model can take parameters for equations that control the the dynamics of the system (e.g 'growth rate'). you know the state of a system, and how the system changes in time, you can use a state-space framework. Once the model represents the current state, it can represent the state of a system. Conceptually, they are a way of modeling time series when you have a model of the 'process' or mechanism that moves the system state from $t$ to $t+1$.
 
 The 'state' of the system may be partially unobserved. But we can infer these states based on observations. 
 
-
-
-## Ecological Forecasting
+### Ecological Forecasting
 
 Like time series, forecasting is a very large area of research. 
 
@@ -452,10 +476,11 @@ Some examples of ecological forecasting problems:
 - Predict the potential yield of different crops under future climates
 - Predict forest green up and senescence
 
-![](images/davis-agave.png)
+![](images/davis_agave.png)
 
 
 ![](images/efi_phenology.png)
+
 
 Key references include Clark et al 2001 and Dietze et al 2018 below. The Ecological Forecasting Initiative (EFI, [ecoforecast.org](https://ecoforecast.org/)) is a Research Coordination Network that you can join to learn and contribute to the development of this field.
 
@@ -472,8 +497,6 @@ There are a variety of forecasting challenges. These can be found on sites like 
 
 A note on challenges. Framing a problem as a challenge is a great way to engage the machine learning world. And these challenges provide a way to engage other communities, and lower the barrier to entry and more level playing field than many scientific pursuits. For challenges like those on Kaggle and the ones run by EFI, the best model wins. 
 
-
-
 ## Your Turn - Some Actual Data!
 
 ### Example 1: A twenty year history of weather in Maricopa, AZ
@@ -485,7 +508,7 @@ While we have a sample of the dataset in the lesson repository for a particular 
 Just change the lat, lon, start and end times to look at your favorite site!
 
 
-```{r eval=FALSE}
+```{r}
 library(daymetr)
 mac_daymet_list <- download_daymet(site = "Maricopa Agricultural Center",
                                    lat = 33.068941,
@@ -504,14 +527,14 @@ mac_daymet <- mac_daymet_list$data %>%
               trange = tmax - tmin,
               srad = srad..W.m.2.,
               vpd = vp..Pa.) 
-readr::write_csv(mac_daymet, file = '../data/mac_daymet.csv')
+readr::write_csv(mac_daymet, file = 'data/mac_daymet.csv')
 
 ```
 
-Lets read in and look at the data
+Lets read in and look at the data:
 
 ```{r}
-mac_daymet <- readr::read_csv('../data/mac_daymet.csv') %>% 
+mac_daymet <- readr::read_csv('data/mac_daymet.csv') %>% 
     select(date, precip, tmean, srad, vpd)
 
 head(mac_daymet)
@@ -547,16 +570,23 @@ lag.plot(tmean.ts, set.lags = c(1, 7, 30, 90, 180, 360))
 
 Which of these lags are positively correlated? 
 
-<detalis>The day, week, and month are all positively correlated.</details> 
+<details>
+The day, week, and month are all positively correlated.
+</details> 
 
-Which are negatively correlated 
-<details>The 1/2 year is negatively correlated - it will be warm on July 1 and cold on Dec 1</details>
+Which of these lags are negatively correlated?
+
+<details>
+The 1/2 year is negatively correlated - it will be warm on July 1 and cold on Dec 1
+</details>
 
 What causes the donut?
 
 <details>
 
 Imagine a circle from trigonometry class. If the value of x at the top of the circle is at 0 degrees, the equivalent of 90 days or 1/4 year ago would be the value of x at -90 degrees. Move forward to +90 degrees and the value of x is 0; the value of x 1/4 of the way back is 1. Take a second to plot these out. 
+
+</details>
 
 ```{r, fig.height=4, fig.width=4}
 angle <- 1:13 * 2 * pi/12
