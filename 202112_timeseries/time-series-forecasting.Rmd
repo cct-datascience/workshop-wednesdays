@@ -298,7 +298,7 @@ preds <- predict(mod_linear,
 ## approx. equivalent to:
 # preds <- 1 + 2 * newdays
 
-plot(day, mass, 
+plot(mass ~ day, 
      data = linear_data, 
      ylab = 'mass (g)', 
      ylim = c(0, 30),
