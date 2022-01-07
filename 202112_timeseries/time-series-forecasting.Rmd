@@ -648,7 +648,7 @@ STL and ETS components) and select the best based on AIC or other
 criteria. Note that this takes a long time because it has to evaluate so
 many candidate models.
 
-```{r}
+```{r cache=TRUE}
 auto_fit <- auto.arima(all[,'seasonal_trend'])
 summary(auto_fit)
 ```
@@ -980,12 +980,15 @@ summary(stlmvlm)
 
 ## References
 
-**Text Books** Hyndman, R.J., & Athanasopoulos, G. (2018) Forecasting:
+**Text Books** 
+
+Hyndman, R.J., & Athanasopoulos, G. (2018) Forecasting:
 principles and practice, 2nd edition, OTexts: Melbourne, Australia.
 OTexts.com/fpp2. Accessed on 2021-10-31
 
-Dietze, Michael. Ecological forecasting. Princeton University Press,
-2017.
+Dietze, Michael. Ecological forecasting. Princeton University Press, 2017.
+
+Bolker, Benjamin M. Ecological models and data in R. Princeton University Press, 2008.
 
 **Courses**
 
