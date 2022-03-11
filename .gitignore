@@ -40,3 +40,5 @@ vignettes/*.pdf
 
 # rsconnect
 202109-repro-data-sci/rsconnect/
+
+202112_timeseries/time-series-forecasting_files/
