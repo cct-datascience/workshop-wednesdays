@@ -5,15 +5,13 @@ date: "3/11/2022"
 output: html_document
 ---
 
-The primary purpose of this curriculum page is to help instructors teach the material. Tangential purposes include sharing content with potential workshop participants and other educators. 
-
-While this page can be used by workshop participants to review materials or for self-guided learning, it is not optimally designed for those purposes. 
+*Note: The primary purpose of this curriculum page is to help instructors teach the material. Tangential purposes include sharing content with potential workshop participants and other educators. While this page can be used by workshop participants to review materials or for self-guided learning, it is not optimally designed for those purposes.*
 
 ## Workshop Overview
 
 ### Purpose
 
-To introduce CALS researchers to better practices for sharing their code and results, managing their projects, and improving reproducibility of their computational work. No prerequisite knowledge is necessary. 
+To introduce CALS researchers to better practices for sharing their code and results, managing their projects, and improving reproducibility of their computational work. Learners who already use R and RStudio will get the most out of this workshop. 
 
 ### Instructional objectives
 
@@ -38,11 +36,13 @@ To introduce CALS researchers to better practices for sharing their code and res
     - *Tools*: markdown, Rmarkdown files, RPubs, RStudio Connect, GitHub
 
 ### General structure
-This workshop was originally taught as a series of 8 two-hour virtual sessions, meeting twice a week for four weeks. We have now added two sessions. Lesson 4 is now optional extension to explore the foundations of collaborating on GitHub, including forking and pull requests. Lessons 6 thru 9 are now modular, meaning that they are independent of each other and can be mixed and matched depending on learner interest. We believe that the full set of lessons will provide the most reinforcement necessary for adoption of these practices, but can also flexibly design shorter workshops depending on user needs. 
+This workshop was originally taught as a series of 8 two-hour virtual sessions, meeting twice a week for four weeks. We have now added two sessions, such that the workshop series can extend fro 8, 9, or 10 sessions.  
+
+Lesson 4 is an optional extension to explore the foundations of collaborating on GitHub, including forking, remotes, and pull requests. Lessons 6 thru 9 are now modular, meaning that they are independent of each other and can be mixed and matched depending on learner interest. 
 
 Relatively small workshop size (< 15) helped keep one-on-one troubleshooting manageable for two instructors. 
 
-The workshop format is code-along, and we use R/RStudio for the entire workshop. Students should install [R](https://cran.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/#download) prior to the first class. 
+The workshop format is primarily code-along, with some sessions that include slides, discussion, and demonstration. We use R/RStudio for the entire workshop. Students should install [R](https://cran.r-project.org/) and [RStudio](https://www.rstudio.com/products/rstudio/download/#download) prior to the first class. 
 
 ## Lessons 
 
@@ -247,6 +247,7 @@ Learners will learn about and practice managing their projects using file struct
 If lesson 4 was covered, do exercise asking participants to identify who owns the following repos and where they are located, for upstream, origin, and local repos. See example diagram below: 
 
 ![](figures/repos_diagram.png)
+
 If lesson 4 was not covered, do the review section in lesson 4. 
 
 ##### Modifications
