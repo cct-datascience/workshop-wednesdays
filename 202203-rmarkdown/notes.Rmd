@@ -2,7 +2,7 @@
 title: "Publishing Research as Reports with R Markdown"
 author: "Kristina Riemer"
 date: "03/30/2022"
-output: html_document
+output: github_document
 ---
 
 ## Overview
@@ -81,13 +81,27 @@ Content based on [Data Carpentry for Biologists knitr lecture](https://datacarpe
 - Include interactive components with R package `htmlwidgets` or with Shiny
 - Create dashboard using R package `flexdashboard` (run through example at end)
 
-Walk through how to create basic R Markdown. Final content: 
+**Walk through for creating basic R Markdown**
+
+Additional things to note beyond DC material: 
+
+- Briefly explain dataset
+- Show how to do unordered list
+- Google for markdown cheat sheet
+- Cover keyboard shortcuts for chunks
+- Explain how knitting creating new R session
+- Demonstrate running code interactively in console
+- Are using tidyverse packages but out of scope to explain how dplyr and ggplot work
+- Talk about sharing rendered output
+- Reknit at end into pdf output with `pdf_document`, though they might need to install other software
+
+Final content: 
 
 ````
 ---
 title: "Rodent Report"
 author: "Kristina Riemer"
-date: "10/27/2021"
+date: "3/29/2022"
 output: html_document
 ---
 
@@ -110,7 +124,7 @@ library(ggplot2)
 
 ## Read in data
 
-```{r}`r ''`
+```{r, cache=TRUE}`r ''`
 data <- read.csv("https://ndownloader.figshare.com/files/2292172")
 head(data)
 ```
@@ -119,15 +133,16 @@ The data includes `r knitr::inline_expr('length(unique(data$species_id))')` spec
 
 ## Clean up data and plot
 
-Summarizing data for number of occurrences per year and per species. Removed zero values and NAs, and species x because they went extinct. 
+Summarize data for number of occurrences per year and per species. 
 
 ```{r}`r ''`
-#generate time series data with dplyr
 time_series <- data %>% 
   group_by(species_id, year) %>% 
   summarize(count = n())
 head(time_series)
 ```
+
+Plot the time series. 
 
 ```{r, message=FALSE, echo=FALSE}`r ''`
 ggplot(time_series, aes(x = year, y = count)) +
@@ -152,6 +167,7 @@ ggplot(time_series, aes(x = year, y = count)) +
 **Walkthrough of publishing through RPubs**
 
 - [Official (incomplete?) instructions](https://rpubs.com/about/getting-started)
+- Sign out of RPubs ahead of time
 - Knit document, then click "Publish" button in pop up window
 - Select RPubs (only option if not connected to RStudio Connect server)
 - Create new account or sign in on browser window pop up
@@ -167,7 +183,7 @@ ggplot(time_series, aes(x = year, y = count)) +
 **Walkthrough of publishing through RStudio Connect**
 
 - [UA RStudio Connect](https://viz.datascience.arizona.edu/connect/)
-- Register UA account for RStudio Connect
+- Register UA account for RStudio Connect [here](https://datascience.arizona.edu/RSConnect)
 - Connect RStudio to RStudio Connect
   - Tools -> Global Options -> Publishing -> Connect...
   - Input UA server address -> Next
@@ -177,7 +193,7 @@ ggplot(time_series, aes(x = year, y = count)) +
   - First option takes longer with big files but renders on fly
   - Second option is faster but have to remember to have knit html
 - Will open in browser window
-- Show [example published R Markdown](https://viz.datascience.arizona.edu/connect/#/apps/61e325a4-b005-4cc6-b090-fbb2d939429e/access/3)
+- Show [example published R Markdown](https://viz.datascience.arizona.edu/connect/#/apps/cb52ef2a-6559-498f-90b8-06bd2c385da1/access)
 
 #### 3. Create new R Markdown
 
@@ -213,7 +229,7 @@ time_series <- data %>%
   summarize(count = n())
 ```
 
-Column 2
+Column 1
 --------------------------------------------------
 
 ### Number of species
