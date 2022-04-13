@@ -1,0 +1,45 @@
+---
+title: "Dates and times in R"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+### Objective
+
+Learners will how dates and times are represented in R and be able to convert variable formats to the R standard. Once dates and times are represented correctly, learners will use the 'lubridate' package to extract components and change timezones. 
+### Schedule
+
+|Topic   |Start time |
+|---|---|
+|Introductions   | 11  |
+|Date and time representation with POSIX   | 11:10  |
+|Creating POSIXct objects from strings  | 11:15   |
+|Timezones and Olson names   | 11:45  |
+|Reading in dates and times from csv  | 12:00 |
+|Extract time and date components with 'lubridate' and 'dplyr' | 12:15  |
+|Changing timezones, two ways   | 12:30   |
+|Open problem solving   | 12:45  |
+
+
+## Including Code
+
+You can include R code in the document as follows:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
