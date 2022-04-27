@@ -3,28 +3,41 @@ Dates and times in R
 
 ## Overview
 
-#### Objective
+#### Objectives
 
-Learners will how dates and times are represented in R and be able to
-convert variable formats to the R standard. Once dates and times are
-represented correctly, learners will use the ‘lubridate’ package to
-extract components and change timezones.
+Learners will how dates and times are represented in base R and be able
+to convert or import different formats, set time zones unambiguously,
+and perform simple calculations. Then, learners will use the ‘lubridate’
+package to extract date/time components and change time zones.
 
 #### Schedule
 
 | Topic                                                 | Start time |
 |-------------------------------------------------------|------------|
 | Introductions                                         | 11:00      |
-| 1\. Date representation in base R                     | 11:10      |
-| 2\. Date/time representation with POSIX               | 11:15      |
-| 3\. Timezones and Olson names                         | 11:45      |
-| 4\. Calculating time differences                      | 12:15      |
-| 5\. Reading in dates and times                        | 12:00      |
-| 6\. Extract time and date components with ‘lubridate’ | 12:15      |
-| 7\. Changing timezones with ‘lubridate’               | 12:30      |
+| 1\. Date representation in base R                     | 11:05      |
+| 2\. Date/time representation with POSIX               | 11:25      |
+| 3\. Time zones and Olson names                        | 11:50      |
+| 4\. Calculating time differences                      | 12:10      |
+| 5\. Reading in dates and times                        | 12:15      |
+| 6\. Extract time and date components with ‘lubridate’ | 12:30      |
+| 7\. Changing time zones with ‘lubridate’              | 12:35      |
 | Open problem solving                                  | 12:45      |
 
 ## Curriculum & Notes
+
+### Introduction
+
+Understanding how dates and times are represented in R is critical for
+visualizing and analyzing time series data. We begin with the
+sometimes-challenging task of converting character strings into date and
+date/time objects. Common pitfalls can be avoided by utilizing
+unambiguous formats and specifying time zones; time zones default to
+`Sys.time()` unless specified, which presents a hazard to reproducible
+analyses. Finally, we switch from base R to the ‘lubridate’ package to
+accomplish two specific tasks: (i) extracting date/time components and
+(ii) changing time zones, differentiating between converting between
+time zones and correcting the underlying time value.
 
 #### 1. Date representation in base R
 
@@ -36,18 +49,22 @@ page](https://www.stat.berkeley.edu/~s133/dates.html)</i>
     which can be retrieved with `as.numeric()`
 -   accepts character strings and POSIXlt or POSIXct objects
 -   to convert from a character string, the default format follows the
-    ISO 8601 international standard, which is “YYYY-MM-DD”
+    [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) international
+    standard, which is “YYYY-MM-DD”
+
+![](https://imgs.xkcd.com/comics/iso_8601.png)
+
 -   if character string is <i>not</i> already in default format, the
     `format` argument should be specified to avoid ambiguity
--   there is an optional timzezone or `tz` argument - more on this later
+-   there is an optional time zone or `tz` argument - more on this later
 
 | Type  | Code | Value                   |
 |-------|------|-------------------------|
 | Day   | %j   | Day of year (1-366)     |
 | Day   | %d   | Day of the month (1-31) |
 | Month | %m   | Month (01-12)           |
-| Month | %b   | Month(abbreviated)      |
-| Month | %B   | Month(full name)        |
+| Month | %b   | Month (abbreviated)     |
+| Month | %B   | Month (full name)       |
 | Year  | %y   | Year (2 digit)          |
 | Year  | %Y   | Year (4 digit)          |
 
@@ -88,21 +105,21 @@ page](https://www.stat.berkeley.edu/~s133/dates.html)</i>
     -   default ISO 8601 standard is “YYYY-MM-DD hh:mm:ss”
     -   if character string is <i>not</i> already in default format, the
         `format` argument should be specified to avoid ambiguity
-    -   if timezone is not specified, `as.POSIXct()` will default to
-        your `Sys.time()` timezone
+    -   if time zone is not specified with the `tz` argument,
+        `as.POSIXct()` will default to your `Sys.time()` time zone
 -   to convert components of date/time into POSIXct, use `ISOdate()` or
     `ISOdatetime()`
     -   specify numeric value of year, month, day, hour, min, sec
-    -   if timezone is not specified, `ISOdate()` will default to GMT
-    -   if timezone is not specified, `ISOdatetime()` will default to
-        your `Sys.time()` timezone
+    -   if time zone is not specified, `ISOdate()` will default to GMT
+    -   if time zone is not specified, `ISOdatetime()` will default to
+        your `Sys.time()` time zone
 
 | Type   | Code | Value                   |
 |--------|------|-------------------------|
 | Hour   | %H   | Hour (0-24)             |
 | Minute | %M   | Minute (0-59)           |
 | Second | %S   | Second (0-59)           |
-| Dy     | %j   | Day of year (1-366)     |
+| Day    | %j   | Day of year (1-366)     |
 | Day    | %d   | Day of the month (1-31) |
 | Month  | %m   | Month (01-12)           |
 | Month  | %b   | Month(abbreviated)      |
@@ -117,12 +134,12 @@ x <- as.POSIXct("2021-02-23 20:30:00")
 x
 class(x)
 str(x)
-attr(x, "tzone")
+attr(x, "tz")
 
 y <- as.POSIXct("April 2, 2019 15:35", format = "%B %d, %Y %H:%M",
                 tz = "America/Denver")
 y
-attr(y, "tzone")
+attr(y, "tz")
 
 z <- ISOdatetime(year = 2021, month = 2, day = 23, hour = 20, min = 30, sec = 0,
                  tz = "America/Phoenix")
@@ -135,7 +152,7 @@ z
 2013; 8; 18
 ```
 
-#### 3. Timezones and Olson names
+#### 3. Time zones and Olson names
 
 -   both `as.Date()` and `as.POSIXct()` have an optional `tz` argument
 -   there exists a [tz
@@ -144,7 +161,8 @@ z
 -   the tz database name for a time zone is sometimes referred to as the
     Olson name
     -   Check `OlsonNames()` for complete list
--   each name includes the offset from UTC (Coordinated Universal Time),
+-   each name includes the offset from UTC ([Coordinated Universal
+    Time](https://en.wikipedia.org/wiki/Coordinated_Universal_Time)),
     including for Daylight Saving where observed
 -   name is in format of Area/Location, e.g., America/Phoenix, where
     Area is typically the continent or ocean and Location is typically
@@ -152,7 +170,7 @@ z
 -   for most of the United States that observes Daylight Saving,
     e.g. America/Los\_Angeles, the Olson name automatically switches
     between PST and PDT
--   timezone designation affects which date is assigned when converting
+-   time zone designation affects which date is assigned when converting
     between POSIX and Date formats
 
 Let’s explore the following:
@@ -229,8 +247,8 @@ str(dat_clean)
         parsed into date, time, or date/time column types
     -   otherwise, the format must be specified in the `col_types`
         argument
-    -   timezone can be specified in the `locale` argument to avoid
-        ambiguity, or else your `Sys.time()` timezone will be the
+    -   time zone can be specified in the `locale` argument to avoid
+        ambiguity, or else your `Sys.time()` time zone will be the
         default
 
 Let’s explore the following:
@@ -284,24 +302,24 @@ dat %>%
          min = minute(dt))
 ```
 
-#### 7. Changing timezones with ‘lubridate’
+#### 7. Changing time zones with ‘lubridate’
+
+What is going on in this figure? ![timeseries](timeseries_tz.png)
 
 <i>Content based on [R for Data
 Science](https://r4ds.had.co.nz/dates-and-times.html#date-time-components)
 section and date and times</i>
 
 -   there are two distinct intentions with changing time zones:
-
-1.  Keep the numeric value (e.g., seconds since January 1, 1970) the
-    same, but alter how it is displayed
-2.  Change the underlying numeric value because the original timezone
-    was incorrect
-
+    1.  Keep the numeric value (e.g., seconds since January 1, 1970) the
+        same, but alter how it is displayed
+    2.  Correct the underlying numeric value because the original time
+        zone was incorrect
 -   ‘lubridate’ has clear functions for each instance
--   specify the `tzone` argument in `with_tz()` to change the time zone
+-   specify the `tzone` argument in `with_tz()` to convert the time zone
     displayed
 -   specify the `tzone` argument in `force_tz()` to correct the time
-    zone displayed
+    value itself
 
 Let’s explore the following:
 
@@ -320,7 +338,7 @@ difftime(x, x2)
 ## Help
 
 Feel free to drop by the [CCT Data Science Team office
-hours](https://datascience.cals.arizona.edu/office-hours), which happen
+hours](https://datascience.cals.arizona.edu/office-hours), which happens
 every Tuesday morning. We would love to help you with your R questions
 about date/time, and more!
 
