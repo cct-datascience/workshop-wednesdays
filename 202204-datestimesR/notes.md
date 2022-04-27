@@ -270,7 +270,7 @@ attr(dat$dt, "tzone")
 
 <i>Content based on [R for Data
 Science](https://r4ds.had.co.nz/dates-and-times.html#date-time-components)
-section and date and times</i>
+section on date and times</i>
 
 -   once data are read in correctly in POSIX format, components can be
     extracted with functions from the `lubridate()` package
