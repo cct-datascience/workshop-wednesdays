@@ -222,7 +222,7 @@ attr(dat$dt, "tzone")
 
 #### 6. Extract time and date components with 'lubridate'
 
-<i>Content based on [R for Data Science](https://r4ds.had.co.nz/dates-and-times.html#date-time-components) section and date and times</i>
+<i>Content based on [R for Data Science](https://r4ds.had.co.nz/dates-and-times.html#date-time-components) section on date and times</i>
 
  - once data are read in correctly in POSIX format, components can be extracted with functions from the `lubridate()` package
  - `year()`, `month()`, `hour()`, `minute()`, and `second()` are self-explanatory
