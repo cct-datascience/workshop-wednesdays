@@ -197,7 +197,7 @@ Otherwise, connect personal repository to GitHub.
 ---
 
 
-### Lesson 4 (optional)
+### Lesson 4
 
 #### Topic
 Collaborating with GitHub
@@ -275,7 +275,7 @@ Revise the plot_ts.R script to adhere to style guide and best practices. Optiona
 
 ---
 
-### Lesson 6 (modular)
+### Lesson 6
 
 #### Topic
 Intermediate R programming I
@@ -311,7 +311,7 @@ Create a plan for applying these skills to their own research projects. Can appl
 
 ---
 
-### Lesson 7 (modular)
+### Lesson 7
 
 #### Topic
 Intermediate R programming II
@@ -345,7 +345,7 @@ None
 
 ---
 
-### Lesson 8 (modular)
+### Lesson 8
 
 #### Topic
 Data manipulation
@@ -384,7 +384,7 @@ None
 
 ---
 
-### Lesson 9 (modular)
+### Lesson 9
 
 #### Topic
 Data visualization
