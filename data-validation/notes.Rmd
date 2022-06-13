@@ -1,0 +1,173 @@
+---
+title: "Data Validation in R"
+author: "Eric R. Scott"
+date: '2022-06-09'
+output: github_document
+---
+
+## Overview
+
+There are many opportunities for human error in data.
+Let's find them before we do analysis or maybe even before we finish the field season.
+
+## Learning Objectives
+
+-   Understand best practices for entering data and fixing errors in data
+
+-   Use Excel data validation tools to prevent data entry errors
+
+-   Compare data entered by two people in R to check for data entry mistakes
+
+-   Use the `pointblank` package to perform data validation checks
+
+## Notes
+
+-   **not** talking about "outliers" which are usually not appropriate to remove or change.
+
+```{r}
+library(tidyverse)
+plants_raw <- read_csv("data_raw/HDP_1997_2009.txt")
+plants <-
+  plants_raw |> 
+  #just take one plot, 2 years
+  filter(year %in% 2000:2001, plot == first(plot)) |> 
+  select(plot, subplot, plant_id, year, shts, ht, infl) |> 
+  #pivot wider to better resemble actual data entry
+  pivot_wider(names_from = year, values_from = c(shts, ht, infl), 
+              names_vary = "slowest")
+
+write_csv(plants, "data_raw/data_true.csv", na = "")
+
+```
+
+## Packages needed
+
+```{r}
+library(tidyverse)
+library(visdat)
+library(pointblank)
+```
+
+## Avoiding mistakes in data entry
+
+### Data Validation Tools in Excel
+
+-   Select a column (or cells) and choose Data \> Validation ...
+    from menu.
+
+-   Use "list" to restrict to specific values for categorical data
+
+-   Use "whole number" for count data
+
+-   Can either do before data entry or after, then use "Circle Invalid Data"
+
+-   Watch out for dates!
+
+    -   Even with validation turned on, Excel will auto-format anything that remotely looks like a date!
+
+    -   Caused serious scientific errors (show paper about gene names -\> dates)
+
+    -   Make sure no columns are set to "general" format.
+
+    -   Disable Excel's date detection behavior
+
+### Double-entry Method
+
+One method is to have two people enter the same data, then compare the data programatically.
+In the `data` folder, there are two versions of the example dataset—one entered by Eric and one entered by Jessica.
+
+```{r}
+eric <- read_csv("data/data_eric.csv")
+jessica <- read_csv("data/data_jessica.csv")
+```
+
+We can compare them a couple of ways.
+First, we can compare them visually using the `visdat` package.
+This only works if the two datasets are the same dimensions
+
+```{r}
+vis_compare(eric, jessica)
+```
+
+We can also compare by finding any rows that are not identical between the two datasets with the `anti_join()` function from `dplyr`.
+Adding row numbers first will make it easier to find mistakes in the csv files.
+
+```{r}
+# add rownumbers
+eric    <- eric    |> mutate(row = 2:(n()+1))
+jessica <- jessica |> mutate(row = 2:(n()+1))
+```
+
+```{r}
+#values in `eric` that are different in `jessica`
+anti_join(eric, jessica)
+#values in `jessica` that are different in `eric`
+anti_join(jessica, eric)
+```
+
+This finds several rows that aren't identical and have potential problems.
+For example for `plant_id` 33, Eric entered "27" for the height in 2000 and Jessica entered "21".
+Whoever recorded the measurement probably just had messy handwriting.
+There are two rows that appear in Eric's version but not in Jessica's version.
+Maybe Jessica skipped some rows or Eric accidentally entered two rows twice?
+These should be double-checked on the raw data sheet.
+
+## Catching mistakes in correctly entered data
+
+```{r}
+#after fixing data-entry errors, we get `data_resolved.csv`
+plants <- read_csv("data/data_resolved.csv")
+```
+
+After correcting the data entry, there may still be mistakes in the data as a result of incorrect recording of the data (or possibly a mistake that both Jessica *and* Eric made).  
+At this point, it is likely ***impossible*** to know for sure if aberrant data are truly mistakes and not just extreme values, unless you can go back to the field to check.
+However, we can still flag these unexpected values to double-check the raw data or in the field next time you are there.
+
+### The `pointblank` package
+
+```{r}
+library(pointblank)
+```
+
+[`pointblank`](https://rich-iannone.github.io/pointblank/) is an R package for data validation.  
+It includes 6 (six!) data validation workflows!
+Much of what it does is overkill for most of us, but the [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) makes very cool looking tables that will help you pinpoint potential mistakes.
+
+-   start with simple example
+-   demo "CSV" button
+-   then talk about action levels
+-   then talk about different validation functions
+
+```{r}
+create_agent(
+  tbl = plants,
+  label = "plants 2000 & 2001",
+) |> 
+  # basic checks on column types with `col_is_*` functions
+  col_is_character(columns = c(plot, subplot)) |> 
+  col_is_numeric(columns = starts_with(c("shts", "ht", "infl"))) |> 
+  # check values with `col_vals_*` functions
+  #TODO: simplify plot or sublot to be like 5 possibilities or something easier to do programmatically
+  # col_vals_in_set(columns = subplot, set = LETTERS[1:10]) |>
+  col_vals_between(columns = starts_with("shts"), left = 1, right = 4, na_pass = TRUE) |> 
+  col_vals_lt(columns = starts_with("ht"), 60) |> 
+  # "custom" checks with col_vals_expr().  E.g. check that height is measured to nearest cm:
+  col_vals_expr(~ ht_2000 %% 1 == 0) |> 
+  col_vals_expr(~ ht_2001 %% 1 == 0) |> 
+  interrogate()
+```
+
+(This wont show up in github doc. Prob need to use html)
+
+-   preconditions (or just mutate and make a new agent) to check growth between years
+
+-   publish validation to rstudio connect
+
+-   if you want something fancy set up for your lab (automation, advanced types of validations, etc.) contact us to talk more.
+
+## Help
+
+Feel free to drop by the [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours), which happens every Tuesday morning.
+We would love to help you with your R questions about date/time, and more!
+
+You can also [make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help.
