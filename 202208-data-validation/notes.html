@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Eric R. Scott">
-<meta name="dcterms.date" content="2022-06-14">
+<meta name="dcterms.date" content="2022-08-24">
 
 <title>Data Validation in Excel and R</title>
 <style>
@@ -121,7 +121,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 14, 2022</p>
+      <p class="date">August 24, 2022</p>
     </div>
   </div>
     
@@ -225,12 +225,16 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 <p><img src="notes_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>We can also compare by finding any rows that are not identical between the two datasets with the <code>anti_join()</code> function from <code>dplyr</code>. Adding row numbers first will make it easier to find mistakes in the csv files.</p>
+</section>
+<section id="compare-with-anti_join" class="level3">
+<h3 class="anchored" data-anchor-id="compare-with-anti_join">Compare with <code>anti_join()</code></h3>
+<p>First add row numbers to make it easier to find mistakes in Excel.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add rownumbers that match Excel (headers are row 1)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eric    <span class="ot">&lt;-</span> eric    <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">row =</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">n</span>()<span class="sc">+</span><span class="dv">1</span>), <span class="at">.before =</span> plot)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>jessica <span class="ot">&lt;-</span> jessica <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">row =</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">n</span>()<span class="sc">+</span><span class="dv">1</span>), <span class="at">.before =</span> plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><code>anti_join()</code> takes two data frames and returns only rows that differ between them.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#values in `eric` that are different in `jessica`</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">anti_join</span>(eric, jessica)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -269,7 +273,15 @@ Call `lifecycle::last_lifecycle_warnings()` to see where this warning was genera
 7   225 E          306         1      13 &lt;NA&gt;              1      12 &lt;NA&gt;     </code></pre>
 </div>
 </div>
-<p>This finds several rows that aren’t identical and have potential problems. For example for <code>plant_id</code> 33, Eric entered “27” for the height in 2000 and Jessica entered “21”. Whoever recorded the measurement probably just had messy handwriting. There are two rows that appear in Eric’s version but not in Jessica’s version. Maybe Jessica skipped some rows or Eric accidentally entered two rows twice? These should be double-checked on the raw data sheet.</p>
+<p>Errors include:</p>
+<ul>
+<li>row 14: messy handwriting? (21 or 27)</li>
+<li>row 96: typo in flwr_2020</li>
+<li>row 121: discrepency in plot ID</li>
+<li>row 159: messy handwriting? (33 or 38)</li>
+<li>row 167 &amp; 168: completely different rows</li>
+<li>row 225: missing data in Eric’s version</li>
+</ul>
 </section>
 </section>
 <section id="catching-mistakes-in-correctly-entered-data" class="level2">
@@ -1120,9 +1132,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-14 11:37:00 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-14 13:48:13 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-14 11:37:01 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-14 13:48:13 EDT</span></td>
     </tr>
   </tfoot>
   
