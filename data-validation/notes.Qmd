@@ -1,8 +1,8 @@
 ---
-title: "Data Validation in R"
+title: "Data Validation in Excel and R"
 author: "Eric R. Scott"
-date: '2022-06-09'
-output: github_document
+date: "`r Sys.Date()`"
+format: html
 ---
 
 ## Overview
@@ -20,66 +20,67 @@ Let's find them before we do analysis or maybe even before we finish the field s
 
 -   Use the `pointblank` package to perform data validation checks
 
-## Notes
+::: callout-important
+## We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
+:::
 
--   **not** talking about "outliers" which are usually not appropriate to remove or change.
+## Software needed
 
-```{r}
-library(tidyverse)
-plants_raw <- read_csv("data_raw/HDP_1997_2009.txt")
-plants <-
-  plants_raw |> 
-  #just take one plot, 2 years
-  filter(year %in% 2000:2001, plot == first(plot)) |> 
-  select(plot, subplot, plant_id, year, shts, ht, infl) |> 
-  #pivot wider to better resemble actual data entry
-  pivot_wider(names_from = year, values_from = c(shts, ht, infl), 
-              names_vary = "slowest")
-
-write_csv(plants, "data_raw/data_true.csv", na = "")
-
-```
-
-## Packages needed
+You'll need access to Excel, R, RStudio, and the following R packages:
 
 ```{r}
+#| output: false
 library(tidyverse)
 library(visdat)
 library(pointblank)
+library(readxl)
 ```
 
 ## Avoiding mistakes in data entry
 
+Set up validation tools in your data entry spreadsheet to stop data entry errors in their tracks!
+
+<!--# add gif or image here -->
+
 ### Data Validation Tools in Excel
 
--   Select a column (or cells) and choose Data \> Validation ...
-    from menu.
+-   Select a column (or cells) and choose `Data > Validation …` from the menu
 
 -   Use "list" to restrict to specific values for categorical data
 
 -   Use "whole number" for count data
 
--   Can either do before data entry or after, then use "Circle Invalid Data"
+-   Can also be set up *after* data entry.
+    Highlight invalid data with "Circle Invalid Data" from toolbar
 
--   Watch out for dates!
+### Watch out for dates!
 
-    -   Even with validation turned on, Excel will auto-format anything that remotely looks like a date!
+-   Even with validation turned on, Excel will auto-format anything that remotely looks like a date!
 
-    -   Caused serious scientific errors (show paper about gene names -\> dates)
+[![](images/nature-excel.png){fig-alt="Nature headline: \"Autocorrect errors in Excel still creating genomics headache.  Despite geneticists being warned about spreadsheet problems, 30% of published papers contain mangled gene names in supplementary data." fig-align="center" width="400"}](https://www.nature.com/articles/d41586-021-02211-4)
 
-    -   Make sure no columns are set to "general" format.
+\[DEMO\]
 
-    -   Disable Excel's date detection behavior
+### Stop Excel Autocorrect!
+
+![](images/excel-meme.jpg){fig-alt="Confused anime guy with butterfly meme where the guy has a Microsoft Excel logo on his face, the butterfly is \"any data at all\" and the caption is \"is this a date?\"" width="200"}
+
+1.  Explicitly set all column types to numeric, text, date, etc.
+
+2.  Make sure no columns are set to "general" ![](images/general-x.png){width="120"}
 
 ### Double-entry Method
 
-One method is to have two people enter the same data, then compare the data programatically.
-In the `data` folder, there are two versions of the example dataset—one entered by Eric and one entered by Jessica.
+-   Two people enter the same data, then compare programatically.
+
+-   In the `data` folder, there are two versions of a dataset---one entered by Eric and one entered by Jessica.
 
 ```{r}
-eric <- read_csv("data/data_eric.csv")
-jessica <- read_csv("data/data_jessica.csv")
+eric <- read_excel("data/data_eric.xlsx")
+jessica <- read_excel("data/data_jessica.xlsx")
 ```
+
+### Compare visually with `visdat`
 
 We can compare them a couple of ways.
 First, we can compare them visually using the `visdat` package.
@@ -93,9 +94,9 @@ We can also compare by finding any rows that are not identical between the two d
 Adding row numbers first will make it easier to find mistakes in the csv files.
 
 ```{r}
-# add rownumbers
-eric    <- eric    |> mutate(row = 2:(n()+1))
-jessica <- jessica |> mutate(row = 2:(n()+1))
+# add rownumbers that match Excel (headers are row 1)
+eric    <- eric    |> mutate(row = 2:(n()+1), .before = plot)
+jessica <- jessica |> mutate(row = 2:(n()+1), .before = plot)
 ```
 
 ```{r}
@@ -116,10 +117,10 @@ These should be double-checked on the raw data sheet.
 
 ```{r}
 #after fixing data-entry errors, we get `data_resolved.csv`
-plants <- read_csv("data/data_resolved.csv")
+plants <- read_excel("data/data_resolved.xlsx")
 ```
 
-After correcting the data entry, there may still be mistakes in the data as a result of incorrect recording of the data (or possibly a mistake that both Jessica *and* Eric made).  
+After correcting the data entry, there may still be mistakes in the data as a result of incorrect recording of the data (or possibly a mistake that both Jessica *and* Eric made).\
 At this point, it is likely ***impossible*** to know for sure if aberrant data are truly mistakes and not just extreme values, unless you can go back to the field to check.
 However, we can still flag these unexpected values to double-check the raw data or in the field next time you are there.
 
@@ -129,7 +130,7 @@ However, we can still flag these unexpected values to double-check the raw data 
 library(pointblank)
 ```
 
-[`pointblank`](https://rich-iannone.github.io/pointblank/) is an R package for data validation.  
+[`pointblank`](https://rich-iannone.github.io/pointblank/) is an R package for data validation.\
 It includes 6 (six!) data validation workflows!
 Much of what it does is overkill for most of us, but the [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) makes very cool looking tables that will help you pinpoint potential mistakes.
 
@@ -144,7 +145,7 @@ create_agent(
   label = "plants 2000 & 2001",
 ) |> 
   # basic checks on column types with `col_is_*` functions
-  col_is_character(columns = c(plot, subplot)) |> 
+  col_is_character(columns = plot) |> 
   col_is_numeric(columns = starts_with(c("shts", "ht", "infl"))) |> 
   # check values with `col_vals_*` functions
   #TODO: simplify plot or sublot to be like 5 possibilities or something easier to do programmatically
@@ -156,8 +157,6 @@ create_agent(
   col_vals_expr(~ ht_2001 %% 1 == 0) |> 
   interrogate()
 ```
-
-(This wont show up in github doc. Prob need to use html)
 
 -   preconditions (or just mutate and make a new agent) to check growth between years
 
