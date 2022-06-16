@@ -2,7 +2,10 @@
 title: "Data Validation in Excel and R"
 author: "Eric R. Scott"
 date: "2022-08-24"
-format: html
+format: 
+  html:
+    toc: true
+    toc_float: true
 ---
 
 ## Overview
@@ -53,17 +56,15 @@ Set up validation tools in your data entry spreadsheet to stop data entry errors
 -   Can also be set up *after* data entry.
     Highlight invalid data with "Circle Invalid Data" from toolbar
 
-### Watch out for dates!
+### Watch out for Excel autocorrect!
 
--   Even with validation turned on, Excel will auto-format anything that remotely looks like a date!
-
-[![](images/nature-excel.png){fig-alt="Nature headline: \"Autocorrect errors in Excel still creating genomics headache.  Despite geneticists being warned about spreadsheet problems, 30% of published papers contain mangled gene names in supplementary data." fig-align="center" width="400"}](https://www.nature.com/articles/d41586-021-02211-4)
-
-\[DEMO\]
-
-### Stop Excel Autocorrect!
+::: {layout-ncol="2"}
+[![](images/nature-excel.png){fig-alt="Nature headline: \"Autocorrect errors in Excel still creating genomics headache.  Despite geneticists being warned about spreadsheet problems, 30% of published papers contain mangled gene names in supplementary data." width="530"}](https://www.nature.com/articles/d41586-021-02211-4)
 
 ![](images/excel-meme.jpg){fig-alt="Confused anime guy with butterfly meme where the guy has a Microsoft Excel logo on his face, the butterfly is \"any data at all\" and the caption is \"is this a date?\"" width="200"}
+:::
+
+To stop Excel from converting entries to dates:
 
 1.  Explicitly set all column types to numeric, text, date, etc.
 
@@ -80,17 +81,18 @@ eric <- read_excel("data/data_eric.xlsx")
 jessica <- read_excel("data/data_jessica.xlsx")
 ```
 
-### Compare visually with `visdat`
+#### Compare visually with `visdat`
 
 We can compare them a couple of ways.
 First, we can compare them visually using the `visdat` package.
-This only works if the two datasets are the same dimensions
+This only works if the two datasets are the same dimensions.
 
 ```{r}
+#| warning: false
 vis_compare(eric, jessica)
 ```
 
-### Compare with `anti_join()`
+#### Compare with `dplyr::anti_join()`
 
 First add row numbers to make it easier to find mistakes in Excel.
 
@@ -118,18 +120,20 @@ Errors include:
 -   row 167 & 168: completely different rows
 -   row 225: missing data in Eric's version
 
-## Catching mistakes in correctly entered data
-
-TODO: this section needs pacing and more detail
-
 ```{r}
 #after fixing data-entry errors, we get `data_resolved.csv`
 plants <- read_excel("data/data_resolved.xlsx")
 ```
 
-After correcting the data entry, there may still be mistakes in the data as a result of incorrect recording of the data (or possibly a mistake that both Jessica *and* Eric made).\
-At this point, it is likely ***impossible*** to know for sure if aberrant data are truly mistakes and not just extreme values, unless you can go back to the field to check.
-However, we can still flag these unexpected values to double-check the raw data or in the field next time you are there.
+## Catching mistakes after data entry
+
+<!--# TODO: this section needs pacing and more detail  -->
+
+-   Correctly entered data could also contain mistakes in *recording* the data
+
+-   Likely ***impossible*** to know for sure if aberrant data are truly mistakes and not just extreme values, unless you can go back to the field to check.
+
+-   Can still flag unexpected values to double-check data sheets or in the field
 
 ### The `pointblank` package
 
@@ -137,39 +141,104 @@ However, we can still flag these unexpected values to double-check the raw data 
 library(pointblank)
 ```
 
-[`pointblank`](https://rich-iannone.github.io/pointblank/) is an R package for data validation.\
-It includes 6 (six!) data validation workflows!
-Much of what it does is overkill for most of us, but the [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) makes very cool looking tables that will help you pinpoint potential mistakes.
+-   `pointblank` provides 6 (six!) workflows for validating data
 
--   start with simple example
--   demo "CSV" button
--   then talk about action levels
--   then talk about different validation functions
+-   The [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) (VALID-1) is probably most useful for this group
+
+-   Start with a data frame, create an "agent", give it some validation functions, and let it "interrogate" your data!
+
+-   Output is a HTML table with CSV buttons to download any data that didn't pass your validations!
+
+### `pointblank` demo
+
+1.  Decide on "action levels". Can set a number or fraction of rows as a threshold for a warning or error
 
 ```{r}
-create_agent(
-  tbl = plants,
-  label = "plants 2000 & 2001",
-) |> 
-  # basic checks on column types with `col_is_*` functions
-  col_is_character(columns = plot) |> 
-  col_is_numeric(columns = starts_with(c("shts", "ht", "infl"))) |> 
-  # check values with `col_vals_*` functions
-  #TODO: simplify plot or sublot to be like 5 possibilities or something easier to do programmatically
-  # col_vals_in_set(columns = subplot, set = LETTERS[1:10]) |>
-  col_vals_between(columns = starts_with("shts"), left = 1, right = 4, na_pass = TRUE) |> 
-  col_vals_lt(columns = starts_with("ht"), 60) |> 
-  # "custom" checks with col_vals_expr().  E.g. check that height is measured to nearest cm:
-  col_vals_expr(~ ht_2000 %% 1 == 0) |> 
-  col_vals_expr(~ ht_2001 %% 1 == 0) |> 
-  interrogate()
+al <- action_levels(warn_at = 1, stop_at = .1)
+al
 ```
 
--   preconditions (or just mutate and make a new agent) to check growth between years
+2.  Create agent
 
--   publish validation to rstudio connect
+```{r}
+agent <- 
+  create_agent(
+    tbl = plants, #our data example from before
+    label = "plants 2000 & 2001",
+    actions = al
+  )
+```
+
+3.  Specify validation conditions
+
+-   Basic checks on column types with `col_is_*()` functions
+-   Check column values with `col_vals_*()` functions
+-   Check rows (e.g. duplicate rows) with `rows_*()` functions
+
+```{r}
+agent_informed <- 
+  agent |> 
+  col_is_character(columns = plot) |>  #plot should be character
+  col_is_numeric(columns = c(shts_2000, shts_2001)) |> #shts should be numeric
+  
+  col_vals_in_set(columns = plot, set = LETTERS[1:10]) |> #plot should be A-E
+  col_vals_lt(  #expect shts < 5
+    columns = c(shts_2000, shts_2001), 
+    value =  5,
+    na_pass = TRUE
+  ) |> 
+  
+  rows_distinct(columns = vars(plant_id)) #no duplicate plant IDs
+
+#TODO: ^this should work with `columns = plant_id` but doesn't due to a bug:
+#https://github.com/rich-iannone/pointblank/issues/416
+#switch when bug gets fixed.
+```
+
+4. Interrogate!
+
+```{r}
+agent_informed |> interrogate()
+```
+
+### Flexible validations
+
+If a validation function you need doesn't exist, you can use `col_vals_expr()`
+
+E.g. let's add a validation that height is measured to the nearest cm.
+
+```{r}
+agent_informed <-
+  agent_informed |> 
+  col_vals_expr(~ ht_2000 %% 1 == 0) |> 
+  col_vals_expr(~ ht_2001 %% 1 == 0) 
+
+agent_informed |> interrogate()
+```
+
+### Create new columns to test on the fly
+
+"preconditions" let you manipulate the data before a check is run within a single validation step.
+
+E.g. check that height doesn't change by more than 50 cm from 2000 to 2001
+
+```{r}
+agent_informed |> 
+  col_vals_lt(
+    columns = ht_change, #doesn't exist yet 
+    value = 50,
+    na_pass = TRUE,
+    preconditions = function(df) mutate(df, ht_change = ht_2001 - ht_2000)
+    ) |> interrogate()
+```
+
+### Publishing validation reports
+
+-   publish validation to rstudio connect with R Markdown
 
 -   if you want something fancy set up for your lab (automation, advanced types of validations, etc.) contact us to talk more.
+
+
 
 ## Help
 
