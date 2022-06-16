@@ -7,6 +7,8 @@ editor: visual
 
 Outline:
 
+PART 1:
+
 1.  What problems does workflow management solve?
 2.  Quick demo of `targets`
 3.  How to setup a project to use `targets` with `use_targets()`
@@ -19,15 +21,18 @@ Outline:
     4.  Make changes and re-run `tar_make()`
 4.  How to refactor an existing project to use `targets`
     1.  converting code to functions using RStudio "extract function" feature
-5.  Good practices for targets
+
+PART 2:
+
+1.  Good practices for targets
     1.  names
 
     2.  how many?
-6.  Parallelization with `tar_make_clustermq()` or `tar_make_future()`
-7.  Branching demo
+2.  Parallelization with `tar_make_clustermq()` or `tar_make_future()`
+3.  Branching demo
     1.  Just dynamic branching, I think?
         Basically just make them aware that it exists and is powerful for speeding up repetitive tasks
-8.  When to use `targets` for a project?
+4.  When to use `targets` for a project?
     1.  Consider complexity, time to re-run
 
     2.  As you get more comfortable with `targets`, you may find yourself using it for even simple projects.
