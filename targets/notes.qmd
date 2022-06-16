@@ -1,0 +1,43 @@
+---
+title: "Workflow Managment in R Projects with {targets}"
+author: "Eric Scott"
+format: html
+editor: visual
+---
+
+Outline:
+
+1.  What problems does workflow management solve?
+2.  Quick demo of `targets`
+3.  How to setup a project to use `targets` with `use_targets()`
+    1.  Anatomy of `targets` project
+
+    2.  Writing your first targets
+
+    3.  Visualize with `tar_visnetwork()`
+
+    4.  Make changes and re-run `tar_make()`
+4.  How to refactor an existing project to use `targets`
+    1.  converting code to functions using RStudio "extract function" feature
+5.  Good practices for targets
+    1.  names
+
+    2.  how many?
+6.  Parallelization with `tar_make_clustermq()` or `tar_make_future()`
+7.  Branching demo
+    1.  Just dynamic branching, I think?
+        Basically just make them aware that it exists and is powerful for speeding up repetitive tasks
+8.  When to use `targets` for a project?
+    1.  Consider complexity, time to re-run
+
+    2.  As you get more comfortable with `targets`, you may find yourself using it for even simple projects.
+
+    3.  Collaborating with `targets`
+
+        1.  `_targets` not tracked with git/GitHub
+
+        2.  Cloud storage a possibility, but extra setup
+
+        3.  Save intermediate results with `tar_file()`
+
+I also want to make a template repo that has a cool readme with the mermaid.js graph and instructions for reproducibility that people can start with.
