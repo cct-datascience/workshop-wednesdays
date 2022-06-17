@@ -10,8 +10,7 @@ format:
 
 ## Overview
 
-There are many opportunities for human error in data.
-Let's find them before we do analysis or maybe even before we finish the field season.
+There are many opportunities for human or instrument error to affect data. Ideally, you want to find those errors and fix them early and often!  This workshop introduces some tools in Excel and R to avoid making mistakes in data entry and data collection, and to detect the ones you inadvertently make.
 
 ## Learning Objectives
 
@@ -20,6 +19,8 @@ Let's find them before we do analysis or maybe even before we finish the field s
 -   Use Excel data validation tools to prevent data entry errors
 
 -   Compare data entered by two people in R to check for data entry mistakes
+
+-   Explore data summaries to check for errors
 
 -   Use the `pointblank` package to perform data validation checks
 
@@ -37,6 +38,7 @@ library(tidyverse)
 library(visdat)
 library(pointblank)
 library(readxl)
+library(skimr)
 ```
 
 ## Avoiding mistakes in data entry
@@ -125,9 +127,32 @@ Errors include:
 plants <- read_excel("data/data_resolved.xlsx")
 ```
 
-## Catching mistakes after data entry
+## Explore data summaries
 
-<!--# TODO: this section needs pacing and more detail  -->
+-   You can't check for errors if you don't get to know your data!
+-   Use `skimr::skim()` to get a nicely formatted summary
+
+```{r}
+skimr::skim(plants)
+```
+
+## Explore data visually
+
+-   `visdat::vis_guess()` can help spot inconsistencies
+-   I'll change one of the plots to a number to demonstrate
+
+```{r}
+#change plot in the 10th row to "1"
+plants$plot[10] <- 1
+#doesn't change the type of the column
+class(plants$plot)
+#but vis_guess() spots the mistake!
+visdat::vis_guess(plants)
+```
+
+It also spots a decimal in the `ht_2000` column (but it's hard to see the green line)
+
+## Data validation pipelines with `pointblank`
 
 -   Correctly entered data could also contain mistakes in *recording* the data
 
@@ -171,9 +196,9 @@ agent <-
 
 3.  Specify validation conditions
 
--   Basic checks on column types with `col_is_*()` functions
--   Check column values with `col_vals_*()` functions
--   Check rows (e.g. duplicate rows) with `rows_*()` functions
+    -   Basic checks on column types with `col_is_*()` functions
+    -   Check column values with `col_vals_*()` functions
+    -   Check rows (e.g. duplicate rows) with `rows_*()` functions
 
 ```{r}
 agent_informed <- 
@@ -195,9 +220,11 @@ agent_informed <-
 #switch when bug gets fixed.
 ```
 
-4. Interrogate!
+4.  Interrogate!
 
 ```{r}
+#| column: body-outset
+
 agent_informed |> interrogate()
 ```
 
@@ -208,6 +235,7 @@ If a validation function you need doesn't exist, you can use `col_vals_expr()`
 E.g. let's add a validation that height is measured to the nearest cm.
 
 ```{r}
+#| column: body-outset
 agent_informed <-
   agent_informed |> 
   col_vals_expr(~ ht_2000 %% 1 == 0) |> 
@@ -223,22 +251,25 @@ agent_informed |> interrogate()
 E.g. check that height doesn't change by more than 50 cm from 2000 to 2001
 
 ```{r}
+#| column: body-outset
 agent_informed |> 
   col_vals_lt(
     columns = ht_change, #doesn't exist yet 
     value = 50,
     na_pass = TRUE,
+    # creates a new column on the fly:
     preconditions = function(df) mutate(df, ht_change = ht_2001 - ht_2000)
-    ) |> interrogate()
+    ) |> 
+  interrogate()
 ```
 
 ### Publishing validation reports
 
--   publish validation to rstudio connect with R Markdown
+-   Students, faculty, and staff at University of Arizona have access to **RStudio Connect** which allows you to publish an RMarkdown document to the web with a single click.
+    ([Learn More](https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect))
 
--   if you want something fancy set up for your lab (automation, advanced types of validations, etc.) contact us to talk more.
-
-
+-   Data validation can be automated in a variety of ways.
+    If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
 
 ## Help
 

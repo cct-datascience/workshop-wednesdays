@@ -113,7 +113,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#watch-out-for-excel-autocorrect" id="toc-watch-out-for-excel-autocorrect" class="nav-link" data-scroll-target="#watch-out-for-excel-autocorrect">Watch out for Excel autocorrect!</a></li>
   <li><a href="#double-entry-method" id="toc-double-entry-method" class="nav-link" data-scroll-target="#double-entry-method">Double-entry Method</a></li>
   </ul></li>
-  <li><a href="#catching-mistakes-after-data-entry" id="toc-catching-mistakes-after-data-entry" class="nav-link" data-scroll-target="#catching-mistakes-after-data-entry">Catching mistakes after data entry</a>
+  <li><a href="#explore-data-summaries" id="toc-explore-data-summaries" class="nav-link" data-scroll-target="#explore-data-summaries">Explore data summaries</a></li>
+  <li><a href="#explore-data-visually" id="toc-explore-data-visually" class="nav-link" data-scroll-target="#explore-data-visually">Explore data visually</a></li>
+  <li><a href="#data-validation-pipelines-with-pointblank" id="toc-data-validation-pipelines-with-pointblank" class="nav-link" data-scroll-target="#data-validation-pipelines-with-pointblank">Data validation pipelines with <code>pointblank</code></a>
   <ul class="collapse">
   <li><a href="#the-pointblank-package" id="toc-the-pointblank-package" class="nav-link" data-scroll-target="#the-pointblank-package">The <code>pointblank</code> package</a></li>
   <li><a href="#pointblank-demo" id="toc-pointblank-demo" class="nav-link" data-scroll-target="#pointblank-demo"><code>pointblank</code> demo</a></li>
@@ -125,7 +127,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </ul>
 </nav>
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -157,7 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>There are many opportunities for human error in data. Let’s find them before we do analysis or maybe even before we finish the field season.</p>
+<p>There are many opportunities for human or instrument error to affect data. Ideally, you want to find those errors and fix them early and often! This workshop introduces some tools in Excel and R to avoid making mistakes in data entry and data collection, and to detect the ones you inadvertently make.</p>
 </section>
 <section id="learning-objectives" class="level2">
 <h2 class="anchored" data-anchor-id="learning-objectives">Learning Objectives</h2>
@@ -165,6 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Understand best practices for entering data and fixing errors in data</p></li>
 <li><p>Use Excel data validation tools to prevent data entry errors</p></li>
 <li><p>Compare data entered by two people in R to check for data entry mistakes</p></li>
+<li><p>Explore data summaries to check for errors</p></li>
 <li><p>Use the <code>pointblank</code> package to perform data validation checks</p></li>
 </ul>
 <div class="callout-important callout callout-style-default callout-captioned">
@@ -188,7 +191,8 @@ We are only interested in fixing verifiable mistakes! It is generally <strong>no
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visdat)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pointblank)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="avoiding-mistakes-in-data-entry" class="level2">
@@ -307,9 +311,238 @@ We are only interested in fixing verifiable mistakes! It is generally <strong>no
 </section>
 </section>
 </section>
-<section id="catching-mistakes-after-data-entry" class="level2">
-<h2 class="anchored" data-anchor-id="catching-mistakes-after-data-entry">Catching mistakes after data entry</h2>
-<!--# TODO: this section needs pacing and more detail  -->
+<section id="explore-data-summaries" class="level2">
+<h2 class="anchored" data-anchor-id="explore-data-summaries">Explore data summaries</h2>
+<ul>
+<li>You can’t check for errors if you don’t get to know your data!</li>
+<li>Use <code>skimr::skim()</code> to get a nicely formatted summary</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(plants)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">plants</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">247</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">character</td>
+<td style="text-align: left;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 15%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">max</th>
+<th style="text-align: right;">empty</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: right;">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">plot</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">flwr_2000</td>
+<td style="text-align: right;">243</td>
+<td style="text-align: right;">0.02</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">flwr_2001</td>
+<td style="text-align: right;">245</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 12%">
+<col style="width: 17%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">plant_id</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">167.79</td>
+<td style="text-align: right;">97.25</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">83.5</td>
+<td style="text-align: right;">166</td>
+<td style="text-align: right;">247.5</td>
+<td style="text-align: right;">337</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">shts_2000</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">2.06</td>
+<td style="text-align: right;">1.07</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">▇▇▃▂▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ht_2000</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">26.95</td>
+<td style="text-align: right;">13.85</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">17.0</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">34.0</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: left;">▆▇▃▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">shts_2001</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">2.10</td>
+<td style="text-align: right;">1.11</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">▇▂▁▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ht_2001</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.89</td>
+<td style="text-align: right;">26.88</td>
+<td style="text-align: right;">14.47</td>
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">16.0</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">35.0</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: left;">▇▇▃▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="explore-data-visually" class="level2">
+<h2 class="anchored" data-anchor-id="explore-data-visually">Explore data visually</h2>
+<ul>
+<li><code>visdat::vis_guess()</code> can help spot inconsistencies</li>
+<li>I’ll change one of the plots to a number to demonstrate</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#change plot in the 10th row to "1"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plants<span class="sc">$</span>plot[<span class="dv">10</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#doesn't change the type of the column</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(plants<span class="sc">$</span>plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#but vis_guess() spots the mistake!</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>visdat<span class="sc">::</span><span class="fu">vis_guess</span>(plants)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="notes_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It also spots a decimal in the <code>ht_2000</code> column (but it’s hard to see the green line)</p>
+</section>
+<section id="data-validation-pipelines-with-pointblank" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="data-validation-pipelines-with-pointblank">Data validation pipelines with <code>pointblank</code></h2>
 <ul>
 <li><p>Correctly entered data could also contain mistakes in <em>recording</em> the data</p></li>
 <li><p>Likely <strong><em>impossible</em></strong> to know for sure if aberrant data are truly mistakes and not just extreme values, unless you can go back to the field to check.</p></li>
@@ -318,7 +551,7 @@ We are only interested in fixing verifiable mistakes! It is generally <strong>no
 <section id="the-pointblank-package" class="level3">
 <h3 class="anchored" data-anchor-id="the-pointblank-package">The <code>pointblank</code> package</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p><code>pointblank</code> provides 6 (six!) workflows for validating data</p></li>
@@ -327,14 +560,14 @@ We are only interested in fixing verifiable mistakes! It is generally <strong>no
 <li><p>Output is a HTML table with CSV buttons to download any data that didn’t pass your validations!</p></li>
 </ul>
 </section>
-<section id="pointblank-demo" class="level3">
+<section id="pointblank-demo" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="pointblank-demo"><code>pointblank</code> demo</h3>
 <ol type="1">
 <li>Decide on “action levels”. Can set a number or fraction of rows as a threshold for a warning or error</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>al <span class="ot">&lt;-</span> <span class="fu">action_levels</span>(<span class="at">warn_at =</span> <span class="dv">1</span>, <span class="at">stop_at =</span> .<span class="dv">1</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>al</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>al <span class="ot">&lt;-</span> <span class="fu">action_levels</span>(<span class="at">warn_at =</span> <span class="dv">1</span>, <span class="at">stop_at =</span> .<span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>al</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>-- The `action_levels` settings
 WARN failure threshold of 1test units.
@@ -346,46 +579,46 @@ STOP failure threshold of 0.1 of all test units.
 <li>Create agent</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>agent <span class="ot">&lt;-</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">create_agent</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tbl =</span> plants, <span class="co">#our data example from before</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"plants 2000 &amp; 2001"</span>,</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">actions =</span> al</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>agent <span class="ot">&lt;-</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">create_agent</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tbl =</span> plants, <span class="co">#our data example from before</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"plants 2000 &amp; 2001"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">actions =</span> al</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="3" type="1">
-<li>Specify validation conditions</li>
-</ol>
+<li><p>Specify validation conditions</p>
 <ul>
 <li>Basic checks on column types with <code>col_is_*()</code> functions</li>
 <li>Check column values with <code>col_vals_*()</code> functions</li>
 <li>Check rows (e.g.&nbsp;duplicate rows) with <code>rows_*()</code> functions</li>
-</ul>
+</ul></li>
+</ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="ot">&lt;-</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  agent <span class="sc">|&gt;</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_is_character</span>(<span class="at">columns =</span> plot) <span class="sc">|&gt;</span>  <span class="co">#plot should be character</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_is_numeric</span>(<span class="at">columns =</span> <span class="fu">c</span>(shts_2000, shts_2001)) <span class="sc">|&gt;</span> <span class="co">#shts should be numeric</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_in_set</span>(<span class="at">columns =</span> plot, <span class="at">set =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">|&gt;</span> <span class="co">#plot should be A-E</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_lt</span>(  <span class="co">#expect shts &lt; 5</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(shts_2000, shts_2001), </span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span>  <span class="dv">5</span>,</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">na_pass =</span> <span class="cn">TRUE</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rows_distinct</span>(<span class="at">columns =</span> <span class="fu">vars</span>(plant_id)) <span class="co">#no duplicate plant IDs</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: ^this should work with `columns = plant_id` but doesn't due to a bug:</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">#https://github.com/rich-iannone/pointblank/issues/416</span></span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">#switch when bug gets fixed.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="ot">&lt;-</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  agent <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_is_character</span>(<span class="at">columns =</span> plot) <span class="sc">|&gt;</span>  <span class="co">#plot should be character</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_is_numeric</span>(<span class="at">columns =</span> <span class="fu">c</span>(shts_2000, shts_2001)) <span class="sc">|&gt;</span> <span class="co">#shts should be numeric</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_in_set</span>(<span class="at">columns =</span> plot, <span class="at">set =</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]) <span class="sc">|&gt;</span> <span class="co">#plot should be A-E</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_lt</span>(  <span class="co">#expect shts &lt; 5</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">c</span>(shts_2000, shts_2001), </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span>  <span class="dv">5</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">na_pass =</span> <span class="cn">TRUE</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rows_distinct</span>(<span class="at">columns =</span> <span class="fu">vars</span>(plant_id)) <span class="co">#no duplicate plant IDs</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#TODO: ^this should work with `columns = plant_id` but doesn't due to a bug:</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#https://github.com/rich-iannone/pointblank/issues/416</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#switch when bug gets fixed.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ol start="4" type="1">
 <li>Interrogate!</li>
 </ol>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="sc">|&gt;</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="sc">|&gt;</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display column-body-outset">
 
 <div id="pb_agent" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -959,7 +1192,7 @@ html {
 </div></td>
 <td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><p>—</p>
 </div></td></tr>
-    <tr><td class="gt_row gt_left" style="background-color: #4CA64C; height:  40px"></td>
+    <tr><td class="gt_row gt_left" style="background-color: #FFBF00; height:  40px"></td>
 <td class="gt_row gt_right" style="color: #666666; font-size: 13px; font-weight: bold; height:  40px">4</td>
 <td class="gt_row gt_left" style="height:  40px"><div class="gt_from_md"><div aria-label="Expect that values in `plot` should be in the set of `A`, `B`, `C` (and 7 more). " data-balloon-pos="right" style="width:fit-content;">
   <div style="margin:0;padding:0;display:inline-block;height:30px;vertical-align:middle;"><!--?xml version="1.0" encoding="UTF-8"?--><svg width="30px" height="30px" viewbox="0 0 67 67" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">    <title>col_vals_in_set</title>    <g id="All-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">        <g id="col_vals_in_set" transform="translate(0.000000, 0.172414)">            <path d="M56.712234,1 C59.1975153,1 61.4475153,2.00735931 63.076195,3.63603897 C64.7048747,5.26471863 65.712234,7.51471863 65.712234,10 L65.712234,10 L65.712234,65 L10.712234,65 C8.22695259,65 5.97695259,63.9926407 4.34827294,62.363961 C2.71959328,60.7352814 1.71223397,58.4852814 1.71223397,56 L1.71223397,56 L1.71223397,10 C1.71223397,7.51471863 2.71959328,5.26471863 4.34827294,3.63603897 C5.97695259,2.00735931 8.22695259,1 10.712234,1 L10.712234,1 Z" id="rectangle" stroke="#000000" stroke-width="2" fill="#FFFFFF"></path>            <path d="M44.127969,41.1538382 L31.0814568,41.1538382 C29.9510748,41.1536429 28.8827052,40.9256134 27.9079888,40.5136953 C26.4467442,39.8960136 25.19849,38.8599685 24.3189894,37.5577099 C23.8792391,36.906727 23.5314818,36.1899233 23.2936866,35.4252675 C23.2130217,35.16589 23.1460289,34.9005554 23.0913409,34.6307286 L44.1278714,34.6307286 C45.028466,34.6306309 45.7586488,33.9004481 45.7586488,32.9998535 C45.7586488,32.0992589 45.028466,31.3690761 44.1278714,31.3690761 L23.0905596,31.3690761 C23.1990567,30.8337194 23.3597028,30.3180894 23.5675173,29.8264831 C24.185199,28.3652386 25.2212442,27.1169844 26.5236004,26.2374838 C27.1745833,25.7977334 27.891387,25.4499762 28.6560428,25.2122786 C29.4208939,24.9744833 30.2334994,24.8459665 31.0813591,24.8459665 L44.1277737,24.8459665 C45.0283683,24.8459665 45.7586488,24.1157837 45.7586488,23.2151891 C45.7586488,22.3145945 45.0283683,21.5844117 44.1277737,21.5844117 L31.0813591,21.5844117 C29.5096643,21.5844117 28.0039858,21.9038483 26.6373711,22.4820765 C24.5866678,23.3498583 22.8469049,24.7950871 21.6163267,26.616296 C20.3856508,28.4362354 19.665136,30.6413347 19.6658191,33.0000488 C19.6658191,34.5717436 19.9852563,36.0774222 20.5635822,37.4440369 C21.4312663,39.4947402 22.8765927,41.2345031 24.697704,42.4650813 C26.5176434,43.6957572 28.7227427,44.4155883 31.0814568,44.4155883 L44.1278714,44.4155883 C45.028466,44.4155883 45.7586488,43.6854055 45.7586488,42.7848109 C45.7586488,41.8842163 45.0285636,41.1538382 44.127969,41.1538382 Z" id="set_of" fill="#000000" fill-rule="nonzero"></path>        </g>    </g></svg></div>
@@ -979,15 +1212,17 @@ html {
 <td class="gt_row gt_center" style="border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="background:transparent;padding:5px;color:#4CA64C;vertical-align:middle;font-size:15px;border:none;" aria-label="No evaluation issues." data-balloon-pos="left">✓</span></p>
 </div></td>
 <td class="gt_row gt_right" style="font-size: 11px; height:  40px"><code>247</code></td>
-<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>247</code><br><code>1</code></td>
-<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>0</code><br><code>0</code></td>
-<td class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #E5AB00;">○</span></p>
+<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>246</code><br><code>1</code></td>
+<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>1</code><br><code>0</code></td>
+<td class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #E5AB00;">●</span></p>
 </div></td>
 <td class="gt_row gt_center" style="background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #CF142B;">○</span></p>
 </div></td>
 <td class="gt_row gt_center" style="border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p>—</p>
 </div></td>
-<td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><p>—</p>
+<td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><a href="data:text/csv;base64,InBsb3QiLCJwbGFudF9pZCIsInNodHNfMjAwMCIsImh0XzIwMDAiLCJmbHdyXzIwMDAiLCJzaHRzXzIwMDEiLCJodF8yMDAxIiwiZmx3cl8yMDAxIgoiMSIsMzAsNCwzOCxOQSw0LDQzLE5BCg==" download="extract_0004.csv">
+  <button aria-label="There are 1 'fail' rows available as a CSV file." data-balloon-pos="left" style="background-color:#67C2DC;color:#FFFFFF;border:none;padding:5px;font-weight:bold;cursor:pointer;border-radius:4px;">CSV</button>
+</a>
 </div></td></tr>
     <tr><td class="gt_row gt_left" style="background-color: #FFBF00; height:  40px"></td>
 <td class="gt_row gt_right" style="color: #666666; font-size: 13px; font-weight: bold; height:  40px">5</td>
@@ -1087,9 +1322,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-16 12:52:58 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-17 12:07:04 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-16 12:52:59 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-17 12:07:04 EDT</span></td>
     </tr>
   </tfoot>
   
@@ -1098,18 +1333,18 @@ html {
 </div>
 </div>
 </section>
-<section id="flexible-validations" class="level3">
+<section id="flexible-validations" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="flexible-validations">Flexible validations</h3>
 <p>If a validation function you need doesn’t exist, you can use <code>col_vals_expr()</code></p>
 <p>E.g. let’s add a validation that height is measured to the nearest cm.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="ot">&lt;-</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  agent_informed <span class="sc">|&gt;</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_expr</span>(<span class="sc">~</span> ht_2000 <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_expr</span>(<span class="sc">~</span> ht_2001 <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">0</span>) </span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="sc">|&gt;</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="ot">&lt;-</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  agent_informed <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_expr</span>(<span class="sc">~</span> ht_2000 <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_expr</span>(<span class="sc">~</span> ht_2001 <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">0</span>) </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="sc">|&gt;</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display column-body-outset">
 
 <div id="pb_agent" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -1683,7 +1918,7 @@ html {
 </div></td>
 <td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><p>—</p>
 </div></td></tr>
-    <tr><td class="gt_row gt_left" style="background-color: #4CA64C; height:  40px"></td>
+    <tr><td class="gt_row gt_left" style="background-color: #FFBF00; height:  40px"></td>
 <td class="gt_row gt_right" style="color: #666666; font-size: 13px; font-weight: bold; height:  40px">4</td>
 <td class="gt_row gt_left" style="height:  40px"><div class="gt_from_md"><div aria-label="Expect that values in `plot` should be in the set of `A`, `B`, `C` (and 7 more). " data-balloon-pos="right" style="width:fit-content;">
   <div style="margin:0;padding:0;display:inline-block;height:30px;vertical-align:middle;"><!--?xml version="1.0" encoding="UTF-8"?--><svg width="30px" height="30px" viewbox="0 0 67 67" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">    <title>col_vals_in_set</title>    <g id="All-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">        <g id="col_vals_in_set" transform="translate(0.000000, 0.172414)">            <path d="M56.712234,1 C59.1975153,1 61.4475153,2.00735931 63.076195,3.63603897 C64.7048747,5.26471863 65.712234,7.51471863 65.712234,10 L65.712234,10 L65.712234,65 L10.712234,65 C8.22695259,65 5.97695259,63.9926407 4.34827294,62.363961 C2.71959328,60.7352814 1.71223397,58.4852814 1.71223397,56 L1.71223397,56 L1.71223397,10 C1.71223397,7.51471863 2.71959328,5.26471863 4.34827294,3.63603897 C5.97695259,2.00735931 8.22695259,1 10.712234,1 L10.712234,1 Z" id="rectangle" stroke="#000000" stroke-width="2" fill="#FFFFFF"></path>            <path d="M44.127969,41.1538382 L31.0814568,41.1538382 C29.9510748,41.1536429 28.8827052,40.9256134 27.9079888,40.5136953 C26.4467442,39.8960136 25.19849,38.8599685 24.3189894,37.5577099 C23.8792391,36.906727 23.5314818,36.1899233 23.2936866,35.4252675 C23.2130217,35.16589 23.1460289,34.9005554 23.0913409,34.6307286 L44.1278714,34.6307286 C45.028466,34.6306309 45.7586488,33.9004481 45.7586488,32.9998535 C45.7586488,32.0992589 45.028466,31.3690761 44.1278714,31.3690761 L23.0905596,31.3690761 C23.1990567,30.8337194 23.3597028,30.3180894 23.5675173,29.8264831 C24.185199,28.3652386 25.2212442,27.1169844 26.5236004,26.2374838 C27.1745833,25.7977334 27.891387,25.4499762 28.6560428,25.2122786 C29.4208939,24.9744833 30.2334994,24.8459665 31.0813591,24.8459665 L44.1277737,24.8459665 C45.0283683,24.8459665 45.7586488,24.1157837 45.7586488,23.2151891 C45.7586488,22.3145945 45.0283683,21.5844117 44.1277737,21.5844117 L31.0813591,21.5844117 C29.5096643,21.5844117 28.0039858,21.9038483 26.6373711,22.4820765 C24.5866678,23.3498583 22.8469049,24.7950871 21.6163267,26.616296 C20.3856508,28.4362354 19.665136,30.6413347 19.6658191,33.0000488 C19.6658191,34.5717436 19.9852563,36.0774222 20.5635822,37.4440369 C21.4312663,39.4947402 22.8765927,41.2345031 24.697704,42.4650813 C26.5176434,43.6957572 28.7227427,44.4155883 31.0814568,44.4155883 L44.1278714,44.4155883 C45.028466,44.4155883 45.7586488,43.6854055 45.7586488,42.7848109 C45.7586488,41.8842163 45.0285636,41.1538382 44.127969,41.1538382 Z" id="set_of" fill="#000000" fill-rule="nonzero"></path>        </g>    </g></svg></div>
@@ -1703,15 +1938,17 @@ html {
 <td class="gt_row gt_center" style="border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="background:transparent;padding:5px;color:#4CA64C;vertical-align:middle;font-size:15px;border:none;" aria-label="No evaluation issues." data-balloon-pos="left">✓</span></p>
 </div></td>
 <td class="gt_row gt_right" style="font-size: 11px; height:  40px"><code>247</code></td>
-<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>247</code><br><code>1</code></td>
-<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>0</code><br><code>0</code></td>
-<td class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #E5AB00;">○</span></p>
+<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>246</code><br><code>1</code></td>
+<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>1</code><br><code>0</code></td>
+<td class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #E5AB00;">●</span></p>
 </div></td>
 <td class="gt_row gt_center" style="background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #CF142B;">○</span></p>
 </div></td>
 <td class="gt_row gt_center" style="border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p>—</p>
 </div></td>
-<td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><p>—</p>
+<td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><a href="data:text/csv;base64,InBsb3QiLCJwbGFudF9pZCIsInNodHNfMjAwMCIsImh0XzIwMDAiLCJmbHdyXzIwMDAiLCJzaHRzXzIwMDEiLCJodF8yMDAxIiwiZmx3cl8yMDAxIgoiMSIsMzAsNCwzOCxOQSw0LDQzLE5BCg==" download="extract_0004.csv">
+  <button aria-label="There are 1 'fail' rows available as a CSV file." data-balloon-pos="left" style="background-color:#67C2DC;color:#FFFFFF;border:none;padding:5px;font-weight:bold;cursor:pointer;border-radius:4px;">CSV</button>
+</a>
 </div></td></tr>
     <tr><td class="gt_row gt_left" style="background-color: #FFBF00; height:  40px"></td>
 <td class="gt_row gt_right" style="color: #666666; font-size: 13px; font-weight: bold; height:  40px">5</td>
@@ -1863,9 +2100,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-16 12:53:01 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-17 12:07:05 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-16 12:53:01 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-17 12:07:06 EDT</span></td>
     </tr>
   </tfoot>
   
@@ -1874,19 +2111,21 @@ html {
 </div>
 </div>
 </section>
-<section id="create-new-columns-to-test-on-the-fly" class="level3">
+<section id="create-new-columns-to-test-on-the-fly" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="create-new-columns-to-test-on-the-fly">Create new columns to test on the fly</h3>
 <p>“preconditions” let you manipulate the data before a check is run within a single validation step.</p>
 <p>E.g. check that height doesn’t change by more than 50 cm from 2000 to 2001</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="sc">|&gt;</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_lt</span>(</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> ht_change, <span class="co">#doesn't exist yet </span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="dv">50</span>,</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">na_pass =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">preconditions =</span> <span class="cf">function</span>(df) <span class="fu">mutate</span>(df, <span class="at">ht_change =</span> ht_2001 <span class="sc">-</span> ht_2000)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>agent_informed <span class="sc">|&gt;</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">col_vals_lt</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">columns =</span> ht_change, <span class="co">#doesn't exist yet </span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="dv">50</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">na_pass =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># creates a new column on the fly:</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">preconditions =</span> <span class="cf">function</span>(df) <span class="fu">mutate</span>(df, <span class="at">ht_change =</span> ht_2001 <span class="sc">-</span> ht_2000)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display column-body-outset">
 
 <div id="pb_agent" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
@@ -2460,7 +2699,7 @@ html {
 </div></td>
 <td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><p>—</p>
 </div></td></tr>
-    <tr><td class="gt_row gt_left" style="background-color: #4CA64C; height:  40px"></td>
+    <tr><td class="gt_row gt_left" style="background-color: #FFBF00; height:  40px"></td>
 <td class="gt_row gt_right" style="color: #666666; font-size: 13px; font-weight: bold; height:  40px">4</td>
 <td class="gt_row gt_left" style="height:  40px"><div class="gt_from_md"><div aria-label="Expect that values in `plot` should be in the set of `A`, `B`, `C` (and 7 more). " data-balloon-pos="right" style="width:fit-content;">
   <div style="margin:0;padding:0;display:inline-block;height:30px;vertical-align:middle;"><!--?xml version="1.0" encoding="UTF-8"?--><svg width="30px" height="30px" viewbox="0 0 67 67" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">    <title>col_vals_in_set</title>    <g id="All-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">        <g id="col_vals_in_set" transform="translate(0.000000, 0.172414)">            <path d="M56.712234,1 C59.1975153,1 61.4475153,2.00735931 63.076195,3.63603897 C64.7048747,5.26471863 65.712234,7.51471863 65.712234,10 L65.712234,10 L65.712234,65 L10.712234,65 C8.22695259,65 5.97695259,63.9926407 4.34827294,62.363961 C2.71959328,60.7352814 1.71223397,58.4852814 1.71223397,56 L1.71223397,56 L1.71223397,10 C1.71223397,7.51471863 2.71959328,5.26471863 4.34827294,3.63603897 C5.97695259,2.00735931 8.22695259,1 10.712234,1 L10.712234,1 Z" id="rectangle" stroke="#000000" stroke-width="2" fill="#FFFFFF"></path>            <path d="M44.127969,41.1538382 L31.0814568,41.1538382 C29.9510748,41.1536429 28.8827052,40.9256134 27.9079888,40.5136953 C26.4467442,39.8960136 25.19849,38.8599685 24.3189894,37.5577099 C23.8792391,36.906727 23.5314818,36.1899233 23.2936866,35.4252675 C23.2130217,35.16589 23.1460289,34.9005554 23.0913409,34.6307286 L44.1278714,34.6307286 C45.028466,34.6306309 45.7586488,33.9004481 45.7586488,32.9998535 C45.7586488,32.0992589 45.028466,31.3690761 44.1278714,31.3690761 L23.0905596,31.3690761 C23.1990567,30.8337194 23.3597028,30.3180894 23.5675173,29.8264831 C24.185199,28.3652386 25.2212442,27.1169844 26.5236004,26.2374838 C27.1745833,25.7977334 27.891387,25.4499762 28.6560428,25.2122786 C29.4208939,24.9744833 30.2334994,24.8459665 31.0813591,24.8459665 L44.1277737,24.8459665 C45.0283683,24.8459665 45.7586488,24.1157837 45.7586488,23.2151891 C45.7586488,22.3145945 45.0283683,21.5844117 44.1277737,21.5844117 L31.0813591,21.5844117 C29.5096643,21.5844117 28.0039858,21.9038483 26.6373711,22.4820765 C24.5866678,23.3498583 22.8469049,24.7950871 21.6163267,26.616296 C20.3856508,28.4362354 19.665136,30.6413347 19.6658191,33.0000488 C19.6658191,34.5717436 19.9852563,36.0774222 20.5635822,37.4440369 C21.4312663,39.4947402 22.8765927,41.2345031 24.697704,42.4650813 C26.5176434,43.6957572 28.7227427,44.4155883 31.0814568,44.4155883 L44.1278714,44.4155883 C45.028466,44.4155883 45.7586488,43.6854055 45.7586488,42.7848109 C45.7586488,41.8842163 45.0285636,41.1538382 44.127969,41.1538382 Z" id="set_of" fill="#000000" fill-rule="nonzero"></path>        </g>    </g></svg></div>
@@ -2480,15 +2719,17 @@ html {
 <td class="gt_row gt_center" style="border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="background:transparent;padding:5px;color:#4CA64C;vertical-align:middle;font-size:15px;border:none;" aria-label="No evaluation issues." data-balloon-pos="left">✓</span></p>
 </div></td>
 <td class="gt_row gt_right" style="font-size: 11px; height:  40px"><code>247</code></td>
-<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>247</code><br><code>1</code></td>
-<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>0</code><br><code>0</code></td>
-<td class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #E5AB00;">○</span></p>
+<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>246</code><br><code>1</code></td>
+<td class="gt_row gt_right" style="border-left-width: 1px; border-left-style: dashed; border-left-color: #E5E5E5; font-size: 11px; height:  40px"><code>1</code><br><code>0</code></td>
+<td class="gt_row gt_center" style="border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #E5AB00;">●</span></p>
 </div></td>
 <td class="gt_row gt_center" style="background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p><span style="color: #CF142B;">○</span></p>
 </div></td>
 <td class="gt_row gt_center" style="border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; background-color: #FCFCFC; height:  40px"><div class="gt_from_md"><p>—</p>
 </div></td>
-<td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><p>—</p>
+<td class="gt_row gt_center" style="height:  40px"><div class="gt_from_md"><a href="data:text/csv;base64,InBsb3QiLCJwbGFudF9pZCIsInNodHNfMjAwMCIsImh0XzIwMDAiLCJmbHdyXzIwMDAiLCJzaHRzXzIwMDEiLCJodF8yMDAxIiwiZmx3cl8yMDAxIgoiMSIsMzAsNCwzOCxOQSw0LDQzLE5BCg==" download="extract_0004.csv">
+  <button aria-label="There are 1 'fail' rows available as a CSV file." data-balloon-pos="left" style="background-color:#67C2DC;color:#FFFFFF;border:none;padding:5px;font-weight:bold;cursor:pointer;border-radius:4px;">CSV</button>
+</a>
 </div></td></tr>
     <tr><td class="gt_row gt_left" style="background-color: #FFBF00; height:  40px"></td>
 <td class="gt_row gt_right" style="color: #666666; font-size: 13px; font-weight: bold; height:  40px">5</td>
@@ -2672,9 +2913,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-16 12:53:03 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-06-17 12:07:07 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-16 12:53:04 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-06-17 12:07:08 EDT</span></td>
     </tr>
   </tfoot>
   
@@ -2686,8 +2927,8 @@ html {
 <section id="publishing-validation-reports" class="level3">
 <h3 class="anchored" data-anchor-id="publishing-validation-reports">Publishing validation reports</h3>
 <ul>
-<li><p>publish validation to rstudio connect with R Markdown</p></li>
-<li><p>if you want something fancy set up for your lab (automation, advanced types of validations, etc.) contact us to talk more.</p></li>
+<li><p>Students, faculty, and staff at University of Arizona have access to <strong>RStudio Connect</strong> which allows you to publish an RMarkdown document to the web with a single click. (<a href="https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect">Learn More</a>)</p></li>
+<li><p>Data validation can be automated in a variety of ways. If you are interested in more advanced applications of data validation for your lab, <a href="https://cct.cals.arizona.edu/contact">contact us</a>!</p></li>
 </ul>
 </section>
 </section>
