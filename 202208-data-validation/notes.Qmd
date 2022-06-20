@@ -25,7 +25,7 @@ This workshop introduces some tools in Excel and R to avoid making mistakes in d
 
 -   Explore data summaries to check for errors
 
--   Use the `pointblank` package to perform data validation checks
+-   Get the gist of how you can use the `pointblank` package to perform data validation checks
 
 ::: callout-important
 ## We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
@@ -42,6 +42,15 @@ library(visdat)
 library(pointblank)
 library(readxl)
 library(skimr)
+```
+
+If you can, install the development version of `pointblank` using this R code:
+
+```r
+if(!require("remotes")) {
+  install.packages("remotes")
+} 
+remotes::install_github("rich-iannone/pointblank")
 ```
 
 ## Avoiding mistakes in data entry
@@ -136,9 +145,23 @@ plants <- read_excel("data/data_resolved.xlsx")
 
 -   You can't check for errors if you don't get to know your data!
 -   Use `skimr::skim()` to get a nicely formatted summary
+-   Look for number of unique values for categorical variables
+-   Look for long tails or strange patterns in mini-histograms for numeric variables
 
 ```{r}
+#| column: body-outset
+
 skimr::skim(plants)
+```
+
+Or get a more detailed breakdown by running `skim()` on a grouped data frame:
+
+```{r}
+#| column: body-outset
+
+plants |> 
+  group_by(plot) |> 
+  skim()
 ```
 
 ## Explore data visually
@@ -220,9 +243,9 @@ agent_informed <-
   
   rows_distinct(columns = vars(plant_id)) #no duplicate plant IDs
 
-#TODO: ^this should work with `columns = plant_id` but doesn't due to a bug:
-#https://github.com/rich-iannone/pointblank/issues/416
-#switch when bug gets fixed.
+#'TODO: ^this should work as just `columns = plant_id` but doesn't due to a bug.  
+#'Change if this gets fixed before workshop. 
+#'https://github.com/rich-iannone/pointblank/issues/416
 ```
 
 4.  Interrogate!
