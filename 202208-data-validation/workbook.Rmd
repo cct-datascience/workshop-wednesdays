@@ -1,0 +1,239 @@
+---
+title: "Data Validation in Excel and R"
+author: "Eric R. Scott"
+date: '2022-08-24'
+---
+
+# Load packages
+
+```{r}
+library(tidyverse)
+library(visdat)
+library(pointblank)
+library(readxl)
+library(skimr)
+```
+
+# Learning Objectives
+
+-   Understand best practices for entering data and fixing errors in data
+-   Use Excel data validation tools to prevent data entry errors
+-   Compare data entered by two people in R to check for data entry mistakes
+-   Explore data summaries to check for errors
+-   Get the gist of how you can use the `pointblank` package to perform data validation checks
+
+
+# Data Validation Tools in Excel
+
+-   Select a column (or cells) and choose `Data > Validation …` from the menu
+-   Use "list" to restrict to specific values for categorical data
+-   Use "whole number" for count data
+
+To stop Excel from converting entries to dates:
+
+1.  Explicitly set all column types to numeric, text, date, etc.
+2.  Make sure no columns are set to "general"
+
+# Double-entry Method
+
+-   Two people enter the same data, then compare programatically.
+-   In the `data` folder, there are two versions of a dataset---one entered by Eric and one entered by Jessica.
+
+```{r}
+eric <- read_excel("data/data_eric.xlsx")
+jessica <- read_excel("data/data_jessica.xlsx")
+```
+
+## Compare visually with `visdat`
+
+We can compare them a couple of ways.
+First, we can compare them visually using the `visdat` package.
+This only works if the two datasets are the same dimensions.
+
+```{r}
+vis_compare(eric, jessica)
+```
+
+## Compare with `dplyr::anti_join()`
+
+First add row numbers to make it easier to find mistakes in Excel.
+
+```{r}
+# add rownumbers that match Excel (headers are row 1)
+eric    <- eric    |> mutate(row = 2:(n()+1), .before = plot)
+jessica <- jessica |> mutate(row = 2:(n()+1), .before = plot)
+```
+
+`anti_join()` takes two data frames and returns only rows that differ between them.
+
+```{r}
+#values in `eric` that are different in `jessica`
+anti_join(eric, jessica)
+#values in `jessica` that are different in `eric`
+anti_join(jessica, eric)
+```
+
+What errors can you spot?
+
+
+```{r}
+#after fixing data-entry errors, we get `data_resolved.csv`
+plants <- read_excel("data/data_resolved.xlsx")
+```
+
+# Explore data summaries
+
+-   You can't check for errors if you don't get to know your data!
+-   Use `skimr::skim()` to get a nicely formatted summary
+-   Look for number of unique values for categorical variables
+-   Look for long tails or strange patterns in mini-histograms for numeric variables
+
+```{r}
+skimr::skim(plants)
+```
+
+Or get a more detailed breakdown by running `skim()` on a grouped data frame:
+
+```{r}
+
+```
+
+## Explore data visually
+
+-   `visdat::vis_guess()` can help spot inconsistencies
+
+```{r}
+visdat::vis_guess(plants)
+```
+
+Spot the mistake? 
+
+Try intentionally introducing different kinds of mistakes to see if `vis_guess()` can spot them:
+
+- change a `plant_id` to a character value
+- change a `plot` to a number
+- change a value of `shts` to a decimal
+- change a value of `flwr` to "TRUE"
+
+```{r}
+plants_messed_up <- plants
+
+# mess up the data.  E.g.:
+plants_messed_up$plant_id[25] <- "plant1"
+
+
+
+
+vis_guess(plants_messed_up)
+```
+
+
+# Data validation pipelines with `pointblank`
+
+https://rich-iannone.github.io/pointblank
+
+```{r}
+library(pointblank)
+```
+
+
+## `pointblank` demo
+
+1.  Decide on "action levels". Can set a number or fraction of rows as a threshold for a warning or error
+
+```{r}
+al <- action_levels(warn_at = 1, stop_at = .02)
+al
+```
+
+2.  Create agent
+
+```{r}
+agent <- 
+  create_agent(
+    tbl = plants, #our data example from before
+    label = "plants 2000 & 2001",
+    actions = al
+  )
+```
+
+3.  Specify validation conditions
+
+    -   Basic checks on column types with `col_is_*()` functions
+    -   Check column values with `col_vals_*()` functions
+    -   Check rows (e.g. duplicate rows) with `rows_*()` functions
+
+```{r}
+agent_informed <- 
+  agent |> 
+  col_is_character(columns = plot) |>  #plot should be character
+  col_is_numeric(columns = starts_with("shts")) #shts columns should be numeric
+  
+
+```
+
+4.  Interrogate!
+
+```{r}
+agent_informed |> interrogate()
+```
+
+## Add validation steps
+
+Try using `col_is*()` and `rows_*()` functions to add the following validation steps:
+
+  - check that `ht` columns are numeric
+  - check that `plot` should be LETTERS[1:10] (use `col_vals_in_set`)
+  - check that `shts` should be < 5
+  - check for duplicate rows
+
+
+## Flexible validations
+
+If a validation function you need doesn't exist, you can use `col_vals_expr()`
+
+E.g. let's add a validation that height is measured to the nearest cm.
+
+```{r}
+agent_informed <-
+  agent_informed |> 
+  col_vals_expr(~ ht_2000 %% 1 == 0) |> 
+  col_vals_expr(~ ht_2001 %% 1 == 0) 
+
+agent_informed |> interrogate()
+```
+
+Use the same pattern to check that values in the shts columns are integers
+
+```{r}
+agent_informed |> 
+  #add your validation steps
+  interrogate()
+```
+
+## Create new columns to test on the fly
+
+"preconditions" let you manipulate the data before a check is run within a single validation step.
+
+E.g. check that height doesn't change by more than 50 cm from 2000 to 2001
+
+```{r}
+agent_informed |> 
+  col_vals_lt(
+    columns = ht_change, #doesn't exist yet 
+    value = 50,
+    na_pass = TRUE,
+    # creates a new column on the fly:
+    preconditions = function(df) mutate(df, ht_change = ht_2001 - ht_2000)
+    ) |> 
+  interrogate()
+```
+
+Use the same pattern to check that the number of `shts` doubles *at most* from year to year
+
+```{r}
+agent_informed |> 
+  #add your validation steps
+  interrogate()
+```
+
