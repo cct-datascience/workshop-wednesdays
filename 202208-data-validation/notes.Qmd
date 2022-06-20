@@ -4,13 +4,16 @@ author: "Eric R. Scott"
 date: "2022-08-24"
 format: 
   html:
+    self-contained: true
     toc: true
     toc_float: true
 ---
 
 ## Overview
 
-There are many opportunities for human or instrument error to affect data. Ideally, you want to find those errors and fix them early and often!  This workshop introduces some tools in Excel and R to avoid making mistakes in data entry and data collection, and to detect the ones you inadvertently make.
+There are many opportunities for human or instrument error to affect data.
+Ideally, you want to find those errors and fix them early and often!
+This workshop introduces some tools in Excel and R to avoid making mistakes in data entry and data collection, and to detect the ones you inadvertently make.
 
 ## Learning Objectives
 
@@ -45,9 +48,11 @@ library(skimr)
 
 Set up validation tools in your data entry spreadsheet to stop data entry errors in their tracks!
 
-<!--# add gif or image here -->
+![](https://c.tenor.com/Kt00_NI0XegAAAAC/gee-data-entry.gif){fig-alt="gif of cat typing furiously on a laptop" fig-align="center" width="300"}
 
 ### Data Validation Tools in Excel
+
+![](images/validation-dialog.png){fig-alt="Data Validation dialog box in Excel.  Settings tab is shown with dropdown menu for Allow:" fig-align="center" width="300"}
 
 -   Select a column (or cells) and choose `Data > Validation …` from the menu
 
@@ -179,7 +184,7 @@ library(pointblank)
 1.  Decide on "action levels". Can set a number or fraction of rows as a threshold for a warning or error
 
 ```{r}
-al <- action_levels(warn_at = 1, stop_at = .1)
+al <- action_levels(warn_at = 1, stop_at = .02)
 al
 ```
 
