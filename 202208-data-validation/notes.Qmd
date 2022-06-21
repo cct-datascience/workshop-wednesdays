@@ -182,13 +182,6 @@ It also spots a decimal in the `ht_2000` column (but it's hard to see the green 
 
 ## Data validation pipelines with `pointblank`
 
--   Correctly entered data could also contain mistakes in *recording* the data
-
--   Likely ***impossible*** to know for sure if aberrant data are truly mistakes and not just extreme values, unless you can go back to the field to check.
-
--   Can still flag unexpected values to double-check data sheets or in the field
-
-### The `pointblank` package
 
 ```{r}
 library(pointblank)
@@ -198,9 +191,9 @@ library(pointblank)
 
 -   The [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) (VALID-1) is probably most useful for this group
 
--   Start with a data frame, create an "agent", give it some validation functions, and let it "interrogate" your data!
+-   Start with a data frame, create an "agent", tell it what to expect of your data with validation functions, and let it "interrogate" your data
 
--   Output is a HTML table with CSV buttons to download any data that didn't pass your validations!
+-   Output is a HTML table with buttons to download CSV files of any data that didn't pass your validations
 
 ### `pointblank` demo
 
@@ -256,6 +249,10 @@ agent_informed <-
 agent_informed |> interrogate()
 ```
 
+::: callout-tip
+Click the blue "CSV" buttons above to download a .csv file of just the rows that failed that particular validation
+:::
+
 ### Flexible validations
 
 If a validation function you need doesn't exist, you can use `col_vals_expr()`
@@ -298,6 +295,21 @@ agent_informed |>
 
 -   Data validation can be automated in a variety of ways.
     If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
+    
+
+## Fixing mistakes
+
+-  For true mistakes in data entry (paper -> spreadsheet), probably ok to just edit raw data
+
+-  For other errors, best practice:
+
+    - **Don't edit raw data!**
+    - Record all changes to raw data (e.g. by using an R script to make them)
+    - Flag observations that have been changed
+    - Publish raw data, cleaning steps/scripts, and "cleaned" data
+
+-  Keep an eye out for future workshops on data wrangling/tidying/cleaning
+
 
 ## Help
 
