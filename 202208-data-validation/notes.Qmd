@@ -46,7 +46,7 @@ library(skimr)
 
 If you can, install the development version of `pointblank` using this R code:
 
-```r
+``` r
 if(!require("remotes")) {
   install.packages("remotes")
 } 
@@ -182,7 +182,6 @@ It also spots a decimal in the `ht_2000` column (but it's hard to see the green 
 
 ## Data validation pipelines with `pointblank`
 
-
 ```{r}
 library(pointblank)
 ```
@@ -295,21 +294,19 @@ agent_informed |>
 
 -   Data validation can be automated in a variety of ways.
     If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
-    
 
 ## Fixing mistakes
 
--  For true mistakes in data entry (paper -> spreadsheet), probably ok to just edit raw data
+-   For true mistakes in data entry (paper -\> spreadsheet), probably ok to just edit raw data
 
--  For other errors, best practice:
+-   For other errors, best practice:
 
-    - **Don't edit raw data!**
-    - Record all changes to raw data (e.g. by using an R script to make them)
-    - Flag observations that have been changed
-    - Publish raw data, cleaning steps/scripts, and "cleaned" data
+    -   **Don't edit raw data!**
+    -   Record all changes to raw data (e.g. by using an R script to make them)
+    -   Flag observations that have been changed
+    -   Publish raw data, cleaning steps/scripts, and "cleaned" data
 
--  Keep an eye out for future workshops on data wrangling/tidying/cleaning
-
+-   Keep an eye out for future workshops on data wrangling/tidying/cleaning
 
 ## Help
 
