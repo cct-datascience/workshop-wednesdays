@@ -9,6 +9,12 @@ format:
     toc_float: true
 ---
 
+#TODO:
+
+- Switch to using tea data
+- Add brief description of experiment with data dictionary
+
+
 ## Overview
 
 There are many opportunities for human or instrument error to affect data.
@@ -53,6 +59,19 @@ if(!require("remotes")) {
 remotes::install_github("rich-iannone/pointblank")
 ```
 
+## Data Entry in Spreadsheets
+
+A common and useful way to enter data is in a spreadsheet (e.g. in Excel or Google Sheets). Here are some tips for avoiding data entry mistakes and saving yourself time and headaches with data wrangling:
+
+- For categorical variables and notes use consistent values (e.g. don't sometimes write "dead" and other times write "Dead")
+- Explicitly record missing data instead of leaving cells blank
+- Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
+- Use ISO (YYYY-MM-DD) format for dates
+
+::: callout-tip
+For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by Broman and Woo (2017)
+:::
+
 ## Avoiding mistakes in data entry
 
 Set up validation tools in your data entry spreadsheet to stop data entry errors in their tracks!
@@ -68,6 +87,8 @@ Set up validation tools in your data entry spreadsheet to stop data entry errors
 -   Use "list" to restrict to specific values for categorical data
 
 -   Use "whole number" for count data
+
+-   Use "date" to restrict date ranges
 
 -   Can also be set up *after* data entry.
     Highlight invalid data with "Circle Invalid Data" from toolbar
@@ -85,6 +106,8 @@ To stop Excel from converting entries to dates:
 1.  Explicitly set all column types to numeric, text, date, etc.
 
 2.  Make sure no columns are set to "general" ![](images/general-x.png){width="120"}
+
+
 
 ### Double-entry Method
 
@@ -131,7 +154,7 @@ Errors include:
 
 -   row 14: messy handwriting? (21 or 27)
 -   row 96: typo in flwr_2020
--   row 121: discrepency in plot ID
+-   row 121: discrepancy in plot ID
 -   row 159: messy handwriting? (33 or 38)
 -   row 167 & 168: completely different rows
 -   row 225: missing data in Eric's version
