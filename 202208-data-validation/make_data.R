@@ -13,14 +13,16 @@ df <- read_csv(here::here("202208-data-validation", "data_raw", "tea_leafhopper.
 
 df <-
   df %>%
-  rename(time = Start.Time) %>% 
+  rename(time = Start.Time, plant_id = Plant) %>% 
   rename_with(~str_replace(., "S", "shoot_")) %>% 
   rename_with(tolower) %>% 
   mutate(leaves = case_when(
     date %in% c("Jul 1", "Jul 2") ~ 30,
     TRUE ~ 50
   )) %>% 
-  mutate(date = mdy(paste(date, "2016")))
+  mutate(date = mdy(paste(date, "2016"))) %>% 
+  #make plant_id unique
+  mutate(plant_id = if_else(field == "B", plant_id + 10, plant_id))
 
 # create "mistakes" in the "true" data
 
@@ -49,7 +51,10 @@ df_eric <-
     counter = if_else(row_number() == 29, "E ", counter)
   ) %>% 
   # missed the last row
-  slice(-60)
+  mutate(
+    across(c(starts_with("shoot_"), plant_id, counter, leaves, hoppers), ~ifelse(row_number() == 60, NA, .))
+  )
+  
 
 # Data entry errors in Jessica's version
 
@@ -62,7 +67,7 @@ df_jessica <-
     # forget to enter a decimal
     shoot_3 = if_else(row_number() == 48, shoot_3*10, shoot_3),
     # typo
-    plant = if_else(row_number() == 50, 1, plant)
+    plant_id = if_else(row_number() == 50, 11, plant_id)
   )
 
 anti_join(df_eric, df_jessica)

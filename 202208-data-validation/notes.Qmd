@@ -7,13 +7,8 @@ format:
     self-contained: true
     toc: true
     toc_float: true
+bibliography: references.bib
 ---
-
-#TODO:
-
-- Switch to using tea data
-- Add brief description of experiment with data dictionary
-
 
 ## Overview
 
@@ -46,7 +41,6 @@ You'll need access to Excel, R, RStudio, and the following R packages:
 library(tidyverse)
 library(visdat)
 library(pointblank)
-library(readxl)
 library(skimr)
 ```
 
@@ -61,12 +55,13 @@ remotes::install_github("rich-iannone/pointblank")
 
 ## Data Entry in Spreadsheets
 
-A common and useful way to enter data is in a spreadsheet (e.g. in Excel or Google Sheets). Here are some tips for avoiding data entry mistakes and saving yourself time and headaches with data wrangling:
+A common and useful way to enter data is in a spreadsheet (e.g. in Excel or Google Sheets).
+Here are some tips for avoiding data entry mistakes and saving yourself time and headaches with data wrangling:
 
-- For categorical variables and notes use consistent values (e.g. don't sometimes write "dead" and other times write "Dead")
-- Explicitly record missing data instead of leaving cells blank
-- Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
-- Use ISO (YYYY-MM-DD) format for dates
+-   For categorical variables and notes use consistent values (e.g. don't sometimes write "dead" and other times write "Dead")
+-   Explicitly record missing data instead of leaving cells blank
+-   Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
+-   Use ISO (YYYY-MM-DD) format for dates
 
 ::: callout-tip
 For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by Broman and Woo (2017)
@@ -107,8 +102,6 @@ To stop Excel from converting entries to dates:
 
 2.  Make sure no columns are set to "general" ![](images/general-x.png){width="120"}
 
-
-
 ### Double-entry Method
 
 -   Two people enter the same data, then compare programatically.
@@ -116,9 +109,15 @@ To stop Excel from converting entries to dates:
 -   In the `data` folder, there are two versions of a dataset---one entered by Eric and one entered by Jessica.
 
 ```{r}
-eric <- read_excel("data/data_eric.xlsx")
-jessica <- read_excel("data/data_jessica.xlsx")
+eric <- read_csv("data/tea_eric.csv")
+jessica <- read_csv("data/tea_jessica.csv")
 ```
+
+::: callout-note
+This example dataset is modified from [@scott2021].
+Each day, researchers counted the number of leafhoppers (`hoppers`) on tea plants and measured the length of 7 labeled tea shoots in cm (recorded in `shoot_*` columns).
+`leaves` is how many leaves were searched for leafhoppers on each plant and `counter` is the initial of the researcher who took measurements.
+:::
 
 #### Compare visually with `visdat`
 
@@ -137,8 +136,8 @@ First add row numbers to make it easier to find mistakes in Excel.
 
 ```{r}
 # add rownumbers that match Excel (headers are row 1)
-eric    <- eric    |> mutate(row = 2:(n()+1), .before = plot)
-jessica <- jessica |> mutate(row = 2:(n()+1), .before = plot)
+eric    <- eric    |> mutate(row = 2:(n()+1), .before = date)
+jessica <- jessica |> mutate(row = 2:(n()+1), .before = date)
 ```
 
 `anti_join()` takes two data frames and returns only rows that differ between them.
@@ -152,16 +151,15 @@ anti_join(jessica, eric)
 
 Errors include:
 
--   row 14: messy handwriting? (21 or 27)
--   row 96: typo in flwr_2020
--   row 121: discrepancy in plot ID
--   row 159: messy handwriting? (33 or 38)
--   row 167 & 168: completely different rows
--   row 225: missing data in Eric's version
+-   row 11: messy handwriting? (1 or 7?)
+-   row 28 & 29: values swapped for `shoot_7`\
+-   row 49: missing decimal point
+-   row 51: discrepancy in plant ID
+-   row 61: missing data in Eric's version
 
 ```{r}
-#after fixing data-entry errors, we get `data_resolved.csv`
-plants <- read_excel("data/data_resolved.xlsx")
+#after fixing data-entry errors, we get `tea_resolved.csv`
+tea <- read_csv("data/tea_resolved.csv")
 ```
 
 ## Explore data summaries
@@ -174,7 +172,7 @@ plants <- read_excel("data/data_resolved.xlsx")
 ```{r}
 #| column: body-outset
 
-skimr::skim(plants)
+skimr::skim(tea)
 ```
 
 Or get a more detailed breakdown by running `skim()` on a grouped data frame:
@@ -182,8 +180,8 @@ Or get a more detailed breakdown by running `skim()` on a grouped data frame:
 ```{r}
 #| column: body-outset
 
-plants |> 
-  group_by(plot) |> 
+tea |> 
+  group_by(date) |> 
   skim()
 ```
 
@@ -193,15 +191,18 @@ plants |>
 -   I'll change one of the plots to a number to demonstrate
 
 ```{r}
-#change plot in the 10th row to "1"
-plants$plot[10] <- 1
+#change field in the 10th row to "1"
+tea$field[10] <- 1
 #doesn't change the type of the column
-class(plants$plot)
+class(tea$field)
 #but vis_guess() spots the mistake!
-visdat::vis_guess(plants)
+visdat::vis_guess(tea)
 ```
 
-It also spots a decimal in the `ht_2000` column (but it's hard to see the green line)
+Potential mistakes spotted:
+
+-   numeric value in `field` column
+-   a decimal in the `hoppers` column
 
 ## Data validation pipelines with `pointblank`
 
@@ -222,7 +223,7 @@ library(pointblank)
 1.  Decide on "action levels". Can set a number or fraction of rows as a threshold for a warning or error
 
 ```{r}
-al <- action_levels(warn_at = 1, stop_at = .02)
+al <- action_levels(warn_at = 1, stop_at = .05)
 al
 ```
 
@@ -231,8 +232,7 @@ al
 ```{r}
 agent <- 
   create_agent(
-    tbl = plants, #our data example from before
-    label = "plants 2000 & 2001",
+    tbl = tea, #our data example from before
     actions = al
   )
 ```
@@ -246,22 +246,22 @@ agent <-
 ```{r}
 agent_informed <- 
   agent |> 
-  col_is_character(columns = plot) |>  #plot should be character
-  col_is_numeric(columns = c(shts_2000, shts_2001)) |> #shts should be numeric
+  col_is_character(c(field, counter)) |> #should be character
+  col_is_date(date) |> #should be a date
   
-  col_vals_in_set(columns = plot, set = LETTERS[1:10]) |> #plot should be A-E
-  col_vals_lt(  #expect shts < 5
-    columns = c(shts_2000, shts_2001), 
-    value =  5,
+  col_vals_in_set(counter, c("W", "G", "E")) |> #The three researchers
+  col_vals_lt(  #expect shoots < 15cm
+    columns = starts_with("shoot_"), 
+    value =  15,
     na_pass = TRUE
   ) |> 
-  
-  rows_distinct(columns = vars(plant_id)) #no duplicate plant IDs
-
-#'TODO: ^this should work as just `columns = plant_id` but doesn't due to a bug.  
-#'Change if this gets fixed before workshop. 
-#'https://github.com/rich-iannone/pointblank/issues/416
+  rows_distinct(columns = vars(plant_id, date)) #no duplicate plant IDs
 ```
+
+::: callout-important
+`pointblank` historically used the `vars()` function to specify columns (e.g. `col_is_character(vars(field))`), but is moving toward a more tidyverse-like approach.
+However, at the time of writing this, some functions and arguments still require `vars()` like `rows_distinct()` above.
+:::
 
 4.  Interrogate!
 
@@ -279,35 +279,29 @@ Click the blue "CSV" buttons above to download a .csv file of just the rows that
 
 If a validation function you need doesn't exist, you can use `col_vals_expr()`
 
-E.g. let's add a validation that height is measured to the nearest cm.
+E.g. let's add a validation to check that `hoppers`is always a whole number.
 
 ```{r}
 #| column: body-outset
 agent_informed <-
   agent_informed |> 
-  col_vals_expr(~ ht_2000 %% 1 == 0) |> 
-  col_vals_expr(~ ht_2001 %% 1 == 0) 
+  col_vals_expr(~ hoppers %% 1 == 0) 
 
 agent_informed |> interrogate()
 ```
 
-### Create new columns to test on the fly
+### Check that shoots are growing
 
-"preconditions" let you manipulate the data before a check is run within a single validation step.
-
-E.g. check that height doesn't change by more than 50 cm from 2000 to 2001
+The tea shoots should be consistently growing (within measurement error), so we can use `col_vals_increasing()` to check that shoot height is always going up.
+We use the `segment` argument to specify that this check happens *within* each `plant_id`
 
 ```{r}
-#| column: body-outset
-agent_informed |> 
-  col_vals_lt(
-    columns = ht_change, #doesn't exist yet 
-    value = 50,
-    na_pass = TRUE,
-    # creates a new column on the fly:
-    preconditions = function(df) mutate(df, ht_change = ht_2001 - ht_2000)
-    ) |> 
-  interrogate()
+agent_informed <-
+  agent_informed |> 
+  #just with one shoot for demo purposes, but could use starts_with("shoot_")
+  col_vals_increasing(shoot_1, segments = vars(plant_id))
+
+agent_informed |> interrogate()
 ```
 
 ### Publishing validation reports
