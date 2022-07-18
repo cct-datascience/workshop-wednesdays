@@ -18,15 +18,15 @@ This workshop introduces some tools in Excel and R to avoid making mistakes in d
 
 ## Learning Objectives
 
--   Understand best practices for entering data and fixing errors in data
+-   Understand some best practices for entering data
 
 -   Use Excel data validation tools to prevent data entry errors
 
--   Compare data entered by two people in R to check for data entry mistakes
+-   Use double-entry and `anti_join()` to check for data entry mistakes
 
 -   Explore data summaries to check for errors
 
--   Get the gist of how you can use the `pointblank` package to perform data validation checks
+-   Be familiar with the basics of data validation with `pointblank`
 
 ::: callout-important
 ## We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
@@ -136,8 +136,8 @@ First add row numbers to make it easier to find mistakes in Excel.
 
 ```{r}
 # add rownumbers that match Excel (headers are row 1)
-eric    <- eric    |> mutate(row = 2:(n()+1), .before = date)
-jessica <- jessica |> mutate(row = 2:(n()+1), .before = date)
+eric    <- eric    %>% mutate(row = 2:(n()+1), .before = date)
+jessica <- jessica %>% mutate(row = 2:(n()+1), .before = date)
 ```
 
 `anti_join()` takes two data frames and returns only rows that differ between them.
@@ -180,8 +180,8 @@ Or get a more detailed breakdown by running `skim()` on a grouped data frame:
 ```{r}
 #| column: body-outset
 
-tea |> 
-  group_by(date) |> 
+tea %>% 
+  group_by(date) %>% 
   skim()
 ```
 
@@ -245,16 +245,16 @@ agent <-
 
 ```{r}
 agent_informed <- 
-  agent |> 
-  col_is_character(c(field, counter)) |> #should be character
-  col_is_date(date) |> #should be a date
+  agent %>% 
+  col_is_character(c(field, counter)) %>% #should be character
+  col_is_date(date) %>% #should be a date
   
-  col_vals_in_set(counter, c("W", "G", "E")) |> #The three researchers
+  col_vals_in_set(counter, c("W", "G", "E")) %>% #The three researchers
   col_vals_lt(  #expect shoots < 15cm
     columns = starts_with("shoot_"), 
     value =  15,
     na_pass = TRUE
-  ) |> 
+  ) %>% 
   rows_distinct(columns = vars(plant_id, date)) #no duplicate plant IDs
 ```
 
@@ -268,7 +268,7 @@ However, at the time of writing this, some functions and arguments still require
 ```{r}
 #| column: body-outset
 
-agent_informed |> interrogate()
+agent_informed %>% interrogate()
 ```
 
 ::: callout-tip
@@ -284,10 +284,10 @@ E.g. let's add a validation to check that `hoppers`is always a whole number.
 ```{r}
 #| column: body-outset
 agent_informed <-
-  agent_informed |> 
+  agent_informed %>% 
   col_vals_expr(~ hoppers %% 1 == 0) 
 
-agent_informed |> interrogate()
+agent_informed %>% interrogate()
 ```
 
 ### Check that shoots are growing
@@ -297,11 +297,11 @@ We use the `segment` argument to specify that this check happens *within* each `
 
 ```{r}
 agent_informed <-
-  agent_informed |> 
+  agent_informed %>% 
   #just with one shoot for demo purposes, but could use starts_with("shoot_")
   col_vals_increasing(shoot_1, segments = vars(plant_id))
 
-agent_informed |> interrogate()
+agent_informed %>% interrogate()
 ```
 
 ### Publishing validation reports
