@@ -13,15 +13,15 @@ options(pillar.width = 75)
 ## Learning Objectives
 
 ::: incremental
--   Understand best practices for entering data and fixing errors in data
+-   Understand some best practices for entering data
 
 -   Use Excel data validation tools to prevent data entry errors
 
--   Compare data entered by two people in R to check for data entry mistakes
+-   Use double-entry and anti_join() to check for data entry mistakes
 
 -   Explore data summaries to check for errors
 
--   Get the gist of how you can use the `pointblank` package to perform data validation checks
+-   Be familiar with the basics of data validation with pointblank
 :::
 
 . . .
@@ -51,6 +51,22 @@ if(!require("remotes")) {
 } 
 remotes::install_github("rich-iannone/pointblank")
 ```
+
+## How and when to fix mistakes?
+
+::: incremental
+-   **Don't edit raw data!**
+-   Record all changes to raw data (e.g. by using an R script to make them)
+-   Flag observations that have been changed
+-   Publish raw data, cleaning steps/scripts, and "cleaned" data
+-   For **true** mistakes in data entry (paper -\> spreadsheet), *maybe* ok to edit raw data
+:::
+
+::: notes
+Keep raw data files **read-only**\
+Not going to cover programatically editing data.
+Keep an eye out for future workshops on tidying/wrangling data
+:::
 
 ## Data Entry in Spreadsheets
 
@@ -90,6 +106,8 @@ Set up validation tools in your data entry spreadsheet to stop data entry errors
 
 2.  Make sure no columns are set to "general"
 
+\[DEMO\]
+
 ## Double-entry Method
 
 -   Two people enter the same data, then compare programatically.
@@ -101,12 +119,6 @@ Set up validation tools in your data entry spreadsheet to stop data entry errors
 eric <- read_csv("data/tea_eric.csv")
 jessica <- read_csv("data/tea_jessica.csv")
 ```
-
-::: callout-note
-This example dataset is modified from [@scott2021].
-Each day, researchers counted the number of leafhoppers (`hoppers`) on tea plants and measured the length of 7 labeled tea shoots in cm (recorded in `shoot_*` columns).
-`leaves` is how many leaves were searched for leafhoppers on each plant and `counter` is the initial of the researcher who took measurements.
-:::
 
 ## Data Example
 
@@ -141,20 +153,19 @@ Each day, researchers counted the number of leafhoppers (`hoppers`) on tea plant
 vis_compare(eric, jessica)
 ```
 
-## Compare data frames with `anti_join()`
+## Compare data frames
 
-The `dplyr` package includes a set of `*_join()` functions for combining two datasets with some shared columns.
+-   The `dplyr` package includes a set of `*_join()` functions for combining two datasets
 
-`anti_join()` takes two data frames and returns only rows that differ.
-This is perfect for the double-entry method.
+-   `anti_join()` returns only rows that differ, perfect for double-entry
 
 ```{r}
 #| eval: false
 #| echo: true
-#values in `eric` that are different in `jessica`:
+#rows in `eric` that are different in `jessica`:
 anti_join(eric, jessica)
 
-#values in `jessica` that are different in `eric`:
+#rows in `jessica` that are different in `eric`:
 anti_join(jessica, eric)
 ```
 
@@ -168,16 +179,19 @@ First, I like to add row numbers that match the ones in Excel to make it easier 
 #| output-location: fragment
 # add rownumbers that match Excel (headers are row 1)
 excel_rows <- 2:(nrow(eric) + 1)
-eric    <- eric    |> mutate(row = excel_rows, .before = date)
-jessica <- jessica |> mutate(row = excel_rows, .before = date)
+eric    <- eric    %>% mutate(row = excel_rows, .before = date)
+jessica <- jessica %>% mutate(row = excel_rows, .before = date)
 head(eric, 5)
 ```
 
-## Inspect the output of `anti_join()`
+## Inspect the output of `anti_join()` {.smaller}
+
+```{r}
+options(pillar.width = 80)
+```
 
 ```{r}
 #| echo: true
-#| df-print: paged
 
 # Rows in eric that don't match jessica
 anti_join(eric, jessica)
@@ -200,7 +214,10 @@ tea <- read_csv("data/tea_resolved.csv")
 
 -   From this point on, "mistakes" in data are harder to verify
 
--   Can still take steps to validate the data
+-   Can still take steps to *validate* the data
+
+    -   What values are *possible*?
+    -   What values are *reasonable*?
 
 ## Explore data summaries
 
@@ -208,7 +225,7 @@ tea <- read_csv("data/tea_resolved.csv")
 -   You can't check for errors if you don't get to know your data!
 -   Use `skimr::skim()` to get a nicely formatted summary
 -   Look for number of unique values for categorical variables
--   Look for long tails or strange patterns in mini-histograms for numeric variables
+-   Prints mini-histograms for numeric variables
 :::
 
 ## `skim()` the data {.smaller .scrollable}
@@ -219,14 +236,19 @@ tea <- read_csv("data/tea_resolved.csv")
 skimr::skim(tea)
 ```
 
+::: notes
+`whitespace` shows how many columns are whitespace---common mistake in Excel and reason to be explicit about marking missing data instead of blank cells.
+:::
+
 ## Explore data visually
 
--   `visdat::vis_guess()` can help spot inconsistencies
+-   `visdat::vis_guess()` plots guesses of the type of variable for each observation
+-   Useful for spotting inconsistencies in a column
 -   I'll change one of the plots to a number to demonstrate
 
 ```{r}
 #| echo: true
-
+tea$field[10]
 #change field in the 10th row to "1"
 tea$field[10] <- 1
 #doesn't change the type of the column
@@ -244,127 +266,100 @@ class(tea$field)
 visdat::vis_guess(tea)
 ```
 
-
-## Data validation pipelines with `pointblank`
+## Data Validation Pipelines
 
 ```{r}
+#| echo: true
 library(pointblank)
 ```
 
 -   `pointblank` provides 6 (six!) workflows for validating data
 
--   The [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) (VALID-1) is probably most useful for this group
+-   The [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) (VALID-1) is probably most useful to start
 
--   Start with a data frame, create an "agent", tell it what to expect of your data with validation functions, and let it "interrogate" your data
+![](https://rich-iannone.github.io/pointblank/articles/images/VALID-I.svg)
 
--   Output is a HTML table with buttons to download CSV files of any data that didn't pass your validations
+## 1. Action Levels
 
-### `pointblank` demo
-
-1.  Decide on "action levels". Can set a number or fraction of rows as a threshold for a warning or error
+-   Decide on "action levels"
+-   Can set a number or fraction of rows as a threshold for a warning or error
+-   We will come back to this later
 
 ```{r}
+#| echo: true
 al <- action_levels(warn_at = 1, stop_at = .05)
 al
 ```
 
-2.  Create agent
+## 2. Create Agent
+
+-   The "agent" will store information about our table, action levels, and validation steps
 
 ```{r}
+#| echo: true
 agent <- 
   create_agent(
     tbl = tea, #our data example from before
-    actions = al
+    actions = al #our action levels from before
   )
 ```
 
-3.  Specify validation conditions
+## 3. Specify Validation Plan
 
-    -   Basic checks on column types with `col_is_*()` functions
-    -   Check column values with `col_vals_*()` functions
-    -   Check rows (e.g. duplicate rows) with `rows_*()` functions
+-   Basic checks on column types with `col_is_*()` functions
+-   Check column values with `col_vals_*()` functions
+-   Check rows (e.g. duplicate rows) with `rows_*()` functions
 
 ```{r}
+#| code-line-numbers: "1-2|3|4|5-6|"
+#| echo: true
 agent_informed <- 
-  agent |> 
-  col_is_character(c(field, counter)) |> #should be character
-  col_is_date(date) |> #should be a date
-  
-  col_vals_in_set(counter, c("W", "G", "E")) |> #The three researchers
-  col_vals_lt(  #expect shoots < 15cm
-    columns = starts_with("shoot_"), 
-    value =  15,
-    na_pass = TRUE
-  ) |> 
-  rows_distinct(columns = vars(plant_id, date)) #no duplicate plant IDs
+  agent %>% 
+  col_is_date(date) %>% # should be a date
+  col_vals_in_set(field, c("A", "B")) %>%
+  # all shoot_ columns should be less than 15 cm (NAs allowed)
+  col_vals_lt(starts_with("shoot_"), 15, na_pass = TRUE)
 ```
 
-::: callout-important
-`pointblank` historically used the `vars()` function to specify columns (e.g. `col_is_character(vars(field))`), but is moving toward a more tidyverse-like approach.
-However, at the time of writing this, some functions and arguments still require `vars()` like `rows_distinct()` above.
-:::
+## 4. Interrogate
 
-4.  Interrogate!
+Finally, run `interrogate()` on the agent to produce a beautiful report!
 
 ```{r}
-#| column: body-outset
+#| echo: true
+#| eval: false
 
-agent_informed |> interrogate()
+agent_informed %>% interrogate()
 ```
 
-::: callout-tip
-Click the blue "CSV" buttons above to download a .csv file of just the rows that failed that particular validation
-:::
+## 4. Interrogate {.smaller .scrollable}
 
-### Flexible validations
+```{r}
+agent_informed %>% interrogate()
+```
+
+## Flexible validations
 
 If a validation function you need doesn't exist, you can use `col_vals_expr()`
 
-E.g. let's add a validation to check that `hoppers`is always a whole number.
+E.g. let's add a validation to check that `hoppers` is always a whole number.
 
 ```{r}
-#| column: body-outset
-agent_informed <-
-  agent_informed |> 
-  col_vals_expr(~ hoppers %% 1 == 0) 
+#| echo: true
+#| eval: false
 
-agent_informed |> interrogate()
+agent_informed <-
+  agent_informed  %>%  
+  col_vals_expr(~ hoppers %% 1 == 0) #modulo operation (%%) returns remainder
 ```
 
-### Check that shoots are growing
+## Publishing validation reports
 
-The tea shoots should be consistently growing (within measurement error), so we can use `col_vals_increasing()` to check that shoot height is always going up.
-We use the `segment` argument to specify that this check happens *within* each `plant_id`
+-   RMarkdown documents with `pointblank` validations can be published on **RStudio Connect** ([Learn More](https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect))
 
-```{r}
-agent_informed <-
-  agent_informed |> 
-  #just with one shoot for demo purposes, but could use starts_with("shoot_")
-  col_vals_increasing(shoot_1, segments = vars(plant_id))
+-   Data validation can be automated in a variety of ways!
 
-agent_informed |> interrogate()
-```
-
-### Publishing validation reports
-
--   Students, faculty, and staff at University of Arizona have access to **RStudio Connect** which allows you to publish an RMarkdown document to the web with a single click.
-    ([Learn More](https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect))
-
--   Data validation can be automated in a variety of ways.
-    If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
-
-## Fixing mistakes
-
--   For true mistakes in data entry (paper -\> spreadsheet), probably ok to just edit raw data
-
--   For other errors, best practice:
-
-    -   **Don't edit raw data!**
-    -   Record all changes to raw data (e.g. by using an R script to make them)
-    -   Flag observations that have been changed
-    -   Publish raw data, cleaning steps/scripts, and "cleaned" data
-
--   Keep an eye out for future workshops on data wrangling/tidying/cleaning
+-   If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
 
 ## Help
 
