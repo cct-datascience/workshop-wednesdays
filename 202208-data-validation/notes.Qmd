@@ -64,7 +64,7 @@ Here are some tips for avoiding data entry mistakes and saving yourself time and
 -   Use ISO (YYYY-MM-DD) format for dates
 
 ::: callout-tip
-For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by Broman and Woo (2017)
+For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
 :::
 
 ## Avoiding mistakes in data entry
@@ -296,6 +296,7 @@ The tea shoots should be consistently growing (within measurement error), so we 
 We use the `segment` argument to specify that this check happens *within* each `plant_id`
 
 ```{r}
+#| column: body-outset
 agent_informed <-
   agent_informed %>% 
   #just with one shoot for demo purposes, but could use starts_with("shoot_")
