@@ -6,9 +6,9 @@ format:
   revealjs:
     logo: "logo.png"
 bibliography: references.bib
+nocite: |
+  @lewis2021
 ---
-
-
 
 ## Learning Objectives
 
@@ -367,7 +367,12 @@ agent_informed <-
 
 ## Help
 
-Feel free to drop by the [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours), which happens every Tuesday morning.
-We would love to help you with your R questions about date/time, and more!
+-   [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours) every Tuesday morning
 
-You can also [make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help.
+-   We would love to help you with your R questions about data validation and more!
+
+-   [Make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help
+
+. . .
+
+### References
