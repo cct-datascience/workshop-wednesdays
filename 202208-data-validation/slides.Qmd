@@ -2,15 +2,19 @@
 title: "Data Validation in Excel and R"
 author: "Eric R. Scott"
 date: "2022-08-24"
-format: revealjs
+format: 
+  revealjs:
+    logo: "logo.png"
 bibliography: references.bib
 ---
 
-```{r setup}
-options(pillar.width = 75)
-```
+
 
 ## Learning Objectives
+
+```{r setup, echo=FALSE}
+options(pillar.width = 75)
+```
 
 ::: incremental
 -   Understand some best practices for entering data
