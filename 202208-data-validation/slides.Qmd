@@ -5,6 +5,7 @@ date: "2022-08-24"
 format: 
   revealjs:
     logo: "logo.png"
+    chalkboard: true
 bibliography: references.bib
 nocite: |
   @lewis2021
