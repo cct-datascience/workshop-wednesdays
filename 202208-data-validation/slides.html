@@ -465,8 +465,8 @@
 </ul>
 </div>
 <aside class="notes">
-<p>Keep raw data files <strong>read-only</strong><br>
-Not going to cover programatically editing data. Keep an eye out for future workshops on tidying/wrangling data</p>
+<p>Keep raw data files <strong>read-only</strong>!<br>
+Not going to cover programatically editing data. Keep an eye out for future workshops on tidying/wrangling data.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -494,6 +494,30 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <aside><div>
 <p>For more detailed guidelines on using spreadsheets for data entry, I highly recommend <a href="https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989">Data Organization in Spreadsheets</a> by <span class="citation" data-cites="broman2018">Broman and Woo (<a href="#/ref-broman2018" role="doc-biblioref" onclick="return false;">2018</a>)</span>.</p>
 </div></aside></section>
+<section id="data-example" class="slide level2">
+<h2>Data Example</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<ul>
+<li><p>Modified from <span class="citation" data-cites="scott2021">(<a href="#/ref-scott2021" role="doc-biblioref" onclick="return false;">Scott et al. 2021</a>)</span>.</p></li>
+<li><p>Every day, around 6am, measured 7 marked tea shoots per plant</p></li>
+<li><p>Also counted number of leafhoppers on a certain number of leaves</p></li>
+<li><p>Three researchers recorded data (W, G, and E)</p></li>
+</ul>
+</div><div class="column" style="width:40%;">
+<div class="quarto-figure quarto-figure-right">
+<figure>
+<p><img data-src="images/tea.jpg" width="425"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-right">
+<figure>
+<p><img data-src="images/leafhopper.jpg" width="425"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="use-excels-validation-tools" class="slide level2">
 <h2>Use Excel’s Validation Tools</h2>
 <p>Set up validation tools in your data entry spreadsheet to stop data entry errors in their tracks!</p>
@@ -531,30 +555,6 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>eric <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_eric.csv"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2"></a>jessica <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_jessica.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="data-example" class="slide level2">
-<h2>Data Example</h2>
-<div class="columns">
-<div class="column" style="width:60%;">
-<ul>
-<li><p>Modified from <span class="citation" data-cites="scott2021">(<a href="#/ref-scott2021" role="doc-biblioref" onclick="return false;">Scott et al. 2021</a>)</span>.</p></li>
-<li><p>Every day, around 6am, measured 7 marked tea shoots per plant</p></li>
-<li><p>Also counted number of leafhoppers on a certain number of leaves</p></li>
-<li><p>Three researchers recorded data (W, G, and E)</p></li>
-</ul>
-</div><div class="column" style="width:40%;">
-<div class="quarto-figure quarto-figure-right">
-<figure>
-<p><img data-src="images/tea.jpg" width="425"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-right">
-<figure>
-<p><img data-src="images/leafhopper.jpg" width="425"></p>
-</figure>
-</div>
-</div>
 </div>
 </section>
 <section id="compare-visually-with-visdat" class="slide level2">
@@ -1579,7 +1579,7 @@ html {
       <th colspan="14" class="gt_heading gt_title gt_font_normal" style="color: #444444; font-size: 28px; text-align: left; font-weight: 500;">Pointblank Validation</th>
     </tr>
     <tr>
-      <th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-size: 12px; text-align: left;"><span style="text-decoration-style:solid;text-decoration-color:#ADD8E6;text-decoration-line:underline;text-underline-position:under;color:#333333;font-variant-numeric:tabular-nums;padding-left:4px;margin-right:5px;padding-right:2px;">[2022-07-28|13:48:35]</span><p></p>
+      <th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-size: 12px; text-align: left;"><span style="text-decoration-style:solid;text-decoration-color:#ADD8E6;text-decoration-line:underline;text-underline-position:under;color:#333333;font-variant-numeric:tabular-nums;padding-left:4px;margin-right:5px;padding-right:2px;">[2022-08-03|16:29:53]</span><p></p>
 <div style="height:25px;"><span style="background-color:#F1D35A;color:#222222;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 0px 5px 5px;font-weight:bold;border:solid 1px #F1D35A;padding:2px 15px 2px 15px;font-size:smaller;">tibble</span>
 <span style="background-color:none;color:#222222;padding:0.5em 0.5em;position:inherit;margin:5px 10px 5px -4px;font-weight:bold;border:solid 1px #F1D35A;padding:2px 15px 2px 15px;font-size:smaller;">tea</span><span style="background-color:#E5AB00;color:white;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 0px 5px 5px;font-weight:bold;border:solid 1px #E5AB00;padding:2px 15px 2px 15px;font-size:smaller;">WARN</span>
 <span style="background-color:none;color:#333333;padding:0.5em 0.5em;position:inherit;margin:5px 0px 5px -4px;font-weight:bold;border:solid 1px #E5AB00;padding:2px 15px 2px 15px;font-size:smaller;">1</span>
@@ -1889,9 +1889,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-07-28 13:48:35 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-08-03 16:29:53 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-07-28 13:48:36 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-08-03 16:29:53 EDT</span></td>
     </tr>
   </tfoot>
   

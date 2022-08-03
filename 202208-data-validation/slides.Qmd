@@ -67,9 +67,9 @@ remotes::install_github("rich-iannone/pointblank")
 :::
 
 ::: notes
-Keep raw data files **read-only**\
+Keep raw data files **read-only**!\
 Not going to cover programatically editing data.
-Keep an eye out for future workshops on tidying/wrangling data
+Keep an eye out for future workshops on tidying/wrangling data.
 :::
 
 ## Data Entry in Spreadsheets
@@ -87,6 +87,30 @@ Take some time setting up your data entry spreadsheet.
 ::: aside
 For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
 :::
+
+
+## Data Example
+
+::: columns
+::: {.column width="60%"}
+-   Modified from [@scott2021].
+
+-   Every day, around 6am, recorded data from individual tea plants
+
+-   Measured 7 marked shoots per plant with a ruler
+
+-   Counted number of leafhoppers on 30 or 50 leaves per plant
+
+-   Noted who took the observations (there were three of us)
+:::
+
+::: {.column width="40%"}
+![](images/tea.jpg){fig-align="right" width="425"}
+
+![](images/leafhopper.jpg){fig-align="right" width="425"}
+:::
+:::
+
 
 ## Use Excel's Validation Tools
 
@@ -124,25 +148,6 @@ eric <- read_csv("data/tea_eric.csv")
 jessica <- read_csv("data/tea_jessica.csv")
 ```
 
-## Data Example
-
-::: columns
-::: {.column width="60%"}
--   Modified from [@scott2021].
-
--   Every day, around 6am, measured 7 marked tea shoots per plant
-
--   Also counted number of leafhoppers on a certain number of leaves
-
--   Three researchers recorded data (W, G, and E)
-:::
-
-::: {.column width="40%"}
-![](images/tea.jpg){fig-align="right" width="425"}
-
-![](images/leafhopper.jpg){fig-align="right" width="425"}
-:::
-:::
 
 ## Compare visually with `visdat`
 
