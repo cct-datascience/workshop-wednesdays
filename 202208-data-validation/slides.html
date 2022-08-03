@@ -408,6 +408,21 @@
   <p class="date">2022-08-24</p>
 </section>
 
+<section id="setup" class="slide level2">
+<h2>Setup</h2>
+<p>If you haven’t already, download the files for the course by running this code in RStudio</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># if usethis isn't installed...</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co"># install.packages("usethis")</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">use_course</span>(<span class="st">"cct-datascience/data-validation-workshop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>You can also download the .zip file here if you’d rather:</p>
+<p><a href="https://github.com/cct-datascience/data-validation-workshop/archive/refs/tags/v0.0.1.zip" class="uri">https://github.com/cct-datascience/data-validation-workshop/archive/refs/tags/v0.0.1.zip</a></p>
+</div>
+</section>
 <section id="learning-objectives" class="slide level2">
 <h2>Learning Objectives</h2>
 <div class="cell">
@@ -442,16 +457,16 @@
 <h2>Software needed</h2>
 <p>You’ll need access to Excel, R, RStudio, and the following R packages:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(visdat)</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(pointblank)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">library</span>(visdat)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">library</span>(pointblank)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="fu">library</span>(skimr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>If you can, install the development version of <code>pointblank</code> using this R code:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">"remotes"</span>)) {</span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3"></a>} </span>
-<span id="cb2-4"><a href="#cb2-4"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rich-iannone/pointblank"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">"remotes"</span>)) {</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>} </span>
+<span id="cb3-4"><a href="#cb3-4"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"rich-iannone/pointblank"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="how-and-when-to-fix-mistakes" class="slide level2">
 <h2>How and when to fix mistakes?</h2>
@@ -500,9 +515,10 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <div class="column" style="width:60%;">
 <ul>
 <li><p>Modified from <span class="citation" data-cites="scott2021">(<a href="#/ref-scott2021" role="doc-biblioref" onclick="return false;">Scott et al. 2021</a>)</span>.</p></li>
-<li><p>Every day, around 6am, measured 7 marked tea shoots per plant</p></li>
-<li><p>Also counted number of leafhoppers on a certain number of leaves</p></li>
-<li><p>Three researchers recorded data (W, G, and E)</p></li>
+<li><p>Every day, around 6am, recorded data from individual tea plants</p></li>
+<li><p>Measured 7 marked shoots per plant with a ruler</p></li>
+<li><p>Counted number of leafhoppers on 30 or 50 leaves per plant</p></li>
+<li><p>Noted who took the observations (there were three of us)</p></li>
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="quarto-figure quarto-figure-right">
@@ -553,18 +569,18 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <li><p>In the <code>data</code> folder, there are two versions of a dataset—one entered by Eric and one entered by Jessica.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>eric <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_eric.csv"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>jessica <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_jessica.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>eric <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_eric.csv"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>jessica <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_jessica.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="compare-visually-with-visdat" class="slide level2">
 <h2>Compare visually with <code>visdat</code></h2>
 <p><code>vis_compare()</code> visually compares two datasets of the same dimensions.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">vis_compare</span>(eric, jessica)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">vis_compare</span>(eric, jessica)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="672" class="r-stretch quarto-figure-center"></section>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="672" class="r-stretch quarto-figure-center"></section>
 <section id="compare-data-frames" class="slide level2">
 <h2>Compare data frames</h2>
 <ul>
@@ -572,22 +588,22 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <li><p><code>anti_join()</code> returns only rows that differ, perfect for double-entry</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">#rows in `eric` that are different in `jessica`:</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">anti_join</span>(eric, jessica)</span>
-<span id="cb5-3"><a href="#cb5-3"></a></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#rows in `jessica` that are different in `eric`:</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">anti_join</span>(jessica, eric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#rows in `eric` that are different in `jessica`:</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">anti_join</span>(eric, jessica)</span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#rows in `jessica` that are different in `eric`:</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="fu">anti_join</span>(jessica, eric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="using-anti_join" class="slide level2">
 <h2>Using <code>anti_join()</code></h2>
 <p>First, I like to add row numbers that match the ones in Excel to make it easier to find the mistakes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" data-code-line-numbers="1,2|3,4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># add rownumbers that match Excel (headers are row 1)</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>excel_rows <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">nrow</span>(eric) <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a>eric    <span class="ot">&lt;-</span> eric    <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">row =</span> excel_rows, <span class="at">.before =</span> date)</span>
-<span id="cb6-4"><a href="#cb6-4"></a>jessica <span class="ot">&lt;-</span> jessica <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">row =</span> excel_rows, <span class="at">.before =</span> date)</span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="fu">head</span>(eric, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7" data-code-line-numbers="1,2|3,4|5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># add rownumbers that match Excel (headers are row 1)</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>excel_rows <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">nrow</span>(eric) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>eric    <span class="ot">&lt;-</span> eric    <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">row =</span> excel_rows, <span class="at">.before =</span> date)</span>
+<span id="cb7-4"><a href="#cb7-4"></a>jessica <span class="ot">&lt;-</span> jessica <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">row =</span> excel_rows, <span class="at">.before =</span> date)</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="fu">head</span>(eric, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output cell-output-stdout">
@@ -611,8 +627,8 @@ Not going to cover programatically editing data. Keep an eye out for future work
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Rows in eric that don't match jessica</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">anti_join</span>(eric, jessica)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># Rows in eric that don't match jessica</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">anti_join</span>(eric, jessica)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 15
     row date       field time   plant_id shoot_1 shoot_2 shoot_3 shoot_4 shoot_5
@@ -627,8 +643,8 @@ Not going to cover programatically editing data. Keep an eye out for future work
 #   counter &lt;chr&gt;, leaves &lt;dbl&gt;
 # ℹ Use `colnames()` to see all variable names</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Rows in jessica that don't match eric</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">anti_join</span>(jessica, eric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Rows in jessica that don't match eric</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">anti_join</span>(jessica, eric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 15
     row date       field time   plant_id shoot_1 shoot_2 shoot_3 shoot_4 shoot_5
@@ -656,7 +672,7 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <li>Data entry errors revealed by double-entry are fixed in <code>tea_resolved.csv</code></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>tea <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_resolved.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>tea <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/tea_resolved.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p>From this point on, “mistakes” in data are harder to verify</p></li>
@@ -681,7 +697,7 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <section id="skim-the-data" class="slide level2 smaller scrollable">
 <h2><code>skim()</code> the data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(tea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>skimr<span class="sc">::</span><span class="fu">skim</span>(tea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table>
 <caption>Data summary</caption>
@@ -1034,14 +1050,14 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <li>I’ll change one of the plots to a number to demonstrate</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>tea<span class="sc">$</span>field[<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>tea<span class="sc">$</span>field[<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co">#change field in the 10th row to "1"</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>tea<span class="sc">$</span>field[<span class="dv">10</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#doesn't change the type of the column</span></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">class</span>(tea<span class="sc">$</span>field)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co">#change field in the 10th row to "1"</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>tea<span class="sc">$</span>field[<span class="dv">10</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#doesn't change the type of the column</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="fu">class</span>(tea<span class="sc">$</span>field)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "character"</code></pre>
 </div>
@@ -1050,14 +1066,14 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <section id="explore-data-visually-1" class="slide level2">
 <h2>Explore data visually</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>visdat<span class="sc">::</span><span class="fu">vis_guess</span>(tea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>visdat<span class="sc">::</span><span class="fu">vis_guess</span>(tea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="672" class="r-stretch quarto-figure-center"></section>
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-12-1.png" width="672" class="r-stretch quarto-figure-center"></section>
 <section id="data-validation-pipelines" class="slide level2">
 <h2>Data Validation Pipelines</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p><code>pointblank</code> provides 6 (six!) workflows for validating data</p></li>
@@ -1073,8 +1089,8 @@ Not going to cover programatically editing data. Keep an eye out for future work
 <li>We will come back to this later</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>al <span class="ot">&lt;-</span> <span class="fu">action_levels</span>(<span class="at">warn_at =</span> <span class="dv">1</span>, <span class="at">stop_at =</span> .<span class="dv">05</span>)</span>
-<span id="cb20-2"><a href="#cb20-2"></a>al</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>al <span class="ot">&lt;-</span> <span class="fu">action_levels</span>(<span class="at">warn_at =</span> <span class="dv">1</span>, <span class="at">stop_at =</span> .<span class="dv">05</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>al</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>-- The `action_levels` settings
 WARN failure threshold of 1test units.
@@ -1089,11 +1105,11 @@ STOP failure threshold of 0.05 of all test units.
 <li>The “agent” will store information about our table, action levels, and validation steps</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>agent <span class="ot">&lt;-</span> </span>
-<span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">create_agent</span>(</span>
-<span id="cb22-3"><a href="#cb22-3"></a>    <span class="at">tbl =</span> tea, <span class="co">#our data example from before</span></span>
-<span id="cb22-4"><a href="#cb22-4"></a>    <span class="at">actions =</span> al <span class="co">#our action levels from before</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>agent <span class="ot">&lt;-</span> </span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">create_agent</span>(</span>
+<span id="cb23-3"><a href="#cb23-3"></a>    <span class="at">tbl =</span> tea, <span class="co">#our data example from before</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>    <span class="at">actions =</span> al <span class="co">#our action levels from before</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="specify-validation-plan" class="slide level2">
@@ -1104,19 +1120,19 @@ STOP failure threshold of 0.05 of all test units.
 <li>Check rows (e.g.&nbsp;duplicate rows) with <code>rows_*()</code> functions</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23" data-code-line-numbers="1-2|3|4|5-6|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>agent_informed <span class="ot">&lt;-</span> </span>
-<span id="cb23-2"><a href="#cb23-2"></a>  agent <span class="sc">%&gt;%</span> </span>
-<span id="cb23-3"><a href="#cb23-3"></a>  <span class="fu">col_is_date</span>(date) <span class="sc">%&gt;%</span> <span class="co"># should be a date</span></span>
-<span id="cb23-4"><a href="#cb23-4"></a>  <span class="fu">col_vals_in_set</span>(field, <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb23-5"><a href="#cb23-5"></a>  <span class="co"># all shoot_ columns should be less than 15 cm (NAs allowed)</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a>  <span class="fu">col_vals_lt</span>(<span class="fu">starts_with</span>(<span class="st">"shoot_"</span>), <span class="dv">15</span>, <span class="at">na_pass =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24" data-code-line-numbers="1-2|3|4|5-6|"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>agent_informed <span class="ot">&lt;-</span> </span>
+<span id="cb24-2"><a href="#cb24-2"></a>  agent <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3"></a>  <span class="fu">col_is_date</span>(date) <span class="sc">%&gt;%</span> <span class="co"># should be a date</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>  <span class="fu">col_vals_in_set</span>(field, <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a>  <span class="co"># all shoot_ columns should be less than 15 cm (NAs allowed)</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>  <span class="fu">col_vals_lt</span>(<span class="fu">starts_with</span>(<span class="st">"shoot_"</span>), <span class="dv">15</span>, <span class="at">na_pass =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="interrogate" class="slide level2">
 <h2>4. Interrogate</h2>
 <p>Finally, run <code>interrogate()</code> on the agent to produce a beautiful report!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>agent_informed <span class="sc">%&gt;%</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>agent_informed <span class="sc">%&gt;%</span> <span class="fu">interrogate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="interrogate-1" class="slide level2 smaller scrollable">
@@ -1579,7 +1595,7 @@ html {
       <th colspan="14" class="gt_heading gt_title gt_font_normal" style="color: #444444; font-size: 28px; text-align: left; font-weight: 500;">Pointblank Validation</th>
     </tr>
     <tr>
-      <th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-size: 12px; text-align: left;"><span style="text-decoration-style:solid;text-decoration-color:#ADD8E6;text-decoration-line:underline;text-underline-position:under;color:#333333;font-variant-numeric:tabular-nums;padding-left:4px;margin-right:5px;padding-right:2px;">[2022-08-03|16:29:53]</span><p></p>
+      <th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-size: 12px; text-align: left;"><span style="text-decoration-style:solid;text-decoration-color:#ADD8E6;text-decoration-line:underline;text-underline-position:under;color:#333333;font-variant-numeric:tabular-nums;padding-left:4px;margin-right:5px;padding-right:2px;">[2022-08-03|16:40:47]</span><p></p>
 <div style="height:25px;"><span style="background-color:#F1D35A;color:#222222;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 0px 5px 5px;font-weight:bold;border:solid 1px #F1D35A;padding:2px 15px 2px 15px;font-size:smaller;">tibble</span>
 <span style="background-color:none;color:#222222;padding:0.5em 0.5em;position:inherit;margin:5px 10px 5px -4px;font-weight:bold;border:solid 1px #F1D35A;padding:2px 15px 2px 15px;font-size:smaller;">tea</span><span style="background-color:#E5AB00;color:white;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 0px 5px 5px;font-weight:bold;border:solid 1px #E5AB00;padding:2px 15px 2px 15px;font-size:smaller;">WARN</span>
 <span style="background-color:none;color:#333333;padding:0.5em 0.5em;position:inherit;margin:5px 0px 5px -4px;font-weight:bold;border:solid 1px #E5AB00;padding:2px 15px 2px 15px;font-size:smaller;">1</span>
@@ -1889,9 +1905,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-08-03 16:29:53 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-08-03 16:40:47 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-08-03 16:29:53 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-08-03 16:40:47 EDT</span></td>
     </tr>
   </tfoot>
   
@@ -1905,9 +1921,9 @@ html {
 <p>If a validation function you need doesn’t exist, you can use <code>col_vals_expr()</code></p>
 <p>E.g. let’s add a validation to check that <code>hoppers</code> is always a whole number.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>agent_informed <span class="ot">&lt;-</span></span>
-<span id="cb25-2"><a href="#cb25-2"></a>  agent_informed  <span class="sc">%&gt;%</span>  </span>
-<span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">col_vals_expr</span>(<span class="sc">~</span> hoppers <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="co">#modulo operation (%%) returns remainder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>agent_informed <span class="ot">&lt;-</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>  agent_informed  <span class="sc">%&gt;%</span>  </span>
+<span id="cb26-3"><a href="#cb26-3"></a>  <span class="fu">col_vals_expr</span>(<span class="sc">~</span> hoppers <span class="sc">%%</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">0</span>) <span class="co">#modulo operation (%%) returns remainder</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="publishing-validation-reports" class="slide level2">

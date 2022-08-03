@@ -10,6 +10,26 @@ nocite: |
   @lewis2021
 ---
 
+## Setup
+
+If you haven't already, download the files for the course by running this code in RStudio
+
+```{r}
+#| eval: false
+#| echo: true
+# if usethis isn't installed...
+# install.packages("usethis")
+
+library(usethis)
+use_course("cct-datascience/data-validation-workshop")
+```
+
+. . . 
+
+You can also download the .zip file here if you'd rather:
+
+<https://github.com/cct-datascience/data-validation-workshop/archive/refs/tags/v0.0.1.zip>
+
 ## Learning Objectives
 
 ```{r setup, echo=FALSE}
