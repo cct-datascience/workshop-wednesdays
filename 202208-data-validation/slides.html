@@ -7,7 +7,7 @@
 <link href="slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="slides_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="slides_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.37">
+  <meta name="generator" content="quarto-1.0.38">
 
   <meta name="author" content="Eric R. Scott">
   <meta name="dcterms.date" content="2022-08-24">
@@ -410,6 +410,15 @@
   <p class="date">2022-08-24</p>
 </section>
 
+<section id="reminders" class="slide level2">
+<h2>Reminders</h2>
+<ul>
+<li>This workshop will be recorded</li>
+<li>Please ask questions!</li>
+<li>Slides available here: <a href="https://viz.datascience.arizona.edu/data-validation-workshop-slides/" class="uri">https://viz.datascience.arizona.edu/data-validation-workshop-slides/</a></li>
+<li>Slides and notes will be made available after the workshop</li>
+</ul>
+</section>
 <section id="setup" class="slide level2">
 <h2>Setup</h2>
 <p>If you haven’t already, download the files for the course by running this code in RStudio</p>
@@ -434,7 +443,7 @@
 <ul>
 <li class="fragment"><p>Understand some best practices for entering data</p></li>
 <li class="fragment"><p>Use Excel data validation tools to prevent data entry errors</p></li>
-<li class="fragment"><p>Use double-entry and anti_join() to check for data entry mistakes</p></li>
+<li class="fragment"><p>Use double-entry and <code>anti_join()</code> to check for data entry mistakes</p></li>
 <li class="fragment"><p>Explore data summaries to check for errors</p></li>
 <li class="fragment"><p>Be familiar with the basics of data validation with pointblank</p></li>
 </ul>
@@ -476,25 +485,25 @@
 <ul>
 <li class="fragment"><strong>Don’t edit raw data!</strong></li>
 <li class="fragment">Record all changes to raw data (e.g.&nbsp;by using an R script to make them)</li>
-<li class="fragment">Flag observations that have been changed</li>
-<li class="fragment">Publish raw data, cleaning steps/scripts, and “cleaned” data</li>
-<li class="fragment">For <strong>true</strong> mistakes in data entry (paper -&gt; spreadsheet), <em>maybe</em> ok to edit raw data</li>
+<li class="fragment">Flag observations that have been changed<br>
+</li>
 </ul>
 </div>
-<aside class="notes">
-<p>Keep raw data files <strong>read-only</strong>!<br>
-Not going to cover programatically editing data. Keep an eye out for future workshops on tidying/wrangling data.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+<div class="fragment">
+<div class="callout callout-note callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>This workshop won’t cover <em>fixing</em> mistakes with R—just preventing and catching mistakes. Keep an eye out for future workshops on tidying/wrangling data.</p>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="data-entry-in-spreadsheets" class="slide level2">
 <h2>Data Entry in Spreadsheets</h2>
@@ -1597,7 +1606,7 @@ html {
       <th colspan="14" class="gt_heading gt_title gt_font_normal" style="color: #444444; font-size: 28px; text-align: left; font-weight: 500;">Pointblank Validation</th>
     </tr>
     <tr>
-      <th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-size: 12px; text-align: left;"><span style="text-decoration-style:solid;text-decoration-color:#ADD8E6;text-decoration-line:underline;text-underline-position:under;color:#333333;font-variant-numeric:tabular-nums;padding-left:4px;margin-right:5px;padding-right:2px;">[2022-08-03|16:45:38]</span><p></p>
+      <th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="font-size: 12px; text-align: left;"><span style="text-decoration-style:solid;text-decoration-color:#ADD8E6;text-decoration-line:underline;text-underline-position:under;color:#333333;font-variant-numeric:tabular-nums;padding-left:4px;margin-right:5px;padding-right:2px;">[2022-08-18|15:12:27]</span><p></p>
 <div style="height:25px;"><span style="background-color:#F1D35A;color:#222222;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 0px 5px 5px;font-weight:bold;border:solid 1px #F1D35A;padding:2px 15px 2px 15px;font-size:smaller;">tibble</span>
 <span style="background-color:none;color:#222222;padding:0.5em 0.5em;position:inherit;margin:5px 10px 5px -4px;font-weight:bold;border:solid 1px #F1D35A;padding:2px 15px 2px 15px;font-size:smaller;">tea</span><span style="background-color:#E5AB00;color:white;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 0px 5px 5px;font-weight:bold;border:solid 1px #E5AB00;padding:2px 15px 2px 15px;font-size:smaller;">WARN</span>
 <span style="background-color:none;color:#333333;padding:0.5em 0.5em;position:inherit;margin:5px 0px 5px -4px;font-weight:bold;border:solid 1px #E5AB00;padding:2px 15px 2px 15px;font-size:smaller;">1</span>
@@ -1907,9 +1916,9 @@ html {
   </tbody>
   <tfoot class="gt_sourcenotes">
     <tr>
-      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-08-03 16:45:38 EDT</span>
+      <td class="gt_sourcenote" colspan="14"><span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin-left:10px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;padding:2px 10px 2px 10px;">2022-08-18 15:12:28 EDT</span>
 <span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;margin:5px 1px 5px 0;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">&lt; 1 s</span>
-<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-08-03 16:45:39 EDT</span></td>
+<span style="background-color:#FFF;color:#444;padding:0.5em 0.5em;position:inherit;text-transform:uppercase;margin:5px 1px 5px -1px;border:solid 1px #999999;font-variant-numeric:tabular-nums;border-radius:0;padding:2px 10px 2px 10px;">2022-08-18 15:12:28 EDT</span></td>
     </tr>
   </tfoot>
   

@@ -11,6 +11,13 @@ nocite: |
   @lewis2021
 ---
 
+## Reminders
+
+-   This workshop will be recorded
+-   Please ask questions!
+-   Slides available here: <https://viz.datascience.arizona.edu/data-validation-workshop-slides/>
+-   Slides and notes will be made available after the workshop
+
 ## Setup
 
 If you haven't already, download the files for the course by running this code in RStudio
@@ -25,7 +32,7 @@ library(usethis)
 use_course("cct-datascience/data-validation-workshop")
 ```
 
-. . . 
+. . .
 
 You can also download the .zip file here if you'd rather:
 
@@ -42,7 +49,7 @@ options(pillar.width = 75)
 
 -   Use Excel data validation tools to prevent data entry errors
 
--   Use double-entry and anti_join() to check for data entry mistakes
+-   Use double-entry and `anti_join()` to check for data entry mistakes
 
 -   Explore data summaries to check for errors
 
@@ -82,16 +89,16 @@ remotes::install_github("rich-iannone/pointblank")
 ::: incremental
 -   **Don't edit raw data!**
 -   Record all changes to raw data (e.g. by using an R script to make them)
--   Flag observations that have been changed
--   Publish raw data, cleaning steps/scripts, and "cleaned" data
--   For **true** mistakes in data entry (paper -\> spreadsheet), *maybe* ok to edit raw data
+-   Flag observations that have been changed\
 :::
 
-::: notes
-Keep raw data files **read-only**!\
-Not going to cover programatically editing data.
+. . . 
+
+::: callout-note
+This workshop won't cover *fixing* mistakes with R---just preventing and catching mistakes.
 Keep an eye out for future workshops on tidying/wrangling data.
 :::
+
 
 ## Data Entry in Spreadsheets
 
@@ -108,7 +115,6 @@ Take some time setting up your data entry spreadsheet.
 ::: aside
 For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
 :::
-
 
 ## Data Example
 
@@ -131,7 +137,6 @@ For more detailed guidelines on using spreadsheets for data entry, I highly reco
 ![](images/leafhopper.jpg){fig-align="right" width="425"}
 :::
 :::
-
 
 ## Use Excel's Validation Tools
 
@@ -168,7 +173,6 @@ Set up validation tools in your data entry spreadsheet to stop data entry errors
 eric <- read_csv("data/tea_eric.csv")
 jessica <- read_csv("data/tea_jessica.csv")
 ```
-
 
 ## Compare visually with `visdat`
 
