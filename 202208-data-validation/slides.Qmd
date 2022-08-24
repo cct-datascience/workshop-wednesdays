@@ -32,11 +32,22 @@ library(usethis)
 use_course("cct-datascience/data-validation-workshop")
 ```
 
-. . .
+You'll also need the following R packages:
 
+```{r}
+#| output: false
+#| echo: true
+library(tidyverse)
+library(visdat)
+library(skimr)
+library(pointblank)
+```
+
+::: notes
 You can also download the .zip file here if you'd rather:
 
 <https://github.com/cct-datascience/data-validation-workshop/archive/refs/tags/v0.0.1.zip>
+:::
 
 ## Learning Objectives
 
@@ -47,74 +58,38 @@ options(pillar.width = 75)
 ::: incremental
 -   Understand some best practices for entering data
 
--   Use Excel data validation tools to prevent data entry errors
+-   Use Excel's data validation tools to prevent data entry errors
 
 -   Use double-entry and `anti_join()` to check for data entry mistakes
 
 -   Explore data summaries to check for errors
 
--   Be familiar with the basics of data validation with pointblank
+-   Be familiar with the basics of data validation with `pointblank`
 :::
 
 . . .
 
 ::: callout-important
-## We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
+We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
 :::
 
-## Software needed
-
-You'll need access to Excel, R, RStudio, and the following R packages:
-
-```{r}
-#| output: false
-#| echo: true
-library(tidyverse)
-library(visdat)
-library(pointblank)
-library(skimr)
-```
-
-If you can, install the development version of `pointblank` using this R code:
-
-``` r
-if(!require("remotes")) {
-  install.packages("remotes")
-} 
-remotes::install_github("rich-iannone/pointblank")
-```
-
-## How and when to fix mistakes?
+## General approach
 
 ::: incremental
 -   **Don't edit raw data!**
+-   Data validation
 -   Record all changes to raw data (e.g. by using an R script to make them)
--   Flag observations that have been changed\
+-   Flag observations that have been changed
 :::
 
-. . . 
+. . .
 
 ::: callout-note
-This workshop won't cover *fixing* mistakes with R---just preventing and catching mistakes.
-Keep an eye out for future workshops on tidying/wrangling data.
+This workshop is focused on finding and preventing mistakes.\
+
+Keep an eye out for future workshops on tidying/wrangling data for tools to fix those mistakes.
 :::
 
-
-## Data Entry in Spreadsheets
-
-Spreadsheets are convenient for data entry, but can result in errors.
-Take some time setting up your data entry spreadsheet.
-
-::: incremental
--   Use consistent values for categorical variables
--   Explicitly record missing data instead of leaving blanks
--   Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
--   Use YYYY-MM-DD format for dates
-:::
-
-::: aside
-For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
-:::
 
 ## Data Example
 
@@ -136,6 +111,22 @@ For more detailed guidelines on using spreadsheets for data entry, I highly reco
 
 ![](images/leafhopper.jpg){fig-align="right" width="425"}
 :::
+:::
+
+## Data Entry in Spreadsheets
+
+Spreadsheets are convenient for data entry, but can result in errors.
+Take some time setting up your data entry spreadsheet.
+
+::: incremental
+-   Use consistent values for categorical variables
+-   Explicitly record missing data instead of leaving blanks
+-   Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
+-   Use YYYY-MM-DD format for dates
+:::
+
+::: aside
+For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
 :::
 
 ## Use Excel's Validation Tools
