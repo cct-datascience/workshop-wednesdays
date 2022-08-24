@@ -67,17 +67,12 @@ options(pillar.width = 75)
 -   Be familiar with the basics of data validation with `pointblank`
 :::
 
-. . .
-
-::: callout-important
-We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
-:::
 
 ## General approach
 
 ::: incremental
 -   **Don't edit raw data!**
--   Data validation
+-   Data validation to identify *errors*
 -   Record all changes to raw data (e.g. by using an R script to make them)
 -   Flag observations that have been changed
 :::
