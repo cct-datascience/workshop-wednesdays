@@ -1,0 +1,4 @@
+data_raw/*
+rsconnect/*
+slides_files/*
+*.html

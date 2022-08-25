@@ -1,0 +1,394 @@
+---
+title: "Data Validation in Excel and R"
+author: "Eric R. Scott"
+date: "2022-08-24"
+format: 
+  revealjs:
+    logo: "logo.png"
+    chalkboard: true
+bibliography: references.bib
+nocite: |
+  @lewis2021
+---
+
+## Reminders
+
+-   This workshop will be recorded
+-   Please ask questions!
+-   Slides available here: <https://viz.datascience.arizona.edu/data-validation-workshop-slides/>
+-   Slides and notes will be made available after the workshop
+
+## Setup
+
+If you haven't already, download the files for the course by running this code in RStudio
+
+```{r}
+#| eval: false
+#| echo: true
+# if usethis isn't installed...
+# install.packages("usethis")
+
+library(usethis)
+use_course("cct-datascience/data-validation-workshop")
+```
+
+You'll also need the following R packages:
+
+```{r}
+#| output: false
+#| echo: true
+library(tidyverse)
+library(visdat)
+library(skimr)
+library(pointblank)
+```
+
+::: notes
+You can also download the .zip file here if you'd rather:
+
+<https://github.com/cct-datascience/data-validation-workshop/archive/refs/tags/v0.0.1.zip>
+:::
+
+## Learning Objectives
+
+```{r setup, echo=FALSE}
+options(pillar.width = 75)
+```
+
+::: incremental
+-   Understand some best practices for entering data
+
+-   Use Excel's data validation tools to prevent data entry errors
+
+-   Use double-entry and `anti_join()` to check for data entry mistakes
+
+-   Explore data summaries to check for errors
+
+-   Be familiar with the basics of data validation with `pointblank`
+:::
+
+
+## General approach
+
+::: incremental
+-   **Don't edit raw data!**
+-   Data validation to identify *errors*
+-   Record all changes to raw data (e.g. by using an R script to make them)
+-   Flag observations that have been changed
+:::
+
+. . .
+
+::: callout-note
+This workshop is focused on finding and preventing mistakes.\
+
+Keep an eye out for future workshops on tidying/wrangling data for tools to fix those mistakes.
+:::
+
+
+## Data Example
+
+::: columns
+::: {.column width="60%"}
+-   Modified from [@scott2021].
+
+-   Every day, around 6am, recorded data from individual tea plants
+
+-   Measured 7 marked shoots per plant with a ruler
+
+-   Counted number of leafhoppers on 30 or 50 leaves per plant
+
+-   Noted who took the observations (there were three of us)
+:::
+
+::: {.column width="40%"}
+![](images/tea.jpg){fig-align="right" width="425"}
+
+![](images/leafhopper.jpg){fig-align="right" width="425"}
+:::
+:::
+
+## Data Entry in Spreadsheets
+
+Spreadsheets are convenient for data entry, but can result in errors.
+Take some time setting up your data entry spreadsheet.
+
+::: incremental
+-   Use consistent values for categorical variables
+-   Explicitly record missing data instead of leaving blanks
+-   Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
+-   Use YYYY-MM-DD format for dates
+:::
+
+::: aside
+For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
+:::
+
+## Use Excel's Validation Tools
+
+Set up validation tools in your data entry spreadsheet to stop data entry errors in their tracks!
+
+![](images/validation-dialog.png){fig-alt="Data Validation dialog box in Excel.  Settings tab is shown with dropdown menu for Allow:" fig-align="center" width="300"}
+
+::: {text-align="center"}
+\[DEMO\]
+:::
+
+## Watch out for Excel Autocorrect!
+
+::: {layout-ncol="2"}
+[![](images/nature-excel.png){fig-alt="Nature headline: \"Autocorrect errors in Excel still creating genomics headache.  Despite geneticists being warned about spreadsheet problems, 30% of published papers contain mangled gene names in supplementary data." width="530"}](https://www.nature.com/articles/d41586-021-02211-4)
+
+![](images/excel-meme.jpg){fig-alt="Confused anime guy with butterfly meme where the guy has a Microsoft Excel logo on his face, the butterfly is \"any data at all\" and the caption is \"is this a date?\"" width="200"}
+:::
+
+1.  Explicitly set all column types to numeric, text, date, etc.
+
+2.  Make sure no columns are set to "general"
+
+\[DEMO\]
+
+## Double-entry Method
+
+-   Two people enter the same data, then compare programatically.
+
+-   In the `data` folder, there are two versions of a dataset---one entered by Eric and one entered by Jessica.
+
+```{r}
+#| echo: true
+eric <- read_csv("data/tea_eric.csv")
+jessica <- read_csv("data/tea_jessica.csv")
+```
+
+## Compare visually with `visdat`
+
+`vis_compare()` visually compares two datasets of the same dimensions.
+
+```{r}
+#| warning: false
+#| echo: true 
+#| fig-align: center
+#| fig-width: 7
+#| fig-height: 3.5
+vis_compare(eric, jessica)
+```
+
+## Compare data frames
+
+-   The `dplyr` package includes a set of `*_join()` functions for combining two datasets
+
+-   `anti_join()` returns only rows that differ, perfect for double-entry
+
+```{r}
+#| eval: false
+#| echo: true
+#rows in `eric` that are different in `jessica`:
+anti_join(eric, jessica)
+
+#rows in `jessica` that are different in `eric`:
+anti_join(jessica, eric)
+```
+
+## Using `anti_join()`
+
+First, I like to add row numbers that match the ones in Excel to make it easier to find the mistakes.
+
+```{r}
+#| echo: true
+#| code-line-numbers: "1,2|3,4|5"
+#| output-location: fragment
+# add rownumbers that match Excel (headers are row 1)
+excel_rows <- 2:(nrow(eric) + 1)
+eric    <- eric    %>% mutate(row = excel_rows, .before = date)
+jessica <- jessica %>% mutate(row = excel_rows, .before = date)
+head(eric, 5)
+```
+
+## Inspect the output of `anti_join()` {.smaller}
+
+```{r}
+options(pillar.width = 80)
+```
+
+```{r}
+#| echo: true
+
+# Rows in eric that don't match jessica
+anti_join(eric, jessica)
+
+# Rows in jessica that don't match eric
+anti_join(jessica, eric)
+```
+
+# Break
+
+## We fixed the data entry mistakes!
+
+-   Data entry errors revealed by double-entry are fixed in `tea_resolved.csv`
+
+```{r}
+#| echo: true
+
+tea <- read_csv("data/tea_resolved.csv")
+```
+
+-   From this point on, "mistakes" in data are harder to verify
+
+-   Can still take steps to *validate* the data
+
+    -   What values are *possible*?
+    -   What values are *reasonable*?
+
+## Explore data summaries
+
+::: incremental
+-   You can't check for errors if you don't get to know your data!
+-   Use `skimr::skim()` to get a nicely formatted summary
+-   Look for number of unique values for categorical variables
+-   Prints mini-histograms for numeric variables
+:::
+
+## `skim()` the data {.smaller .scrollable}
+
+```{r}
+#| echo: true
+
+skimr::skim(tea)
+```
+
+::: notes
+`whitespace` shows how many columns are whitespace---common mistake in Excel and reason to be explicit about marking missing data instead of blank cells.
+:::
+
+## Explore data visually
+
+-   `visdat::vis_guess()` plots guesses of the type of variable for each observation
+-   Useful for spotting inconsistencies in a column
+-   I'll change one of the plots to a number to demonstrate
+
+```{r}
+#| echo: true
+tea$field[10]
+#change field in the 10th row to "1"
+tea$field[10] <- 1
+#doesn't change the type of the column
+class(tea$field)
+```
+
+## Explore data visually
+
+```{r}
+#| echo: true 
+#| fig-align: center
+#| fig-width: 7
+#| fig-height: 4
+
+visdat::vis_guess(tea)
+```
+
+## Data Validation Pipelines
+
+```{r}
+#| echo: true
+library(pointblank)
+```
+
+-   `pointblank` provides 6 (six!) workflows for validating data
+
+-   The [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) (VALID-1) is probably most useful to start
+
+![](https://rich-iannone.github.io/pointblank/articles/images/VALID-I.svg)
+
+## 1. Action Levels
+
+-   Decide on "action levels"
+-   Can set a number or fraction of rows as a threshold for a warning or error
+-   We will come back to this later
+
+```{r}
+#| echo: true
+al <- action_levels(warn_at = 1, stop_at = .05)
+al
+```
+
+## 2. Create Agent
+
+-   The "agent" will store information about our table, action levels, and validation steps
+
+```{r}
+#| echo: true
+agent <- 
+  create_agent(
+    tbl = tea, #our data example from before
+    actions = al #our action levels from before
+  )
+```
+
+## 3. Specify Validation Plan
+
+-   Basic checks on column types with `col_is_*()` functions
+-   Check column values with `col_vals_*()` functions
+-   Check rows (e.g. duplicate rows) with `rows_*()` functions
+
+```{r}
+#| code-line-numbers: "1-2|3|4|5-6|"
+#| echo: true
+agent_informed <- 
+  agent %>% 
+  col_is_date(date) %>% # should be a date
+  col_vals_in_set(field, c("A", "B")) %>%
+  # all shoot_ columns should be less than 15 cm (NAs allowed)
+  col_vals_lt(starts_with("shoot_"), 15, na_pass = TRUE)
+```
+
+## 4. Interrogate
+
+Finally, run `interrogate()` on the agent to produce a beautiful report!
+
+```{r}
+#| echo: true
+#| eval: false
+
+agent_informed %>% interrogate()
+```
+
+## 4. Interrogate {.smaller .scrollable}
+
+```{r}
+agent_informed %>% interrogate()
+```
+
+## Flexible validations
+
+If a validation function you need doesn't exist, you can use `col_vals_expr()`
+
+E.g. let's add a validation to check that `hoppers` is always a whole number.
+
+```{r}
+#| echo: true
+#| eval: false
+
+agent_informed <-
+  agent_informed  %>%  
+  col_vals_expr(~ hoppers %% 1 == 0) #modulo operation (%%) returns remainder
+```
+
+## Publishing validation reports
+
+-   RMarkdown documents with `pointblank` validations can be published on **RStudio Connect** ([Learn More](https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect))
+
+-   Data validation can be automated in a variety of ways!
+
+-   If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
+
+## Help
+
+-   [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours) every Tuesday morning
+
+-   We would love to help you with your R questions about data validation and more!
+
+-   [Make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help
+
+. . .
+
+### References
