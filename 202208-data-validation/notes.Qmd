@@ -1,0 +1,334 @@
+---
+title: "Data Validation in Excel and R"
+author: "Eric R. Scott"
+date: "2022-08-24"
+format: 
+  html:
+    self-contained: true
+    toc: true
+    toc_float: true
+bibliography: references.bib
+---
+
+## Overview
+
+There are many opportunities for human or instrument error to affect data.
+Ideally, you want to find those errors and fix them early and often!
+This workshop introduces some tools in Excel and R to avoid making mistakes in data entry and data collection, and to detect the ones you inadvertently make.
+
+## Learning Objectives
+
+-   Understand some best practices for entering data
+
+-   Use Excel data validation tools to prevent data entry errors
+
+-   Use double-entry and `anti_join()` to check for data entry mistakes
+
+-   Explore data summaries to check for errors
+
+-   Be familiar with the basics of data validation with `pointblank`
+
+::: callout-important
+## We are only interested in fixing verifiable mistakes! It is generally **not** appropriate to remove or edit outliers---extreme values that may or may not be accurate.
+:::
+
+## Software needed
+
+You'll need access to Excel, R, RStudio, and the following R packages:
+
+```{r}
+#| output: false
+library(tidyverse)
+library(visdat)
+library(pointblank)
+library(skimr)
+```
+
+If you can, install the development version of `pointblank` using this R code:
+
+``` r
+if(!require("remotes")) {
+  install.packages("remotes")
+} 
+remotes::install_github("rich-iannone/pointblank")
+```
+
+## Data Entry in Spreadsheets
+
+A common and useful way to enter data is in a spreadsheet (e.g. in Excel or Google Sheets).
+Here are some tips for avoiding data entry mistakes and saving yourself time and headaches with data wrangling:
+
+-   For categorical variables and notes use consistent values (e.g. don't sometimes write "dead" and other times write "Dead")
+-   Explicitly record missing data instead of leaving cells blank
+-   Use consistent, concise, descriptive, machine-readable column headers (this is hard!)
+-   Use ISO (YYYY-MM-DD) format for dates
+
+::: callout-tip
+For more detailed guidelines on using spreadsheets for data entry, I highly recommend [Data Organization in Spreadsheets](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989) by @broman2018.
+:::
+
+## Avoiding mistakes in data entry
+
+Set up validation tools in your data entry spreadsheet to stop data entry errors in their tracks!
+
+![](https://c.tenor.com/Kt00_NI0XegAAAAC/gee-data-entry.gif){fig-alt="gif of cat typing furiously on a laptop" fig-align="center" width="300"}
+
+### Data Validation Tools in Excel
+
+![](images/validation-dialog.png){fig-alt="Data Validation dialog box in Excel.  Settings tab is shown with dropdown menu for Allow:" fig-align="center" width="300"}
+
+-   Select a column (or cells) and choose `Data > Validation …` from the menu
+
+-   Use "list" to restrict to specific values for categorical data
+
+-   Use "whole number" for count data
+
+-   Use "date" to restrict date ranges
+
+-   Can also be set up *after* data entry.
+    Highlight invalid data with "Circle Invalid Data" from toolbar
+
+### Watch out for Excel autocorrect!
+
+::: {layout-ncol="2"}
+[![](images/nature-excel.png){fig-alt="Nature headline: \"Autocorrect errors in Excel still creating genomics headache.  Despite geneticists being warned about spreadsheet problems, 30% of published papers contain mangled gene names in supplementary data." width="530"}](https://www.nature.com/articles/d41586-021-02211-4)
+
+![](images/excel-meme.jpg){fig-alt="Confused anime guy with butterfly meme where the guy has a Microsoft Excel logo on his face, the butterfly is \"any data at all\" and the caption is \"is this a date?\"" width="200"}
+:::
+
+To stop Excel from converting entries to dates:
+
+1.  Explicitly set all column types to numeric, text, date, etc.
+
+2.  Make sure no columns are set to "general" ![](images/general-x.png){width="120"}
+
+### Double-entry Method
+
+-   Two people enter the same data, then compare programatically.
+
+-   In the `data` folder, there are two versions of a dataset---one entered by Eric and one entered by Jessica.
+
+```{r}
+eric <- read_csv("data/tea_eric.csv")
+jessica <- read_csv("data/tea_jessica.csv")
+```
+
+::: callout-note
+This example dataset is modified from [@scott2021].
+Each day, researchers counted the number of leafhoppers (`hoppers`) on tea plants and measured the length of 7 labeled tea shoots in cm (recorded in `shoot_*` columns).
+`leaves` is how many leaves were searched for leafhoppers on each plant and `counter` is the initial of the researcher who took measurements.
+:::
+
+#### Compare visually with `visdat`
+
+We can compare them a couple of ways.
+First, we can compare them visually using the `visdat` package.
+This only works if the two datasets are the same dimensions.
+
+```{r}
+#| warning: false
+vis_compare(eric, jessica)
+```
+
+#### Compare with `dplyr::anti_join()`
+
+First add row numbers to make it easier to find mistakes in Excel.
+
+```{r}
+# add rownumbers that match Excel (headers are row 1)
+eric    <- eric    %>% mutate(row = 2:(n()+1), .before = date)
+jessica <- jessica %>% mutate(row = 2:(n()+1), .before = date)
+```
+
+`anti_join()` takes two data frames and returns only rows that differ between them.
+
+```{r}
+#values in `eric` that are different in `jessica`
+anti_join(eric, jessica)
+#values in `jessica` that are different in `eric`
+anti_join(jessica, eric)
+```
+
+Errors include:
+
+-   row 11: messy handwriting? (1 or 7?)
+-   row 28 & 29: values swapped for `shoot_7`\
+-   row 49: missing decimal point
+-   row 51: discrepancy in plant ID
+-   row 61: missing data in Eric's version
+
+```{r}
+#after fixing data-entry errors, we get `tea_resolved.csv`
+tea <- read_csv("data/tea_resolved.csv")
+```
+
+## Explore data summaries
+
+-   You can't check for errors if you don't get to know your data!
+-   Use `skimr::skim()` to get a nicely formatted summary
+-   Look for number of unique values for categorical variables
+-   Look for long tails or strange patterns in mini-histograms for numeric variables
+
+```{r}
+#| column: body-outset
+
+skimr::skim(tea)
+```
+
+Or get a more detailed breakdown by running `skim()` on a grouped data frame:
+
+```{r}
+#| column: body-outset
+
+tea %>% 
+  group_by(date) %>% 
+  skim()
+```
+
+## Explore data visually
+
+-   `visdat::vis_guess()` can help spot inconsistencies
+-   I'll change one of the plots to a number to demonstrate
+
+```{r}
+#change field in the 10th row to "1"
+tea$field[10] <- 1
+#doesn't change the type of the column
+class(tea$field)
+#but vis_guess() spots the mistake!
+visdat::vis_guess(tea)
+```
+
+Potential mistakes spotted:
+
+-   numeric value in `field` column
+-   a decimal in the `hoppers` column
+
+## Data validation pipelines with `pointblank`
+
+```{r}
+library(pointblank)
+```
+
+-   `pointblank` provides 6 (six!) workflows for validating data
+
+-   The [Data Quality Reporting Workflow](https://rich-iannone.github.io/pointblank/articles/VALID-I.html) (VALID-1) is probably most useful for this group
+
+-   Start with a data frame, create an "agent", tell it what to expect of your data with validation functions, and let it "interrogate" your data
+
+-   Output is a HTML table with buttons to download CSV files of any data that didn't pass your validations
+
+### `pointblank` demo
+
+1.  Decide on "action levels". Can set a number or fraction of rows as a threshold for a warning or error
+
+```{r}
+al <- action_levels(warn_at = 1, stop_at = .05)
+al
+```
+
+2.  Create agent
+
+```{r}
+agent <- 
+  create_agent(
+    tbl = tea, #our data example from before
+    actions = al
+  )
+```
+
+3.  Specify validation conditions
+
+    -   Basic checks on column types with `col_is_*()` functions
+    -   Check column values with `col_vals_*()` functions
+    -   Check rows (e.g. duplicate rows) with `rows_*()` functions
+
+```{r}
+agent_informed <- 
+  agent %>% 
+  col_is_character(c(field, counter)) %>% #should be character
+  col_is_date(date) %>% #should be a date
+  
+  col_vals_in_set(counter, c("W", "G", "E")) %>% #The three researchers
+  col_vals_lt(  #expect shoots < 15cm
+    columns = starts_with("shoot_"), 
+    value =  15,
+    na_pass = TRUE
+  ) %>% 
+  rows_distinct(columns = vars(plant_id, date)) #no duplicate plant IDs
+```
+
+::: callout-important
+`pointblank` historically used the `vars()` function to specify columns (e.g. `col_is_character(vars(field))`), but is moving toward a more tidyverse-like approach.
+However, at the time of writing this, some functions and arguments still require `vars()` like `rows_distinct()` above.
+:::
+
+4.  Interrogate!
+
+```{r}
+#| column: body-outset
+
+agent_informed %>% interrogate()
+```
+
+::: callout-tip
+Click the blue "CSV" buttons above to download a .csv file of just the rows that failed that particular validation
+:::
+
+### Flexible validations
+
+If a validation function you need doesn't exist, you can use `col_vals_expr()`
+
+E.g. let's add a validation to check that `hoppers`is always a whole number.
+
+```{r}
+#| column: body-outset
+agent_informed <-
+  agent_informed %>% 
+  col_vals_expr(~ hoppers %% 1 == 0) 
+
+agent_informed %>% interrogate()
+```
+
+### Check that shoots are growing
+
+The tea shoots should be consistently growing (within measurement error), so we can use `col_vals_increasing()` to check that shoot height is always going up.
+We use the `segment` argument to specify that this check happens *within* each `plant_id`
+
+```{r}
+#| column: body-outset
+agent_informed <-
+  agent_informed %>% 
+  #just with one shoot for demo purposes, but could use starts_with("shoot_")
+  col_vals_increasing(shoot_1, segments = vars(plant_id))
+
+agent_informed %>% interrogate()
+```
+
+### Publishing validation reports
+
+-   Students, faculty, and staff at University of Arizona have access to **RStudio Connect** which allows you to publish an RMarkdown document to the web with a single click.
+    ([Learn More](https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect))
+
+-   Data validation can be automated in a variety of ways.
+    If you are interested in more advanced applications of data validation for your lab, [contact us](https://cct.cals.arizona.edu/contact)!
+
+## Fixing mistakes
+
+-   For true mistakes in data entry (paper -\> spreadsheet), probably ok to just edit raw data
+
+-   For other errors, best practice:
+
+    -   **Don't edit raw data!**
+    -   Record all changes to raw data (e.g. by using an R script to make them)
+    -   Flag observations that have been changed
+    -   Publish raw data, cleaning steps/scripts, and "cleaned" data
+
+-   Keep an eye out for future workshops on data wrangling/tidying/cleaning
+
+## Help
+
+Feel free to drop by the [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours), which happens every Tuesday morning.
+We would love to help you with your R questions about date/time, and more!
+
+You can also [make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help.
