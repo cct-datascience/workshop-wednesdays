@@ -5,6 +5,8 @@ format: html
 editor: visual
 ---
 
+Tagline: "As data analysis projects grow, they can get complicated to update and time consuming to re-run. Learn how to save time and reduce confusion by using the `targets` package to manage the workflow of your analyses in R."
+
 Outline:
 
 PART 1:
@@ -30,8 +32,7 @@ PART 2:
     2.  how many?
 2.  Parallelization with `tar_make_clustermq()` or `tar_make_future()`
 3.  Branching demo
-    1.  Just dynamic branching, I think?
-        Basically just make them aware that it exists and is powerful for speeding up repetitive tasks
+    1.  Just dynamic branching, I think? Basically just make them aware that it exists and is powerful for speeding up repetitive tasks
 4.  When to use `targets` for a project?
     1.  Consider complexity, time to re-run
 
@@ -46,3 +47,11 @@ PART 2:
         3.  Save intermediate results with `tar_file()`
 
 I also want to make a template repo that has a cool readme with the mermaid.js graph and instructions for reproducibility that people can start with.
+
+PART 3:
+
+1.  You can take advantage of UA HPC to run targets in parallel
+2.  Demo requesting multi-core OOD RStudio session
+3.  Set up clustermq (SLURM doesn't work, but "multisession" does)
+4.  Make dummy targets with `sys.sleep()` and demo how multiple workers run pipeline faster.
+5.  Demo running in background and `tar_watch()`
