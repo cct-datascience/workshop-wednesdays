@@ -7,8 +7,10 @@ format:
     code-link: true
 ---
 
-# Personal websites with Quarto
+# Personal websites with Quarto 
 
+::: columns
+::: {.column style="width: 40%"}
 October 26, 2022
 
 Workshop Wednesday
@@ -16,11 +18,15 @@ Workshop Wednesday
 Heidi Steiner, PSM \| Data Science Educator
 
 Jessica Guo, PhD \| Data Scientist
+:::
+::: {.column style="width: 60%"}
+![](img/horst_quarto_penguins_teach.png){fig-alt="Graphic showing penguin showing another penguin the Quarto moon"}
+:::
+:::
 
 ## Quarto
 
-> Quarto® is an open-source scientific and technical publishing system built to dramatically improve the process of creating and collaborating
-![](img/horst_quarto_schematic.png){fig-alt="Graphic showing R, Python, Julia, and Observable languages flowing to Quarto and then on to html, PDF, and MS Word documents"}
+> Quarto® is an open-source scientific and technical publishing system built to dramatically improve the process of creating and collaborating ![](img/horst_quarto_schematic.png){fig-alt="Graphic showing R, Python, Julia, and Observable languages flowing to Quarto and then on to html, PDF, and MS Word documents"}
 
 ::: {.footer .center style="width: 80%;"}
 Content is a mixture of \[RStudio Education materials\](https://github.com/rstudio-education), CC-BY. All art (unless otherwise noted) is by \[Desirée De Leon\](https://desiree.rbind.io/) and \[Allison Horst\](https://www.allisonhorst.com/), CC-BY-NC-ND.
@@ -31,7 +37,6 @@ lowering the activation energy to reproducible reporting in MANY ways
 
 I think it's totally appropriate to stop here and ask how folks feel about the term open/reproducible
 :::
-
 
 ## 
 
@@ -159,7 +164,7 @@ search "lung svg" then select images, cc licensed images, and use address url fr
 
 ![](img/knitOutput.png){style="margin-top: 20px;" fig-alt="illustration of brown hedgehod wearing a yellow knitted beanie knitting a turquoise scarf surrounded by possible output options such as pdf and word doc" width="850"}
 
-## Style 
+## Style
 
 CSS
 
@@ -189,33 +194,159 @@ I live on this website: https://www.w3schools.com/cssref/default.asp
 
 ## Let's dive in. {.darkbackground background-image="img/diveInQuarto.png," background-size="contain," background-opacity=".6,"}
 
-## 10 steps to a Quarto website on GitHub
+## 6 steps to a Quarto website on GitHub
 
- - Check that you have a command line shell installed, e.g. Git Bash
-   - Does the terminal window begin with a $?
+-   Check that you have a command line shell installed, e.g. Git Bash
+    
+-   Check that quarto is installed with `quarto --help`
+    
+::: callout-tip
+## Hints
+-   Does the terminal window begin with a \$?
 
- - Check that quarto is installed with `quarto --help`
-   - If on PC, also try `quarto.cmd --help`
-
+-   PC users might have to use `quarto.cmd`
+:::
 
 ## Step 1: Create website directory
 
 In the terminal window:
 
- - Use `pwd` and `cd` to navigate to where you want your website to live
- 
- - Type the command `quarto create-project username.github.io --type website`
- 
-## Step 2: Convert directory to git repository
+-   Use `pwd` and `cd` to navigate to where you want your website to live
+
+-   Type the command `quarto create-project username.github.io --type website`
+
+## Step 2: Initiate git repository
 
 In the terminal window:
 
-  - Use `ls` and `cd` to navigate into the new directory
-  
-  - Initialize a git repo with `git init`
-  
-  - Add and commit all files
-     - `git add .`
-     - `git commit -m "Initial commit"`
+-   Use `ls` and `cd` to navigate into the new directory
+
+-   Initialize the repo
+
+-   Add and commit all files
+
+```{=html}
+<!-- -->
+```
+    git init
+    git add .
+    git commit -m "Initial commit"
 
 ## Step 3: Connect to GitHub
+
+-   On GitHub, create a new remote with the same name as your local repository.
+
+-   Copy remote repository URL and type into the terminal window:
+
+```{=html}
+<!-- -->
+```
+    git remote add origin <REMOTE_URL>
+    git remote -v
+    git push origin main
+
+## Step 4: Prepare for GitHub Pages
+
+-   In the terminal, create a file named `.nojekyll` using `touch .nojekyll`
+
+-   Open `_quarto.yml` and add nested key and value `output-dir: docs` under `project`
+
+```
+project:
+  type: website
+  output-dir: docs
+```
+
+::: notes
+GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.
+
+With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.
+:::
+
+## Step 5: Render to html
+
+-   In the terminal, use `quarto render` - what's in your docs folder now?
+
+-   Add, commit, and push the new files to GitHub
+
+## Step 6: Publish
+
+On GitHub, navigate to your website repo, to Settings, and to Pages. Check that the branch is set to `main` and the folder is set to `/docs`.
+
+![](img/ghpages.png){style="margin-top: 20px;" fig-alt="screenshot of github pages showing branch and folder options" width="850"}
+
+## Success! {.darkbackground background-image="img/horst-quarto-meteor.png," background-size="contain," background-opacity=".6,"}
+
+## Customize your landing page
+
+`index.qmd` is the landing page. Feel free to update the title, [template](https://quarto.org/docs/websites/website-about.html#templates), image, and links
+
+::: callout-tip
+## Hints
+
+-   Try editing in Visual mode
+-   Click **Render** to check the document's changes on the fly
+:::
+
+## Add additional pages
+
+ - Create a new `.qmd` file and save to repo's root directory
+ 
+ - Update `_quarto.yml` to adding the new `.qmd` to list of navbar pages. 
+ 
+ ```
+ project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Jessica S. Guo"
+  navbar:
+    left:
+      - text: "About"
+        href: index.qmd
+      - text: "Research"
+        href: research.qmd
+      - text: "Data Science"
+        href: ds.qmd
+      - text: "Teaching"
+        href: teaching.qmd
+      - text: "Publications"
+        href: pubs.qmd
+```
+
+## Change the theme
+
+Chose from the 25 predefined [Bootswatch themes](https://bootswatch.com/) and define in `_quarto.yml`.  
+
+One theme only:
+```
+format:
+  html:
+    theme: journal
+    css: styles.css
+```
+Supply a light and dark theme to toggle between:
+```
+format:
+  html:
+    theme: 
+      light: journal
+      dark: slate
+    css: styles.css
+```
+
+## Rendering each page vs. whole Website
+
+ - When developing content, rendering each page provides immediate feedback
+ 
+ - When ready to publish, use `quarto render` or the **Render Website** button under the **Build** tab
+ 
+
+::: callout-tip
+## Hints
+
+Added/changed files must be committed and pushed to GitHub if you want to see the changes on your site. Only rendering files locally will not work. 
+:::
+
+## Go forth and Quarto. {.darkbackground background-image="img/horst_quarto_penguins_thankyou.png," background-size="contain," background-opacity=".6,"}

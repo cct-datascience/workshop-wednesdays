@@ -385,10 +385,16 @@
 <section>
 <section id="personal-websites-with-quarto" class="title-slide slide level1 center">
 <h1>Personal websites with Quarto</h1>
+<div class="columns">
+<div class="column" style="width: 40%">
 <p>October 26, 2022</p>
 <p>Workshop Wednesday</p>
 <p>Heidi Steiner, PSM | Data Science Educator</p>
 <p>Jessica Guo, PhD | Data Scientist</p>
+</div><div class="column" style="width: 60%">
+<p><img data-src="img/horst_quarto_penguins_teach.png" alt="Graphic showing penguin showing another penguin the Quarto moon"></p>
+</div>
+</div>
 </section>
 <section id="quarto" class="slide level2">
 <h2>Quarto</h2>
@@ -583,17 +589,27 @@
 <h2>Let’s dive in.</h2>
 </section>
 <section id="steps-to-a-quarto-website-on-github" class="slide level2">
-<h2>10 steps to a Quarto website on GitHub</h2>
-<ul class="task-list">
-<li><input type="checkbox" disabled="">
-Check that you have a command line shell installed, e.g.&nbsp;Git Bash<ul>
-<li>Does the terminal window begin with a $?</li>
-</ul></li>
-<li><input type="checkbox" disabled="">
-Check that quarto is installed with <code>quarto --help</code><ul>
-<li>If on PC, also try <code>quarto.cmd --help</code></li>
-</ul></li>
+<h2>6 steps to a Quarto website on GitHub</h2>
+<ul>
+<li><p>Check that you have a command line shell installed, e.g.&nbsp;Git Bash</p></li>
+<li><p>Check that quarto is installed with <code>quarto --help</code></p></li>
 </ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><p>Does the terminal window begin with a $?</p></li>
+<li><p>PC users might have to use <code>quarto.cmd</code></p></li>
+</ul>
+</div>
+</div>
+</div>
 </section>
 <section id="step-1-create-website-directory" class="slide level2">
 <h2>Step 1: Create website directory</h2>
@@ -603,21 +619,152 @@ Check that quarto is installed with <code>quarto --help</code><ul>
 <li><p>Type the command <code>quarto create-project username.github.io --type website</code></p></li>
 </ul>
 </section>
-<section id="step-2-convert-directory-to-git-repository" class="slide level2">
-<h2>Step 2: Convert directory to git repository</h2>
+<section id="step-2-initiate-git-repository" class="slide level2">
+<h2>Step 2: Initiate git repository</h2>
 <p>In the terminal window:</p>
 <ul>
 <li><p>Use <code>ls</code> and <code>cd</code> to navigate into the new directory</p></li>
-<li><p>Initialize a git repo with <code>git init</code></p></li>
-<li><p>Add and commit all files</p>
-<ul>
-<li><code>git add .</code></li>
-<li><code>git commit -m "Initial commit"</code></li>
-</ul></li>
+<li><p>Initialize the repo</p></li>
+<li><p>Add and commit all files</p></li>
 </ul>
+<!-- -->
+<pre><code>git init
+git add .
+git commit -m "Initial commit"</code></pre>
 </section>
 <section id="step-3-connect-to-github" class="slide level2">
 <h2>Step 3: Connect to GitHub</h2>
+<ul>
+<li><p>On GitHub, create a new remote with the same name as your local repository.</p></li>
+<li><p>Copy remote repository URL and type into the terminal window:</p></li>
+</ul>
+<!-- -->
+<pre><code>git remote add origin &lt;REMOTE_URL&gt;
+git remote -v
+git push origin main</code></pre>
+</section>
+<section id="step-4-prepare-for-github-pages" class="slide level2">
+<h2>Step 4: Prepare for GitHub Pages</h2>
+<ul>
+<li><p>In the terminal, create a file named <code>.nojekyll</code> using <code>touch .nojekyll</code></p></li>
+<li><p>Open <code>_quarto.yml</code> and add nested key and value <code>output-dir: docs</code> under <code>project</code></p></li>
+</ul>
+<pre><code>project:
+  type: website
+  output-dir: docs</code></pre>
+<aside class="notes">
+<p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
+<p>With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="step-5-render-to-html" class="slide level2">
+<h2>Step 5: Render to html</h2>
+<ul>
+<li><p>In the terminal, use <code>quarto render</code> - what’s in your docs folder now?</p></li>
+<li><p>Add, commit, and push the new files to GitHub</p></li>
+</ul>
+</section>
+<section id="step-6-publish" class="slide level2">
+<h2>Step 6: Publish</h2>
+<p>On GitHub, navigate to your website repo, to Settings, and to Pages. Check that the branch is set to <code>main</code> and the folder is set to <code>/docs</code>.</p>
+
+<img data-src="img/ghpages.png" style="margin-top: 20px;" alt="screenshot of github pages showing branch and folder options" width="850" class="r-stretch"></section>
+<section id="success" class="slide level2 darkbackground" data-background-image="img/horst-quarto-meteor.png," data-background-size="contain," data-background-opacity=".6,">
+<h2>Success!</h2>
+</section>
+<section id="customize-your-landing-page" class="slide level2">
+<h2>Customize your landing page</h2>
+<p><code>index.qmd</code> is the landing page. Feel free to update the title, <a href="https://quarto.org/docs/websites/website-about.html#templates">template</a>, image, and links</p>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Try editing in Visual mode</li>
+<li>Click <strong>Render</strong> to check the document’s changes on the fly</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="add-additional-pages" class="slide level2">
+<h2>Add additional pages</h2>
+<ul>
+<li><p>Create a new <code>.qmd</code> file and save to repo’s root directory</p></li>
+<li><p>Update <code>_quarto.yml</code> to adding the new <code>.qmd</code> to list of navbar pages.</p></li>
+</ul>
+<pre><code>project:
+ type: website
+ output-dir: docs
+
+website:
+ title: "Jessica S. Guo"
+ navbar:
+   left:
+     - text: "About"
+       href: index.qmd
+     - text: "Research"
+       href: research.qmd
+     - text: "Data Science"
+       href: ds.qmd
+     - text: "Teaching"
+       href: teaching.qmd
+     - text: "Publications"
+       href: pubs.qmd</code></pre>
+</section>
+<section id="change-the-theme" class="slide level2">
+<h2>Change the theme</h2>
+<p>Chose from the 25 predefined <a href="https://bootswatch.com/">Bootswatch themes</a> and define in <code>_quarto.yml</code>.</p>
+<p>One theme only:</p>
+<pre><code>format:
+  html:
+    theme: journal
+    css: styles.css</code></pre>
+<p>Supply a light and dark theme to toggle between:</p>
+<pre><code>format:
+  html:
+    theme: 
+      light: journal
+      dark: slate
+    css: styles.css</code></pre>
+</section>
+<section id="rendering-each-page-vs.-whole-website" class="slide level2">
+<h2>Rendering each page vs.&nbsp;whole Website</h2>
+<ul>
+<li><p>When developing content, rendering each page provides immediate feedback</p></li>
+<li><p>When ready to publish, use <code>quarto render</code> or the <strong>Render Website</strong> button under the <strong>Build</strong> tab</p></li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<p>Added/changed files must be committed and pushed to GitHub if you want to see the changes on your site. Only rendering files locally will not work.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="go-forth-and-quarto." class="slide level2 darkbackground" data-background-image="img/horst_quarto_penguins_thankyou.png," data-background-size="contain," data-background-opacity=".6,">
+<h2>Go forth and Quarto.</h2>
 
 <img src="img/dslogoweb.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
