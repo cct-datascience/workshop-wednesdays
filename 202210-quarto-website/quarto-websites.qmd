@@ -1,0 +1,221 @@
+---
+Title: "Personal websites with Quarto"
+format:
+  revealjs:
+    theme: [default, img/custom.scss]
+    logo: img/dslogoweb.png
+    code-link: true
+---
+
+# Personal websites with Quarto
+
+October 26, 2022
+
+Workshop Wednesday
+
+Heidi Steiner, PSM \| Data Science Educator
+
+Jessica Guo, PhD \| Data Scientist
+
+## Quarto
+
+> Quarto® is an open-source scientific and technical publishing system built to dramatically improve the process of creating and collaborating
+![](img/horst_quarto_schematic.png){fig-alt="Graphic showing R, Python, Julia, and Observable languages flowing to Quarto and then on to html, PDF, and MS Word documents"}
+
+::: {.footer .center style="width: 80%;"}
+Content is a mixture of \[RStudio Education materials\](https://github.com/rstudio-education), CC-BY. All art (unless otherwise noted) is by \[Desirée De Leon\](https://desiree.rbind.io/) and \[Allison Horst\](https://www.allisonhorst.com/), CC-BY-NC-ND.
+:::
+
+::: notes
+lowering the activation energy to reproducible reporting in MANY ways
+
+I think it's totally appropriate to stop here and ask how folks feel about the term open/reproducible
+:::
+
+
+## 
+
+Quarto documents, and other **"literate programming"** documents such as `.rmd` and `.ipynb`, include code, prose, and results in a single human-readable file
+
+![](img/rmarkdown_wizards.png){style="margin-top: -10px;" width="800"}
+
+::: notes
+same here! stop and ask folks how they feel about the term literate programming
+:::
+
+## Change your mental model
+
+[![](img/drakeMeme.jpeg){fig-alt="drake meme shaking head at copy/paste and encouraging source -> output models" fig-align="center"}](https://twitter.com/ijeamaka_a/status/1367242513782763521)
+
+## Anatomy of a `.qmd` {.center}
+
+::: columns
+::: {.column style="width: 20%; color: #A95C42; font-size: 1.2em;"}
+1.  Metadata
+2.  Markup
+3.  Code
+4.  Output
+5.  Style
+:::
+
+::: {.column style="width: 75%;"}
+![](img/anatomy.jpeg){fig-alt="handrawn graphic of literate programming document" fig-align="right"}
+:::
+:::
+
+## Metadata: YAML
+
+::: columns
+::: {.column style="width: 50%"}
+"YAML Ain't Markup Language"
+
+``` {.yaml execute="FALSE"}
+---
+key: value
+---
+```
+
+-   Save options in your YAML
+
+    -   "setup" chunk
+
+-   `format: html`
+:::
+
+::: {.column style="width: 50%"}
+![](img/orchestra.jpg){fig-alt="the back of an illustrated orchestra conductor" fig-align="right"}
+:::
+:::
+
+## Markdown (...is a Markup language)
+
+``` markdown
+# Heading 1
+This is a sentence with some **bold text**, some *italic text* and an 
+![image](image.png){fig-alt="Alt text for this image"}.
+```
+
+![](img/markdown.png){width="496"}
+
+::: {style="font-size: .8em"}
+\^\^ Check out [commonmark](https://commonmark.org/help/tutorial/) for a tutorial on common markup languages!
+:::
+
+::: notes
+stop and show visual editor here
+
+search "lung svg" then select images, cc licensed images, and use address url from image
+:::
+
+## Code
+
+::: columns
+::: {.column style="width: 60%"}
+    ```{{r}}
+    library(dplyr)
+    mtcars |> 
+      group_by(cyl) |> 
+      summarize(mean = mean(mpg))
+    ```
+
+</br>
+
+    ```{{python}}
+    from siuba import _, group_by, summarize
+    from siuba.data import mtcars
+    (mtcars
+      >> group_by(_.cyl)
+      >> summarize(avg_mpg = _.mpg.mean())
+      )
+    ```
+:::
+
+::: {.column style="width: 35%; padding-left: 50px;"}
+    ```{{ojs}}
+    {
+      let sum = 0;
+      for (let i = 0; i < 10; ++i) {
+        sum += i;
+      }
+      return sum;
+    }
+    ```
+
+</br>
+
+    ```{{julia}}
+    using Plots
+    plot(sin, 
+         x->sin(2x), 
+         0, 
+         2π, 
+         leg=false, 
+         fill=(0,:lavender))
+    ```
+:::
+:::
+
+## Output {.center .middle}
+
+![](img/knitOutput.png){style="margin-top: 20px;" fig-alt="illustration of brown hedgehod wearing a yellow knitted beanie knitting a turquoise scarf surrounded by possible output options such as pdf and word doc" width="850"}
+
+## Style 
+
+CSS
+
+``` {.css echo="fenced"}
+.body {
+  font: 100% Helvetica, sans-serif;
+  color: #333;
+}
+```
+
+scss = CSS +
+
+``` {.scss echo="fenced"}
+/*-- scss:defaults --*/
+$font-stack: Helvetica, sans-serif;
+$primary-color: #333;
+/*-- scss:rules --*/
+.body {
+  font: 100% $font-stack;
+  color: $primary-color;
+}
+```
+
+::: notes
+I live on this website: https://www.w3schools.com/cssref/default.asp
+:::
+
+## Let's dive in. {.darkbackground background-image="img/diveInQuarto.png," background-size="contain," background-opacity=".6,"}
+
+## 10 steps to a Quarto website on GitHub
+
+ - Check that you have a command line shell installed, e.g. Git Bash
+   - Does the terminal window begin with a $?
+
+ - Check that quarto is installed with `quarto --help`
+   - If on PC, also try `quarto.cmd --help`
+
+
+## Step 1: Create website directory
+
+In the terminal window:
+
+ - Use `pwd` and `cd` to navigate to where you want your website to live
+ 
+ - Type the command `quarto create-project username.github.io --type website`
+ 
+## Step 2: Convert directory to git repository
+
+In the terminal window:
+
+  - Use `ls` and `cd` to navigate into the new directory
+  
+  - Initialize a git repo with `git init`
+  
+  - Add and commit all files
+     - `git add .`
+     - `git commit -m "Initial commit"`
+
+## Step 3: Connect to GitHub

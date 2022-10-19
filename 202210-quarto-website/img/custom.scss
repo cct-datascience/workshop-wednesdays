@@ -1,0 +1,38 @@
+/*-- scss:defaults --*/
+$theme-darkblue: #001C48;
+$theme-blue: #1E5288;
+$theme-white: #E2E9EB;
+$theme-green: #70B865;
+$theme-ltblue: #378DBD;
+$theme-gray: #9EABAE;
+$theme-pink: #EF4056;
+
+$body-color: $theme-darkblue;
+$link-color: $theme-green;
+
+/*-- scss:rules --*/
+
+
+.your-turn h2 {
+  text-align: center;
+  color: $theme-pink;
+}
+
+.darkbackground h2 {
+  color: $theme-gray;
+}
+
+.footer {
+  margin-right: 30px !important;
+  margin-left: 30px !important;
+  color: $theme-ltblue !important;
+}
+
+.reveal .callout-tip {
+  position: fixed !important;
+  bottom: 20px !important;
+}
+
+.reveal blockquote {
+  color: $theme-blue !important;
+}
