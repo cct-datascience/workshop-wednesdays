@@ -9,30 +9,50 @@ $theme-pink: #EF4056;
 
 $body-color: $theme-darkblue;
 $link-color: $theme-green;
+$code-bg: $theme-white;
+$code-color: $theme-pink;
 
 /*-- scss:rules --*/
 
 
-.your-turn h2 {
+.title-slide h2 {
+  margin: 20px 2000px 5px 200px; 
+}
+
+.steps h2 {
   text-align: center;
   color: $theme-pink;
 }
 
+.steps p {
+  color: $theme-white;
+  font-size: larger;
+}
+
+.steps ul {
+  color: $theme-pink;
+}
+
+.reveal .steps {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .darkbackground h2 {
-  color: $theme-gray;
+  color: $theme-ltblue;
 }
 
 .footer {
-  margin-right: 30px !important;
-  margin-left: 30px !important;
   color: $theme-ltblue !important;
 }
 
-.reveal .callout-tip {
+.reveal .steps .callout-tip {
   position: fixed !important;
-  bottom: 20px !important;
+  right: 10px !important;
+  bottom: 10px;
 }
 
-.reveal blockquote {
-  color: $theme-blue !important;
+.reveal .steps .callout-tip p {
+  color: $theme-ltblue;
 }

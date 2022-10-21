@@ -6,22 +6,27 @@
 <script src="quarto-websites_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="quarto-websites_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="quarto-websites_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="quarto-websites_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.37">
-
-  <title>quarto-websites</title>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="quarto-websites_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="quarto-websites_files/libs/revealjs/dist/reveal.css">
-  <style>
+<link href="quarto-websites_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+<title>quarto-websites</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="quarto-websites_files/libs/revealjs/dist/reset.css">
+<link rel="stylesheet" href="quarto-websites_files/libs/revealjs/dist/reveal.css">
+<style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -87,12 +92,12 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="quarto-websites_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link href="quarto-websites_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="quarto-websites_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="quarto-websites_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="quarto-websites_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
-  <style type="text/css">
+<link rel="stylesheet" href="quarto-websites_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+<link href="quarto-websites_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+<link href="quarto-websites_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+<link href="quarto-websites_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+<link href="quarto-websites_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+<style type="text/css">
 
   .callout {
     margin-top: 1em;
@@ -289,7 +294,7 @@
   }
 
   </style>
-  <style type="text/css">
+<style type="text/css">
     .reveal div.sourceCode {
       margin: 0;
       overflow: auto;
@@ -382,30 +387,24 @@
     <div class="slides">
 
 
-<section>
-<section id="personal-websites-with-quarto" class="title-slide slide level1 center">
-<h1>Personal websites with Quarto</h1>
+<section id="personal-websites-with-quarto" class="slide level2" style="font-size: 120%;"><h2>Personal Websites with Quarto</h2>
+<h5 style="font-size: 80%;" id="five-steps-to-a-github-pages-website-built-on-quarto">Five Steps to a GitHub Pages Website Built on Quarto</h5>
 <div class="columns">
-<div class="column" style="width: 40%">
-<p>October 26, 2022</p>
-<p>Workshop Wednesday</p>
-<p>Heidi Steiner, PSM | Data Science Educator</p>
-<p>Jessica Guo, PhD | Data Scientist</p>
-</div><div class="column" style="width: 60%">
+<div class="column" style="width: 45%">
+<h3 id="cct-workshop-wednesday">CCT Workshop Wednesday</h3>
+<p>with<br>
+Jessica Guo, PhD &amp; Heidi Steiner, PSM</p>
+</div><div class="column" style="width: 55%; margin-bottom: 20px;">
 <p><img data-src="img/horst_quarto_penguins_teach.png" alt="Graphic showing penguin showing another penguin the Quarto moon"></p>
 </div>
 </div>
-</section>
-<section id="quarto" class="slide level2">
-<h2>Quarto</h2>
-<blockquote>
+</section><section id="quarto" class="slide level2"><h2>Quarto</h2>
 <p>Quarto® is an open-source scientific and technical publishing system built to dramatically improve the process of creating and collaborating <img data-src="img/horst_quarto_schematic.png" alt="Graphic showing R, Python, Julia, and Observable languages flowing to Quarto and then on to html, PDF, and MS Word documents"></p>
-</blockquote>
-<div class="footer center" style="width: 80%;">
-<p>Content is a mixture of [RStudio Education materials](https://github.com/rstudio-education), CC-BY. All art (unless otherwise noted) is by [Desirée De Leon](https://desiree.rbind.io/) and [Allison Horst](https://www.allisonhorst.com/), CC-BY-NC-ND.</p>
+<div class="footer">
+<p>Content is a mixture of <a href="https://github.com/rstudio-education">RStudio Education materials</a>, CC-BY.<br>
+All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">Allison Horst</a>, CC-BY-NC-ND.</p>
 </div>
-<aside class="notes">
-<p>lowering the activation energy to reproducible reporting in MANY ways</p>
+<aside class="notes"><p>lowering the activation energy to reproducible reporting in MANY ways</p>
 <p>I think it’s totally appropriate to stop here and ask how folks feel about the term open/reproducible</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -417,182 +416,14 @@
           width: 1px!important;
           overflow: hidden!important;
           display:block!important;
-      }</style></aside>
-</section>
-<section id="section" class="slide level2">
-<h2></h2>
-<p>Quarto documents, and other <strong>“literate programming”</strong> documents such as <code>.rmd</code> and <code>.ipynb</code>, include code, prose, and results in a single human-readable file</p>
-<p><img data-src="img/rmarkdown_wizards.png" style="margin-top: -10px;" width="800"></p>
-<aside class="notes">
-<p>same here! stop and ask folks how they feel about the term literate programming</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="change-your-mental-model" class="slide level2">
-<h2>Change your mental model</h2>
+      }</style></aside></section><section id="change-your-mental-model" class="slide level2"><h2>Change your mental model</h2>
 
-<img data-src="img/drakeMeme.jpeg" alt="drake meme shaking head at copy/paste and encouraging source -> output models" class="r-stretch quarto-figure-center"></section>
-<section id="anatomy-of-a-.qmd" class="slide level2 center">
-<h2>Anatomy of a <code>.qmd</code></h2>
-<div class="columns">
-<div class="column" style="width: 20%; color: #A95C42; font-size: 1.2em;">
-<ol type="1">
-<li>Metadata</li>
-<li>Markup</li>
-<li>Code</li>
-<li>Output</li>
-<li>Style</li>
-</ol>
-</div><div class="column" style="width: 75%;">
-<div class="quarto-figure quarto-figure-right">
-<figure>
-<p><img data-src="img/anatomy.jpeg" alt="handrawn graphic of literate programming document"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="metadata-yaml" class="slide level2">
-<h2>Metadata: YAML</h2>
-<div class="columns">
-<div class="column" style="width: 50%">
-<p>“YAML Ain’t Markup Language”</p>
-<div class="sourceCode" id="cb1" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1"></a><span class="pp">---</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">key</span><span class="kw">:</span><span class="at"> value</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<img data-src="img/drakeMeme.jpeg" alt="drake meme shaking head at copy/paste and encouraging source -> output models" class="r-stretch quarto-figure-center"></section><section id="lets-dive-in." class="slide level2 darkbackground" data-background-image="img/diveInQuarto.png," data-background-size="contain," data-background-opacity=".6,"><h2>Let’s dive in.</h2>
+</section><section id="check-your-set-up" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Check your set-up <svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M384 128v255.1c0 35.35-28.65 64-64 64H64c-35.35 0-64-28.65-64-64V128c0-35.35 28.65-64 64-64H320C355.3 64 384 92.65 384 128z"></path></svg>
+</h2>
 <ul>
-<li><p>Save options in your YAML</p>
-<ul>
-<li>“setup” chunk</li>
-</ul></li>
-<li><p><code>format: html</code></p></li>
-</ul>
-</div><div class="column" style="width: 50%">
-<div class="quarto-figure quarto-figure-right">
-<figure>
-<p><img data-src="img/orchestra.jpg" alt="the back of an illustrated orchestra conductor"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="markdown-is-a-markup-language" class="slide level2">
-<h2>Markdown (…is a Markup language)</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource markdown number-lines code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu"># Heading 1</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>This is a sentence with some **bold text**, some *italic text* and an </span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="al">![image](image.png)</span>{fig-alt="Alt text for this image"}.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><img data-src="img/markdown.png" width="496"></p>
-<div style="font-size: .8em">
-<p>^^ Check out <a href="https://commonmark.org/help/tutorial/">commonmark</a> for a tutorial on common markup languages!</p>
-</div>
-<aside class="notes">
-<p>stop and show visual editor here</p>
-<p>search “lung svg” then select images, cc licensed images, and use address url from image</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
-<div class="columns">
-<div class="column" style="width: 60%">
-<div class="sourceCode" id="cb3"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">|&gt;</span> </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>(mpg))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><br></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> siuba <span class="im">import</span> _, group_by, summarize</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> siuba.data <span class="im">import</span> mtcars</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>(mtcars</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;&gt;</span> group_by(_.cyl)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">&gt;&gt;</span> summarize(avg_mpg <span class="op">=</span> _.mpg.mean())</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column" style="width: 35%; padding-left: 50px;">
-<div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{ojs}</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> <span class="op">++</span>i) {</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    sum <span class="op">+=</span> i<span class="op">;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> sum<span class="op">;</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="vs">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><br></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{julia}</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>using Plots</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plot(<span class="fu">sin</span>, </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     x-&gt;<span class="fu">sin</span>(<span class="dv">2</span>x), </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     <span class="dv">0</span>, </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="dv">2</span>π, </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>     leg=false, </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>     fill=(<span class="dv">0</span>,:lavender))</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</section>
-<section id="output" class="slide level2 center middle">
-<h2>Output</h2>
-
-<img data-src="img/knitOutput.png" style="margin-top: 20px;" alt="illustration of brown hedgehod wearing a yellow knitted beanie knitting a turquoise scarf surrounded by possible output options such as pdf and word doc" width="850" class="r-stretch"></section>
-<section id="style" class="slide level2">
-<h2>Style</h2>
-<p>CSS</p>
-<div class="sourceCode" id="cb7" data-echo="fenced"><pre class="sourceCode numberSource css number-lines code-with-copy"><code class="sourceCode css"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">.body</span> {</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="kw">font</span>: <span class="dv">100</span><span class="dt">%</span> Helvetica<span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="kw">color</span>: <span class="cn">#333</span><span class="op">;</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>scss = CSS +</p>
-<div class="sourceCode" id="cb8" data-echo="fenced"><pre class="sourceCode numberSource scss number-lines code-with-copy"><code class="sourceCode scss"><span id="cb8-1"><a href="#cb8-1"></a><span class="co">/*-- scss:defaults --*/</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="va">$font-stack</span>: Helvetica<span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="va">$primary-color</span>: <span class="cn">#333</span><span class="op">;</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="co">/*-- scss:rules --*/</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="fu">.body</span> {</span>
-<span id="cb8-6"><a href="#cb8-6"></a>  <span class="kw">font</span>: <span class="dv">100</span><span class="dt">%</span> <span class="va">$font-stack</span><span class="op">;</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>  <span class="kw">color</span>: <span class="va">$primary-color</span><span class="op">;</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<aside class="notes">
-<p>I live on this website: https://www.w3schools.com/cssref/default.asp</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="lets-dive-in." class="slide level2 darkbackground" data-background-image="img/diveInQuarto.png," data-background-size="contain," data-background-opacity=".6,">
-<h2>Let’s dive in.</h2>
-</section>
-<section id="steps-to-a-quarto-website-on-github" class="slide level2">
-<h2>6 steps to a Quarto website on GitHub</h2>
-<ul>
-<li><p>Check that you have a command line shell installed, e.g.&nbsp;Git Bash</p></li>
-<li><p>Check that quarto is installed with <code>quarto --help</code></p></li>
+<li><p>Command Line Shell, e.g.&nbsp;Git Bash</p></li>
+<li><p><code>quarto --help</code></p></li>
 </ul>
 <div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
@@ -604,56 +435,91 @@
 </div>
 <div class="callout-content">
 <ul>
-<li><p>Does the terminal window begin with a $?</p></li>
-<li><p>PC users might have to use <code>quarto.cmd</code></p></li>
+<li><p>Does your terminal window begin with a $?</p></li>
+<li><p>PC users try <code>quarto.cmd</code></p></li>
 </ul>
 </div>
 </div>
 </div>
-</section>
-<section id="step-1-create-website-directory" class="slide level2">
-<h2>Step 1: Create website directory</h2>
-<p>In the terminal window:</p>
+</section><section id="step-1-create-directory" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 1: Create Directory</h2>
 <ul>
-<li><p>Use <code>pwd</code> and <code>cd</code> to navigate to where you want your website to live</p></li>
-<li><p>Type the command <code>quarto create-project username.github.io --type website</code></p></li>
+<li><p>Navigate to where you want your website to live</p></li>
+<li><p>Type <code>quarto create-project username.github.io --type website</code></p></li>
 </ul>
-</section>
-<section id="step-2-initiate-git-repository" class="slide level2">
-<h2>Step 2: Initiate git repository</h2>
-<p>In the terminal window:</p>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
 <ul>
-<li><p>Use <code>ls</code> and <code>cd</code> to navigate into the new directory</p></li>
-<li><p>Initialize the repo</p></li>
-<li><p>Add and commit all files</p></li>
+<li><p>Are you in the terminal?</p></li>
+<li><p>Use <code>pwd</code> and <code>cd</code> to navigate</p></li>
 </ul>
-<!-- -->
-<pre><code>git init
-git add .
-git commit -m "Initial commit"</code></pre>
-</section>
-<section id="step-3-connect-to-github" class="slide level2">
-<h2>Step 3: Connect to GitHub</h2>
+</div>
+</div>
+</div>
+</section><section id="step-2-initiate-repository" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 2: Initiate Repository</h2>
 <ul>
-<li><p>On GitHub, create a new remote with the same name as your local repository.</p></li>
-<li><p>Copy remote repository URL and type into the terminal window:</p></li>
+<li><code>git init</code></li>
+<li><code>git add .</code></li>
+<li><code>git commit -m "Initial commit"</code></li>
 </ul>
-<!-- -->
-<pre><code>git remote add origin &lt;REMOTE_URL&gt;
-git remote -v
-git push origin main</code></pre>
-</section>
-<section id="step-4-prepare-for-github-pages" class="slide level2">
-<h2>Step 4: Prepare for GitHub Pages</h2>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
 <ul>
-<li><p>In the terminal, create a file named <code>.nojekyll</code> using <code>touch .nojekyll</code></p></li>
-<li><p>Open <code>_quarto.yml</code> and add nested key and value <code>output-dir: docs</code> under <code>project</code></p></li>
+<li><p>Are you in your new directory?</p></li>
+<li><p>Use <code>ls</code> and <code>cd</code> to navigate</p></li>
 </ul>
-<pre><code>project:
-  type: website
-  output-dir: docs</code></pre>
-<aside class="notes">
-<p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
+</div>
+</div>
+</div>
+</section><section id="step-3-connect-to-github" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 3: Connect to GitHub</h2>
+<ul>
+<li><p>Create GitHub repository <code>username.github.io</code></p></li>
+<li><p><code>git remote add origin &lt;Copied-URL&gt;</code></p></li>
+<li><p><code>git remote -v</code></p></li>
+<li><p><code>git push origin main</code></p></li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><p>The repository name is v important for GitHub Pages…</p></li>
+<li><p>Don’t want this repository name? You have options</p></li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="step-4-prep-github-pages" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Prep GitHub Pages</h2>
+<ul>
+<li>Update Pages Settings of new GitHub Repository to <code>main</code> branch and <code>docs/</code> folder</li>
+</ul></section><section id="step-4-prep-github-pages-1" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Prep GitHub Pages</h2>
+<ul>
+<li><p><code>touch .nojekyll</code></p></li>
+<li><p>Add <code>output-dir: docs</code> under <code>project</code> in <code>_quarto.yml</code></p></li>
+</ul>
+<!-- --><pre><code>project:
+      type: website
+      output-dir: docs
+      </code></pre>
+<aside class="notes"><p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
 <p>With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -665,26 +531,29 @@ git push origin main</code></pre>
           width: 1px!important;
           overflow: hidden!important;
           display:block!important;
-      }</style></aside>
-</section>
-<section id="step-5-render-to-html" class="slide level2">
-<h2>Step 5: Render to html</h2>
+      }</style></aside></section><section id="yet-another-markdown-language" class="slide level2"><h2>“Yet Another Markdown Language”</h2>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width: 50%">
+<div class="sourceCode" id="cb2" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="pp">---</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="fu">key</span><span class="kw">:</span><span class="at"> value</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br><br></p>
+<p>A <code>.yml</code> file orchestrates all the nested <code>.qmd</code> files</p>
+</div><div class="column" style="width: 50%">
+<div class="quarto-figure quarto-figure-right">
+<figure><p><img data-src="img/orchestra.jpg" alt="the back of an illustrated orchestra conductor"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="step-5-publish" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 5: Publish</h2>
 <ul>
-<li><p>In the terminal, use <code>quarto render</code> - what’s in your docs folder now?</p></li>
-<li><p>Add, commit, and push the new files to GitHub</p></li>
+<li><p>In the terminal, <code>quarto render</code></p></li>
+<li><p>Add, commit, push</p></li>
 </ul>
-</section>
-<section id="step-6-publish" class="slide level2">
-<h2>Step 6: Publish</h2>
-<p>On GitHub, navigate to your website repo, to Settings, and to Pages. Check that the branch is set to <code>main</code> and the folder is set to <code>/docs</code>.</p>
-
-<img data-src="img/ghpages.png" style="margin-top: 20px;" alt="screenshot of github pages showing branch and folder options" width="850" class="r-stretch"></section>
-<section id="success" class="slide level2 darkbackground" data-background-image="img/horst-quarto-meteor.png," data-background-size="contain," data-background-opacity=".6,">
-<h2>Success!</h2>
-</section>
-<section id="customize-your-landing-page" class="slide level2">
-<h2>Customize your landing page</h2>
-<p><code>index.qmd</code> is the landing page. Feel free to update the title, <a href="https://quarto.org/docs/websites/website-about.html#templates">template</a>, image, and links</p>
 <div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
 <div class="callout-caption">
@@ -695,20 +564,74 @@ git push origin main</code></pre>
 </div>
 <div class="callout-content">
 <ul>
-<li>Try editing in Visual mode</li>
-<li>Click <strong>Render</strong> to check the document’s changes on the fly</li>
+<li>What changes in <code>docs/</code> when you render?</li>
 </ul>
 </div>
 </div>
 </div>
-</section>
-<section id="add-additional-pages" class="slide level2">
-<h2>Add additional pages</h2>
+</section><section id="render-individual-.qmd-vs.-entire-project" class="slide level2"><h2>Render Individual <code>.qmd</code> vs.&nbsp;Entire Project</h2>
+<ul>
+<li><p>Rendering each page provides immediate feedback</p></li>
+<li><p>When ready to publish, use <code>quarto render</code></p></li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>
+<strong>Render Website</strong> button under the <strong>Build</strong> tab is equivalent to <code>quarto render</code>
+</li>
+<li>Changes must be pushed to GitHub before they will be <strong>live</strong>. Rendering files locally does not publish.</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="success" class="slide level2 darkbackground" data-background-image="img/horst-quarto-meteor.png," data-background-size="contain," data-background-opacity=".6,"><h2>Success!</h2>
+</section><section id="quarto-website-template" class="slide level2"><h2>Quarto Website Template</h2>
+
+<img data-src="img/quartoWebsiteNew.png" class="r-stretch"><pre><code>docs/
+
+.gitignore
+
+_quarto.yml
+
+about.qmd
+
+index.qmd
+
+project.Rproj
+
+style.css</code></pre>
+</section><section id="customizing-your-landing-page" class="slide level2"><h2>Customizing your landing page</h2>
+<p>For example, create a introductory page like Sam Csik’s</p>
+
+<img data-src="img/landingPage.png" class="r-stretch quarto-figure-center"></section><section id="change-the-theme" class="slide level2"><h2>Change the theme</h2>
+<p>Chose from the 25 predefined <a href="https://bootswatch.com/">Bootswatch themes</a> and define in <code>_quarto.yml</code>.</p>
+<p>One theme only:</p>
+<pre><code>format:
+  html:
+    theme: journal
+    css: styles.css</code></pre>
+<p>Supply a light and dark theme to toggle between:</p>
+<pre><code>format:
+  html:
+    theme: 
+      light: journal
+      dark: slate
+    css: styles.css
+    </code></pre>
+</section><section id="add-a-new-page" class="slide level2"><h2>Add a new page</h2>
 <ul>
 <li><p>Create a new <code>.qmd</code> file and save to repo’s root directory</p></li>
 <li><p>Update <code>_quarto.yml</code> to adding the new <code>.qmd</code> to list of navbar pages.</p></li>
 </ul>
-<pre><code>project:
+<!-- --><pre><code>project:
  type: website
  output-dir: docs
 
@@ -726,70 +649,27 @@ website:
        href: teaching.qmd
      - text: "Publications"
        href: pubs.qmd</code></pre>
-</section>
-<section id="change-the-theme" class="slide level2">
-<h2>Change the theme</h2>
-<p>Chose from the 25 predefined <a href="https://bootswatch.com/">Bootswatch themes</a> and define in <code>_quarto.yml</code>.</p>
-<p>One theme only:</p>
-<pre><code>format:
-  html:
-    theme: journal
-    css: styles.css</code></pre>
-<p>Supply a light and dark theme to toggle between:</p>
-<pre><code>format:
-  html:
-    theme: 
-      light: journal
-      dark: slate
-    css: styles.css</code></pre>
-</section>
-<section id="rendering-each-page-vs.-whole-website" class="slide level2">
-<h2>Rendering each page vs.&nbsp;whole Website</h2>
+</section><section id="make-a-page-into-a-blog" class="slide level2"><h2>Make a page into a blog</h2>
 <ul>
-<li><p>When developing content, rendering each page provides immediate feedback</p></li>
-<li><p>When ready to publish, use <code>quarto render</code> or the <strong>Render Website</strong> button under the <strong>Build</strong> tab</p></li>
+<li>Instead of writing in research.qmd, for example, leave it as a YAML header only</li>
+<li>Make the page a blog by adding the key “listing” to the metadata</li>
 </ul>
-<div class="callout callout-tip callout-captioned callout-style-default">
-<div class="callout-body">
-<div class="callout-caption">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Hints</strong></p>
-</div>
-<div class="callout-content">
-<p>Added/changed files must be committed and pushed to GitHub if you want to see the changes on your site. Only rendering files locally will not work.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="go-forth-and-quarto." class="slide level2 darkbackground" data-background-image="img/horst_quarto_penguins_thankyou.png," data-background-size="contain," data-background-opacity=".6,">
-<h2>Go forth and Quarto.</h2>
+<pre><code>listing: 
+  contents: research</code></pre>
+<ul>
+<li>Create a new directory, <code>research/</code>
+</li>
+<li>Add a new qmd for each featured research project</li>
+</ul></section><section id="go-forth-and-quarto." class="slide level2 darkbackground" data-background-image="img/horst_quarto_penguins_thankyou.png," data-background-size="contain," data-background-opacity=".6,"><h2>Go Forth and Quarto.</h2>
 
 <img src="img/dslogoweb.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
 </div>
-</section></section>
-    </div>
+</section>
+</div>
   </div>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="quarto-websites_files/libs/revealjs/dist/reveal.js"></script>
-  <!-- reveal.js plugins -->
-  <script src="quarto-websites_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/quarto-support/support.js"></script>
-  
-
-  <script src="quarto-websites_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="quarto-websites_files/libs/revealjs/plugin/math/math.js"></script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
-
-  <script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="quarto-websites_files/libs/revealjs/dist/reveal.js"></script><!-- reveal.js plugins --><script src="quarto-websites_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/reveal-menu/menu.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/quarto-support/support.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/notes/notes.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/search/search.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/zoom/zoom.js"></script><script src="quarto-websites_files/libs/revealjs/plugin/math/math.js"></script><script>window.define = window.backupDefine; window.backupDefine = undefined;</script><script>
 
       // Full list of configuration options available at:
       // https://revealjs.com/config/
@@ -980,8 +860,46 @@ website:
           RevealZoom
         ]
       });
-    </script>
-    <script id="quarto-html-after-body" type="application/javascript">
+    </script><script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script><script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
         const mode = bsSheetEl.getAttribute("data-mode");
@@ -1049,7 +967,8 @@ website:
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
@@ -1077,6 +996,6 @@ website:
       }
     });
     </script>
-    
+
 
 </body></html>
