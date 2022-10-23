@@ -89,7 +89,7 @@ I think it's totally appropriate to stop here and ask how folks feel about the t
 
 ## Step 3: Connect to GitHub {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
--   Create GitHub repository `username.github.io`
+-   New GitHub repository `username.github.io`
 
 -   `git remote add origin <Copied-URL>`
 
@@ -100,14 +100,16 @@ I think it's totally appropriate to stop here and ask how folks feel about the t
 ::: callout-tip
 ## Hints
 
--   The repository name is v important for GitHub Pages...
+-   The repository name is important for GitHub Pages...
 
 -   Don't want this repository name? You have options
 :::
 
 ## Step 4: Prep GitHub Pages {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
--   Update Pages Settings of new GitHub Repository to `main` branch and `docs/` folder
+-   Navigate to Pages Settings in your website's GitHub Repository
+
+-   Set branch to `main` and folder to `docs/`
 
 ## Step 4: Prep GitHub Pages {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
@@ -115,14 +117,22 @@ I think it's totally appropriate to stop here and ask how folks feel about the t
 
 -   Add `output-dir: docs` under `project` in `_quarto.yml`
 
-<!-- -->
+<div>
 
-    project:
-          type: website
-          output-dir: docs
-          
+::: {.column style="width: 50%"}
+``` {.yaml execute="FALSE"}
+
+project:
+      type: website
+      output-dir: docs
+```
+:::
+
+</div>
 
 ::: notes
+make code block size bigger
+
 GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.
 
 With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.
@@ -145,11 +155,11 @@ key: value
 \
 \
 
-A `.yml` file orchestrates all the nested `.qmd` files
+A `.yml` file "orchestrates" all the nested `.qmd` files
 :::
 
 ::: {.column style="width: 50%"}
-![](img/orchestra.jpg){fig-alt="the back of an illustrated orchestra conductor" fig-align="right"}
+![](img/orchestra.jpg){style="margin-bottom: 100px" fig-alt="the back of an illustrated orchestra conductor" fig-align="right"}
 :::
 :::
 
@@ -163,6 +173,8 @@ A `.yml` file orchestrates all the nested `.qmd` files
 ## Hints
 
 -   What changes in `docs/` when you render?
+
+-   Having troubles? Try GitHub Desktop!
 :::
 
 ## Render Individual `.qmd` vs. Entire Project
@@ -184,19 +196,7 @@ A `.yml` file orchestrates all the nested `.qmd` files
 
 ![](img/quartoWebsiteNew.png)
 
-    docs/
-
-    .gitignore
-
-    _quarto.yml
-
-    about.qmd
-
-    index.qmd
-
-    project.Rproj
-
-    style.css
+![](img/quartoTemplate.png){fig-alt="screenshot of MacOS file explorer" fig-align="center" width="1000"}
 
 ## Customizing your landing page
 
@@ -204,64 +204,65 @@ For example, create a introductory page like Sam Csik's
 
 ![](img/landingPage.png){fig-align="center"}
 
-
 ## Change the theme
 
 Chose from the 25 predefined [Bootswatch themes](https://bootswatch.com/) and define in `_quarto.yml`.
 
 One theme only:
 
-    format:
-      html:
-        theme: journal
-        css: styles.css
+``` {.yaml execute="FALSE"}
+format:
+  html:
+    theme: journal
+    css: styles.css
+```
 
 Supply a light and dark theme to toggle between:
 
-    format:
-      html:
-        theme: 
-          light: journal
-          dark: slate
-        css: styles.css
-        
+``` {.yaml execute="FALSE"}
+format:
+  html:
+    theme: 
+      light: journal
+      dark: slate
+    css: styles.css
+    
+```
+
 ## Add a new page
 
 -   Create a new `.qmd` file and save to repo's root directory
 
 -   Update `_quarto.yml` to adding the new `.qmd` to list of navbar pages.
 
-<!-- -->
-
-    project:
-     type: website
-     output-dir: docs
-
-    website:
-     title: "Jessica S. Guo"
-     navbar:
-       left:
-         - text: "About"
-           href: index.qmd
-         - text: "Research"
-           href: research.qmd
-         - text: "Data Science"
-           href: ds.qmd
-         - text: "Teaching"
-           href: teaching.qmd
-         - text: "Publications"
-           href: pubs.qmd
+``` {.yaml execute="FALSE"}
+website:
+ title: "Jessica S. Guo"
+ navbar:
+   left:
+     - text: "About"
+       href: index.qmd
+     - text: "Research"
+       href: research.qmd
+     - text: "Data Science"
+       href: ds.qmd
+     - text: "Teaching"
+       href: teaching.qmd
+     - text: "Publications"
+       href: pubs.qmd
+```
 
 ## Make a page into a blog
 
-- Instead of writing in research.qmd, for example, leave it as a YAML header only 
-- Make the page a blog by adding the key "listing" to the metadata 
+-   Instead of writing in research.qmd, for example, leave it as a YAML header only
+-   Make the page a blog by adding the key "listing" to the metadata
 
-```
+``` {.yaml execute="FALSE"}
 listing: 
   contents: research
 ```
-- Create a new directory, `research/`
-- Add a new qmd for each featured research project
+
+-   Create a new directory, `research/`
+-   Add a new qmd for each featured research project
 
 ## Go Forth and Quarto. {.darkbackground background-image="img/horst_quarto_penguins_thankyou.png," background-size="contain," background-opacity=".6,"}

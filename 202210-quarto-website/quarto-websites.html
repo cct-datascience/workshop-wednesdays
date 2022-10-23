@@ -486,7 +486,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 </section><section id="step-3-connect-to-github" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 3: Connect to GitHub</h2>
 <ul>
-<li><p>Create GitHub repository <code>username.github.io</code></p></li>
+<li><p>New GitHub repository <code>username.github.io</code></p></li>
 <li><p><code>git remote add origin &lt;Copied-URL&gt;</code></p></li>
 <li><p><code>git remote -v</code></p></li>
 <li><p><code>git push origin main</code></p></li>
@@ -501,7 +501,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 <div class="callout-content">
 <ul>
-<li><p>The repository name is v important for GitHub Pages…</p></li>
+<li><p>The repository name is important for GitHub Pages…</p></li>
 <li><p>Don’t want this repository name? You have options</p></li>
 </ul>
 </div>
@@ -509,17 +509,23 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 </section><section id="step-4-prep-github-pages" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Prep GitHub Pages</h2>
 <ul>
-<li>Update Pages Settings of new GitHub Repository to <code>main</code> branch and <code>docs/</code> folder</li>
+<li><p>Navigate to Pages Settings in your website’s GitHub Repository</p></li>
+<li><p>Set branch to <code>main</code> and folder to <code>docs/</code></p></li>
 </ul></section><section id="step-4-prep-github-pages-1" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Prep GitHub Pages</h2>
 <ul>
 <li><p><code>touch .nojekyll</code></p></li>
 <li><p>Add <code>output-dir: docs</code> under <code>project</code> in <code>_quarto.yml</code></p></li>
 </ul>
-<!-- --><pre><code>project:
-      type: website
-      output-dir: docs
-      </code></pre>
-<aside class="notes"><p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
+<div>
+<div class="column" style="width: 50%">
+<div class="sourceCode" id="cb1" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1"></a></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">project</span><span class="kw">:</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="at">      </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="at">      </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> docs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<aside class="notes"><p>make code block size bigger</p>
+<p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
 <p>With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -541,9 +547,9 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 <span id="cb2-4"><a href="#cb2-4"></a></span>
 <span id="cb2-5"><a href="#cb2-5"></a><span class="pp">---</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br><br></p>
-<p>A <code>.yml</code> file orchestrates all the nested <code>.qmd</code> files</p>
+<p>A <code>.yml</code> file “orchestrates” all the nested <code>.qmd</code> files</p>
 </div><div class="column" style="width: 50%">
-<div class="quarto-figure quarto-figure-right">
+<div class="quarto-figure quarto-figure-right" style="margin-bottom: 100px">
 <figure><p><img data-src="img/orchestra.jpg" alt="the back of an illustrated orchestra conductor"></p>
 </figure>
 </div>
@@ -564,7 +570,8 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 <div class="callout-content">
 <ul>
-<li>What changes in <code>docs/</code> when you render?</li>
+<li><p>What changes in <code>docs/</code> when you render?</p></li>
+<li><p>Having troubles? Try GitHub Desktop!</p></li>
 </ul>
 </div>
 </div>
@@ -594,68 +601,55 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 </section><section id="success" class="slide level2 darkbackground" data-background-image="img/horst-quarto-meteor.png," data-background-size="contain," data-background-opacity=".6,"><h2>Success!</h2>
 </section><section id="quarto-website-template" class="slide level2"><h2>Quarto Website Template</h2>
-
-<img data-src="img/quartoWebsiteNew.png" class="r-stretch"><pre><code>docs/
-
-.gitignore
-
-_quarto.yml
-
-about.qmd
-
-index.qmd
-
-project.Rproj
-
-style.css</code></pre>
+<p><img data-src="img/quartoWebsiteNew.png"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="img/quartoTemplate.png" alt="screenshot of MacOS file explorer" width="1000"></p>
+</figure>
+</div>
 </section><section id="customizing-your-landing-page" class="slide level2"><h2>Customizing your landing page</h2>
 <p>For example, create a introductory page like Sam Csik’s</p>
 
 <img data-src="img/landingPage.png" class="r-stretch quarto-figure-center"></section><section id="change-the-theme" class="slide level2"><h2>Change the theme</h2>
 <p>Chose from the 25 predefined <a href="https://bootswatch.com/">Bootswatch themes</a> and define in <code>_quarto.yml</code>.</p>
 <p>One theme only:</p>
-<pre><code>format:
-  html:
-    theme: journal
-    css: styles.css</code></pre>
+<div class="sourceCode" id="cb3" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> journal</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="at">    </span><span class="fu">css</span><span class="kw">:</span><span class="at"> styles.css</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Supply a light and dark theme to toggle between:</p>
-<pre><code>format:
-  html:
-    theme: 
-      light: journal
-      dark: slate
-    css: styles.css
-    </code></pre>
+<div class="sourceCode" id="cb4" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">format</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="at">  </span><span class="fu">html</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="at">    </span><span class="fu">theme</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="at">      </span><span class="fu">light</span><span class="kw">:</span><span class="at"> journal</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="at">      </span><span class="fu">dark</span><span class="kw">:</span><span class="at"> slate</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="at">    </span><span class="fu">css</span><span class="kw">:</span><span class="at"> styles.css</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="at">    </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section><section id="add-a-new-page" class="slide level2"><h2>Add a new page</h2>
 <ul>
 <li><p>Create a new <code>.qmd</code> file and save to repo’s root directory</p></li>
 <li><p>Update <code>_quarto.yml</code> to adding the new <code>.qmd</code> to list of navbar pages.</p></li>
 </ul>
-<!-- --><pre><code>project:
- type: website
- output-dir: docs
-
-website:
- title: "Jessica S. Guo"
- navbar:
-   left:
-     - text: "About"
-       href: index.qmd
-     - text: "Research"
-       href: research.qmd
-     - text: "Data Science"
-       href: ds.qmd
-     - text: "Teaching"
-       href: teaching.qmd
-     - text: "Publications"
-       href: pubs.qmd</code></pre>
+<div class="sourceCode" id="cb5" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="at"> </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Jessica S. Guo"</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="at"> </span><span class="fu">navbar</span><span class="kw">:</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="at">   </span><span class="fu">left</span><span class="kw">:</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"About"</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> index.qmd</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Research"</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> research.qmd</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Data Science"</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> ds.qmd</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Teaching"</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> teaching.qmd</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Publications"</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> pubs.qmd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section><section id="make-a-page-into-a-blog" class="slide level2"><h2>Make a page into a blog</h2>
 <ul>
 <li>Instead of writing in research.qmd, for example, leave it as a YAML header only</li>
 <li>Make the page a blog by adding the key “listing” to the metadata</li>
 </ul>
-<pre><code>listing: 
-  contents: research</code></pre>
+<div class="sourceCode" id="cb6" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">listing</span><span class="kw">:</span><span class="at"> </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="at">  </span><span class="fu">contents</span><span class="kw">:</span><span class="at"> research</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>Create a new directory, <code>research/</code>
 </li>
