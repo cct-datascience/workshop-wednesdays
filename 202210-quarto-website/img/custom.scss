@@ -1,0 +1,60 @@
+/*-- scss:defaults --*/
+$theme-darkblue: #001C48;
+$theme-blue: #1E5288;
+$theme-white: #E2E9EB;
+$theme-green: #70B865;
+$theme-ltblue: #378DBD;
+$theme-gray: #9EABAE;
+$theme-pink: #EF4056;
+
+$body-color: $theme-darkblue;
+$link-color: $theme-green;
+$code-bg: $theme-white;
+$code-color: $theme-pink;
+$code-block-font-size: .7em;
+
+
+/*-- scss:rules --*/
+
+
+.title-slide h2 {
+  margin: 20px 2000px 5px 200px; 
+}
+
+.steps h2 {
+  text-align: center;
+  color: $theme-pink;
+}
+
+.steps p {
+  color: $theme-white;
+  font-size: larger;
+}
+
+.steps ul {
+  color: $theme-pink;
+}
+
+.reveal .steps {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.darkbackground h2 {
+  color: $theme-ltblue;
+}
+
+.footer {
+  color: $theme-ltblue !important;
+}
+
+.reveal .steps .callout-tip {
+  position: fixed !important;
+  right: 10px !important;
+  bottom: 10px;
+}
+
+.reveal .steps .callout-tip p {
+  color: $theme-ltblue;
+}
