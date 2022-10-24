@@ -8,7 +8,7 @@
 <link href="quarto-websites_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="quarto-websites_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.251">
+<meta name="generator" content="quarto-1.0.37">
 <title>quarto-websites</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,15 +18,10 @@
 <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -388,7 +383,7 @@
 
 
 <section id="personal-websites-with-quarto" class="slide level2" style="font-size: 120%;"><h2>Personal Websites with Quarto</h2>
-<h5 style="font-size: 80%;" id="five-steps-to-a-github-pages-website-built-on-quarto">Five Steps to a GitHub Pages Website Built on Quarto</h5>
+<h5 style="font-size: 80%;" id="six-steps-to-a-github-pages-website-built-on-quarto">Six Steps to a GitHub Pages Website Built on Quarto</h5>
 <div class="columns">
 <div class="column" style="width: 45%">
 <h3 id="cct-workshop-wednesday">CCT Workshop Wednesday</h3>
@@ -422,7 +417,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </section><section id="check-your-set-up" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Check your set-up <svg aria-hidden="true" role="img" viewbox="0 0 384 512" style="height:1em;width:0.75em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M384 128v255.1c0 35.35-28.65 64-64 64H64c-35.35 0-64-28.65-64-64V128c0-35.35 28.65-64 64-64H320C355.3 64 384 92.65 384 128z"></path></svg>
 </h2>
 <ul>
-<li><p>Command Line Shell, e.g.&nbsp;Git Bash</p></li>
+<li><p>Unix command line interface, e.g.&nbsp;Git Bash or Terminal</p></li>
 <li><p><code>quarto --help</code></p></li>
 </ul>
 <div class="callout callout-tip callout-captioned callout-style-default">
@@ -436,15 +431,15 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 <div class="callout-content">
 <ul>
 <li><p>Does your terminal window begin with a $?</p></li>
-<li><p>PC users try <code>quarto.cmd</code></p></li>
+<li><p>PC users might have to use <code>quarto.cmd</code></p></li>
 </ul>
 </div>
 </div>
 </div>
 </section><section id="step-1-create-directory" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 1: Create Directory</h2>
 <ul>
-<li><p>Navigate to where you want your website to live</p></li>
-<li><p>Type <code>quarto create-project username.github.io --type website</code></p></li>
+<li><p>Navigate to where you want your website</p></li>
+<li><p><code>quarto create-project username.github.io --type website</code></p></li>
 </ul>
 <div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
@@ -456,8 +451,8 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 <div class="callout-content">
 <ul>
-<li><p>Are you in the terminal?</p></li>
-<li><p>Use <code>pwd</code> and <code>cd</code> to navigate</p></li>
+<li><p>Use <code>pwd</code> and <code>cd</code> to navigate the terminal</p></li>
+<li><p>Replace ‘username’ with your GitHub handle</p></li>
 </ul>
 </div>
 </div>
@@ -484,34 +479,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 </div>
 </div>
-</section><section id="step-3-connect-to-github" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 3: Connect to GitHub</h2>
-<ul>
-<li><p>New GitHub repository <code>username.github.io</code></p></li>
-<li><p><code>git remote add origin &lt;Copied-URL&gt;</code></p></li>
-<li><p><code>git remote -v</code></p></li>
-<li><p><code>git push origin main</code></p></li>
-</ul>
-<div class="callout callout-tip callout-captioned callout-style-default">
-<div class="callout-body">
-<div class="callout-caption">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Hints</strong></p>
-</div>
-<div class="callout-content">
-<ul>
-<li><p>The repository name is important for GitHub Pages…</p></li>
-<li><p>Don’t want this repository name? You have options</p></li>
-</ul>
-</div>
-</div>
-</div>
-</section><section id="step-4-prep-github-pages" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Prep GitHub Pages</h2>
-<ul>
-<li><p>Navigate to Pages Settings in your website’s GitHub Repository</p></li>
-<li><p>Set branch to <code>main</code> and folder to <code>docs/</code></p></li>
-</ul></section><section id="step-4-prep-github-pages-1" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Prep GitHub Pages</h2>
+</section><section id="step-3-prep-for-rendering" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 3: Prep for rendering</h2>
 <ul>
 <li><p><code>touch .nojekyll</code></p></li>
 <li><p>Add <code>output-dir: docs</code> under <code>project</code> in <code>_quarto.yml</code></p></li>
@@ -524,8 +492,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 <span id="cb1-4"><a href="#cb1-4"></a><span class="at">      </span><span class="fu">output-dir</span><span class="kw">:</span><span class="at"> docs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<aside class="notes"><p>make code block size bigger</p>
-<p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
+<aside class="notes"><p>GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.</p>
 <p>With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -555,10 +522,20 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 </div>
 </div>
-</section><section id="step-5-publish" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 5: Publish</h2>
+<aside class="notes"><p>The overall _quarto.yml establishes settings for all of the .qmd files it orchestrates. Settings for individual pages can also be defined in the YAML heading of that .qmd.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside></section><section id="step-4-render-locally" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 4: Render locally</h2>
 <ul>
-<li><p>In the terminal, <code>quarto render</code></p></li>
-<li><p>Add, commit, push</p></li>
+<li><code>quarto render</code></li>
 </ul>
 <div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
@@ -570,13 +547,67 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 <div class="callout-content">
 <ul>
-<li><p>What changes in <code>docs/</code> when you render?</p></li>
-<li><p>Having troubles? Try GitHub Desktop!</p></li>
+<li><p>What kind of files are in <code>docs/</code> after rendering?</p></li>
+<li><p><code>quarto preview</code> to render and preview</p></li>
 </ul>
 </div>
 </div>
 </div>
-</section><section id="render-individual-.qmd-vs.-entire-project" class="slide level2"><h2>Render Individual <code>.qmd</code> vs.&nbsp;Entire Project</h2>
+</section><section id="quarto-website-template" class="slide level2"><h2>Quarto Website Template</h2>
+<p><img data-src="img/quartoWebsiteNew.png"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="img/quartoTemplate.png" alt="screenshot of MacOS file explorer" width="1000"></p>
+</figure>
+</div>
+</section><section id="your-turn" class="slide level2"><h2>Your turn</h2>
+<ul>
+<li><p>Rename your website in <code>_quarto.yml</code> file and <code>quarto preview</code> to see the change</p></li>
+<li><p>Add and commit this change, including the <code>docs/</code> folder</p></li>
+</ul></section><section id="step-5-connect-to-github" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 5: Connect to GitHub</h2>
+<ul>
+<li><p>New GitHub repository <code>username.github.io</code></p></li>
+<li><p><code>git remote add origin &lt;Copied-URL&gt;</code></p></li>
+<li><p><code>git remote -v</code></p></li>
+<li><p><code>git push origin main</code></p></li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><p>The repo name is important!</p></li>
+<li><p>Need help connecting to GitHub?</p></li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="step-6-publish" class="slide level2 steps" data-background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"><h2>Step 6: Publish</h2>
+<ul>
+<li><p>Navigate to Settings &gt; Pages in your website’s GitHub repository</p></li>
+<li><p>Set branch to <code>main</code> and folder to <code>docs/</code></p></li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Hints</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><p>Click on your website link</p></li>
+<li><p>Be patient! Check back in a few</p></li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="rendering-individual-.qmd-vs.-entire-project" class="slide level2"><h2>Rendering Individual <code>.qmd</code> vs.&nbsp;Entire Project</h2>
 <ul>
 <li><p>Rendering each page provides immediate feedback</p></li>
 <li><p>When ready to publish, use <code>quarto render</code></p></li>
@@ -591,21 +622,14 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 </div>
 <div class="callout-content">
 <ul>
-<li>
-<strong>Render Website</strong> button under the <strong>Build</strong> tab is equivalent to <code>quarto render</code>
-</li>
-<li>Changes must be pushed to GitHub before they will be <strong>live</strong>. Rendering files locally does not publish.</li>
+<li><p><strong>Render Website</strong> button under the <strong>Build</strong> tab is equivalent to <code>quarto render</code></p></li>
+<li><p>Changes <em>must</em> be pushed to GitHub before they will be <strong>live</strong>.</p></li>
+<li><p>If your website isn’t updating, ask yourself: 1) did I render? and 2) did I push?</p></li>
 </ul>
 </div>
 </div>
 </div>
 </section><section id="success" class="slide level2 darkbackground" data-background-image="img/horst-quarto-meteor.png," data-background-size="contain," data-background-opacity=".6,"><h2>Success!</h2>
-</section><section id="quarto-website-template" class="slide level2"><h2>Quarto Website Template</h2>
-<p><img data-src="img/quartoWebsiteNew.png"></p>
-<div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="img/quartoTemplate.png" alt="screenshot of MacOS file explorer" width="1000"></p>
-</figure>
-</div>
 </section><section id="customizing-your-landing-page" class="slide level2"><h2>Customizing your landing page</h2>
 <p>For example, create a introductory page like Sam Csik’s</p>
 
@@ -629,20 +653,22 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 <li><p>Create a new <code>.qmd</code> file and save to repo’s root directory</p></li>
 <li><p>Update <code>_quarto.yml</code> to adding the new <code>.qmd</code> to list of navbar pages.</p></li>
 </ul>
-<div class="sourceCode" id="cb5" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">website</span><span class="kw">:</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="at"> </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Jessica S. Guo"</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="at"> </span><span class="fu">navbar</span><span class="kw">:</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="at">   </span><span class="fu">left</span><span class="kw">:</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"About"</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> index.qmd</span></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Research"</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> research.qmd</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Data Science"</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> ds.qmd</span></span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Teaching"</span></span>
-<span id="cb5-12"><a href="#cb5-12"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> teaching.qmd</span></span>
-<span id="cb5-13"><a href="#cb5-13"></a><span class="at">     </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Publications"</span></span>
-<span id="cb5-14"><a href="#cb5-14"></a><span class="at">       </span><span class="fu">href</span><span class="kw">:</span><span class="at"> pubs.qmd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5" data-execute="FALSE"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">project</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="at">  </span><span class="fu">type</span><span class="kw">:</span><span class="at"> website</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="fu">website</span><span class="kw">:</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="at">  </span><span class="fu">title</span><span class="kw">:</span><span class="at"> </span><span class="st">"Ted Laderas, PhD"</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="at">  </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">"Ted's Teaching Blog"</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="at">  </span><span class="fu">navbar</span><span class="kw">:</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="at">    </span><span class="fu">right</span><span class="kw">:</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"About"</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> index.qmd</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Teaching - R"</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> examples.rmd</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Teaching - Python"</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> notebook.ipynb </span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="fu">text</span><span class="kw">:</span><span class="at"> </span><span class="st">"Talks"</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="at">        </span><span class="fu">href</span><span class="kw">:</span><span class="at"> talks.qmd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section><section id="make-a-page-into-a-blog" class="slide level2"><h2>Make a page into a blog</h2>
 <ul>
 <li>Instead of writing in research.qmd, for example, leave it as a YAML header only</li>
@@ -653,7 +679,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
 <ul>
 <li>Create a new directory, <code>research/</code>
 </li>
-<li>Add a new qmd for each featured research project</li>
+<li>Add a new .qmd for each featured research project</li>
 </ul></section><section id="go-forth-and-quarto." class="slide level2 darkbackground" data-background-image="img/horst_quarto_penguins_thankyou.png," data-background-size="contain," data-background-opacity=".6,"><h2>Go Forth and Quarto.</h2>
 
 <img src="img/dslogoweb.png" class="slide-logo r-stretch"><div class="footer footer-default">
@@ -961,8 +987,7 @@ All art (unless otherwise noted) is by <a href="https://www.allisonhorst.com/">A
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          let href = ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);

@@ -9,7 +9,7 @@ format:
 
 ## Personal Websites with Quarto {style="font-size: 120%;"}
 
-##### Five Steps to a GitHub Pages Website Built on Quarto {style="font-size: 80%;"}
+##### Six Steps to a GitHub Pages Website Built on Quarto {style="font-size: 80%;"}
 
 ::: columns
 ::: {.column style="width: 45%"}
@@ -47,7 +47,7 @@ I think it's totally appropriate to stop here and ask how folks feel about the t
 
 ## Check your set-up `r fontawesome::fa("stop")` {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
--   Command Line Shell, e.g. Git Bash
+-   Unix command line interface, e.g. Git Bash or Terminal
 
 -   `quarto --help`
 
@@ -56,21 +56,21 @@ I think it's totally appropriate to stop here and ask how folks feel about the t
 
 -   Does your terminal window begin with a \$?
 
--   PC users try `quarto.cmd`
+-   PC users might have to use `quarto.cmd`
 :::
 
 ## Step 1: Create Directory {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
--   Navigate to where you want your website to live
+-   Navigate to where you want your website
 
--   Type `quarto create-project username.github.io --type website`
+-   `quarto create-project username.github.io --type website`
 
 ::: callout-tip
 ## Hints
 
--   Are you in the terminal?
+-   Use `pwd` and `cd` to navigate the terminal
 
--   Use `pwd` and `cd` to navigate
+-   Replace 'username' with your GitHub handle
 :::
 
 ## Step 2: Initiate Repository {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
@@ -87,31 +87,7 @@ I think it's totally appropriate to stop here and ask how folks feel about the t
 -   Use `ls` and `cd` to navigate
 :::
 
-## Step 3: Connect to GitHub {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
-
--   New GitHub repository `username.github.io`
-
--   `git remote add origin <Copied-URL>`
-
--   `git remote -v`
-
--   `git push origin main`
-
-::: callout-tip
-## Hints
-
--   The repository name is important for GitHub Pages...
-
--   Don't want this repository name? You have options
-:::
-
-## Step 4: Prep GitHub Pages {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
-
--   Navigate to Pages Settings in your website's GitHub Repository
-
--   Set branch to `main` and folder to `docs/`
-
-## Step 4: Prep GitHub Pages {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+## Step 3: Prep for rendering {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
 -   `touch .nojekyll`
 
@@ -131,8 +107,6 @@ project:
 </div>
 
 ::: notes
-make code block size bigger
-
 GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.
 
 With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.
@@ -163,21 +137,67 @@ A `.yml` file "orchestrates" all the nested `.qmd` files
 :::
 :::
 
-## Step 5: Publish {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+::: notes
+The overall \_quarto.yml establishes settings for all of the .qmd files it orchestrates. Settings for individual pages can also be defined in the YAML heading of that .qmd.
+:::
 
--   In the terminal, `quarto render`
+## Step 4: Render locally {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
 
--   Add, commit, push
+-   `quarto render`
 
 ::: callout-tip
 ## Hints
 
--   What changes in `docs/` when you render?
+-   What kind of files are in `docs/` after rendering?
 
--   Having troubles? Try GitHub Desktop!
+-   `quarto preview` to render and preview
 :::
 
-## Render Individual `.qmd` vs. Entire Project
+## Quarto Website Template
+
+![](img/quartoWebsiteNew.png)
+
+![](img/quartoTemplate.png){fig-alt="screenshot of MacOS file explorer" fig-align="center" width="1000"}
+
+## Your turn
+
+-   Rename your website in `_quarto.yml` file and `quarto preview` to see the change
+
+-   Add and commit this change, including the `docs/` folder
+
+## Step 5: Connect to GitHub {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   New GitHub repository `username.github.io`
+
+-   `git remote add origin <Copied-URL>`
+
+-   `git remote -v`
+
+-   `git push origin main`
+
+::: callout-tip
+## Hints
+
+-   The repo name is important!
+
+-   Need help connecting to GitHub?
+:::
+
+## Step 6: Publish {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   Navigate to Settings \> Pages in your website's GitHub repository
+
+-   Set branch to `main` and folder to `docs/`
+
+::: callout-tip
+## Hints
+
+-   Click on your website link
+
+-   Be patient! Check back in a few
+:::
+
+## Rendering Individual `.qmd` vs. Entire Project
 
 -   Rendering each page provides immediate feedback
 
@@ -187,16 +207,12 @@ A `.yml` file "orchestrates" all the nested `.qmd` files
 ## Hints
 
 -   **Render Website** button under the **Build** tab is equivalent to `quarto render`
--   Changes must be pushed to GitHub before they will be **live**. Rendering files locally does not publish.
+-   Changes *must* be pushed to GitHub before they will be **live**. 
+
+-   If your website isn't updating, ask yourself:  1) did I render? and 2) did I push?
 :::
 
 ## Success! {.darkbackground background-image="img/horst-quarto-meteor.png," background-size="contain," background-opacity=".6,"}
-
-## Quarto Website Template
-
-![](img/quartoWebsiteNew.png)
-
-![](img/quartoTemplate.png){fig-alt="screenshot of MacOS file explorer" fig-align="center" width="1000"}
 
 ## Customizing your landing page
 
@@ -236,20 +252,22 @@ format:
 -   Update `_quarto.yml` to adding the new `.qmd` to list of navbar pages.
 
 ``` {.yaml execute="FALSE"}
+project:
+  type: website
+
 website:
- title: "Jessica S. Guo"
- navbar:
-   left:
-     - text: "About"
-       href: index.qmd
-     - text: "Research"
-       href: research.qmd
-     - text: "Data Science"
-       href: ds.qmd
-     - text: "Teaching"
-       href: teaching.qmd
-     - text: "Publications"
-       href: pubs.qmd
+  title: "Ted Laderas, PhD"
+  description: "Ted's Teaching Blog"
+  navbar:
+    right:
+      - text: "About"
+        href: index.qmd
+      - text: "Teaching - R"
+        href: examples.rmd
+      - text: "Teaching - Python"
+        href: notebook.ipynb 
+      - text: "Talks"
+        href: talks.qmd
 ```
 
 ## Make a page into a blog
@@ -263,6 +281,6 @@ listing:
 ```
 
 -   Create a new directory, `research/`
--   Add a new qmd for each featured research project
+-   Add a new .qmd for each featured research project
 
 ## Go Forth and Quarto. {.darkbackground background-image="img/horst_quarto_penguins_thankyou.png," background-size="contain," background-opacity=".6,"}
