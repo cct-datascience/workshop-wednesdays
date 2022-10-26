@@ -16,7 +16,7 @@ format:
 ### CCT Workshop Wednesday
 
 with\
-Jessica Guo, PhD & Heidi Steiner, PSM
+Jessica Guo, PhD & Heidi Steiner, PhD
 :::
 
 ::: {.column style="width: 55%; margin-bottom: 20px;"}
@@ -207,9 +207,10 @@ The overall \_quarto.yml establishes settings for all of the .qmd files it orche
 ## Hints
 
 -   **Render Website** button under the **Build** tab is equivalent to `quarto render`
--   Changes *must* be pushed to GitHub before they will be **live**. 
 
--   If your website isn't updating, ask yourself:  1) did I render? and 2) did I push?
+-   Changes *must* be pushed to GitHub before they will be **live**.
+
+-   If your website isn't updating, ask yourself: 1) did I render? and 2) did I push?
 :::
 
 ## Success! {.darkbackground background-image="img/horst-quarto-meteor.png," background-size="contain," background-opacity=".6,"}
@@ -247,9 +248,9 @@ format:
 
 ## Add a new page
 
--   Create a new `.qmd` file and save to repo's root directory
+-   Create a new file and save to repo's root directory
 
--   Update `_quarto.yml` to adding the new `.qmd` to list of navbar pages.
+-   Add new docs to navbar in `_quarto.yml`
 
 ``` {.yaml execute="FALSE"}
 project:
