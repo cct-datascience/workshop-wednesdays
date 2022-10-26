@@ -33,3 +33,7 @@
 -   Jessica Guo's [website](https://jessicaguo.github.io/), [source](https://github.com/jessicaguo/jessicaguo.github.io)
 
 -   Drew Dimmery's [website](https://ddimmery.com/), [source](https://github.com/ddimmery/quarto-website)
+
+## Learning More
+
+- [Quarto Documentation](https://quarto.org/docs/websites/#learning-more)
