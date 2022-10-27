@@ -28,7 +28,11 @@ editor: visual
     5.  Make a change and run `tar_visnetwork()` and `tar_make()` again
 
     6.  Show `targets/` and explain what it is and why you don't need to touch it manually
-3.  How to setup a project to use `targets` with `use_targets()`
+
+#### PARTICIPATORY LIVE CODING:
+
+1.  How to setup a project to use `targets` with `use_targets()`
+
     1.  Start a new RStudio project and run `use_targets()`
 
     2.  Anatomy of `targets` project
@@ -50,10 +54,9 @@ editor: visual
     2.  Discussion about how many targets to have (e.g. `read_wrangle_transform_data` vs. `read_data`, `wrangle_data`, `transform_data)`
 3.  Debugging targets
     1.  use `tar_load()` and match argument names to target names
-
     2.  Official debug features of `targets` (need to do more research)
 
-### EXERCISE:
+#### EXERCISE:
 
 Convert existing simple project to use `targets`:
 
@@ -69,30 +72,24 @@ Convert existing simple project to use `targets`:
 
 ### PART 4 (if time):
 
-1.  Demo parallelization with `tar_make_clustermq()`
-    1.  Mention/demo multi-core OOD RStudio session?
-2.  Demo branching
+1.  Parallelization
+    1.  Demo 'multisession' parallelization with `tar_make_clustermq()`
+    2.  Multi-core OOD RStudio session as way to use HPC
+2.  Demo branching (?)
     1.  Just so they are aware it exists
-
     2.  Dynamic branching only is enough probably
 3.  Collaborating with `targets`
-    1.  `_targets` not tracked with git/GitHub
-
+    1.  Intermediates in `_targets` not tracked with git/GitHub
     2.  Cloud storage a possibility, but extra setup
-
     3.  Save intermediate results with `tar_file()`
 
 ### Closing discussion:
 
 1.  When to use `targets` for a project?
     1.  Consider complexity, time to re-run---how much time will you save?
-
     2.  Consider your collaborators---do they need to just see results (+`targets`) or do they need to contribute code (±`targets`)?
-
     3.  As you get more comfortable with `targets`, you may find yourself using it for even simple projects!
 2.  Point people to template on GitHub
     1.  README with instructions
-
     2.  GitHub actions to render README
-
     3.  Cool mermaid.js graph
