@@ -1,0 +1,287 @@
+---
+Title: "Personal websites with Quarto"
+format:
+  revealjs:
+    theme: [default, img/custom.scss]
+    logo: img/dslogoweb.png
+    code-link: true
+---
+
+## Personal Websites with Quarto {style="font-size: 120%;"}
+
+##### Six Steps to a GitHub Pages Website Built on Quarto {style="font-size: 80%;"}
+
+::: columns
+::: {.column style="width: 45%"}
+### CCT Workshop Wednesday
+
+with\
+Jessica Guo, PhD & Heidi Steiner, PhD
+:::
+
+::: {.column style="width: 55%; margin-bottom: 20px;"}
+![](img/horst_quarto_penguins_teach.png){fig-alt="Graphic showing penguin showing another penguin the Quarto moon"}
+:::
+:::
+
+## Quarto
+
+Quarto® is an open-source scientific and technical publishing system built to dramatically improve the process of creating and collaborating ![](img/horst_quarto_schematic.png){fig-alt="Graphic showing R, Python, Julia, and Observable languages flowing to Quarto and then on to html, PDF, and MS Word documents"}
+
+::: footer
+Content is a mixture of [RStudio Education materials](https://github.com/rstudio-education), CC-BY.\
+All art (unless otherwise noted) is by [Allison Horst](https://www.allisonhorst.com/), CC-BY-NC-ND.
+:::
+
+::: notes
+lowering the activation energy to reproducible reporting in MANY ways
+
+I think it's totally appropriate to stop here and ask how folks feel about the term open/reproducible
+:::
+
+## Change your mental model
+
+[![](img/drakeMeme.jpeg){fig-alt="drake meme shaking head at copy/paste and encouraging source -> output models" fig-align="center"}](https://twitter.com/ijeamaka_a/status/1367242513782763521)
+
+## Let's dive in. {.darkbackground background-image="img/diveInQuarto.png," background-size="contain," background-opacity=".6,"}
+
+## Check your set-up `r fontawesome::fa("stop")` {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   Unix command line interface, e.g. Git Bash or Terminal
+
+-   `quarto --help`
+
+::: callout-tip
+## Hints
+
+-   Does your terminal window begin with a \$?
+
+-   PC users might have to use `quarto.cmd`
+:::
+
+## Step 1: Create Directory {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   Navigate to where you want your website
+
+-   `quarto create-project username.github.io --type website`
+
+::: callout-tip
+## Hints
+
+-   Use `pwd` and `cd` to navigate the terminal
+
+-   Replace 'username' with your GitHub handle
+:::
+
+## Step 2: Initiate Repository {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   `git init`
+-   `git add .`
+-   `git commit -m "Initial commit"`
+
+::: callout-tip
+## Hints
+
+-   Are you in your new directory?
+
+-   Use `ls` and `cd` to navigate
+:::
+
+## Step 3: Prep for rendering {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   `touch .nojekyll`
+
+-   Add `output-dir: docs` under `project` in `_quarto.yml`
+
+<div>
+
+::: {.column style="width: 50%"}
+``` {.yaml execute="FALSE"}
+
+project:
+      type: website
+      output-dir: docs
+```
+:::
+
+</div>
+
+::: notes
+GitHub Pages assumes you are using jekyll as your static site generator. This empty file corrects that assumption.
+
+With the output-dir setting, your rendered html will be saved in a docs folder. Each time you render, remember to add-commit-push the docs folder, which will trigger your website to update. Try not to manually edit the folder - would get rewritten the next time you render.
+:::
+
+## "Yet Another Markdown Language"
+
+\
+
+::: columns
+::: {.column style="width: 50%"}
+``` {.yaml execute="FALSE"}
+---
+
+key: value
+
+---
+```
+
+\
+\
+
+A `.yml` file "orchestrates" all the nested `.qmd` files
+:::
+
+::: {.column style="width: 50%"}
+![](img/orchestra.jpg){style="margin-bottom: 100px" fig-alt="the back of an illustrated orchestra conductor" fig-align="right"}
+:::
+:::
+
+::: notes
+The overall \_quarto.yml establishes settings for all of the .qmd files it orchestrates. Settings for individual pages can also be defined in the YAML heading of that .qmd.
+:::
+
+## Step 4: Render locally {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   `quarto render`
+
+::: callout-tip
+## Hints
+
+-   What kind of files are in `docs/` after rendering?
+
+-   `quarto preview` to render and preview
+:::
+
+## Quarto Website Template
+
+![](img/quartoWebsiteNew.png)
+
+![](img/quartoTemplate.png){fig-alt="screenshot of MacOS file explorer" fig-align="center" width="1000"}
+
+## Your turn
+
+-   Rename your website in `_quarto.yml` file and `quarto preview` to see the change
+
+-   Add and commit this change, including the `docs/` folder
+
+## Step 5: Connect to GitHub {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   New GitHub repository `username.github.io`
+
+-   `git remote add origin <Copied-URL>`
+
+-   `git remote -v`
+
+-   `git push origin main`
+
+::: callout-tip
+## Hints
+
+-   The repo name is important!
+
+-   Need help connecting to GitHub?
+:::
+
+## Step 6: Publish {.steps background-image="https://github.com/allisonhorst/stats-illustrations/blob/main/julie-mine-quarto-keynote/penguins_telescope_2.png?raw=true"}
+
+-   Navigate to Settings \> Pages in your website's GitHub repository
+
+-   Set branch to `main` and folder to `docs/`
+
+::: callout-tip
+## Hints
+
+-   Click on your website link
+
+-   Be patient! Check back in a few
+:::
+
+## Rendering Individual `.qmd` vs. Entire Project
+
+-   Rendering each page provides immediate feedback
+
+-   When ready to publish, use `quarto render`
+
+::: callout-tip
+## Hints
+
+-   **Render Website** button under the **Build** tab is equivalent to `quarto render`
+
+-   Changes *must* be pushed to GitHub before they will be **live**.
+
+-   If your website isn't updating, ask yourself: 1) did I render? and 2) did I push?
+:::
+
+## Success! {.darkbackground background-image="img/horst-quarto-meteor.png," background-size="contain," background-opacity=".6,"}
+
+## Customizing your landing page
+
+For example, create a introductory page like Sam Csik's
+
+![](img/landingPage.png){fig-align="center"}
+
+## Change the theme
+
+Chose from the 25 predefined [Bootswatch themes](https://bootswatch.com/) and define in `_quarto.yml`.
+
+One theme only:
+
+``` {.yaml execute="FALSE"}
+format:
+  html:
+    theme: journal
+    css: styles.css
+```
+
+Supply a light and dark theme to toggle between:
+
+``` {.yaml execute="FALSE"}
+format:
+  html:
+    theme: 
+      light: journal
+      dark: slate
+    css: styles.css
+    
+```
+
+## Add a new page
+
+-   Create a new file and save to repo's root directory
+
+-   Add new docs to navbar in `_quarto.yml`
+
+``` {.yaml execute="FALSE"}
+project:
+  type: website
+
+website:
+  title: "Ted Laderas, PhD"
+  description: "Ted's Teaching Blog"
+  navbar:
+    right:
+      - text: "About"
+        href: index.qmd
+      - text: "Teaching - R"
+        href: examples.rmd
+      - text: "Teaching - Python"
+        href: notebook.ipynb 
+      - text: "Talks"
+        href: talks.qmd
+```
+
+## Make a page into a blog
+
+-   Instead of writing in research.qmd, for example, leave it as a YAML header only
+-   Make the page a blog by adding the key "listing" to the metadata
+
+``` {.yaml execute="FALSE"}
+listing: 
+  contents: research
+```
+
+-   Create a new directory, `research/`
+-   Add a new .qmd for each featured research project
+
+## Go Forth and Quarto. {.darkbackground background-image="img/horst_quarto_penguins_thankyou.png," background-size="contain," background-opacity=".6,"}

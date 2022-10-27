@@ -1,6 +1,7 @@
 # History files
 .Rhistory
 .Rapp.history
+*.Rproj
 
 # Session Data files
 .RData
@@ -40,6 +41,7 @@ vignettes/*.pdf
 
 # rsconnect
 202109-repro-data-sci/rsconnect/
+202210-quarto-website/rsconnect/
 
 202112_timeseries/time-series-forecasting_files/
 202202_repro-data-sci/*.html
