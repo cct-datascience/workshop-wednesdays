@@ -4,7 +4,7 @@
 
 **Slides**: [rsconnect](https://viz.datascience.arizona.edu/quarto-websites/)
 
-**Recording**: TBA
+**Recording**: [YouTube](https://youtu.be/GsoBkxrK9Vg)
 
 **Learning outcomes**: By the end of this workshop, learners will create a basic website using Quarto, turn the project into a GitHub repository, and publish the website on GitHub. Learners will understand the basic workflow for customizing and rendering a Quarto website. Some familiarity with the command line and git/GitHub is recommended.
 
