@@ -1,11 +1,21 @@
 ---
-title: "Workflow Managment in R Projects with {targets}"
+title: "Managing complicated research workflows in R with {targets}"
 author: "Eric Scott"
 format: gfm
 editor: visual
 ---
 
-**Tagline**: "As data analysis projects grow, they can get complicated to update and time consuming to re-run. Learn how to save time and reduce confusion by using the `targets` package to manage the workflow of your analyses in R."
+Title brainstorm:\
+
+-   How to simplify and track complicated research workflows in R
+
+-   How to track and reproduce complicated research workflows in R
+
+-   A time- and sanity-saving approach for reproducible analyses in R
+
+-   Orchestrating complicated research workflows in R
+
+**Tagline**: "As data analysis projects grow, they can get complicated to update and time consuming to re-run. Learn how to save time and reduce confusion by using the `targets` package to manage your analysis workflow in R."
 
 ### PART 1:
 
@@ -63,6 +73,8 @@ Convert existing simple project to use `targets`:
 1\) Run `use_targets()` and create a `tar_plan()`
 
 2\) turn scripts or portions of scripts into functions in the `R/` folder
+
+3\) add packages to `tar_option_set(packages = c(…))`
 
 4\) check workflow with `tar_visnetwork()`
 
