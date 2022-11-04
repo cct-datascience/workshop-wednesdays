@@ -45,47 +45,61 @@ library(usethis)
 
     <!--# Look at Jenny Bryan's slides maybe and see if there are good images to use -->
 
-## Scenario 1
+##  {#scenario1-1}
 
-> You have a reproducible R project, but to re-run all the code takes several **days** because some of the steps are very slow.
-> Your collaborator finds a few mistakes in the data and sends an update and asks you if you can update the plots.
-> You probably don't need to re-run *everything*, but that's the easiest route to reproducibility.
-> While your code is running, they send another update: "Whoops, missed another mistake!".
-> You cringe and reluctantly re-start your analysis running.
+![](img/scenario1-1.png){fig-align="center"}
 
-::: notes
-Replace this with something graphical
-:::
+##  {#scenario1-2}
 
-## Scenario 2
+![](img/scenario1-2.png){fig-align="center"}
 
-> You took a previous reproducibility workshop and learned to number R scripts sequentially (e.g. `01-wrangle_data.R`, `02-analysis.R`, etc.).
-> This has been working out great for you, but now your current project has too many scripts that can be run independently to keep track of (e.g. `02a-multivariate_analysis.R`, `02b-linear_model.R`, `02c-bayesian_analysis.R`).
-> Manually updating the numbering system when you add something new is becoming a burden and you are ready to give up on reproducibility.
+##  {#scenario1-3}
 
-::: notes
-Replace this with something graphical
-:::
+![](img/scenario1-3.png){fig-align="center"}
+
+##  {#scenario1-4}
+
+![](img/scenario1-4.png){fig-align="center"}
+
+##  {#scenario2-1}
+
+![](img/scenario2-1.png){fig-align="center"}
+
+##  {#scenario2-2}
+
+![](img/scenario2-2.png){fig-align="center"}
+
+##  {#scenario2-3}
+
+![](img/scenario2-3.png){fig-align="center"}
+
+## 
 
 ## Workflow management
 
+::: columns
+::: {.column width="70%"}
 -   Automatically detect dependencies
 
 -   Run your entire analysis with one master command
 
 -   Skip steps that don't need to be re-run
+:::
 
-`targets` is a workflow managment R package
+::: {.column width="30%"}
+![](https://docs.ropensci.org/targets/logo.svg){fig-align="center" width="193"}
+:::
+:::
+
+![](img/pipeline_graph.png){fig-align="center" width="722"}
 
 ## Demo
 
-If you want to follow along (recommended), install this project using the following R code
+To install a demo `targets` pipeline, run the following R code and follow the prompts:
 
 ``` r
 usethis::use_course("cct-datascience/targets-demo")
 ```
-
-Please speak up if anything isn't working for you!
 
 ::: notes
 1.  tar_make()

@@ -435,58 +435,64 @@ Eric R. Scott
 <!--# Look at Jenny Bryan's slides maybe and see if there are good images to use --></li>
 </ul>
 </section>
-<section id="scenario-1" class="slide level2">
-<h2>Scenario 1</h2>
-<blockquote>
-<p>You have a reproducible R project, but to re-run all the code takes several <strong>days</strong> because some of the steps are very slow. Your collaborator finds a few mistakes in the data and sends an update and asks you if you can update the plots. You probably don’t need to re-run <em>everything</em>, but that’s the easiest route to reproducibility. While your code is running, they send another update: “Whoops, missed another mistake!”. You cringe and reluctantly re-start your analysis running.</p>
-</blockquote>
-<aside class="notes">
-<p>Replace this with something graphical</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="scenario-2" class="slide level2">
-<h2>Scenario 2</h2>
-<blockquote>
-<p>You took a previous reproducibility workshop and learned to number R scripts sequentially (e.g.&nbsp;<code>01-wrangle_data.R</code>, <code>02-analysis.R</code>, etc.). This has been working out great for you, but now your current project has too many scripts that can be run independently to keep track of (e.g.&nbsp;<code>02a-multivariate_analysis.R</code>, <code>02b-linear_model.R</code>, <code>02c-bayesian_analysis.R</code>). Manually updating the numbering system when you add something new is becoming a burden and you are ready to give up on reproducibility.</p>
-</blockquote>
-<aside class="notes">
-<p>Replace this with something graphical</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+<section id="scenario1-1" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario1-1.png" class="r-stretch quarto-figure-center"></section>
+<section id="scenario1-2" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario1-2.png" class="r-stretch quarto-figure-center"></section>
+<section id="scenario1-3" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario1-3.png" class="r-stretch quarto-figure-center"></section>
+<section id="scenario1-4" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario1-4.png" class="r-stretch quarto-figure-center"></section>
+<section id="scenario2-1" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario2-1.png" class="r-stretch quarto-figure-center"></section>
+<section id="scenario2-2" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario2-2.png" class="r-stretch quarto-figure-center"></section>
+<section id="scenario2-3" class="slide level2">
+<h2></h2>
+
+<img data-src="img/scenario2-3.png" class="r-stretch quarto-figure-center"></section>
+<section id="section" class="slide level2">
+<h2></h2>
 </section>
 <section id="workflow-management" class="slide level2">
 <h2>Workflow management</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
 <ul>
 <li><p>Automatically detect dependencies</p></li>
 <li><p>Run your entire analysis with one master command</p></li>
 <li><p>Skip steps that don’t need to be re-run</p></li>
 </ul>
-<p><code>targets</code> is a workflow managment R package</p>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://docs.ropensci.org/targets/logo.svg" width="193"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/pipeline_graph.png" width="722"></p>
+</figure>
+</div>
 </section>
 <section id="demo" class="slide level2">
 <h2>Demo</h2>
-<p>If you want to follow along (recommended), install this project using the following R code</p>
+<p>To install a demo <code>targets</code> pipeline, run the following R code and follow the prompts:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>usethis<span class="sc">::</span><span class="fu">use_course</span>(<span class="st">"cct-datascience/targets-demo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Please speak up if anything isn’t working for you!</p>
 <aside class="notes">
 <ol type="1">
 <li>tar_make()</li>
@@ -672,7 +678,7 @@ Eric R. Scott
 <li>Checking if it works with <code>tar_make()</code></li>
 <li>Debug functions if necessary</li>
 </ul>
-<h3 id="section"></h3></li>
+<h3 id="section-1"></h3></li>
 </ol>
 
 <img src="_extensions/cct-datascience/uaz/logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
