@@ -1,11 +1,18 @@
 ---
 title: "Managing complicated research workflows in R with {targets}"
 author: Eric R. Scott
-format: uaz-revealjs
+format: 
+  uaz-revealjs:
+    fontsize: 1.9em
 editor: visual
 ---
 
 <!--# TODO:- Make font size smaller- Switch logo to cct-datascience- Add images to replace text- Add timer widget to exercise slide- Acknowledge Will Landau for inspiration for slides- Add part 4 slides (branching, parallel computing, cloud storage exist) -->
+
+```{r}
+#| echo: false
+library(countdown)
+```
 
 ## Before we get started
 
@@ -73,8 +80,6 @@ library(usethis)
 
 ![](img/scenario2-3.png){fig-align="center"}
 
-## 
-
 ## Workflow management
 
 ::: columns
@@ -118,7 +123,7 @@ usethis::use_course("cct-datascience/targets-demo")
 
 -   Everything that happens to make that target is a function
 
-    <!--# add image of example workflow -->
+    <!--# add image of example workflow with functions shown.  Look at source code of Targets book to see how Will gets tar_visnetwork() output without a real workflow -->
 
 ## Anatomy of a `targets` project
 
@@ -133,24 +138,6 @@ usethis::use_course("cct-datascience/targets-demo")
 
     3.  Should ***not*** be tracked in version control
 
-## Starting a new `targets` project
-
-Use `use_targets()` to set up a brand new project, or convert an existing one to use `targets` .
-
-::: callout-tip
-Follow along on your own computer for best learning results!
-:::
-
-::: notes
-Use .csv that's online so they don't need to download data and demo `tar_url()` ---carpentries maybe?
-
-Have a question to answer so you can write some simple data wrangling functions
-
-Demo sketching out target names at start
-
-Demo sketching out code, transfer to function, run `tar_make()` workflow.
-:::
-
 ## Refactoring a project to use `targets`
 
 > **refactor**
@@ -161,19 +148,95 @@ Demo sketching out code, transfer to function, run `tar_make()` workflow.
 >
 > 1.  restructure (the source code of an application or piece of software) so as to improve operation without altering functionality.
 
+First, let's start with a "traditional" R analysis project.
+Download and take a look around:
+
+``` r
+usethis::use_course("cct-datascience/targets-refactor")
+```
+
+```{r}
+countdown(minutes = 5, right = "33.33%")
+```
+
 ## Refactoring a project to use `targets`
 
 ### To-do:
 
 1.  `use_targets()` to set up infrastructure including `_targets.R`
-2.  Convert R script(s) to functions
-3.  Write targets
-4.  Run `tar_make()`
-5.  Debug
+2.  Add package dependencies to `tar_option_set()`
+3.  Convert R script(s) to functions
+4.  Write targets
+5.  Run `tar_make()`
+6.  Debug
 
-Best to do this one target at a time
+Best to do steps 3-6 **one target at a time!**
 
-## Writing functions for `targets`
+## 1. `use_targets()`
+
+Run `use_targets()` and open the `_targets.R` file it generates
+
+```{r}
+#| eval: false
+#| echo: true
+library(targets)
+use_targets()
+```
+
+## 2. Package dependencies
+
+Figure out what packages are needed and add them to `tar_option_set()` in `_targets.R`.
+
+```{r}
+#| eval: false
+#| echo: true
+tar_option_set(
+  packages = c(
+    "tidyverse",
+    "lubridate",
+    #add more packages here
+    ),
+  format = "rds"
+)
+```
+
+```{r}
+countdown(minutes = 2)
+```
+
+## 3. Create functions
+
+Functions in R are created with the `function()` function
+
+```{r}
+#| echo: true
+#| code-line-numbers: "1-6|1|2|3|4|5-6"
+add_ten <-        #name of function
+  function(x) {   #argument names and defaults defined here
+    x + 10        #what the function does
+  }
+
+add_ten(x = 13)
+```
+
+. . .
+
+Using multiple arguments:
+
+```{r}
+#| echo: true
+join_data <- 
+  function(weather_data, field_data) {
+    #get dates into same format
+    field_data <- field_data %>%
+      mutate(date = lubridate::mdy(date))
+    
+    #join to weather data
+    left_join(field_data, weather_data, by = "date")
+  }
+```
+
+## "Good enough" functions for `targets`
 
 -   Use a naming convention (verbs are good)
 -   Make the function arguments the same as target names
@@ -195,7 +258,7 @@ fit_model <- function(data_clean) {
 }
 ```
 
-## Creating targets
+## 4. Create targets
 
 -   Use a naming convention (nouns are good)
 
@@ -250,6 +313,6 @@ usethis::use_course("cct-datascience/targets-refactor")
     -   Checking if it works with `tar_make()`
     -   Debug functions if necessary
 
-    ### 
+<!--# Consider moving this up and doing the exercise in chunks.  Like, first everyone download demo project.  Next `use_targets()` and inspect _targets.R.  Next, figure out what packages the project uses and put those in tar_options(). -->
 
 [^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.
