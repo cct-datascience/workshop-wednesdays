@@ -38,6 +38,8 @@ library(usethis)
 
 ```
 
+# Part 1: Context
+
 ## Moving Toward Reproducibility
 
 -   Reproducibility vs. replicability
@@ -98,6 +100,8 @@ library(usethis)
 
 ![](img/pipeline_graph.png){fig-align="center" width="722"}
 
+# Part 2: Demonstration
+
 ## Demo
 
 To install a demo `targets` pipeline, run the following R code and follow the prompts:
@@ -137,6 +141,8 @@ usethis::use_course("cct-datascience/targets-demo")
     2.  Contains targets saved as R objects
 
     3.  Should ***not*** be tracked in version control
+
+# Part 3: Exercise
 
 ## Refactoring a project to use `targets`
 
@@ -275,9 +281,38 @@ fit_model <- function(data_clean) {
 
 -   `plot_hist_site`
 
+## Creating targets for data
+
+-   Use `format="file"` for targets that point to raw data on disk
+
+-   Use `format="url"` for targets that point to a file on the web
+
+-   This will track changes in the data and mark downstream targets as out of date when the data changes
+
+```{r}
+#| eval: false
+#| echo: true
+list(
+  tar_target(data_raw, "data/mydata.csv", format = "file"),
+  tar_target(data, read_wrangle_data(data_raw))
+)
+```
+
+## Pair-programming Exercise
+
+-   Breakout groups of 2
+-   One person shares screen and "drives"
+-   The other person "navigates"
+
+<!-- hmm.. will the navigator feel like they miss out because they won't have a copy of the code at the end?  We can share the "solution" with everyone -->
+
+```{r}
+countdown(minutes = 10)
+```
+
 ## Debugging targets
 
--   Errors in `tar_make()` are usually uninformative because code is run in a separate R session with `callr`.
+-   Errors in `tar_make()` are sometimes uninformative because code is run in a separate R session
 -   Use `tar_meta()` to access error messages
 
 ``` r
@@ -286,33 +321,114 @@ tar_meta(fields = error, complete_only = TRUE)
 
 ## Debugging targets
 
-If the error is in a custom function:
+If the error is in a function you wrote:
 
 1.  Use `tar_load()` to load necessary targets into environment
-2.  Test function in console
-3.  Run through code in function interactively
+2.  Use `tar_load_global()` to load functions and settings
+3.  Test your function in the console
+4.  Test function line by line
 
 ::: notes
 Demo this by purposefully introducing an error in the demo project
 :::
 
-## Exercise {.small}
+<!-- At this point, maybe more time for debugging?? -->
 
-1.  Install another demo project
+# Part 4: A Taste of What's Possible
 
-``` r
-usethis::use_course("cct-datascience/targets-refactor")
+## Targetopia
+
+A family of packages to extend `targets`: <https://wlandau.github.io/targetopia/packages.html>
+
+-   `tarchetypes`: Helpers for a variety of things
+
+    ```{r}
+    #| filename: _targets.R
+    #| eval: false
+    #| echo: true
+    library(targets)
+    library(tarchetypes)
+
+    tar_plan( #alternative to list()
+      tar_file(data_raw, "mydata.csv"),          #shortcut tar_* functions
+      data = read_csv(data_raw),                 #target_name = command
+      report = tar_render(report, "report.Rmd"), #render RMarkdown or Quarto
+      model = fit_model(data),                   #trailing comma is OK!
+    )
+    ```
+
+-   `stantargets` and `jagstargets`: "target factories" for Bayesian analyses
+
+    -   Simplify analyses by automatically creating targets for multiple steps
+
+    -   E.g. `tar_jags()` generates multiple targets for different steps of a JAGS analysis
+
+## Parallel computation
+
+<!--# The refactor exercise is NOT a good example for this because the overhead for both clustermq and future (especially future) makes the pipeline take *longer* to run in parallell.  Something to discuss? -->
+
+-   2 back-ends: `future` and `clustermq`
+
+-   `future` is probably easier to install, and has other uses like `furrr` and `future.apply`
+
+-   `clustermq` is probably faster and more flexible
+
+-   Detailed discussion of pros and cons of both are in [the manual](https://books.ropensci.org/targets/hpc.html)
+
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+# clustermq settings
+options(clustermq.scheduler = "multicore")
+
+#future settings
+future::plan(future.callr::callr)
 ```
 
-2.  *Refactor* the project to use `targets`
+```{r}
+#| filename: R console
+#| eval: false
+#| echo: true
 
-    -   Run `use_targets()` and create a `tar_plan()`
-    -   Turn scripts or portions of scripts into functions in the `R/` folder
-    -   Add packages to `tar_option_set(packages = c(…))`
-    -   Check workflow with `tar_visnetwork()`
-    -   Checking if it works with `tar_make()`
-    -   Debug functions if necessary
+tar_make_future(workers = 3)
+tar_make_clustermq(workers = 3)
+```
 
-<!--# Consider moving this up and doing the exercise in chunks.  Like, first everyone download demo project.  Next `use_targets()` and inspect _targets.R.  Next, figure out what packages the project uses and put those in tar_options(). -->
+## High Performance Computing
+
+-   *Relatively* easy to get a targets pipeline working on an HPC
+
+-   Targets are run on persistent (`clustermq`) or transient (`future`) SLURM jobs and results collected
+
+-   Best option (IMO) is to use [Open On Demand](https://ood.hpc.arizona.edu/)
+
+    -   Runs RStudio in a browser window using the HPC
+
+    -   Select number of cores ≥ number of workers
+
+    -   Use either `tar_make_clustermq()` or `tar_make_future()`
+
+::: callout-warning
+Running `use_targets()` on an Open On Demand session won't get the setup quite right.
+Use `options(clustermq.scheduler = "multicore")` or `future::plan(future.callr::callr)` just as we did above.
+:::
+
+## Cloud Storage
+
+-   \_targets/ folder is by default on your hard drive
+
+-   Workflow is reproducible by collaborator, but why should they have to wait for `tar_make()` to finish when you've already run it?
+
+-   Solution: store \_targets/ in the cloud with Amazon S3 buckets or Google Cloud Storage
+
+-   Targets stored in this way can be *versioned,* so if you roll back your `_targets.R` to a previous version, you don't have to re-run all the targets.
+
+## Branching
+
+How to describe??
+Look at targets book
+
+<!--# Need a closing slide still -->
 
 [^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.
