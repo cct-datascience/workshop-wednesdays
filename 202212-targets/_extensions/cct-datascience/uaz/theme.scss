@@ -67,3 +67,9 @@ blockquote::after{
   /*Reset to make sure*/
   content: "";
 }
+
+/* set background of tar_visnetwork() */
+
+div.cell-output-display {
+  background: white !important;
+}

@@ -7,11 +7,10 @@ format:
 editor: visual
 ---
 
-<!--# TODO:- Make font size smaller- Switch logo to cct-datascience- Add images to replace text- Add timer widget to exercise slide- Acknowledge Will Landau for inspiration for slides- Add part 4 slides (branching, parallel computing, cloud storage exist) -->
-
 ```{r}
 #| echo: false
 library(countdown)
+library(targets)
 ```
 
 ## Before we get started
@@ -123,11 +122,35 @@ usethis::use_course("cct-datascience/targets-demo")
 
 ## Working with `targets`
 
--   Every step ("target") is an R object[^1]
+-   Every intermediate (called a "target") is stored as an R object[^1]
 
--   Everything that happens to make that target is a function
+-   Everything that happens to make that target is written as a function
 
-    <!--# add image of example workflow with functions shown.  Look at source code of Targets book to see how Will gets tar_visnetwork() output without a real workflow -->
+    ```{r}
+    #| fig-height: 4 
+    tar_dir({
+      tar_script({
+        tar_option_set()
+        read_wrangle_data <- function(data_file) {
+          1
+        }
+        fit_model <- function(data) {
+          2
+        }
+        make_table <- function(data, model) {
+          3
+        }
+        list(
+          tar_target(data_file, ""),
+          tar_target(data, read_wrangle_data(data_file)),
+          tar_target(model, fit_model(data)),
+          tar_target(table, make_table(data, model))
+        )
+      })
+      tar_make(reporter = "silent")
+      tar_visnetwork()
+    })
+    ```
 
 ## Anatomy of a `targets` project
 
