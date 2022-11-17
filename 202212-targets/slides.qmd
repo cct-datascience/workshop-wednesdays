@@ -257,11 +257,11 @@ Using multiple arguments:
 join_data <- 
   function(weather_data, field_data) {
     #get dates into same format
-    field_data <- field_data %>%
+    field_data_clean <- field_data %>%
       mutate(date = lubridate::mdy(date))
     
     #join to weather data
-    left_join(field_data, weather_data, by = "date")
+    left_join(field_data_clean, weather_data, by = "date")
   }
 ```
 
@@ -327,6 +327,13 @@ list(
 -   One person shares screen and "drives"
 -   The other person "navigates"
 
+::: callout-tip
+Try starting with a target for the path to the data file.
+Remember to use `format = "file"` in `tar_target()`.
+
+Check your progress by running `tar_visnetwork()` and `tar_make()` frequently!
+:::
+
 <!-- hmm.. will the navigator feel like they miss out because they won't have a copy of the code at the end?  We can share the "solution" with everyone -->
 
 ```{r}
@@ -346,55 +353,97 @@ tar_meta(fields = error, complete_only = TRUE)
 
 If the error is in a function you wrote:
 
-1.  Use `tar_load()` to load necessary targets into environment
+1.  Use `tar_load("target_name")` to load necessary targets into environment
 2.  Use `tar_load_global()` to load functions and settings
 3.  Test your function in the console
 4.  Test function line by line
 
-::: notes
-Demo this by purposefully introducing an error in the demo project
-:::
+```{r}
+#| echo: true
+#| eval: false
+
+tar_load_global()
+tar_load(data_clean)
+
+fit_model(data_clean)
+```
+
+```{r}
+#| error: true
+fit_model <- function(data_clean) {
+  lm(y ~ x + z, data = df_cleaned)
+}
+fit_model(data_clean)
+```
+
+. . .
+
+```{r}
+#| filename: fit_model.R
+#| echo: true
+#| error: true
+#| code-line-numbers: "2"
+
+fit_model <- function(data_clean) {
+  lm(y ~ x + z, data = df_cleaned)
+}
+```
+
+```{r}
+#| error: true
+fit_model(data_clean)
+```
 
 <!-- At this point, maybe more time for debugging?? -->
 
 # Part 4: A Taste of What's Possible
 
-## Targetopia
+## Bayesian analyses with `targets`
 
-A family of packages to extend `targets`: <https://wlandau.github.io/targetopia/packages.html>
+::: columns
+::: column
+[![](https://docs.ropensci.org/stantargets/logo.svg){fig-align="center" width="300"}](https://docs.ropensci.org/stantargets/)
+:::
 
--   `tarchetypes`: Helpers for a variety of things
+::: column
+[![](https://docs.ropensci.org/jagstargets/logo.svg){fig-align="center" width="300"}](https://docs.ropensci.org/jagstargets/)
+:::
+:::
 
-    ```{r}
-    #| filename: _targets.R
-    #| eval: false
-    #| echo: true
-    library(targets)
-    library(tarchetypes)
+"target factories" for Bayesian analyses
 
-    tar_plan( #alternative to list()
-      tar_file(data_raw, "mydata.csv"),          #shortcut tar_* functions
-      data = read_csv(data_raw),                 #target_name = command
-      report = tar_render(report, "report.Rmd"), #render RMarkdown or Quarto
-      model = fit_model(data),                   #trailing comma is OK!
-    )
-    ```
+-   Simplify analyses by automatically creating targets for multiple steps
 
--   `stantargets` and `jagstargets`: "target factories" for Bayesian analyses
+-   E.g. defining a target with `tar_stan_mcmc()` actually generates multiple targets that wrangle data, run the MCMC, create a table of posterior draws, etc.
 
-    -   Simplify analyses by automatically creating targets for multiple steps
+## Tarchetypes
 
-    -   E.g. `tar_jags()` generates multiple targets for different steps of a JAGS analysis
+The `tarchetypes` package includes shortcuts and helpers to make `targets` easier to write and use.
+
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+library(targets)
+library(tarchetypes)
+
+tar_plan(                                    #<- alternative to list()
+  tar_file(data_raw, "mydata.csv"),          #<- shortcut tar_* functions
+  data = read_csv(data_raw),                 #<- target_name = command
+  report = tar_render(report, "report.Rmd"), #<- render RMarkdown or Quarto
+  model = fit_model(data),                   #<- trailing comma is OK!
+)
+```
 
 ## Parallel computation
 
-<!--# The refactor exercise is NOT a good example for this because the overhead for both clustermq and future (especially future) makes the pipeline take *longer* to run in parallell.  Something to discuss? -->
+In the workflow below, the three models and the three plot targets can all be run independently at the same time.
 
--   2 back-ends: `future` and `clustermq`
+![](img/pipeline_graph.png){fig-align="center" width="722"}
 
--   `future` is probably easier to install, and has other uses like `furrr` and `future.apply`
+<!--# The refactor exercise is NOT a good example for this because the overhead for both clustermq and future (especially future) makes the pipeline take *longer* to run in paralell.  Something to discuss? -->
 
--   `clustermq` is probably faster and more flexible
+-   `tar_make_future()` uses the `future` package and `tar_make_clustermq()` uses the `clustermq` package to run targets in parallel!
 
 -   Detailed discussion of pros and cons of both are in [the manual](https://books.ropensci.org/targets/hpc.html)
 
@@ -417,6 +466,8 @@ future::plan(future.callr::callr)
 tar_make_future(workers = 3)
 tar_make_clustermq(workers = 3)
 ```
+
+## Branching
 
 ## High Performance Computing
 
@@ -446,12 +497,5 @@ Use `options(clustermq.scheduler = "multicore")` or `future::plan(future.callr::
 -   Solution: store \_targets/ in the cloud with Amazon S3 buckets or Google Cloud Storage
 
 -   Targets stored in this way can be *versioned,* so if you roll back your `_targets.R` to a previous version, you don't have to re-run all the targets.
-
-## Branching
-
-How to describe??
-Look at targets book
-
-<!--# Need a closing slide still -->
 
 [^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.
