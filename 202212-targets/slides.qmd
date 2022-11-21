@@ -30,7 +30,8 @@ library(future.callr)
 
 #For our data wrangling and analysis:
 library(tidyverse)
-library(lubridate)
+library(janitor)
+library(car)n
 
 #for installing demos and course materials:
 library(usethis)
@@ -353,7 +354,7 @@ tar_meta(fields = error, complete_only = TRUE)
 
 If the error is in a function you wrote:
 
-1.  Use `tar_load("target_name")` to load necessary targets into environment
+1.  Use `tar_load(target_name)` to load necessary targets into environment
 2.  Use `tar_load_global()` to load functions and settings
 3.  Test your function in the console
 4.  Test function line by line
@@ -394,7 +395,32 @@ fit_model <- function(data_clean) {
 fit_model(data_clean)
 ```
 
+## Tarchetypes
+
+<!--# Maybe move this to end of Part 3 and expand a bit? -->
+
+The `tarchetypes` package includes shortcuts and helpers to make `targets` easier to write and use.
+
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+#| code-line-numbers: "1-4|5|6|7|8-9"
+library(targets)
+library(tarchetypes)
+
+tar_options_set()
+tar_source()
+tar_plan(                                    #<- alternative to list()
+  tar_file(data_raw, "mydata.csv"),          #<- shortcut tar_* functions
+  data = read_csv(data_raw),                 #<- target_name = command
+  report = tar_render(report, "report.Rmd"), #<- render RMarkdown or Quarto
+  model = fit_model(data),                   #<- trailing comma is OK!
+)
+```
+
 <!-- At this point, maybe more time for debugging?? -->
+
 
 # Part 4: A Taste of What's Possible
 
@@ -416,24 +442,6 @@ fit_model(data_clean)
 
 -   E.g. defining a target with `tar_stan_mcmc()` actually generates multiple targets that wrangle data, run the MCMC, create a table of posterior draws, etc.
 
-## Tarchetypes
-
-The `tarchetypes` package includes shortcuts and helpers to make `targets` easier to write and use.
-
-```{r}
-#| filename: _targets.R
-#| eval: false
-#| echo: true
-library(targets)
-library(tarchetypes)
-
-tar_plan(                                    #<- alternative to list()
-  tar_file(data_raw, "mydata.csv"),          #<- shortcut tar_* functions
-  data = read_csv(data_raw),                 #<- target_name = command
-  report = tar_render(report, "report.Rmd"), #<- render RMarkdown or Quarto
-  model = fit_model(data),                   #<- trailing comma is OK!
-)
-```
 
 ## Parallel computation
 
@@ -441,33 +449,51 @@ In the workflow below, the three models and the three plot targets can all be ru
 
 ![](img/pipeline_graph.png){fig-align="center" width="722"}
 
-<!--# The refactor exercise is NOT a good example for this because the overhead for both clustermq and future (especially future) makes the pipeline take *longer* to run in paralell.  Something to discuss? -->
-
 -   `tar_make_future()` uses the `future` package and `tar_make_clustermq()` uses the `clustermq` package to run targets in parallel!
 
 -   Detailed discussion of pros and cons of both are in [the manual](https://books.ropensci.org/targets/hpc.html)
 
-```{r}
-#| filename: _targets.R
-#| eval: false
-#| echo: true
-# clustermq settings
-options(clustermq.scheduler = "multicore")
+::: notes
+Demo by creating 3 dummy targets with Sys.sleep(5) and running with tar_make() vs. tar_make_clustermq().\
 
-#future settings
-future::plan(future.callr::callr)
-```
-
-```{r}
-#| filename: R console
-#| eval: false
-#| echo: true
-
-tar_make_future(workers = 3)
-tar_make_clustermq(workers = 3)
-```
+\
+The refactor exercise is NOT a good example for this because the overhead for both clustermq and future (especially future) makes the pipeline take \*longer\* to run in paralell.
+Something to discuss?
+:::
 
 ## Branching
+
+> Sometimes, a pipeline contains more targets than a user can comfortably type by hand.
+> For projects with hundreds of targets, branching can make the code in `_targets.R` shorter and more concise.
+
+::: incremental
+-   Branching lets you break repetitive tasks into separate targets for increased speed from parallelization
+
+-   E.g. fitting model to bootstraps of data
+:::
+
+. . .
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-line-numbers: "1-6|7-13"
+
+  #creates list of bootstrapped dataframes
+  tar_target(
+    data_boot,
+    purrr::map(1:100, ~sample_frac(data, size = 1, replace = TRUE)),
+    iteration = "list"
+  ),
+  # Fit model to each data frame, save results as a list
+  tar_target(
+    bill_lm_boot,
+    fit_lm_bill(data_boot),
+    pattern = map(data_boot),
+    iteration = "list"
+  ),
+
+```
 
 ## High Performance Computing
 
@@ -490,12 +516,12 @@ Use `options(clustermq.scheduler = "multicore")` or `future::plan(future.callr::
 
 ## Cloud Storage
 
--   \_targets/ folder is by default on your hard drive
+-   `_targets/` folder is by default on **your** hard drive
 
--   Workflow is reproducible by collaborator, but why should they have to wait for `tar_make()` to finish when you've already run it?
+-   Your collaborator can reproduce the whole workflow from the start with `tar_make()`, but what if that takes *days* and all they want to do is make changes at the end of the workflow?
 
--   Solution: store \_targets/ in the cloud with Amazon S3 buckets or Google Cloud Storage
+-   Solution: store \_targets/ in the cloud with [Amazon Web Services](https://books.ropensci.org/targets/data.html#aws-setup) or [Google Cloud](https://books.ropensci.org/targets/data.html#gcp-setup)
 
--   Targets stored in this way can be *versioned,* so if you roll back your `_targets.R` to a previous version, you don't have to re-run all the targets.
+-   BONUS: targets stored in this way can be *versioned,* so if you roll back your `_targets.R` to a previous version, you don't have to re-run all the targets.
 
 [^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.
