@@ -36,7 +36,7 @@ To introduce CALS researchers to better practices for sharing their code and res
     - *Tools*: markdown, Rmarkdown files, RPubs, RStudio Connect, GitHub
 
 ### General structure
-This workshop was originally taught as a series of 8 two-hour virtual sessions, meeting twice a week for four weeks. We have now added two sessions, such that the workshop series can extend fro 8, 9, or 10 sessions.  
+This workshop was originally taught as a series of 8 two-hour virtual sessions, meeting twice a week for four weeks. We have now added two sessions, such that the workshop series can extend for 8, 9, or 10 sessions.  
 
 Lesson 4 is an optional extension to explore the foundations of collaborating on GitHub, including forking, remotes, and pull requests. Lessons 6 thru 9 are now modular, meaning that they are independent of each other and can be mixed and matched depending on learner interest. 
 
@@ -138,8 +138,8 @@ Learners will practice how changes to code are tracked with version control and 
 2. [Software Carpentry Version Control with Git episode #2](https://swcarpentry.github.io/git-novice/02-setup/index.html)
 3. [Software Carpentry Version Control with Git episode #3](https://swcarpentry.github.io/git-novice/03-create/index.html)
 4. [Software Carpentry Version Control with Git episode #4](https://swcarpentry.github.io/git-novice/04-changes/index.html)
-5. [Software Carpentry Version Control with Git episode #5](https://swcarpentry.github.io/git-novice/05-history/index.html)
-6. (optional) [Software Carpentry Version Control with Git episode #6](https://swcarpentry.github.io/git-novice/06-ignore/index.html)
+5. [Software Carpentry Version Control with Git episode #6](https://swcarpentry.github.io/git-novice/06-ignore/index.html)
+6. (optional) [Software Carpentry Version Control with Git episode #5](https://swcarpentry.github.io/git-novice/05-history/index.html)
 
 ##### Review
 Ask students to share their diagram of their file system. Warm up with the review question in slide deck. 
@@ -175,8 +175,9 @@ Learners will share their local repository on GitHub and learn how to sync some 
 
 1. [Slides](https://docs.google.com/presentation/d/1u45oBwInH3HkDE0KbRUFeVK_-P1oP6PA-yjYPbNH7wM/edit#slide=id.p)
 2. [Software Carpentry Version Control with Git episode #6](https://swcarpentry.github.io/git-novice/06-ignore/index.html)
-3. [Software Carpentry Version Control with Git episode #7](https://swcarpentry.github.io/git-novice/07-github/index.html)
-4. [Software Carpentry branching add-on](http://erdavenport.github.io/git-lessons/10-branching.html)
+3. GitHub authentication with PAT using [Jenny Bryan's Git book chapter 9](https://happygitwithr.com/https-pat.html) or with ssh using [Software Carpentry Version Control #7](https://swcarpentry.github.io/git-novice/07-github/index.html) section #3
+4. [Software Carpentry Version Control with Git episode #7](https://swcarpentry.github.io/git-novice/07-github/index.html)
+5. [Software Carpentry branching add-on](http://erdavenport.github.io/git-lessons/10-branching.html)
 
 ##### Review
 If anyone turned a folder into a repository, share how that went. Ask students to navigate to previous repository, add new R file, and practice an add-commit cycle. 
@@ -184,7 +185,9 @@ If anyone turned a folder into a repository, share how that went. Ask students t
 ##### Modifications
  - Provide a large .csv file, ask students to move into pilot-analyses repo within a data folder using cd and filepaths
  - Use RStudio interface to create a new text file, save as .gitignore; explore how to suppress a specific file, files within a folder, and specific kinds of file extensions
- - Start #7 with SSH setup. `ssh-keygen -t ed25519 -C "username@laptop"` will create a .ssh file if one does not already exist
+ - Start remotes section with SSH setup, one of two options: 
+    1. SSH method. More difficult to explain and set up, but doesn't expire and applies to all repos. 
+    2. PAT method. Easier to set up, but requires additional R packages and is recommended to set to expire. 
  - Proceed to connecting local repository to GitHub repository; GitHub repository must be empty
  - Create new repository entitled `repro-DS-workshop` on GitHub; can include README, license, and .gitignore. Clone locally to wherever course materials are organized
  - Show how checking out a branch literally changes the local files
@@ -202,7 +205,6 @@ If Lesson 4 will not be taught, skim [tidyverse R style guide](https://style.tid
 Otherwise, connect personal repository to GitHub. 
 
 ---
-
 
 ### Lesson 4
 
@@ -229,13 +231,13 @@ If anyone connected a local repository to GitHub, share how that went. Ask stude
  - Show how distinct units of work can be separately submitted via branches
 
 #### Teaching notes
- - Have students fork a cct-datascience repo as an example of a real research compendium
+ - Have students fork a `cct-datascience` repo as an example of a real research compendium
  - Easy to check on learner progress by looking for who has and hasn't forked repo
 
 #### Homework
 Skim [tidyverse R style guide](https://style.tidyverse.org/index.html). What practice or guideline was new to you?
 
-Also, explore the upstream cct-datascience repo. What practices do you notices that are new or different from your own?
+Also, explore the upstream `cct-datascience` repo. What practices do you notices that are new or different from your own?
 
 ---
 
@@ -281,8 +283,7 @@ If lesson 4 was not covered, do the review section in lesson 4.
     - This is another nice way to keep track of learners' progress
 
 #### Homework
-
-Apply one or more of the organizing principles of a research compendium to an existing reserach project. 
+Apply one or more of the organizing principles of a research compendium to an existing research project. 
 
 ---
 
@@ -301,18 +302,22 @@ Learners will learn how to make their R code more reproducible using functions a
 3. [Data Carpentry for Biologists conditionals lecture](https://datacarpentry.org/semester-biology/materials/conditionals-R/)
 
 ##### Review
-Ask to share cleaning up of example script, their own script, or their research project folder from lesson 5. To review the first 4-5 sessions, we can play the [jeopardy-style game](https://jeopardylabs.com/play/data-science-workshop-review-sessions-1-4) in a non-competitive fashion. 
+Ask to share cleaning up of example script, their own script, or their research project folder from lesson 5. 
 
 ##### Modifications
 - For functions lecture, had them do only the "Use and Modify" exercise
 - From conditionals lecture, only did "if statements" section
 - From latter, only did "Basic If Statements" #2 exercise
 - Added on brief explanation of `ifelse`, using the example of `ifelse(length == 5, "correct", "incorrect")`
+- Mention `case_when` from dplyr for more complicated if & else steps
 
 #### Teaching notes
-- Create new R script for functions content, and another new R script for control flow (ifelse and for loops) content
-- Include real world examples of if and ifelse statements to motivate their use, especially for checking if files already exist
-- Demonstrate git add, commit, and push files or file changes at the end of each set of material
+- Before doing functions and conditions, demonstrate updating local `cct-organization` repo from upstream after adding a commit to the upstream
+- Create new R script for functions content, and another new R script for control flow (ifelse and for loops) content. Put both scripts into `repro-DS-workshop` repo
+- Mention functions are often used with for loops or apply statements
+- After functions, mention consistent order of sections in scripts; example is libraries, read in data, functions, executing functions
+- Include real world examples of `if` and `ifelse` statements to motivate their use, especially for checking if files already exist
+- Demonstrate making a new branch and opening up a pull request in their `repro-DS-workshop` repo at the end of each set of material; can merge pull request
 
 #### Homework
 Create a plan for applying these skills to their own research projects. Can apply different parts to different projects, or more integratively to one single project. Some possibilities: 
@@ -338,20 +343,23 @@ Learners will learn how to make their R code more reproducible using for loops a
 3. [Data Carpentry for Biologists iteration without loops lecture](https://datacarpentry.org/semester-biology/materials/iteration-without-loops-R/)? 
 
 #### Review
-Can share their plans for apply skills to their research
+Can share their plans for apply skills to their research. Lead optional discussion on when to use base R vs. tidyverse packages/functions. 
 
 ##### Modifications
-- What order to teach these in?
 - For for loops lecture:
     - At "Do Tasks 3-4...", do "Basic For Loop" exercises #2 & #3
     - Skip sections "Looping over multiple values" and "Looping with functions"
-    - If sufficient time, do "Storing loop results in a data frame", otherwise stop there
+    - Stop at "Looping over files" due to zip download issues
+- For apply lecture: 
+    - Do "Size Estimates With Maximum" exercise
+    - Do "Size Estimates Vectorized 2" exercise
+    - Stop after first section in "Other apply functions (optional)" section
 
 #### Teaching notes
- - Create new R script for these materials
- - Refine teaching indexing vs. non-indexing for loop methods, including when to use each
- - Unzipping locations.zip with R command `unzip` can cause errors; may need to manually unzip files or redownload files with download.file argument mode set to "wb"
- - Currently getting warnings from "Looping over files section" but wasn't able to troubleshoot, so used as a teaching opportunity to discuss warnings vs. errors
+ - Create new R script for these materials. Put script into `repro-DS-workshop` repo
+ - Emphasize using for loops using index or non-index methods. Index can be useful for reducing memory use and for storing results
+ - If time, demonstrate combining `if` and `for`
+ 
 
 #### Homework
 Identify a script from a research project that could benefit from a for loop, apply, conditional, or function. 
@@ -439,66 +447,77 @@ Learners will understand the purpose of a README and practice using Rmarkdown to
 2. Install R packages `rmarkdown` and `knitr`
 3. [Data Carpentry for Biologists knitr lecture](https://datacarpentry.org/semester-biology/materials/knitr/)
 
+#### Review
+Go through exercise for plotting using for loop
+
 ##### Modifications
-- No lesson materials for first section about READMEs
+- No lesson materials for first section about markdown
 - For Rmarkdown lesson: 
     - Simplify text used to spend less time typing
     - Save .Rmd file in newly created `docs` folder (to demonstrate project management)
     - Skip "Citations" section
     - Stop at "R Presentations" section
+- No lesson materials for third section about READMEs
 
 #### Teaching notes
-- Define README
+- Markdown
+    - Basis of a lot of documentation: READMEs, R Markdowns, hackmd, GitHub issues
+    - Plain text formatting, can be converted to HTML
+        - Compare file in RStudio to GitHub render
+        - [Transect runs README](https://github.com/KristinaRiemer/model-vignettes/tree/master/ED2/transect_runs) as example
+        - Supposed to be able to read plain text version easily
+    - Been around for almost two decades
+    - Simple and easy to read and format
+    - GUI vs. command line type approach
+        - Can do same things in Word/Google Doc but is more explicit and less point and click
+        - Also better for version control
+- R Markdown
+    - Better documentation of code
+    - Use cases: writing a lot of comments on code, other people will be looking at code/outputs, exploratory work with notes, write manuscripts
+    - Basis is markdown, but combines with chunks of R code
+    - Literate programming = combining text and code
+    - Create new branch called docs for this and README
+    - Do DC lesson
+    - Can publish these online (besides GH)
+        - RPubs or UA's RStudio Connect
+        - Push button in RStudio, point this out
+    - Quarto is next generation of R Markdown
+- READMEs
+    - R Markdown good for describing code and data within a script
+    - READMEs are good for documenting an entire project (GitHub repo)
     - Comes from software engineering
     - File that introduces and explains a project
+    - Show example: https://github.com/cct-datascience/rangeland-restore
+        - Look at raw
     - Contains info about other files and folders in a repo
     - Also package versions and installation instructions, how to contribute
     - Should go in main folder of project
     - Usually a plain text file
     - Name is in all upper case
-- Show an example of a README
-- GitHub encourages use of README
-    - Automatically asks to include one when creating new repo
-    - Automatically displays one on repo main page if there is one
-- Either have them create a new README from scratch, or we included one in the repo they forked so we had them open up the README in RStudio to edit later
-- Explanation of markdown
-    - What we can use to format README files and other plain text files
-    - History
-        - https://en.wikipedia.org/wiki/Markdown
-        - https://daringfireball.net/projects/markdown/
-    - Plain text formatting, can be converted to HTML
-    - Compare file in RStudio to GitHub render
-    - GUI vs. command line type approach
-        - Can do same things in Word/Google Doc but is more explicit and less point and click
-        - Also better for version control
-    - Simple and easy to read and format
+    - GitHub encourages use of README
+        - Automatically asks to include one when creating new repo
+        - Automatically displays one on repo main page if there is one
+    - Need to be updated regularly during project
+    - If time, create README in `repro-DS-workshop` repo listing project folder and file names with descriptions
+- GitHub issues
     - GitHub markdown specifically: https://guides.github.com/features/mastering-markdown/
-- Walk through use of GitHub issues, including markdown check box list
-    - Forked repos don't have issues included by default, change in repo settings
-- Practice markdown and README concepts by adding a "Project files" section to their forked local repo README, which can look similar to the example below: 
-
-```
- ### Project files
- 
- - `data_raw` folder
-   - `portal_data_joined.csv`: example data from [Portal project](https://portal.weecology.org/)
- - `scripts` folder
-   - `01-data-manipulation.R`: introduction to dplyr
- - `plots` folder
-```
-
-- Switch to introducing Rmarkdown
-    - Purpose is to share results as report, and possibly turn into manuscripts
-    - Combines markdown-formatted text with code
-- Do DC Rmarkdown lesson
-- Add, commit, and push .Rmd file
-- Demonstrate publishing Rmarkdowns on RPubs and RStudio Connect
-    - Show an example
-    - In RStudio, click blue publish button and select RPubs option
-- Walk through using GitHub project boards and wiki for project management
+    - Walk through use of GitHub issues, including markdown check box list 
+    - Example: https://github.com/genophenoenvo/neon-datasets/issues
+    - Forked repos don’t have issues included by default, change in repo settings
+- GitHub project boards & wikis
+    - Like kanban board
+    - Uses GH issues, in different categories
 
 #### Homework
 None
+
+---
+
+## Post-lesson followup sessions
+
+It is optional but encouraged to include one or two followup sessions in this workshop series after the lessons focused on content. These can be used to review material, such as the [Jeopardy game](https://jeopardylabs.com/play/data-science-workshop-review-sessions-1-4) that we created. It can be used to cover a small amount of other material, such as this session we did on "Tips for getting your code to work" (see [slides](https://docs.google.com/presentation/d/1T0emX_CyvRH9QDXGzYUq0bwTw2_Oi4PPra_DPYbBeC0/edit#slide=id.p)). And it can be used for attendees to present the work that they've done as demos or "show and tells". 
+
+---
 
 ## Technical notes
  - One early problem occurred when students were unsure of which 'Documents' or 'Desktop' folder they were saving to, which made navigating filepaths tricky. Note that on some PCs, the Windows OneDrive backup folders are saved to by default, but students should navigate to `C:/Users/username/Documents` or `C:/Users/username/Desktop`
