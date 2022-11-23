@@ -39,6 +39,9 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+# Mac history files
+.DS_Store
+
 # rsconnect
 202109-repro-data-sci/rsconnect/
 202210-quarto-website/rsconnect/
