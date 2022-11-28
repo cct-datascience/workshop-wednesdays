@@ -255,6 +255,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -276,6 +277,9 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
 pre code {
   padding: 0;
 }
@@ -295,8 +299,8 @@ pre code {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -304,16 +308,9 @@ pre code {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -694,8 +691,8 @@ practice developing new code on branches.</p>
 <li><a href="https://swcarpentry.github.io/git-novice/06-ignore/index.html">Software
 Carpentry Version Control with Git episode #6</a></li>
 <li>GitHub authentication with PAT using <a href="https://happygitwithr.com/https-pat.html">Jenny Bryan’s Git book
-chapter 9</a> or with ssh using <a href="https://swcarpentry.github.io/git-novice/07-github/index.html">Software
-Carpentry Version Control #7</a> section #3</li>
+chapter 9</a> or with ssh using <a href="https://swcarpentry.github.io/git-novice/07-github/index.html#3-ssh-background-and-setup">Software
+Carpentry Version Control #7, section 3</a></li>
 <li><a href="https://swcarpentry.github.io/git-novice/07-github/index.html">Software
 Carpentry Version Control with Git episode #7</a></li>
 <li><a href="http://erdavenport.github.io/git-lessons/10-branching.html">Software

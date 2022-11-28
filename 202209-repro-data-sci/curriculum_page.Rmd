@@ -175,7 +175,7 @@ Learners will share their local repository on GitHub and learn how to sync some 
 
 1. [Slides](https://docs.google.com/presentation/d/1u45oBwInH3HkDE0KbRUFeVK_-P1oP6PA-yjYPbNH7wM/edit#slide=id.p)
 2. [Software Carpentry Version Control with Git episode #6](https://swcarpentry.github.io/git-novice/06-ignore/index.html)
-3. GitHub authentication with PAT using [Jenny Bryan's Git book chapter 9](https://happygitwithr.com/https-pat.html) or with ssh using [Software Carpentry Version Control #7](https://swcarpentry.github.io/git-novice/07-github/index.html) section #3
+3. GitHub authentication with PAT using [Jenny Bryan's Git book chapter 9](https://happygitwithr.com/https-pat.html) or with ssh using [Software Carpentry Version Control #7, section 3](https://swcarpentry.github.io/git-novice/07-github/index.html#3-ssh-background-and-setup)
 4. [Software Carpentry Version Control with Git episode #7](https://swcarpentry.github.io/git-novice/07-github/index.html)
 5. [Software Carpentry branching add-on](http://erdavenport.github.io/git-lessons/10-branching.html)
 
