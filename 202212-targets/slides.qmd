@@ -2,18 +2,21 @@
 title: "Managing complicated research workflows in R with {targets}"
 author: Eric R. Scott
 format: 
-  uaz-revealjs:
+  revealjs:
     fontsize: 1.9em
+    theme: 
+    - "_extensions/cct-datascience/uaz/theme.scss"
+    - "custom.scss"
 editor: visual
 ---
+
+## Before we get started
 
 ```{r}
 #| echo: false
 library(countdown)
 library(targets)
 ```
-
-## Before we get started
 
 You'll need the following R packages today:
 
@@ -25,13 +28,13 @@ You'll need the following R packages today:
 library(targets)
 library(tarchetypes)
 library(visNetwork)
-library(future)
-library(future.callr)
+library(future) #optional
+library(future.callr) #optional
 
 #For our data wrangling and analysis:
 library(tidyverse)
 library(janitor)
-library(car)n
+library(car)
 
 #for installing demos and course materials:
 library(usethis)
@@ -42,17 +45,19 @@ library(usethis)
 
 ## Moving Toward Reproducibility
 
--   Reproducibility vs. replicability
+Working toward reproducible analyses benefits:
 
--   Why bother?
+-   You in the future
 
-    -   For you in the future
+-   Your collaborators
 
-    -   For your collaborators
+-   The greater community
 
-    -   For the greater community
+![Image from: Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst](img/horst-repro.jpg){fig-alt="Cute fuzzy monsters putting rectangular data tables onto a conveyor belt. Along the conveyor belt line are different automated “stations” that update the data, reading “WRANGLE”, “VISUALIZE”, and “MODEL”. A monster at the end of the conveyor belt is carrying away a table that reads “Complete analysis.”" fig-align="center"}
 
-    <!--# Look at Jenny Bryan's slides maybe and see if there are good images to use -->
+::: notes
+How many have taken a workshop on reproduciblity?
+:::
 
 ##  {#scenario1-1}
 
@@ -91,6 +96,8 @@ library(usethis)
 -   Run your entire analysis with one master command
 
 -   Skip steps that don't need to be re-run
+
+-   Scaleable
 :::
 
 ::: {.column width="30%"}
@@ -99,6 +106,11 @@ library(usethis)
 :::
 
 ![](img/pipeline_graph.png){fig-align="center" width="722"}
+
+::: notes
+Similar to make (language agnostic), or snakemake (for Python)\
+scaleable = able to run with multiple cores, on HPC, using cloud storage
+:::
 
 # Part 2: Demonstration
 
@@ -166,7 +178,7 @@ usethis::use_course("cct-datascience/targets-demo")
 
     3.  Should ***not*** be tracked in version control
 
-# Part 3: Exercise
+# Part 3: Refactoring Exercise
 
 ## Refactoring a project to use `targets`
 
@@ -218,6 +230,7 @@ use_targets()
 Figure out what packages are needed and add them to `tar_option_set()` in `_targets.R`.
 
 ```{r}
+#| filename: _targets.R
 #| eval: false
 #| echo: true
 tar_option_set(
@@ -317,8 +330,8 @@ fit_model <- function(data_clean) {
 #| eval: false
 #| echo: true
 list(
-  tar_target(data_raw, "data/mydata.csv", format = "file"),
-  tar_target(data, read_wrangle_data(data_raw))
+  tar_target(data_file, "data/mydata.csv", format = "file"),
+  tar_target(data, read_wrangle_data(data_file))
 )
 ```
 
@@ -346,7 +359,9 @@ countdown(minutes = 10)
 -   Errors in `tar_make()` are sometimes uninformative because code is run in a separate R session
 -   Use `tar_meta()` to access error messages
 
-``` r
+```{r}
+#| eval: false
+#| echo: true
 tar_meta(fields = error, complete_only = TRUE)
 ```
 
@@ -405,7 +420,7 @@ The `tarchetypes` package includes shortcuts and helpers to make `targets` easie
 #| filename: _targets.R
 #| eval: false
 #| echo: true
-#| code-line-numbers: "1-4|5|6|7|8-9"
+#| code-line-numbers: "2|6|7|8|9|10"
 library(targets)
 library(tarchetypes)
 
@@ -420,7 +435,6 @@ tar_plan(                                    #<- alternative to list()
 ```
 
 <!-- At this point, maybe more time for debugging?? -->
-
 
 # Part 4: A Taste of What's Possible
 
@@ -441,7 +455,6 @@ tar_plan(                                    #<- alternative to list()
 -   Simplify analyses by automatically creating targets for multiple steps
 
 -   E.g. defining a target with `tar_stan_mcmc()` actually generates multiple targets that wrangle data, run the MCMC, create a table of posterior draws, etc.
-
 
 ## Parallel computation
 
@@ -487,8 +500,8 @@ Something to discuss?
   ),
   # Fit model to each data frame, save results as a list
   tar_target(
-    bill_lm_boot,
-    fit_lm_bill(data_boot),
+    lm_boot,
+    fit_lm_full(data_boot),
     pattern = map(data_boot),
     iteration = "list"
   ),
@@ -523,5 +536,35 @@ Use `options(clustermq.scheduler = "multicore")` or `future::plan(future.callr::
 -   Solution: store \_targets/ in the cloud with [Amazon Web Services](https://books.ropensci.org/targets/data.html#aws-setup) or [Google Cloud](https://books.ropensci.org/targets/data.html#gcp-setup)
 
 -   BONUS: targets stored in this way can be *versioned,* so if you roll back your `_targets.R` to a previous version, you don't have to re-run all the targets.
+
+## Wrap-up
+
+When to use `targets`?
+Things to consider:
+
+::: incremental
+-   Benefits of paralellization
+
+-   Your collaborators
+
+-   Your comfort using `targets`
+:::
+
+. . .
+
+"Real life" examples of `targets` workflows:
+
+-   <https://github.com/BrunaLab/lagged-ipms> (uses HPC to run dynamic branches in parallel)
+-   <https://github.com/odaniel1/track-cycling> (uses `stantargets`)
+-   <https://github.com/ecohealthalliance/mpx-diagnosis> (medium complexity)
+-   <https://github.com/noamross/reprotemplate> (nice template for reproducibility that uses `targets`)
+
+## Resources
+
+-   [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours) every Tuesday morning
+
+-   [Make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help
+
+-   Sign up for our [mailing list](https://app.e2ma.net/app2/audience/signup/1965047/1923145/) to be notified about future workshops
 
 [^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.
