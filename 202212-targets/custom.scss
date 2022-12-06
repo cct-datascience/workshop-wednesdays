@@ -15,3 +15,8 @@ $code-color: white;
 div.cell-output-display {
   background: white !important;
 }
+
+// make logo larger
+.reveal .slide-logo {
+  max-height: 3rem !important;
+}
