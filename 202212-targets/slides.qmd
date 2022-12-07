@@ -43,6 +43,8 @@ library(usethis)
 
 ```
 
+Slides available here: <https://viz.datascience.arizona.edu/targets-slides/>
+
 ## Learning Objectives
 
 ::: incremental
