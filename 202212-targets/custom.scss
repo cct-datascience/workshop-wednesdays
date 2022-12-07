@@ -1,0 +1,22 @@
+/*-- scss:defaults --*/
+
+$font-family-monospace: Menlo, monospace;
+$code-bg: #001C48;
+$code-color: white;
+
+/*-- scss:rules --*/
+
+// reduce size of inline code to better match text
+.reveal p code {
+  font-size: 85%;
+}
+
+// set background of tar_visnetwork()
+div.cell-output-display {
+  background: white !important;
+}
+
+// make logo larger
+.reveal .slide-logo {
+  max-height: 2.5rem !important;
+}
