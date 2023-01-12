@@ -1,0 +1,25 @@
+/*-- scss:defaults --*/
+
+// fonts
+$font-family-sans-serif: "Proxima Nova", Calibri, sans-serif !default;
+
+// colors from https://brand.arizona.edu/applying-the-brand/colors
+$body-bg: #1E5288 !default; //"azurite"
+$body-color: white !default;
+$link-color: #EF4056 !default; //"bloom"--also controls tabset links, highlight color, and hover over code line numbers color
+$code-block-bg: #001C48 !default; //"midnight"--background of code boxes
+$tabset-border-color: white !default;
+
+// headings
+$presentation-heading-color: white !default;
+
+/*-- scss:rules --*/
+
+.reveal pre code {
+  //set code output background same as code background
+  background-color: $code-block-bg; 
+}
+
+.reveal div.sourceCode {
+  margin-bottom: 10px !important;
+}
