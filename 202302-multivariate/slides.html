@@ -434,22 +434,8 @@ Eric R. Scott
 <section id="what-is-multivariate-data" class="slide level2">
 <h2>What is “multivariate” data?</h2>
 <ul>
-<li>Many things measured on the same sample/observation</li>
-</ul>
-<!-- -->
-<ul>
-<li><p><em>response</em> is many variables = “multivariate”</p>
-<details>
-<summary>
-<p>Examples:</p>
-</summary>
-<ul>
-<li><p>How is species composition impacted by burning?</p></li>
-<li><p>How are plant metabolites impacted by herbivory?</p></li>
-<li><p>How does treatment effect gene expression?</p></li>
-</ul>
-</details></li>
-<li><p>Many correlated predictor variables = “multivariable”</p>
+<li><p>Many things measured on the same sample/observation</p></li>
+<li><p>Multiple predictor/independent variables = “multivariable”</p>
 <details>
 <summary>
 <p>Examples:</p>
@@ -460,15 +446,27 @@ Eric R. Scott
 <li><p>How does gene expression effect disease state?</p></li>
 </ul>
 </details></li>
-<li><p>“Multivariate” often used for both situations</p></li>
+<li><p>Multiple response/dependent variables = “multivariate”</p>
+<details>
+<summary>
+<p>Examples:</p>
+</summary>
+<ul>
+<li><p>How is species composition impacted by burning?</p></li>
+<li><p>How are plant metabolites impacted by herbivory?</p></li>
+<li><p>How does treatment effect gene expression?</p></li>
 </ul>
-</section>
+</details></li>
+<li><p>“Multivariate” often used for both situations <sup>1</sup></p></li>
+</ul>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="citation" data-cites="hidalgo2013">Hidalgo and Goodman (<a href="#/further-reading" role="doc-biblioref" onclick="">2013</a>)</span></p></li></ol></aside></section>
 <section id="challenges-of-multivariate-data" class="slide level2">
 <h2>Challenges of multivariate data</h2>
 <ul>
 <li><p>“Traditional” statistics can’t handle multiple response variables</p></li>
-<li><p>Variables are often correlated and not fully independent (“multicollinearity”</p></li>
+<li><p>Variables are often correlated and not fully independent (“multicollinearity”)</p></li>
 <li><p>More variables than observations (“curse of dimensionality”)</p></li>
+<li><p>How to determine importance of individual variables</p></li>
 </ul>
 </section>
 <section id="cupcakes-vs.-muffins" class="slide level2">
@@ -515,11 +513,15 @@ Eric R. Scott
 
 </div>
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-hidalgo2013" class="csl-entry" role="doc-biblioentry">
+Hidalgo, Bertha, and Melody Goodman. 2013. <span>“Multivariate or Multivariable Regression?”</span> <em>American Journal of Public Health</em> 103 (1): 39–40. <a href="https://doi.org/10.2105/ajph.2012.300897">https://doi.org/10.2105/ajph.2012.300897</a>.
+</div>
 <div id="ref-scott2021" class="csl-entry" role="doc-biblioentry">
 Scott, Eric R., and Elizabeth E. Crone. 2021. <span>“Using the Right Tool for the Job: The Difference Between Unsupervised and Supervised Analyses of Multivariate Ecological Data.”</span> <em>Oecologia</em> 196 (1): 13–25. <a href="https://doi.org/10.1007/s00442-020-04848-w">https://doi.org/10.1007/s00442-020-04848-w</a>.
 </div>
 </div>
 </section>
+
     </div>
   </div>
 

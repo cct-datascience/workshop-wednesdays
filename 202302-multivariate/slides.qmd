@@ -21,24 +21,7 @@ bibliography: references.bib
 
 -   Many things measured on the same sample/observation
 
-```{=html}
-<!-- -->
-```
--   *response* is many variables = "multivariate"
-
-    <details>
-
-    <summary>Examples:</summary>
-
-    -   How is species composition impacted by burning?
-
-    -   How are plant metabolites impacted by herbivory?
-
-    -   How does treatment effect gene expression?
-
-    </details>
-
--   Many correlated predictor variables = "multivariable"
+-   Multiple predictor/independent variables = "multivariable"
 
     <details>
 
@@ -52,15 +35,31 @@ bibliography: references.bib
 
     </details>
 
--   "Multivariate" often used for both situations
+-   Multiple response/dependent variables = "multivariate"
+
+    <details>
+
+    <summary>Examples:</summary>
+
+    -   How is species composition impacted by burning?
+
+    -   How are plant metabolites impacted by herbivory?
+
+    -   How does treatment effect gene expression?
+
+    </details>
+
+-   "Multivariate" often used for both situations [^1]
 
 ## Challenges of multivariate data
 
 -   "Traditional" statistics can't handle multiple response variables
 
--   Variables are often correlated and not fully independent ("multicollinearity"
+-   Variables are often correlated and not fully independent ("multicollinearity")
 
 -   More variables than observations ("curse of dimensionality")
+
+-   How to determine importance of individual variables
 
 ## Cupcakes vs. Muffins
 
@@ -109,3 +108,5 @@ PCA example with 2 dimensions
 -   Herve et al. paper
 
 -   ???
+
+[^1]: @hidalgo2013
