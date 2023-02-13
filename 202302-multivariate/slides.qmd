@@ -1,0 +1,111 @@
+---
+title: "Multivariate Statistics: Using the Right Tool for the Job"
+author: "Eric R. Scott"
+format: revealjs
+editor: visual
+bibliography: references.bib
+---
+
+## Learning Objectives
+
+::: nonincremental
+-   Understand when to apply multivariate tools
+-   Interpret the outputs of multivariate analyses
+-   Understand the difference between supervised/constrained and unsupervised/unconstrained
+-   Match research questions to supervised/unsupervised analyses
+-   Understand consequences of using the "wrong" analysis for the question
+-   Gain familiarity with jargon and common multivariate techniques
+:::
+
+## What is "multivariate" data?
+
+-   Many things measured on the same sample/observation
+
+```{=html}
+<!-- -->
+```
+-   *response* is many variables = "multivariate"
+
+    <details>
+
+    <summary>Examples:</summary>
+
+    -   How is species composition impacted by burning?
+
+    -   How are plant metabolites impacted by herbivory?
+
+    -   How does treatment effect gene expression?
+
+    </details>
+
+-   Many correlated predictor variables = "multivariable"
+
+    <details>
+
+    <summary>Examples:</summary>
+
+    -   How does species composition effect ecosystem productivity?
+
+    -   How does plant metabolite blend effect herbivory?
+
+    -   How does gene expression effect disease state?
+
+    </details>
+
+-   "Multivariate" often used for both situations
+
+## Challenges of multivariate data
+
+-   "Traditional" statistics can't handle multiple response variables
+
+-   Variables are often correlated and not fully independent ("multicollinearity"
+
+-   More variables than observations ("curse of dimensionality")
+
+## Cupcakes vs. Muffins
+
+### Are muffins just an excuse to eat cake for breakfast?
+
+-   Sample of 30 cupcake & muffin recipes scraped from allrecipes.com with frosting ingredients removed
+
+-   40 ingredients, units standardized in US cups (although this is not necessary for multivariate data analysis)
+
+-   You can think of the ingredients for each recipe like species, gene transcripts, chemicals, OTUs, or whatever fits your discipline
+
+-   You can think of `type` (cupcake or muffin) as whatever predictor variable makes sense
+
+Code [here](https://github.com/Aariq/cupcakes-vs-muffins) (unfortunately scraping script is broken because website changed)
+
+```{r}
+#| echo: true
+#| eval: false
+
+#TODO pre-wrangle and put somewhere with a simpler URL
+library(readr)
+nofrosting_raw <- read_rds("https://github.com/Aariq/cupcakes-vs-muffins/raw/master/data/nofrosting_wide.rds")
+nofrosting_raw
+RNGversion("3.1.1")
+set.seed(888)
+nofrosting <-
+  nofrosting_raw %>%
+  sample_n(30) %>%  
+  #puts factor names in title case for prettier plots
+  mutate(type = fct_relabel(type, tools::toTitleCase))
+nofrosting
+```
+
+## Unsupervised/unconstrained
+
+PCA example with 2 dimensions
+
+## Supervised/constrained
+
+## Further Reading
+
+-   https://www.ericrscott.com/post/cupcakes-vs-muffins-round-2/
+
+-   @scott2021
+
+-   Herve et al. paper
+
+-   ???
