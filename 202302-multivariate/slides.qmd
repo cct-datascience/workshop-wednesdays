@@ -1,7 +1,11 @@
 ---
 title: "Multivariate Statistics: Using the Right Tool for the Job"
 author: "Eric R. Scott"
-format: revealjs
+format: 
+  revealjs:
+    code-copy: true
+    code-link: true
+    df-print: kable
 editor: visual
 bibliography: references.bib
 ---
@@ -63,9 +67,7 @@ bibliography: references.bib
 
 ## Cupcakes vs. Muffins
 
-### Are muffins just an excuse to eat cake for breakfast?
-
--   Sample of 30 cupcake & muffin recipes scraped from allrecipes.com with frosting ingredients removed
+-   Sample of 30 cupcake & muffin recipes scraped from allrecipes.com with frosting ingredients removed[^2]
 
 -   40 ingredients, units standardized in US cups (although this is not necessary for multivariate data analysis)
 
@@ -73,40 +75,152 @@ bibliography: references.bib
 
 -   You can think of `type` (cupcake or muffin) as whatever predictor variable makes sense
 
-Code [here](https://github.com/Aariq/cupcakes-vs-muffins) (unfortunately scraping script is broken because website changed)
+## The Data
+
+<!--TODO: change read_csv path to URL somewhere -->
 
 ```{r}
 #| echo: true
-#| eval: false
-
-#TODO pre-wrangle and put somewhere with a simpler URL
+#| eval: true
+#| 
 library(readr)
-nofrosting_raw <- read_rds("https://github.com/Aariq/cupcakes-vs-muffins/raw/master/data/nofrosting_wide.rds")
-nofrosting_raw
-RNGversion("3.1.1")
-set.seed(888)
-nofrosting <-
-  nofrosting_raw %>%
-  sample_n(30) %>%  
-  #puts factor names in title case for prettier plots
-  mutate(type = fct_relabel(type, tools::toTitleCase))
-nofrosting
+baked_goods <- read_csv("baked_goods.csv")
+head(baked_goods)
 ```
 
-## Unsupervised/unconstrained
+## Unsupervised/unconstrained {.smaller}
 
-PCA example with 2 dimensions
+-   Exploratory
+-   Finds axes that explain the ***variation*** in the data
+-   Single-sided equation (no dependent/independent variables)
 
-## Supervised/constrained
+![](img/pca.png){fig-align="center"}
+
+## Supervised/constrained {.smaller}
+
+-   Explanatory
+-   Finds axes that best separate multivariate data along some variable (e.g. cupcakes vs. muffins)
+
+![](img/plsda.png){fig-align="center"}
+
+## Results: unsupervised (PCA)
+
+-   Explain score and loading/correlation
+
+-   Ask audience for description of axes
+
+-   Are cupcakes and muffins separated along those axes?
+
+## Results: supervised (PLS-DA)
+
+-   Explain what PLS-DA does
+
+-   Ask audience for description of axes
+
+-   Are cupcakes and muffins separated along those axes?
+
+-   Which explains more variation in the data?
+
+-   Which method better explains difference between cupcakes and muffins?
+
+## Use the right tool for the job
+
+-   How to match question to method
+
+-   Probably almost always want a supervised method of some kind if you're testing a hypothesis (e.g., rarely want to do PCA regression)
+
+## R Packages
+
+::: incremental
+-   There are *many* R packages for multivariate data analysis, but not one *perfect* package
+
+-   `vegan` is a good toolkit, with extensive documentation, but the language is very specific to community ecology
+
+-   `ropls` a good option if you're interested in PCA or PLS and its variants (a supervised technique), but the UI is *unusual* and it uses S4 objects which are harder to work with
+
+-   `ade4` package is a good toolkit, but documentation is terse and written for someone who is already a stats wiz
+
+-   If you just need principal components analysis (PCA), this can be done in base R with `prcomp()`
+:::
+
+## Code (temp)
+
+```{r}
+library(tidyverse)
+library(vegan)
+ingredients <- 
+  baked_goods |>
+  select(-type, -recipe_id)
+
+#pca with base R
+pca <- prcomp(ingredients, scale. = TRUE)
+summary(pca)
+
+
+biplot(pca)
+library(AMR) #for ggplot_pca()
+ggplot_pca(pca, groups = baked_goods$type)
+```
+
+```{r}
+library(ropls)
+pca <- opls(x = ingredients)
+plot(
+  pca,
+  typeVc = "x-score",
+  parAsColFcVn = baked_goods$type,
+  parLabVc = as.character(baked_goods$recipe_id)
+)
+plot(pca, typeVc = "correlation")
+```
+
+```{r}
+pls <- opls(x = ingredients, y = baked_goods$type)
+pls <- opls(x = ingredients, y = baked_goods$type, predI = 1, orthoI = NA)
+plot(pls, typeVc = "x-score")
+plot(pls, typeVc = "correlation")
+plot(pls, typeVc = "x-loading")
+
+library(vegan)
+m <- rda(ingredients ~ baked_goods$type, scale = TRUE)
+anova(m)
+plot(m)
+```
+
+## Now you try
+
+-   penguins
+
+-   muir dataset (@scott2021 )
+
+-   some kinda gene one???
+
+## Methods and when to use them (a non-exhaustive list)
+
+Unsupervised:
+
+-   PCA
+
+-   PCoA
+
+-   NMDS
+
+Supervised:
+
+-   (O)PLS(-DA)
+
+-   RDA
+
+-   CCA
+
+-   
 
 ## Further Reading
 
--   https://www.ericrscott.com/post/cupcakes-vs-muffins-round-2/
+-   https://mran.microsoft.com/snapshot/2014-12-11/web/views/Multivariate.html
 
--   @scott2021
-
--   Herve et al. paper
-
--   ???
+<!-- refs show up here -->
 
 [^1]: @hidalgo2013
+
+[^2]: More about this dataset: [@scott2019]
