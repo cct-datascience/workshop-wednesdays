@@ -12,32 +12,30 @@ bibliography: references.bib
 
 ## Learning Objectives
 
+```{r setup}
+#| include: false
+
+library(tidyverse)
+library(ropls)
+library(chemhelper)
+library(ggrepel)
+library(patchwork)
+
+```
+
 ::: nonincremental
 -   Understand when to apply multivariate tools
--   Interpret the outputs of multivariate analyses
 -   Understand the difference between supervised/constrained and unsupervised/unconstrained
+-   Interpret score and loading plots
 -   Match research questions to supervised/unsupervised analyses
--   Understand consequences of using the "wrong" analysis for the question
--   Gain familiarity with jargon and common multivariate techniques
+-   Implement PCA and PLS-DA with R code
 :::
 
 ## What is "multivariate" data?
 
 -   Many things measured on the same sample/observation
 
--   Multiple predictor/independent variables = "multivariable"
-
-    <details>
-
-    <summary>Examples:</summary>
-
-    -   How does species composition effect ecosystem productivity?
-
-    -   How does plant metabolite blend effect herbivory?
-
-    -   How does gene expression effect disease state?
-
-    </details>
+. . .
 
 -   Multiple response/dependent variables = "multivariate"
 
@@ -53,10 +51,29 @@ bibliography: references.bib
 
     </details>
 
--   "Multivariate" often used for both situations [^1]
+. . .
+
+-   Multiple predictor/independent variables = "multivariable"
+
+    <details>
+
+    <summary>Examples:</summary>
+
+    -   How does species composition effect ecosystem productivity?
+
+    -   How does plant metabolite blend effect herbivory?
+
+    -   How does gene expression effect disease state?
+
+    </details>
+
+. . .
+
+-   "Multivariate" is often used to describe both [@hidalgo2013]
 
 ## Challenges of multivariate data
 
+::: incremental
 -   "Traditional" statistics can't handle multiple response variables
 
 -   Variables are often correlated and not fully independent ("multicollinearity")
@@ -64,16 +81,19 @@ bibliography: references.bib
 -   More variables than observations ("curse of dimensionality")
 
 -   How to determine importance of individual variables
+:::
 
 ## Cupcakes vs. Muffins
 
--   Sample of 30 cupcake & muffin recipes scraped from allrecipes.com with frosting ingredients removed[^2]
+::: incremental
+-   Sample of 30 cupcake & muffin recipes scraped from allrecipes.com with frosting ingredients removed[^1]
 
 -   40 ingredients, units standardized in US cups (although this is not necessary for multivariate data analysis)
 
 -   You can think of the ingredients for each recipe like species, gene transcripts, chemicals, OTUs, or whatever fits your discipline
 
--   You can think of `type` (cupcake or muffin) as whatever predictor variable makes sense
+-   You can think of `type` (cupcake or muffin) as whatever treatment or site difference fits your discipline
+:::
 
 ## The Data
 
@@ -83,7 +103,6 @@ bibliography: references.bib
 #| echo: true
 #| eval: true
 #| 
-library(readr)
 baked_goods <- read_csv("baked_goods.csv")
 head(baked_goods)
 ```
@@ -105,14 +124,133 @@ head(baked_goods)
 
 ## Results: unsupervised (PCA)
 
+```{r}
+#| include: false
+#| cache: true
+
+# Do PCA
+baked_pca <-
+  opls(
+    dplyr::select(baked_goods, -type, -recipe_id), #the data
+       fig.pdfC = "none" #suppresses default plot
+    )
+
+# Score plot with chemhelper package
+pca_score_plot <- 
+  plot_pca(baked_pca, group_var = baked_goods$type) +
+  theme(legend.position = "bottom")
+
+# Loadings
+pca_scores <- get_scores(baked_pca)
+
+pca_data <-
+  baked_pca@suppLs$xModelMN |> 
+  as_tibble()
+
+pca_cor_dat <-
+  cor(pca_scores[2:3], pca_data) %>%
+    t() %>%
+    as_tibble(rownames = "variable") %>% 
+  rowwise() %>% 
+  mutate(distance = sqrt(sum((c(p1, p2) - c(0, 0))^2))) %>% 
+  ungroup
+# pca.cor.dat
+
+pca_cor_plot <-
+  ggplot(pca_cor_dat) +
+  geom_segment(aes(x = 0, y = 0, xend = p1, yend = p2),
+               arrow = arrow(length = unit(0.15, "cm"))) +
+  geom_label_repel(
+    aes(x = p1, y = p2, label = variable),
+    segment.alpha = 0.6,
+    direction = "y",
+    size = 3,
+    point.padding = 0.2,
+    min.segment.length = 0,
+    force = 5
+  ) +
+  theme_bw() +
+  xlim(-0.6, 1) +
+  labs(x = "Correlation to PC1",
+       y = "Correlation to PC2",
+       title = "PCA correlation plot")
+
+```
+
+```{r}
+#| echo: false
+pca_score_plot | pca_cor_plot
+```
+
+::: notes
 -   Explain score and loading/correlation
 
 -   Ask audience for description of axes
 
 -   Are cupcakes and muffins separated along those axes?
+:::
 
 ## Results: supervised (PLS-DA)
 
+```{r}
+#| include: false
+#| cache: true
+
+baked_plsda <-
+  opls(
+    dplyr::select(baked_goods, -type, -recipe_id), #X data
+    baked_goods$type, #Y data
+    fig.pdfC = "none", #suppresses default plotting
+    predI = 1, #make one predictive axis
+    orthoI = 1, #and one orthogonal axis
+    permI = 300  #use 300 permutations to generate a p-value
+  )
+
+pls_score_plot <- plot_oplsda(baked_plsda) + theme(legend.position = "bottom")
+
+pls_scores <- get_scores(baked_plsda)
+
+pls_data <- 
+  baked_plsda@suppLs$xModelMN %>%
+  as_tibble()
+
+pls_cor_dat <-
+  cor(pls_scores[3:4], pls_data) %>%
+    t() %>%
+    as_tibble(rownames = "variable")
+
+pls_cor_plot <-
+  ggplot(pls_cor_dat) +
+  geom_segment(aes(
+    x = 0,
+    y = 0,
+    xend = p1,
+    yend = o1
+  ),
+  arrow = arrow(length = unit(0.15, "cm"))) +
+  geom_label_repel(
+    aes(x = p1, y = o1, label = variable),
+    segment.alpha = 0.6,
+    direction = "y",
+    size = 2.7,
+    min.segment.length = 0,
+    force = 5,
+    box.padding = 0.3
+  ) +
+  theme_bw() +
+  labs(x = "Correlation to Axis 1",
+       y = "Correlation to Axis 2",
+       title = "PLS correlation plot")
+```
+
+```{r}
+#| echo: false
+
+pls_score_plot | pls_cor_plot
+
+```
+
+::: notes
 -   Explain what PLS-DA does
 
 -   Ask audience for description of axes
@@ -122,26 +260,97 @@ head(baked_goods)
 -   Which explains more variation in the data?
 
 -   Which method better explains difference between cupcakes and muffins?
+:::
 
 ## Use the right tool for the job
 
--   How to match question to method
+Two **different** questions answered:
 
--   Probably almost always want a supervised method of some kind if you're testing a hypothesis (e.g., rarely want to do PCA regression)
+1.  Unsupervised: Do muffins and cupcakes differ *in the ingredients that vary most among them*?
+2.  Supervised: Do muffins and cupcakes differ? What ingredients make them different?
 
-## R Packages
+. . .
+
+::: callout-important
+Most of the time, if you are looking to test a hypothesis, you have a **supervised** type question [@scott2021].
+:::
+
+## R Packages for Multivariate Analysis {.smaller}
 
 ::: incremental
 -   There are *many* R packages for multivariate data analysis, but not one *perfect* package
 
 -   `vegan` is a good toolkit, with extensive documentation, but the language is very specific to community ecology
 
--   `ropls` a good option if you're interested in PCA or PLS and its variants (a supervised technique), but the UI is *unusual* and it uses S4 objects which are harder to work with
+-   [`ropls` a good option if you're interested in PCA or PLS and its variants (a supervised technique), but the UI is *unusual* and it uses S4 objects which are harder to work with]{.rn}
 
 -   `ade4` package is a good toolkit, but documentation is terse and written for someone who is already a stats wiz
 
 -   If you just need principal components analysis (PCA), this can be done in base R with `prcomp()`
 :::
+
+## PCA with base R
+
+1.  Extract just the ingredients columns
+
+```{r}
+#| echo: true
+library(dplyr)
+ingredients <- baked_goods |> select(-type, -recipe_id)
+head(ingredients)
+```
+
+## PCA with base R
+
+2.  Do PCA with `prcomp()`
+
+```{r}
+#| echo: true
+baked_pca <- prcomp(ingredients, scale. = TRUE)
+```
+
+::: callout-note
+It is usually advised to scale and center variables before doing multivariate analyses like PCA.
+You can do this in `prcomp()` with the `scale. = TRUE` argument, or before running PCA using the `scale()` function.
+:::
+
+## PCA with base R
+
+3.  Inspect results and decide how many axes to "retain"
+
+```{r}
+#| echo: true
+summary(baked_pca)
+```
+
+## PCA with base R
+
+4.  Visualize results
+
+```{r}
+#| echo: true
+# biplot
+biplot(baked_pca)
+
+#or extract scores and loadings and build your own!
+scores <- baked_pca$x
+loadings <- baked_pca$rotation
+```
+
+## Now you try!
+
+```{r}
+
+```
+
+## PCA with `ropls`
+
+1.  Install `ropls`
+
+```{r}
+#install bioconductor
+#use bioconductor to install ropls
+```
 
 ## Code (temp)
 
@@ -221,6 +430,4 @@ Supervised:
 
 <!-- refs show up here -->
 
-[^1]: @hidalgo2013
-
-[^2]: More about this dataset: [@scott2019]
+[^1]: More about this dataset: [@scott2019]
