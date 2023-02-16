@@ -5,7 +5,7 @@ format:
   revealjs:
     code-copy: true
     code-link: true
-    df-print: kable
+    df-print: tibble
 editor: visual
 bibliography: references.bib
 ---
@@ -20,6 +20,9 @@ library(ropls)
 library(chemhelper)
 library(ggrepel)
 library(patchwork)
+
+options(pillar.min_title_chars = 7, 
+        pillar.width = 70)
 
 ```
 
@@ -339,11 +342,26 @@ scores <- baked_pca$x
 loadings <- baked_pca$rotation
 ```
 
-## Now you try!
+## Now you try! {.smaller}
+
+Do PCA on the palmer penguins dataset using bill length, bill depth, flipper length, and body mass as variables of interest.
+<!--# NAH, do the muir dataset instead -->
 
 ```{r}
-
+#| echo: true
+library(palmerpenguins)
+head(penguins)
 ```
+
+::: callout-tip
+You'll need to remove rows with `NA`.
+One way to do this is with the `drop_na()` function from the `tidyr` package.
+E.g.:
+
+``` r
+data |> select(col1, col2) |> drop_na()
+```
+:::
 
 ## Using the `ropls` package
 
@@ -458,9 +476,8 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 3.  Interpret statistics
 
-```{=html}
 <!-- -->
-```
+
     OPLS-DA
     30 samples x 29 variables and 1 response
     standard scaling of predictors and response(s)
@@ -479,9 +496,8 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 3.  Interpret statistics
 
-```{=html}
 <!-- -->
-```
+
     OPLS-DA
     30 samples x 29 variables and 1 response
     standard scaling of predictors and response(s)
@@ -507,6 +523,33 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 baked_opls <- 
   opls(ingredients, baked_goods$type, predI = 1, orthoI = NA, permI = 999)
 ```
+
+## OPLS with `ropls` {.smaller}
+
+5.  Customize plot
+
+```{r}
+#| echo: true
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 3.5
+# score plot
+plot(baked_opls, typeVc = "x-score")
+
+# correlation plot
+plot(baked_opls, typeVc = "correlation")
+
+# Or build your own from scores and loadings
+scores <- bind_cols(
+  getScoreMN(baked_opls, orthoL = FALSE),
+  getScoreMN(baked_opls, orthoL = TRUE)
+) |> add_column(type = baked_goods$type)
+loadings <- getLoadingMN(baked_opls) |> as_tibble(rownames = "ingredient")
+```
+
+::: notes
+No longer have to supply `baked_goods$type` as a labeling factor because it's already part of the data.
+:::
 
 ## Now you try
 
