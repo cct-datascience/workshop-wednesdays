@@ -28,6 +28,8 @@ library(patchwork)
 -   Understand the difference between supervised/constrained and unsupervised/unconstrained
 -   Interpret score and loading plots
 -   Match research questions to supervised/unsupervised analyses
+-   Install an R package from Bioconductor
+-   Find help for "generic" functions
 -   Implement PCA and PLS-DA with R code
 :::
 
@@ -343,57 +345,167 @@ loadings <- baked_pca$rotation
 
 ```
 
+## Using the `ropls` package
+
+-   `ropls` is a powerful R package for principal component analysis (PCA) and partial least squares regression (PLS)
+
+-   Includes model diagnostics and permutation test statistics by default
+
+-   Decent plots (although custom `ggplot2` plots look nicer)
+
+-   Must install from Bioconductor
+
+-   User interface is unusual and can be confusing
+
 ## PCA with `ropls`
 
 1.  Install `ropls`
 
-```{r}
-#install bioconductor
-#use bioconductor to install ropls
+```{r ropls-install}
+#| echo: true
+#| eval: false
+# install instructions copied from ropls page:
+# https://bioconductor.org/packages/release/bioc/html/ropls.html
+
+# install BiocManager
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# use bioconductor to install ropls
+BiocManager::install("ropls")
 ```
 
-## Code (temp)
+## PCA with `ropls`
 
-```{r}
-library(tidyverse)
-library(vegan)
-ingredients <- 
-  baked_goods |>
-  select(-type, -recipe_id)
+2.  Do PCA
 
-#pca with base R
-pca <- prcomp(ingredients, scale. = TRUE)
-summary(pca)
+There's just one function, `opls()`, that does PCA, or various 'flavors' of PLS depending on the arguments you give it.
+If we give it just `x` data, it'll do PCA.
 
-
-biplot(pca)
-library(AMR) #for ggplot_pca()
-ggplot_pca(pca, groups = baked_goods$type)
+```{r baked-pca2}
+#| echo: true
+#| output-location: slide
+baked_pca2 <- opls(ingredients)
 ```
 
+## PCA with `ropls`
+
+2.  Make a better score plot.
+
+How to find help for a generic function like `plot()`?
+
 ```{r}
-library(ropls)
-pca <- opls(x = ingredients)
-plot(
-  pca,
-  typeVc = "x-score",
-  parAsColFcVn = baked_goods$type,
-  parLabVc = as.character(baked_goods$recipe_id)
-)
-plot(pca, typeVc = "correlation")
+#| echo: true
+
+#figure out what the object class is
+class(baked_pca2)
+
+#See what methods are available
+methods(class = "opls")
+
+#look for help for that plot method
+?plot.opls
 ```
 
-```{r}
-pls <- opls(x = ingredients, y = baked_goods$type)
-pls <- opls(x = ingredients, y = baked_goods$type, predI = 1, orthoI = NA)
-plot(pls, typeVc = "x-score")
-plot(pls, typeVc = "correlation")
-plot(pls, typeVc = "x-loading")
+## PCA with `ropls`
 
-library(vegan)
-m <- rda(ingredients ~ baked_goods$type, scale = TRUE)
-anova(m)
-plot(m)
+```{r}
+#| echo: true
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4.5
+#| 
+# score plot
+plot(baked_pca2, typeVc = "x-score", parAsColFcVn = baked_goods$type)
+
+# correlation plot
+plot(baked_pca2, typeVc = "correlation")
+```
+
+## PLS with `ropls`
+
+-   PLS is a supervised multivariable technique
+
+-   Handles multicollinearity (correlated predictors) and more variables than observations exceptionally well
+
+-   When $Y$ is categorical (e.g. cupcake or muffin), it's PLS discriminant analysis (PLS-DA)
+
+-   When there's only one predictive axis and other axes are *orthogonal*, its OPLS
+
+## PLS with `ropls`
+
+1.  Try ordinary PLS-DA
+
+```{r}
+#| echo: true
+#| warning: true
+#| output-location: slide
+baked_pls <- opls(ingredients, baked_goods$type)
+```
+
+## OPLS with `ropls`
+
+2.  Try OPLS-DA
+
+```{r}
+#| echo: true
+#| warning: true
+#| output-location: slide
+baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
+```
+
+## OPLS with `ropls`
+
+3.  Interpret statistics
+
+```{=html}
+<!-- -->
+```
+    OPLS-DA
+    30 samples x 29 variables and 1 response
+    standard scaling of predictors and response(s)
+          R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
+    Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+
+::: incremental
+-   $R^2_X$(cum) = How much variation in ingredients is explained by the axes
+
+-   $R^2_Y$(cum) = How much of the response (cupcake vs. muffin) is explained by the axes
+
+-   $Q^2$(cum) = Predictive power of the model---should be close to R2Y, but will always be lower
+:::
+
+## OPLS with `ropls`
+
+3.  Interpret statistics
+
+```{=html}
+<!-- -->
+```
+    OPLS-DA
+    30 samples x 29 variables and 1 response
+    standard scaling of predictors and response(s)
+          R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
+    Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+
+::: incremental
+-   RMSEE = Square root of the mean error between the actual and the predicted responses
+
+-   pre, ort = Number of predictive and orthogonal axes
+
+-   pR2Y, pQ2 = p-values from permutation tests
+:::
+
+## OPLS with `ropls`
+
+4.  Increase number of permutations
+
+```{r}
+#| echo: true
+#| cache: true
+#| output-location: slide
+baked_opls <- 
+  opls(ingredients, baked_goods$type, predI = 1, orthoI = NA, permI = 999)
 ```
 
 ## Now you try
