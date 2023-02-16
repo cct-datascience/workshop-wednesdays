@@ -99,7 +99,7 @@ library(patchwork)
 
 <!--TODO: change read_csv path to URL somewhere -->
 
-```{r}
+```{r read-data}
 #| echo: true
 #| eval: true
 #| 
@@ -124,7 +124,7 @@ head(baked_goods)
 
 ## Results: unsupervised (PCA)
 
-```{r}
+```{r baked-pca}
 #| include: false
 #| cache: true
 
@@ -177,7 +177,7 @@ pca_cor_plot <-
 
 ```
 
-```{r}
+```{r baked-pca-plot}
 #| echo: false
 pca_score_plot | pca_cor_plot
 ```
@@ -192,7 +192,7 @@ pca_score_plot | pca_cor_plot
 
 ## Results: supervised (PLS-DA)
 
-```{r}
+```{r baked-pls}
 #| include: false
 #| cache: true
 
@@ -243,7 +243,7 @@ pls_cor_plot <-
        title = "PLS correlation plot")
 ```
 
-```{r}
+```{r baked-pls-plot}
 #| echo: false
 
 pls_score_plot | pls_cor_plot
@@ -293,7 +293,7 @@ Most of the time, if you are looking to test a hypothesis, you have a **supervis
 
 1.  Extract just the ingredients columns
 
-```{r}
+```{r base-wrangle}
 #| echo: true
 library(dplyr)
 ingredients <- baked_goods |> select(-type, -recipe_id)
@@ -304,7 +304,7 @@ head(ingredients)
 
 2.  Do PCA with `prcomp()`
 
-```{r}
+```{r base-prcomp}
 #| echo: true
 baked_pca <- prcomp(ingredients, scale. = TRUE)
 ```
@@ -318,7 +318,7 @@ You can do this in `prcomp()` with the `scale. = TRUE` argument, or before runni
 
 3.  Inspect results and decide how many axes to "retain"
 
-```{r}
+```{r base-summary}
 #| echo: true
 summary(baked_pca)
 ```
@@ -327,7 +327,7 @@ summary(baked_pca)
 
 4.  Visualize results
 
-```{r}
+```{r base-biplot}
 #| echo: true
 # biplot
 biplot(baked_pca)
