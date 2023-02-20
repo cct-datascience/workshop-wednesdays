@@ -6,6 +6,9 @@ format:
     code-copy: true
     code-link: true
     df-print: tibble
+    slide-number: true
+    chalkboard: true
+    mouse-wheel: false
 editor: visual
 bibliography: references.bib
 ---
@@ -15,9 +18,12 @@ bibliography: references.bib
 ```{r setup}
 #| include: false
 
+# used in workshop
 library(tidyverse)
 library(ropls)
-library(chemhelper)
+
+# used to make pretty plots for slides, not needed for workshop
+library(chemhelper) 
 library(ggrepel)
 library(patchwork)
 
@@ -102,13 +108,11 @@ options(pillar.min_title_chars = 7,
 
 ## The Data
 
-<!--TODO: change read_csv path to URL somewhere -->
-
 ```{r read-data}
 #| echo: true
 #| eval: true
 #| 
-baked_goods <- read_csv("baked_goods.csv")
+baked_goods <- read_csv("https://gist.githubusercontent.com/Aariq/5f990c9e3067ddcdbae6f63a2726dfed/raw/6c383454c0a4018c5dce90dce903081537bbca3e/baked_goods.csv")
 head(baked_goods)
 ```
 
@@ -277,7 +281,8 @@ Two **different** questions answered:
 . . .
 
 ::: callout-important
-Most of the time, if you are looking to test a hypothesis, you have a **supervised** type question [@scott2021].
+Most of the time, if you are looking to test a hypothesis, you have a **supervised** type question unless the main axis of variation is of particular interest.
+E.g. "Do muffins and cupcakes tend to have different **leavening systems**?"
 :::
 
 ## R Packages for Multivariate Analysis {.smaller}
@@ -476,8 +481,9 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 3.  Interpret statistics
 
+```{=html}
 <!-- -->
-
+```
     OPLS-DA
     30 samples x 29 variables and 1 response
     standard scaling of predictors and response(s)
@@ -496,8 +502,9 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 3.  Interpret statistics
 
+```{=html}
 <!-- -->
-
+```
     OPLS-DA
     30 samples x 29 variables and 1 response
     standard scaling of predictors and response(s)
@@ -553,36 +560,25 @@ No longer have to supply `baked_goods$type` as a labeling factor because it's al
 
 ## Now you try
 
--   penguins
+1.  With the `penguins` dataset, try re-doing PCA using the `ropls` package. In what ways is the result the same? In what ways is it different?
+2.  Now try using PLS-DA to determine if penguins differ in morphology by species[^2]
 
--   muir dataset (@scott2021 )
+## Further Reading {.scrollable}
 
--   some kinda gene one???
+-   The `vegan` [package documentation](https://vegandevs.github.io/vegan/)
+-   The `ropls` [package vignette](https://bioconductor.org/packages/release/bioc/vignettes/ropls/inst/doc/ropls-vignette.html#1_The_ropls_package)
+-   CRAN [task view on multivariate analysis](https://mran.microsoft.com/snapshot/2014-12-11/web/views/Multivariate.html) (a bit outdated, but useful)
+-   Cupcakes vs. Muffins [blog post](https://www.ericrscott.com/post/cupcakes-vs-muffins-round-2/)
+-   MR Hervé, et al., 2018. Multivariate Analysis of Multiple Datasets: a Practical Guide for Chemical Ecology. J Chem Ecol 44, 215--234. [doi:10.1007/s10886-018-0932-6](https://doi.org/10.1007/s10886-018-0932-6) (data and **code** in [supplementary](https://link.springer.com/article/10.1007/s10886-018-0932-6#Sec12)!)
+-   ER Scott, EE Crone, 2021. Using the right tool for the job: the difference between unsupervised and supervised analyses of multivariate ecological data. Oecologia 196, 13--25. [doi:10.1007/s00442-020-04848-w](https://doi.org/10.1007/s00442-020-04848-w)
+-   [Legendre, P. Numerical Ecology. 3rd ed. 2012.](https://arizona-primo.hosted.exlibrisgroup.com/permalink/f/6ljalh/01UA_ALMA51806451190003843)
 
-## Methods and when to use them (a non-exhaustive list)
-
-Unsupervised:
-
--   PCA
-
--   PCoA
-
--   NMDS
-
-Supervised:
-
--   (O)PLS(-DA)
-
--   RDA
-
--   CCA
-
--   
-
-## Further Reading
-
--   https://mran.microsoft.com/snapshot/2014-12-11/web/views/Multivariate.html
+## References
 
 <!-- refs show up here -->
 
 [^1]: More about this dataset: [@scott2019]
+
+[^2]: I realize this is a little backwards.
+    Species isn't really a "response" variable here.
+    There are other techniques that are more appropriate for this question that I didn't cover.
