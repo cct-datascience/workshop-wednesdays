@@ -9,6 +9,10 @@ format:
     slide-number: true
     chalkboard: true
     mouse-wheel: false
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
 editor: visual
 bibliography: references.bib
 ---
@@ -349,8 +353,7 @@ loadings <- baked_pca$rotation
 
 ## Now you try! {.smaller}
 
-Do PCA on the palmer penguins dataset using bill length, bill depth, flipper length, and body mass as variables of interest.
-<!--# NAH, do the muir dataset instead -->
+Do PCA on the Palmer penguins dataset using bill length, bill depth, flipper length, and body mass as variables of interest.
 
 ```{r}
 #| echo: true
@@ -374,7 +377,7 @@ data |> select(col1, col2) |> drop_na()
 
 -   Includes model diagnostics and permutation test statistics by default
 
--   Decent plots (although custom `ggplot2` plots look nicer)
+-   Decent plots
 
 -   Must install from Bioconductor
 
@@ -445,17 +448,15 @@ plot(baked_pca2, typeVc = "x-score", parAsColFcVn = baked_goods$type)
 plot(baked_pca2, typeVc = "correlation")
 ```
 
-## PLS with `ropls`
+## PLS-DA with `ropls`
 
--   PLS is a supervised multivariable technique
+-   Partial Least Squares regression (PLS or PLSR) is a supervised multivariable technique
 
 -   Handles multicollinearity (correlated predictors) and more variables than observations exceptionally well
 
 -   When $Y$ is categorical (e.g. cupcake or muffin), it's PLS discriminant analysis (PLS-DA)
 
--   When there's only one predictive axis and other axes are *orthogonal*, its OPLS
-
-## PLS with `ropls`
+## PLS-DA with `ropls`
 
 1.  Try ordinary PLS-DA
 
@@ -466,7 +467,15 @@ plot(baked_pca2, typeVc = "correlation")
 baked_pls <- opls(ingredients, baked_goods$type)
 ```
 
-## OPLS with `ropls`
+## Orthogonal PLS-DA
+
+-   Orthogonal PLS-DA (OPLS-DA) finds a ***single*** predictive axis that separates 2 categories
+
+-   Other axes are *orthogonal---*they're not related to difference between cupcakes & muffins (e.g.)
+
+-   Usually not recommended, but in the case of a single predictive axis with PLS-DA, it allows us to visualize results
+
+## OPLS-DA with `ropls`
 
 2.  Try OPLS-DA
 
@@ -477,7 +486,7 @@ baked_pls <- opls(ingredients, baked_goods$type)
 baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 ```
 
-## OPLS with `ropls`
+## OPLS-DA with `ropls`
 
 3.  Interpret statistics
 
@@ -498,7 +507,7 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 -   $Q^2$(cum) = Predictive power of the model---should be close to R2Y, but will always be lower
 :::
 
-## OPLS with `ropls`
+## OPLS-DA with `ropls`
 
 3.  Interpret statistics
 
@@ -519,7 +528,7 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 -   pR2Y, pQ2 = p-values from permutation tests
 :::
 
-## OPLS with `ropls`
+## OPLS-DA with `ropls`
 
 4.  Increase number of permutations
 
@@ -531,7 +540,7 @@ baked_opls <-
   opls(ingredients, baked_goods$type, predI = 1, orthoI = NA, permI = 999)
 ```
 
-## OPLS with `ropls` {.smaller}
+## OPLS-DA with `ropls` {.smaller}
 
 5.  Customize plot
 
@@ -562,6 +571,16 @@ No longer have to supply `baked_goods$type` as a labeling factor because it's al
 
 1.  With the `penguins` dataset, try re-doing PCA using the `ropls` package. In what ways is the result the same? In what ways is it different?
 2.  Now try using PLS-DA to determine if penguins differ in morphology by species[^2]
+
+## Getting Help
+
+-   CCT Data Science drop-in hours: [datascience.cct.arizona.edu/drop-in-hours](https://datascience.cct.arizona.edu/drop-in-hours)
+
+-   Email us: [cct-datascience\@arizona.edu](mailto:cct-datascience@arizona.edu)
+
+-   Book an appointment: [datascience.cct.arizona.edu/people](https://datascience.cct.arizona.edu/people)
+
+-   Data Science Incubator program: [datascience.cct.arizona.edu/cct-data-science-incubator](https://datascience.cct.arizona.edu/cct-data-science-incubator)
 
 ## Further Reading {.scrollable}
 
