@@ -27,10 +27,13 @@ library(tidyverse)
 library(ropls)
 
 # used to make pretty plots for slides, not needed for workshop
+# install chemhelper:
+# install.packages('chemhelper', repos = c('https://aariq.r-universe.dev', 'https://cloud.r-project.org'))
 library(chemhelper) 
 library(ggrepel)
 library(patchwork)
 
+# makes tibble output fit nicely on slides
 options(pillar.min_title_chars = 7, 
         pillar.width = 70)
 
@@ -135,11 +138,6 @@ Rather than pick a specific discipline example...
 baked_goods <- read_csv("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/main/202302-multivariate/baked_goods.csv")
 head(baked_goods)
 ```
-
-::: notes
-Alternative URL:\
-"https://raw.githubusercontent.com/cct-datascience/CALS-workshops/multivariate/202302-multivariate/baked_goods.csv"
-:::
 
 ## Unsupervised/unconstrained {.smaller}
 
