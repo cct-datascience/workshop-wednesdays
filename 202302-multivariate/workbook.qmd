@@ -14,7 +14,7 @@ library(ropls)
 Read in data
 
 ```{r}
-baked_goods <- read_csv("https://gist.githubusercontent.com/Aariq/5f990c9e3067ddcdbae6f63a2726dfed/raw/6c383454c0a4018c5dce90dce903081537bbca3e/baked_goods.csv")
+baked_goods <- read_csv("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/main/202302-multivariate/baked_goods.csv")
 head(baked_goods)
 ```
 
