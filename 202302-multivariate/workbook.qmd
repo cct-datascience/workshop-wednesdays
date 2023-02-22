@@ -1,6 +1,6 @@
 ---
 title: "Workbook for Workshop Wednesday"
-format: html
+format: gfm
 ---
 
 
