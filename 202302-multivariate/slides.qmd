@@ -490,9 +490,8 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 3.  Interpret statistics
 
-```{=html}
 <!-- -->
-```
+
     OPLS-DA
     30 samples x 29 variables and 1 response
     standard scaling of predictors and response(s)
@@ -511,9 +510,8 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 3.  Interpret statistics
 
-```{=html}
 <!-- -->
-```
+
     OPLS-DA
     30 samples x 29 variables and 1 response
     standard scaling of predictors and response(s)
