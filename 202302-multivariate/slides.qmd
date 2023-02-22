@@ -1,0 +1,624 @@
+---
+title: "Multivariate Statistics: Using the Right Tool for the Job"
+author: "Eric R. Scott"
+format: 
+  revealjs:
+    code-copy: true
+    code-link: true
+    df-print: tibble
+    slide-number: true
+    chalkboard: true
+    mouse-wheel: false
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
+editor: visual
+bibliography: references.bib
+---
+
+## Learning Objectives
+
+```{r setup}
+#| include: false
+
+# used in workshop
+library(tidyverse)
+library(ropls)
+
+# used to make pretty plots for slides, not needed for workshop
+library(chemhelper) 
+library(ggrepel)
+library(patchwork)
+
+options(pillar.min_title_chars = 7, 
+        pillar.width = 70)
+
+```
+
+::: nonincremental
+-   Understand when to apply multivariate tools
+-   Understand the difference between supervised/constrained and unsupervised/unconstrained
+-   Interpret score and loading plots
+-   Match research questions to supervised/unsupervised analyses
+-   Install an R package from Bioconductor
+-   Find help for "generic" functions
+-   Implement PCA and PLS-DA with R code
+:::
+
+::: notes
+Not going to cover:
+
+-   specific R packages
+
+-   specific tests/methods (except PCA & PLS-DA)
+
+-   how to know which method to use for your data/field
+
+-   math
+:::
+
+## What is "multivariate" data?
+
+-   Many things measured on the same sample/observation
+
+. . .
+
+-   Multiple response/dependent variables = "multivariate"
+
+    <details>
+
+    <summary>Examples:</summary>
+
+    -   How is species composition impacted by burning?
+
+    -   How are plant metabolites impacted by herbivory?
+
+    -   How does treatment effect gene expression?
+
+    </details>
+
+. . .
+
+-   Multiple predictor/independent variables = "multivariable"
+
+    <details>
+
+    <summary>Examples:</summary>
+
+    -   How does species composition effect ecosystem productivity?
+
+    -   How does plant metabolite blend effect herbivory?
+
+    -   How does gene expression effect disease state?
+
+    </details>
+
+. . .
+
+-   "Multivariate" is often used to describe both [@hidalgo2013]
+
+## Challenges of multivariate data
+
+::: incremental
+-   "Traditional" statistics can't handle multiple response variables
+
+-   Variables are often correlated and not fully independent ("multicollinearity")
+
+-   More variables than observations ("curse of dimensionality")
+
+-   How to determine importance of individual variables
+:::
+
+## Cupcakes vs. Muffins
+
+::: incremental
+-   Sample of 30 cupcake & muffin recipes scraped from allrecipes.com with frosting ingredients removed[^1]
+
+-   40 ingredients, units standardized in US cups (although this is not necessary for multivariate data analysis)
+
+-   You can think of the ingredients for each recipe like species, gene transcripts, chemicals, OTUs, or whatever fits your discipline
+
+-   You can think of `type` (cupcake or muffin) as whatever treatment or site difference fits your discipline
+:::
+
+::: notes
+Rather than pick a specific discipline example...
+:::
+
+## The Data
+
+```{r read-data}
+#| echo: true
+#| eval: true
+#| 
+baked_goods <- read_csv("https://gist.githubusercontent.com/Aariq/5f990c9e3067ddcdbae6f63a2726dfed/raw/6c383454c0a4018c5dce90dce903081537bbca3e/baked_goods.csv")
+head(baked_goods)
+```
+
+::: notes
+Alternative URL: \
+"https://raw.githubusercontent.com/cct-datascience/CALS-workshops/multivariate/202302-multivariate/baked_goods.csv"
+:::
+
+## Unsupervised/unconstrained {.smaller}
+
+-   Exploratory
+-   Finds axes that explain the ***variation*** in the data
+-   Single-sided equation (no dependent/independent variables)
+
+![](img/pca.png){fig-align="center"}
+
+## Supervised/constrained {.smaller}
+
+-   Explanatory
+-   Finds axes that best separate multivariate data along some variable (e.g. cupcakes vs. muffins)
+
+![](img/plsda.png){fig-align="center"}
+
+## Results: unsupervised (PCA)
+
+```{r baked-pca}
+#| include: false
+#| cache: true
+
+# Do PCA
+baked_pca <-
+  opls(
+    dplyr::select(baked_goods, -type, -recipe_id), #the data
+       fig.pdfC = "none" #suppresses default plot
+    )
+
+# Score plot with chemhelper package
+pca_score_plot <- 
+  plot_pca(baked_pca, group_var = baked_goods$type) +
+  theme(legend.position = "bottom")
+
+# Loadings
+pca_scores <- get_scores(baked_pca)
+
+pca_data <-
+  baked_pca@suppLs$xModelMN |> 
+  as_tibble()
+
+pca_cor_dat <-
+  cor(pca_scores[2:3], pca_data) %>%
+    t() %>%
+    as_tibble(rownames = "variable") %>% 
+  rowwise() %>% 
+  mutate(distance = sqrt(sum((c(p1, p2) - c(0, 0))^2))) %>% 
+  ungroup
+# pca.cor.dat
+
+pca_cor_plot <-
+  ggplot(pca_cor_dat) +
+  geom_segment(aes(x = 0, y = 0, xend = p1, yend = p2),
+               arrow = arrow(length = unit(0.15, "cm"))) +
+  geom_label_repel(
+    aes(x = p1, y = p2, label = variable),
+    segment.alpha = 0.6,
+    direction = "y",
+    size = 3,
+    point.padding = 0.2,
+    min.segment.length = 0,
+    force = 5
+  ) +
+  theme_bw() +
+  xlim(-0.6, 1) +
+  labs(x = "Correlation to PC1",
+       y = "Correlation to PC2",
+       title = "PCA correlation plot")
+
+```
+
+```{r baked-pca-plot}
+#| echo: false
+pca_score_plot | pca_cor_plot
+```
+
+::: notes
+-   Explain score and loading/correlation
+
+-   Ask audience for description of axes
+
+-   Are cupcakes and muffins separated along those axes?
+
+-   Mention that people often do statistical tests using these axes, maybe not a good idea
+:::
+
+## Results: supervised (PLS-DA)
+
+```{r baked-pls}
+#| include: false
+#| cache: true
+
+baked_plsda <-
+  opls(
+    dplyr::select(baked_goods, -type, -recipe_id), #X data
+    baked_goods$type, #Y data
+    fig.pdfC = "none", #suppresses default plotting
+    predI = 1, #make one predictive axis
+    orthoI = 1, #and one orthogonal axis
+    permI = 300  #use 300 permutations to generate a p-value
+  )
+
+pls_score_plot <- plot_oplsda(baked_plsda) + theme(legend.position = "bottom")
+
+pls_scores <- get_scores(baked_plsda)
+
+pls_data <- 
+  baked_plsda@suppLs$xModelMN %>%
+  as_tibble()
+
+pls_cor_dat <-
+  cor(pls_scores[3:4], pls_data) %>%
+    t() %>%
+    as_tibble(rownames = "variable")
+
+pls_cor_plot <-
+  ggplot(pls_cor_dat) +
+  geom_segment(aes(
+    x = 0,
+    y = 0,
+    xend = p1,
+    yend = o1
+  ),
+  arrow = arrow(length = unit(0.15, "cm"))) +
+  geom_label_repel(
+    aes(x = p1, y = o1, label = variable),
+    segment.alpha = 0.6,
+    direction = "y",
+    size = 2.7,
+    min.segment.length = 0,
+    force = 5,
+    box.padding = 0.3
+  ) +
+  theme_bw() +
+  labs(x = "Correlation to Axis 1",
+       y = "Correlation to Axis 2",
+       title = "PLS correlation plot")
+```
+
+```{r baked-pls-plot}
+#| echo: false
+
+pls_score_plot | pls_cor_plot
+
+```
+
+::: notes
+-   Explain what PLS-DA does
+
+-   Ask audience for description of axes
+
+-   Are cupcakes and muffins separated along those axes?
+
+-   Which explains more variation in the data?
+
+-   Which method better explains difference between cupcakes and muffins?
+:::
+
+## Use the right tool for the job
+
+Two **different** questions answered:
+
+1.  Unsupervised: Do muffins and cupcakes differ *in the ingredients that vary most among them*?
+2.  Supervised: Do muffins and cupcakes differ? What ingredients make them different?
+
+. . .
+
+::: callout-important
+Most of the time, if you are looking to test a hypothesis, you have a **supervised** type question unless the main axis of variation is of particular interest.
+E.g. "Do muffins and cupcakes tend to have different **leavening systems**?"
+:::
+
+## R Packages for Multivariate Analysis {.smaller}
+
+::: incremental
+-   There are *many* R packages for multivariate data analysis, but not one *perfect* package
+
+-   `vegan` is a good toolkit, with extensive documentation, but the language is very specific to community ecology
+
+-   [`ropls` a good option if you're interested in PCA or PLS and its variants (a supervised technique), but the UI is *unusual* and it uses S4 objects which are harder to work with]{.rn}
+
+-   `ade4` package is a good toolkit, but documentation is terse and written for someone who is already a stats wiz
+
+-   If you just need principal components analysis (PCA), this can be done in base R with `prcomp()`
+:::
+
+## PCA with base R
+
+1.  Extract just the ingredients columns
+
+```{r base-wrangle}
+#| echo: true
+library(dplyr)
+ingredients <- baked_goods |> select(-type, -recipe_id)
+head(ingredients)
+```
+
+## PCA with base R
+
+2.  Do PCA with `prcomp()`
+
+```{r base-prcomp}
+#| echo: true
+baked_pca <- prcomp(ingredients, scale. = TRUE)
+```
+
+::: callout-note
+It is usually advised to scale and center variables before doing multivariate analyses like PCA.
+You can do this in `prcomp()` with the `scale. = TRUE` argument, or before running PCA using the `scale()` function.
+:::
+
+## PCA with base R
+
+3.  Inspect results and decide how many axes to "retain"
+
+```{r base-summary}
+#| echo: true
+summary(baked_pca)
+```
+
+## PCA with base R
+
+4.  Visualize results
+
+```{r base-biplot}
+#| echo: true
+# biplot
+biplot(baked_pca)
+
+#or extract scores and loadings and build your own!
+scores <- baked_pca$x
+loadings <- baked_pca$rotation
+```
+
+## Now you try! {.smaller}
+
+Do PCA on the Palmer penguins dataset using bill length, bill depth, flipper length, and body mass as variables of interest.
+
+```{r}
+#| echo: true
+library(palmerpenguins)
+head(penguins)
+```
+
+::: callout-tip
+You'll need to remove rows with `NA`.
+One way to do this is with the `drop_na()` function from the `tidyr` package.
+E.g.:
+
+``` r
+data |> select(col1, col2) |> drop_na()
+```
+:::
+
+## Using the `ropls` package
+
+-   `ropls` is a powerful R package for principal component analysis (PCA) and partial least squares regression (PLS)
+
+-   Includes model diagnostics and permutation test statistics by default
+
+-   Decent plots
+
+-   Must install from Bioconductor
+
+-   User interface is unusual and can be confusing
+
+## PCA with `ropls`
+
+1.  Install `ropls`
+
+```{r ropls-install}
+#| echo: true
+#| eval: false
+# install instructions copied from ropls page:
+# https://bioconductor.org/packages/release/bioc/html/ropls.html
+
+# install BiocManager
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# use bioconductor to install ropls
+BiocManager::install("ropls")
+```
+
+## PCA with `ropls`
+
+2.  Do PCA
+
+There's just one function, `opls()`, that does PCA, or various 'flavors' of PLS depending on the arguments you give it.
+If we give it just `x` data, it'll do PCA.
+
+```{r baked-pca2}
+#| echo: true
+#| output-location: slide
+baked_pca2 <- opls(ingredients)
+```
+
+## PCA with `ropls`
+
+2.  Make a better score plot.
+
+How to find help for a generic function like `plot()`?
+
+```{r}
+#| echo: true
+
+#figure out what the object class is
+class(baked_pca2)
+
+#See what methods are available
+methods(class = "opls")
+
+#look for help for that plot method
+?plot.opls
+```
+
+## PCA with `ropls`
+
+```{r}
+#| echo: true
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 4.5
+#| 
+# score plot
+plot(baked_pca2, typeVc = "x-score", parAsColFcVn = baked_goods$type)
+
+# correlation plot
+plot(baked_pca2, typeVc = "correlation")
+```
+
+## PLS-DA with `ropls`
+
+-   Partial Least Squares regression (PLS or PLSR) is a supervised multivariable technique
+
+-   Handles multicollinearity (correlated predictors) and more variables than observations exceptionally well
+
+-   When $Y$ is categorical (e.g. cupcake or muffin), it's PLS discriminant analysis (PLS-DA)
+
+## PLS-DA with `ropls`
+
+1.  Try ordinary PLS-DA
+
+```{r}
+#| echo: true
+#| warning: true
+#| output-location: slide
+baked_pls <- opls(ingredients, baked_goods$type)
+```
+
+## Orthogonal PLS-DA
+
+-   Orthogonal PLS-DA (OPLS-DA) finds a ***single*** predictive axis that separates 2 categories
+
+-   Other axes are *orthogonal---*they're not related to difference between cupcakes & muffins (e.g.)
+
+-   Usually not recommended, but in the case of a single predictive axis with PLS-DA, it allows us to visualize results
+
+## OPLS-DA with `ropls`
+
+2.  Try OPLS-DA
+
+```{r}
+#| echo: true
+#| warning: true
+#| output-location: slide
+baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
+```
+
+## OPLS-DA with `ropls`
+
+3.  Interpret statistics
+
+<!-- -->
+
+    OPLS-DA
+    30 samples x 29 variables and 1 response
+    standard scaling of predictors and response(s)
+          R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
+    Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+
+::: incremental
+-   $R^2_X$(cum) = How much variation in ingredients is explained by the axes
+
+-   $R^2_Y$(cum) = How much of the response (cupcake vs. muffin) is explained by the axes
+
+-   $Q^2$(cum) = Predictive power of the model---should be close to R2Y, but will always be lower
+:::
+
+## OPLS-DA with `ropls`
+
+3.  Interpret statistics
+
+<!-- -->
+
+    OPLS-DA
+    30 samples x 29 variables and 1 response
+    standard scaling of predictors and response(s)
+          R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
+    Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+
+::: incremental
+-   RMSEE = Square root of the mean error between the actual and the predicted responses
+
+-   pre, ort = Number of predictive and orthogonal axes
+
+-   pR2Y, pQ2 = p-values from permutation tests
+:::
+
+## OPLS-DA with `ropls`
+
+4.  Increase number of permutations
+
+```{r}
+#| echo: true
+#| cache: true
+#| output-location: slide
+baked_opls <- 
+  opls(ingredients, baked_goods$type, predI = 1, orthoI = NA, permI = 999)
+```
+
+## OPLS-DA with `ropls` {.smaller}
+
+5.  Customize plot
+
+```{r}
+#| echo: true
+#| layout-ncol: 2
+#| fig-width: 5
+#| fig-height: 3.5
+# score plot
+plot(baked_opls, typeVc = "x-score")
+
+# correlation plot
+plot(baked_opls, typeVc = "correlation")
+
+# Or build your own from scores and loadings
+scores <- bind_cols(
+  getScoreMN(baked_opls, orthoL = FALSE),
+  getScoreMN(baked_opls, orthoL = TRUE)
+) |> add_column(type = baked_goods$type)
+loadings <- getLoadingMN(baked_opls) |> as_tibble(rownames = "ingredient")
+```
+
+::: notes
+No longer have to supply `baked_goods$type` as a labeling factor because it's already part of the data.
+:::
+
+## Now you try
+
+1.  With the `penguins` dataset, try re-doing PCA using the `ropls` package. In what ways is the result the same? In what ways is it different?
+2.  Now try using PLS-DA to determine if penguins differ in morphology by species[^2]
+
+## Getting Help
+
+-   CCT Data Science drop-in hours: [datascience.cct.arizona.edu/drop-in-hours](https://datascience.cct.arizona.edu/drop-in-hours)
+
+-   Email us: [cct-datascience\@arizona.edu](mailto:cct-datascience@arizona.edu)
+
+-   Book an appointment: [datascience.cct.arizona.edu/people](https://datascience.cct.arizona.edu/people)
+
+-   Data Science Incubator program: [datascience.cct.arizona.edu/cct-data-science-incubator](https://datascience.cct.arizona.edu/cct-data-science-incubator)
+
+## Further Reading {.scrollable}
+
+-   The `vegan` [package documentation](https://vegandevs.github.io/vegan/)
+-   The `ropls` [package vignette](https://bioconductor.org/packages/release/bioc/vignettes/ropls/inst/doc/ropls-vignette.html#1_The_ropls_package)
+-   CRAN [task view on multivariate analysis](https://mran.microsoft.com/snapshot/2014-12-11/web/views/Multivariate.html) (a bit outdated, but useful)
+-   Cupcakes vs. Muffins [blog post](https://www.ericrscott.com/post/cupcakes-vs-muffins-round-2/)
+-   MR Hervé, et al., 2018. Multivariate Analysis of Multiple Datasets: a Practical Guide for Chemical Ecology. J Chem Ecol 44, 215--234. [doi:10.1007/s10886-018-0932-6](https://doi.org/10.1007/s10886-018-0932-6) (data and **code** in [supplementary](https://link.springer.com/article/10.1007/s10886-018-0932-6#Sec12)!)
+-   ER Scott, EE Crone, 2021. Using the right tool for the job: the difference between unsupervised and supervised analyses of multivariate ecological data. Oecologia 196, 13--25. [doi:10.1007/s00442-020-04848-w](https://doi.org/10.1007/s00442-020-04848-w)
+-   [Legendre, P. Numerical Ecology. 3rd ed. 2012.](https://arizona-primo.hosted.exlibrisgroup.com/permalink/f/6ljalh/01UA_ALMA51806451190003843)
+
+## References
+
+<!-- refs show up here -->
+
+[^1]: More about this dataset: [@scott2019]
+
+[^2]: I realize this is a little backwards.
+    Species isn't really a "response" variable here.
+    There are other techniques that are more appropriate for this question that I didn't cover.

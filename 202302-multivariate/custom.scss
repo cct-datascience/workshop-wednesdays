@@ -1,0 +1,11 @@
+/*-- scss:defaults --*/
+$body-color: #E2E9EB;
+$tabset-border-color: #E2E9EB;
+$presentation-heading-color: #E2E9EB;
+
+/*-- scss:rules --*/
+
+// make logo slightly bigger
+.reveal .slide-logo {
+  max-height: 2.5rem !important;
+}
