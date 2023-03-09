@@ -1,0 +1,87 @@
+---
+title: "Workbook for Workshop Wednesday"
+format: gfm
+---
+
+
+Load necessary packages
+
+```{r}
+library(tidyverse)
+library(ropls)
+```
+
+Read in data
+
+```{r}
+baked_goods <- read_csv("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/main/202302-multivariate/baked_goods.csv")
+head(baked_goods)
+```
+
+
+```{r}
+ingredients <- baked_goods %>% select(-type, -recipe_id)
+head(ingredients)
+```
+
+```{r}
+baked_pca <-
+  prcomp(ingredients, scale. = TRUE)
+summary(baked_pca)
+plot(baked_pca) #scree plot
+biplot(baked_pca)
+```
+
+PCA with palmer penguins data
+
+```{r}
+library(palmerpenguins)
+penguins
+
+X <- penguins %>%
+  select(-species, -island, -sex, -year) %>%
+  drop_na()
+
+penguin_pca <- prcomp(X, scale. = TRUE)
+summary(penguin_pca)
+biplot(penguin_pca)
+```
+
+Repeat with `ropls` package
+
+```{r}
+library(ropls)
+ingredients
+baked_pca <- opls(x = ingredients)
+plot(baked_pca)
+#get help with plot function with 
+?plot.opls
+```
+
+```{r}
+baked_pls <- opls(ingredients, baked_goods$type) #results in single component model
+
+# Do OPLS-DA and increase number of permutations
+baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA, permI = 999)
+```
+
+
+Repeat with Penguins
+
+```{r}
+#Get rid of NA rows and select just needed cols
+peng2 <- 
+  penguins |> 
+  select(bill_length_mm, bill_depth_mm, body_mass_g, flipper_length_mm, species) |> 
+  drop_na()  
+opls(peng2 |> select(-species) , peng2$species, permI = 999)
+```
+
+Objects created by `ropls` are S4 objects.  What does that mean?  Well, for one, it means you can't use the `$` to get things out of them.  You have to use accessor functions, or you can use the `@` operator.
+
+```{r}
+# baked_opls$ #nothing!
+getScoreMN(baked_opls) #accessor function
+baked_opls@scoreMN
+```
+

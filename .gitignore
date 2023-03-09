@@ -39,9 +39,13 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+# Mac history files
+.DS_Store
+
 # rsconnect
 202109-repro-data-sci/rsconnect/
 202210-quarto-website/rsconnect/
 
 202112_timeseries/time-series-forecasting_files/
 202202_repro-data-sci/*.html
+202209-repro-data-sci/Reproducibility and data science post-workshop survey (Responses) - Form Responses 1.csv

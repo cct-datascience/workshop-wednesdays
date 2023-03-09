@@ -1,0 +1,4 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: 6c534cea-f239-46fe-8ffe-2c4c119cf2ab
+      url: 'https://quartopub.com/sites/cct-datascience/multivariate-statistics-using-the-right-tool-for-the-job'
