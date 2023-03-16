@@ -18,4 +18,10 @@ str(monsoon)
 
 surveys_monsoon <- surveys_complete %>%
   mutate(date = as.Date(paste0(year, "-", month, "-", day))) %>%
-  right_join(monsoon, join_by(date >= m_start, date <= m_end, year))
+  inner_join(monsoon, join_by(date >= m_start, date <= m_end))
+
+# Alternatively, can use the between() helper function
+surveys_monsoon2 <- surveys_complete %>%
+  mutate(date = as.Date(paste0(year, "-", month, "-", day))) %>%
+  inner_join(monsoon, join_by(between(date, m_start, m_end)))
+

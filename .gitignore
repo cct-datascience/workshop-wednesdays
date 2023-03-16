@@ -52,5 +52,6 @@ vignettes/*.pdf
 
 
 # large data files
+202303-dplyr-joins/data_raw/new_data.zip
 202303-dplyr-joins/data_raw/portaldata.zip
 202303-dplyr-joins/data_raw/weecology-PortalData-6017f65

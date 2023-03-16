@@ -2,6 +2,12 @@ library(ratdat)
 library(tidyverse)
 library(lubridate)
 
+# Download
+download.file("https://www.michaelc-m.com/Rewrite-R-ecology-lesson/data/new_data.zip",
+              "202303-dplyr-joins/data_raw/new_data.zip")
+unzip("202303-dplyr-joins/data_raw/new_data.zip", 
+      exdir = "202303-dplyr-joins/data_raw")
+
 # Complete survey data
 str(complete_old)
 dim(complete_old)
@@ -108,4 +114,4 @@ if(dir.exists("202303-dplyr-joins/data_clean") == FALSE) {
   dir.create("202303-dplyr-joins/data_clean")
 }
 
-write_csv(complete_clean, file = "202303-dplyr-joins/data_clean/surveys_complete.csv")
+write_csv(surveys_complete, file = "202303-dplyr-joins/data_clean/surveys_complete.csv")
