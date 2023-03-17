@@ -1,0 +1,75 @@
+---
+title: "joins"
+author: Jessica Guo
+format: revealjs
+editor: visual
+execute: 
+  echo: true
+---
+
+## Use header level 2 for slide titles
+
+You can include bullets:
+
+-   one
+
+-   two
+
+-   three
+
+Make them incremental by wrapping in `::: incremental` or in visual mode, click the ... button that appears when you hover over the bulleted list
+
+::: incremental
+-   first
+
+-   second
+
+-   third
+:::
+
+## Images
+
+Include images with markdown.
+You can also add them in the visual editor with the "insert" menu
+
+[![](https://statisticsglobe.com/wp-content/uploads/2019/04/dplyr-data-join-functions-overview_inner_join-left_join-right_join-full_join-semi_join-anti_join.png)](https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti)
+
+## Code
+
+Read in the data
+
+```{r}
+
+library(tidyverse)
+# Read in surveys data
+surveys_complete <- read_csv("data_clean/surveys_complete.csv")
+monsoon <- read_csv("data_clean/portal-monsoon.csv")
+```
+
+Use three dots to put a pause in the slides (also in the Insert menu as "Slide Pause")\
+
+. . .
+
+Explore data
+
+```{r}
+str(surveys_complete)
+```
+
+## Highlight code
+
+You can highlight specific lines of code with chunk options.
+See here: https://quarto.org/docs/presentations/revealjs/#line-highlighting
+
+```{r}
+#| code-line-numbers: "1|2-3|4"
+surveys_monsoon <- 
+  surveys_complete %>%
+  mutate(date = as.Date(paste0(year, "-", month, "-", day)), .before = month) %>%
+  inner_join(monsoon, join_by(date >= m_start, date <= m_end, year))
+```
+
+------------------------------------------------------------------------
+
+This is a slide without a title.
+Use three hyphens to make a new slide without a title.
