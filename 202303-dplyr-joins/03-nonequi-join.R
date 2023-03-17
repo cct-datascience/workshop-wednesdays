@@ -16,9 +16,11 @@ str(monsoon)
 # Create date column
 # Use with join_by() function tha thas more flexible specification
 
-surveys_monsoon <- surveys_complete %>%
-  mutate(date = as.Date(paste0(year, "-", month, "-", day))) %>%
-  inner_join(monsoon, join_by(date >= m_start, date <= m_end))
+surveys_complete <- surveys_complete %>%
+  mutate(date = as.Date(paste0(year, "-", month, "-", day)))
+  
+surveys_monsoon <- 
+  inner_join(surveys_complete, monsoon, join_by(date >= m_start, date <= m_end))
 
 # Alternatively, can use the between() helper function
 surveys_monsoon2 <- surveys_complete %>%
