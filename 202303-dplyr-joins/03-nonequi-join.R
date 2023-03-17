@@ -25,5 +25,5 @@ surveys_monsoon <-
 # Alternatively, can use the between() helper function
 surveys_monsoon2 <- surveys_complete %>%
   mutate(date = as.Date(paste0(year, "-", month, "-", day))) %>%
-  inner_join(monsoon, join_by(between(date, m_start, m_end)))
+  inner_join(monsoon, join_by(between(date, m_start, m_end), year))
 
