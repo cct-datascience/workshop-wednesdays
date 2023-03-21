@@ -53,7 +53,7 @@ vignettes/*.pdf
 
 # large data files, assorted helper files/folders for rendering
 202303-dplyr-joins/slides.html
-202303-dplyr-joins/slide_files/
+202303-dplyr-joins/slides_files/
 202303-dplyr-joins/data_raw/new_data.zip
 202303-dplyr-joins/data_raw/portaldata.zip
 202303-dplyr-joins/data_raw/weecology-PortalData-6017f65

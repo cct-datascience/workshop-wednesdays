@@ -1,36 +1,133 @@
 ---
-title: "joins"
+title: "Combining datasets using 'dplyr'"
 author: Jessica Guo
-format: revealjs
+format: 
+  revealjs:
+    code-copy: true
+    code-link: true
+    df-print: tibble
+    slide-number: true
+    chalkboard: true
+    mouse-wheel: false
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
 editor: visual
 execute: 
   echo: true
 ---
 
-## Use header level 2 for slide titles
-
-You can include bullets:
-
--   one
-
--   two
-
--   three
-
-Make them incremental by wrapping in `::: incremental` or in visual mode, click the ... button that appears when you hover over the bulleted list
+## Today's agenda
 
 ::: incremental
--   first
+-   New data - how to add to existing dataset?
 
--   second
+-   Sketch out necessary manipulations (breakout rooms)
 
--   third
+-   Report back and wrangle data
+
+-   Joins in 'dplyr' 1.1.0
+
+    -   new functionality for non-equi joins
 :::
+
+## Sources
+
+Materials adapted from [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd edition, by Hadley Wickham
+
+![](img/r4ds_cover.png){width="250" fig-align="center"}
+
+## Keys - how tables are connected
+
+::: incremental
+
+-   <b>Primary key</b> is one or a set of variables that uniquely identifies each observation
+
+-   <b>Foreign key</b> is one or a set of variables that corresponds to the primary key of another table
+
+![](img/tables.png){width="900" fig-align="center"}
+
+:::
+
+## Joins - combining two dataframes into one
+  
+![](img/joins.png){width="900" fig-align="center"}
+
+::: incremental
+-   Order of rows and columns primarily determined by x
+
+-   Four kinds of mutating joins, two kinds of filtering joins
+:::
+  
+## Filtering joins
+
+::: incremental
+
+-   Primary purpose is to `filter()` the rows of one dataframe by another
+
+-   Resulting dataframe will have the same number of columns as <b>x</b>
+
+-   `semi_join()` and `anti_join()` are opposites
+
+    - `anti_join()` particularly useful for spotting differences between dataframes
+
+:::
+  
+## Mutating joins
+
+::: incremental
+
+-   Combines variables across both dataframes, akin to adding columns with `mutate()`
+
+-   Key(s) appear first, then variables from <b>x</b>, then variables from <b>y</b>
+
+-   `left_join()` is the most common type of join
+
+    - output has the same number of rows as x
+
+:::
+
+
+## Visualizing mutating joins
+
+![](https://r4ds.hadley.nz/diagrams/join/setup.png){width="500" fig-align="center"}
+
+
+::: callout-note
+## Activity
+Which rows would be present? Which rows/columns would be `NA`?
+
+::: incremental
+-   `inner_join(x, y)`
+-   `left_join(x, y)`
+-   `right_join(x, y)`
+-   `full_join(x, y)` 
+:::
+:::
+
+## A note on R package versions
+
+-   'dplyr' 1.1.0 was released in January 2023
+
+-   Should you update? [Probably](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
+    - "Frequency reduces difficulty"
+    
+
+
+```{r eval=FALSE}
+# dplyr 1.0.x:
+left_join(x, y, by = "key")
+left_join(x, y, by = c("key.x" = "key.y"))
+
+# dplyr 1.1.0:
+left_join(x, y, join_by(key))
+left_join(x, y, join_by(key.x == key.y))
+```
 
 ## Images
 
-Include images with markdown.
-You can also add them in the visual editor with the "insert" menu
+Include images with markdown. You can also add them in the visual editor with the "insert" menu
 
 [![](https://statisticsglobe.com/wp-content/uploads/2019/04/dplyr-data-join-functions-overview_inner_join-left_join-right_join-full_join-semi_join-anti_join.png)](https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti)
 
@@ -46,6 +143,13 @@ surveys_complete <- read_csv("data_clean/surveys_complete.csv")
 monsoon <- read_csv("data_clean/portal-monsoon.csv")
 ```
 
+```{r, echo=FALSE}
+library(tidyverse)
+# Read in surveys data
+surveys_new <- read_csv("data_raw/surveys_new.csv")
+str(surveys_new)
+```
+
 Use three dots to put a pause in the slides (also in the Insert menu as "Slide Pause")\
 
 . . .
@@ -58,8 +162,7 @@ str(surveys_complete)
 
 ## Highlight code
 
-You can highlight specific lines of code with chunk options.
-See here: https://quarto.org/docs/presentations/revealjs/#line-highlighting
+You can highlight specific lines of code with chunk options. See here: https://quarto.org/docs/presentations/revealjs/#line-highlighting
 
 ```{r}
 #| code-line-numbers: "1|2-3|4"
@@ -71,5 +174,4 @@ surveys_monsoon <-
 
 ------------------------------------------------------------------------
 
-This is a slide without a title.
-Use three hyphens to make a new slide without a title.
+This is a slide without a title. Use three hyphens to make a new slide without a title.
