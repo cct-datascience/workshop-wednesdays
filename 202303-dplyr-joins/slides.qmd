@@ -34,9 +34,17 @@ execute:
 
 ## Sources
 
-Materials adapted from [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd edition, by Hadley Wickham
+:::: {.columns}
 
-![](img/r4ds_cover.png){width="250" fig-align="center"}
+::: {.column width="40%"}
+![](img/r4ds_cover.png){fig-align="left"}
+:::
+
+::: {.column width="60%"}
+Materials adapted from [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd edition, by Hadley Wickham
+:::
+
+::::
 
 ## Keys - how tables are connected
 
@@ -45,17 +53,19 @@ Materials adapted from [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd
 -   <b>Primary key</b> is one or a set of variables that uniquely identifies each observation
 
 -   <b>Foreign key</b> is one or a set of variables that corresponds to the primary key of another table
+:::
+
+. . . 
 
 ![](img/tables.png){width="900" fig-align="center"}
 
-:::
 
 ## Joins - combining two dataframes into one
   
 ![](img/joins.png){width="900" fig-align="center"}
 
 ::: incremental
--   Order of rows and columns primarily determined by x
+-   Order of rows and columns primarily determined by <b>x</b>
 
 -   Four kinds of mutating joins, two kinds of filtering joins
 :::
@@ -84,7 +94,7 @@ Materials adapted from [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd
 
 -   `left_join()` is the most common type of join
 
-    - output has the same number of rows as x
+    - output has the same number of rows as <b>x</b>
 
 :::
 
@@ -108,12 +118,16 @@ Which rows would be present? Which rows/columns would be `NA`?
 
 ## A note on R package versions
 
+::: incremental
+
 -   'dplyr' 1.1.0 was released in January 2023
 
--   Should you update? [Probably](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
+-   Should you update now? [Probably](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
     - "Frequency reduces difficulty"
     
+:::    
 
+. . .
 
 ```{r eval=FALSE}
 # dplyr 1.0.x:
@@ -125,44 +139,65 @@ left_join(x, y, join_by(key))
 left_join(x, y, join_by(key.x == key.y))
 ```
 
-## Images
+## Equi vs. non-equi joins
 
-Include images with markdown. You can also add them in the visual editor with the "insert" menu
+:::: {.columns}
 
-[![](https://statisticsglobe.com/wp-content/uploads/2019/04/dplyr-data-join-functions-overview_inner_join-left_join-right_join-full_join-semi_join-anti_join.png)](https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti)
+::: {.column width="50%"}
+![](https://r4ds.hadley.nz/diagrams/join/inner-both.png){fig-align="left"}
+:::
 
-## Code
+::: {.column width="50%"}
+Previously, join syntax in 'dplyr' was limited to exact matches between the key in <b>x</b> and the key in <b>y</b>
+:::
 
-Read in the data
+::::
+
+## `join_by()`
+:::: {.columns}
+
+::: {.column width="50%"}
+::: incremental
+Construct flexible specification of how to join two tables:
+
+-   equality: ==
+
+-   inequality: >=, >, <=, or <
+
+-   rolling helper: `closest()`
+
+-   overlap helpers: `between()`, `within()`, or `overlaps()`
+
+:::
+:::
+
+::: {.column width="50%"}
+![](https://r4ds.hadley.nz/diagrams/join/gte.png){fig-align="right"}
+:::
+
+::::
+
+## Let's try!
+
+Read in the data 
 
 ```{r}
+#| output-location: fragment
+#| code-line-numbers: "|4"
+
 
 library(tidyverse)
 # Read in surveys data
 surveys_complete <- read_csv("data_clean/surveys_complete.csv")
 monsoon <- read_csv("data_clean/portal-monsoon.csv")
+
+print(monsoon, n = 3)
 ```
 
-```{r, echo=FALSE}
-library(tidyverse)
-# Read in surveys data
-surveys_new <- read_csv("data_raw/surveys_new.csv")
-str(surveys_new)
-```
 
-Use three dots to put a pause in the slides (also in the Insert menu as "Slide Pause")\
+## Obtain observations during monsoon
 
-. . .
-
-Explore data
-
-```{r}
-str(surveys_complete)
-```
-
-## Highlight code
-
-You can highlight specific lines of code with chunk options. See here: https://quarto.org/docs/presentations/revealjs/#line-highlighting
+Specify inequalities in `join_by()`
 
 ```{r}
 #| code-line-numbers: "1|2-3|4"
@@ -172,6 +207,34 @@ surveys_monsoon <-
   inner_join(monsoon, join_by(date >= m_start, date <= m_end, year))
 ```
 
-------------------------------------------------------------------------
+. . . 
 
-This is a slide without a title. Use three hyphens to make a new slide without a title.
+Use the `between()` helper function
+
+```{r}
+#| code-line-numbers: "|4"
+surveys_monsoon <- 
+  surveys_complete %>%
+  mutate(date = as.Date(paste0(year, "-", month, "-", day))) %>%
+  inner_join(monsoon, join_by(between(date, m_start, m_end), year))
+
+```
+
+. . . 
+
+```{r}
+dim(surveys_complete); dim(surveys_monsoon)
+```
+## Further reading and references
+
+-   [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd edition
+
+-   dplyr 1.1.0 release [blog post](https://www.tidyverse.org/blog/2022/11/dplyr-1-1-0-is-coming-soon/#join-improvements)
+
+-   dplyr 1.1.0 [vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html) on two-table verbs
+
+-   [How frequently to update R packages](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
+
+. . . 
+
+And many thanks to Eric Scott!
