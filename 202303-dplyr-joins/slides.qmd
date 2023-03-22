@@ -1,0 +1,237 @@
+---
+title: "Combining datasets using 'dplyr'"
+author: Jessica Guo
+format: 
+  revealjs:
+    code-copy: true
+    code-link: true
+    df-print: tibble
+    slide-number: true
+    chalkboard: true
+    mouse-wheel: false
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
+editor: visual
+execute: 
+  echo: true
+---
+
+## Today's agenda
+
+::: incremental
+-   New data - how to add to existing dataset?
+
+-   Sketch out necessary manipulations (breakout rooms)
+
+-   Report back and wrangle data
+
+-   Joins in 'dplyr' 1.1.0
+
+    -   new functionality for non-equi joins
+:::
+
+## Sources
+
+:::: {.columns}
+
+::: {.column width="40%"}
+![](img/r4ds_cover.png){fig-align="left"}
+:::
+
+::: {.column width="60%"}
+Materials adapted from [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd edition, by Hadley Wickham
+:::
+
+::::
+
+## Keys - how tables are connected
+
+::: incremental
+
+-   <b>Primary key</b> is one or a set of variables that uniquely identifies each observation
+
+-   <b>Foreign key</b> is one or a set of variables that corresponds to the primary key of another table
+:::
+
+. . . 
+
+![](img/tables.png){width="900" fig-align="center"}
+
+
+## Joins - combining two dataframes into one
+  
+![](img/joins.png){width="900" fig-align="center"}
+
+::: incremental
+-   Order of rows and columns primarily determined by <b>x</b>
+
+-   Four kinds of mutating joins, two kinds of filtering joins
+:::
+  
+## Filtering joins
+
+::: incremental
+
+-   Primary purpose is to `filter()` the rows of one dataframe by another
+
+-   Resulting dataframe will have the same number of columns as <b>x</b>
+
+-   `semi_join()` and `anti_join()` are opposites
+
+    - `anti_join()` particularly useful for spotting differences between dataframes
+
+:::
+  
+## Mutating joins
+
+::: incremental
+
+-   Combines variables across both dataframes, akin to adding columns with `mutate()`
+
+-   Key(s) appear first, then variables from <b>x</b>, then variables from <b>y</b>
+
+-   `left_join()` is the most common type of join
+
+    - output has the same number of rows as <b>x</b>
+
+:::
+
+
+## Visualizing mutating joins
+
+![](https://r4ds.hadley.nz/diagrams/join/setup.png){width="500" fig-align="center"}
+
+
+::: callout-note
+## Activity
+Which rows would be present? Which rows/columns would be `NA`?
+
+::: incremental
+-   `inner_join(x, y)`
+-   `left_join(x, y)`
+-   `right_join(x, y)`
+-   `full_join(x, y)` 
+:::
+:::
+
+## A note on R package versions
+
+::: incremental
+
+-   'dplyr' 1.1.0 was released in January 2023
+
+-   Should you update now? [Probably](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
+    - "Frequency reduces difficulty"
+    
+:::    
+
+. . .
+
+```{r eval=FALSE}
+# dplyr 1.0.x:
+left_join(x, y, by = "key")
+left_join(x, y, by = c("key.x" = "key.y"))
+
+# dplyr 1.1.0:
+left_join(x, y, join_by(key))
+left_join(x, y, join_by(key.x == key.y))
+```
+
+## Equi vs. non-equi joins
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](https://r4ds.hadley.nz/diagrams/join/inner-both.png){fig-align="left"}
+:::
+
+::: {.column width="50%"}
+Previously, join syntax in 'dplyr' was limited to exact matches between the key in <b>x</b> and the key in <b>y</b>
+:::
+
+::::
+
+## `join_by()`
+:::: {.columns}
+
+::: {.column width="50%"}
+::: incremental
+Construct flexible specification of how to join two tables:
+
+-   equality: ==
+
+-   inequality: >=, >, <=, or <
+
+-   rolling helper: `closest()`
+
+-   overlap helpers: `between()`, `within()`, or `overlaps()`
+
+:::
+:::
+
+::: {.column width="50%"}
+![](https://r4ds.hadley.nz/diagrams/join/gte.png){fig-align="right"}
+:::
+
+::::
+
+## Let's try!
+
+Read in the data 
+
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|4"
+
+
+library(tidyverse)
+# Read in surveys data
+surveys_complete <- read_csv("data_clean/surveys_complete.csv")
+monsoon <- read_csv("data_clean/portal-monsoon.csv")
+
+print(monsoon, n = 3)
+```
+
+
+## Obtain observations during monsoon
+
+Specify inequalities in `join_by()`
+
+```{r}
+#| code-line-numbers: "1|2-3|4"
+surveys_monsoon <- 
+  surveys_complete %>%
+  mutate(date = as.Date(paste0(year, "-", month, "-", day)), .before = month) %>%
+  inner_join(monsoon, join_by(date >= m_start, date <= m_end, year))
+```
+
+. . . 
+
+Use the `between()` helper function
+
+```{r}
+#| code-line-numbers: "|4"
+surveys_monsoon <- 
+  surveys_complete %>%
+  mutate(date = as.Date(paste0(year, "-", month, "-", day))) %>%
+  inner_join(monsoon, join_by(between(date, m_start, m_end), year))
+
+```
+
+. . . 
+
+```{r}
+dim(surveys_complete); dim(surveys_monsoon)
+```
+## Further reading and references
+
+-   [R4DS chapter 20](https://r4ds.hadley.nz/joins.html), 2nd edition
+
+-   dplyr 1.1.0 release [blog post](https://www.tidyverse.org/blog/2022/11/dplyr-1-1-0-is-coming-soon/#join-improvements)
+
+-   dplyr 1.1.0 [vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/two-table.html) on two-table verbs
+
+-   [How frequently to update R packages](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
+
