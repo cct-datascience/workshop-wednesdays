@@ -235,6 +235,3 @@ dim(surveys_complete); dim(surveys_monsoon)
 
 -   [How frequently to update R packages](https://community.rstudio.com/t/should-i-update-all-my-r-packages-frequently-yes-no-why/5856), according to Jenny Bryan
 
-. . . 
-
-And many thanks to Eric Scott!

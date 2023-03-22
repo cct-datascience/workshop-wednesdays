@@ -43,6 +43,7 @@ vignettes/*.pdf
 .DS_Store
 
 # rsconnect
+202303-dplyr-joins/rsconnect/
 202109-repro-data-sci/rsconnect/
 202210-quarto-website/rsconnect/
 
