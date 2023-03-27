@@ -1,0 +1,88 @@
+---
+title: "Instructor notes"
+format: html
+editor: visual
+---
+
+## Slides
+
+Do the slides to give background and context.
+
+Remember to let people know that even if they don't end up making an R package that goes on CRAN (or any R package at all), that the skills they learn in the workshop will be helpful
+
+## Make a package
+
+1.  Install build tools
+    -   Breakout rooms by OS?
+2.  Install necessary R packages
+3.  `usethis::create_package("~/Desktop/mypkg")` or whatever
+4.  Go through all the files created and explain them
+5.  `use_git()` and troubleshoot. *extremely brief* overview of what git is and super basic use (commit is all they need to start with)
+
+## Add a function
+
+1.  New .R file
+
+2.  Start with super simple:
+
+    ```{r}
+    greet <- function() {
+      "Hello!"
+    }
+    ```
+
+3.  `load_all()` and run `greet()`
+
+4.  Add argument:
+
+    ```{r}
+    greet <- function(name) {
+      paste0("Hello ", name, "!")
+    }
+    ```
+
+5.  `load_all()` and `greet("yourname")`
+
+6.  `greet()` errors, so let's add a default
+
+    ```{r}
+    greet <- function(name = "User") {
+      paste0("Hello ", name, "!")
+    }
+    ```
+
+7.  `load_all()` and `greet()`
+
+## `check()`
+
+Run `check()` and address stuff:
+
+-   DESCRIPTION
+
+-   `use_mit_license()`
+
+## Add documentation
+
+1.  With cursor in function definition, add roxygen skeleton and fill it out
+2.  `document()` then `?greet`
+3.  Explore and commit changes
+
+## `check()` again
+
+should pass
+
+## Install
+
+Should be able to install the package now, load it with `library()`, etc.
+
+## Ideas...
+
+-   Use `lubridate` or `hms` to say either "good morning", "good afternoon" or "good evening" to practice `use_package()`
+
+-   Add a dataset from a .csv online (read it in, wrangle, `use_data()`)
+
+-   add tests with `use_testthat()`
+
+-   add github with `use_github()`
+
+-   add CI with `use_github_actions()`
