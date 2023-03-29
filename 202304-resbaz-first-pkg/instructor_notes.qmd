@@ -10,14 +10,102 @@ Do the slides to give background and context.
 
 Remember to let people know that even if they don't end up making an R package that goes on CRAN (or any R package at all), that the skills they learn in the workshop will be helpful
 
+## Packages needed
+```{r}
+#| eval: false
+install.packages(c("devtools", "here"))
+```
+
+You'll also need build tools.  
+
+### macOS
+For macOS, in terminal:
+
+``` bash
+xcode-select -p
+```
+
+If you get an error instead of a path like `/Library/Developer/CommandLineTools`, then you need to install xcode command line tools with:
+
+``` bash
+xcode-select --install
+```
+
+## Windows
+
+Install Rtools (which is not an R package!)
+
+
+## Configure Git
+
+Checklist of what to do to set things up.
+
+```{r}
+library(usethis)
+git_sitrep()
+```
+
+Introduce yourself to git:
+
+```{r}
+#| eval: false
+git_vaccinate()
+use_git_config(
+  user.name = "your name",
+  user.email = "youremail@arizona.com", #email you used to sign up for GitHub account
+)
+
+#sets your default branch name to "main"
+git_default_branch_configure()
+
+```
+
+There are some other things to do in `git_sitrep()`, but first, let's make our first commit.
+
+```{r}
+#check how we're doing
+git_sitrep()
+```
+
+Set up personal access token (PAT)
+
+```{r}
+#| eval: false
+create_github_token() #takes you to external website. Add description, but keep defaults
+```
+
+
+```{r}
+#| eval: false
+gitcreds::gitcreds_set()
+#paste in PAT from GitHub
+```
+
+```{r}
+git_sitrep()
+```
+
+
+Now everything should be set (except maybe `upstream`) with no red x
+
+## Convert into a package
+
+```{r}
+#| eval: false
+here::here() #prints absolute path to current project directory
+create_package(here::here()) #converts current project to skeleton R package.  Overwrites files.
+```
+
+
 ## Make a package
 
 1.  Install build tools
     -   Breakout rooms by OS?
 2.  Install necessary R packages
-3.  `usethis::create_package("~/Desktop/mypkg")` or whatever
-4.  Go through all the files created and explain them
-5.  `use_git()` and troubleshoot. *extremely brief* overview of what git is and super basic use (commit is all they need to start with)
+3.  Many ways to start a package, we are going GitHub first route
+4.  New project from github, then `usethis::create_package(here::here())` to convert current project to package.
+5.  Go through all the files created and explain them
+6.  `use_git()` and troubleshoot. *extremely brief* overview of what git is and super basic use (commit is all they need to start with)
 
 ## Add a function
 
