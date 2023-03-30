@@ -175,6 +175,7 @@ Run `check()` and address stuff:
 2.  `document()` then `?greet`
 3.  Explore and commit changes
 4.  Discuss roxygen2 fields and where to get more help on this
+5.  What does `@export` mean? When would you *not* want a function to be exported?
 
 ## `check()` again
 
@@ -201,12 +202,62 @@ Should be able to install the package now, load it with `library()`, etc.
 
 ```{r}
 #read in data as an R object
-cupcakes <- read_csv("url/to/cupcakes/dataset.csv")
+baked_goods <- read.csv("https://www.ericrscott.com/files/baked_goods_long.csv")
 #use_data() on the R object to add to your package
-use_data(cupcakes)
+use_data(baked_goods)
 ```
 
--   Inspect files added
+-   Inspect output and see what is changed
+
+    -   lazy data means the dataset is available when you load the package without having to run `data(baked_goods)` .
+        Just load your package and `baked_goods` is available.
+
+    -   .rda files are for saving R objects
+
+-   Document the data set.
+    <https://r-pkgs.org/data.html#sec-documenting-data>
+
+    -   Create a `R/data.R`, paste in the example and edit
+
+    -   Never `@export` a dataset, they're available through lazy loading and this isn't needed.
+
+-   Run `document()` and check `?baked_goods`
+
+-   Run `check()`, commit and push
+
+## Testing
+
+-   "Unit tests" check that your code gives desired output, errors when it's supposed to, etc.
+
+-   Set up with `use_testthat()`
+
+-   Inspect changes
+
+    -   `tests/`
+
+    -   `DESCRIPTION`
+
+-   Add a test for our function with `use_test("greet")`
+
+-   Run test with button and with `test()` and with `check()`
+
+-   Edit test to make sense for greet
+
+```{r}
+test_that("greet works with names", {
+  expect_equal(greet("Eric"), "Hello Eric!")
+})
+
+test_that("greet works with default", {
+  expect_equal(greet(), "Hello User!")
+})
+```
+
+## Continuous Integration
+
+So you've got `check()` passing on your computer, but will your package work on a different OS?
+With a different version of R?
+How can you find out and be alerted if changes you make will break the package for others?
 
 ## Ideas...
 
