@@ -4,23 +4,84 @@ format: revealjs
 editor: visual
 ---
 
-## Quarto
+## What is an R package?
 
-Quarto enables you to weave together content and executable code into a finished presentation.
-To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+-   Provides functions to fit models, wrangle data, create plots, etc.
 
-## Bullets
+-   A way of documenting and sharing data sets
 
-When you click the **Render** button a document will be generated that includes:
+## Why make an R package?
 
--   Content authored with markdown
--   Output from executable code
+-   You find yourself copying and pasting code from one project to another
 
-## Code
+-   You have a great data set you want to document and share
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code.
-You can embed code like this:
+-   You think your code would be helpful for others working with similar data or analyses
+
+-   These things don't already exist in an R package somewhere
+
+## Overview
+
+In the workshop today we will:
+
+1.  Set up your system for R development
+2.  Make an R package with a function, a data set, documentation, and more!
+3.  Put that package on GitHub so it can be installed by others
+4.  Add unit tests and set up automated testing with GitHub actions
+5.  Give you the resources to learn more
+
+## Git and GitHub
+
+-   We will be using git and GitHub in this workshop in it's simplest way
+
+-   GitHub is a website for hosting code "repositories" and it will be how people can find and install our R package
+
+-   Git is a "version control" software that will let you track changes and "push" those changes to GitHub
+
+## Needed packages
+
+`devtools` is a "meta package" kind of like `tidyverse`.
+`here` will only be used during the setup process for this workshop.
 
 ```{r}
-1 + 1
+#code to load packages or install if you don't have them already
+if(!require(devtools)) {
+  install.packages("devtools")
+}
+if(!require(here)) {
+  install.packages("here")
+}
 ```
+
+## Configure git
+
+In the console, run `git_sitrep()` to get a "situation report" of your git setup.
+
+```{r}
+library(devtools)
+git_sitrep()
+```
+
+It is possible you don't have `git` installed.
+To install it:
+
+### macOS
+
+In terminal
+
+``` bash
+xcode-select --install
+```
+
+### Windows
+
+<https://git-scm.com/download/win>
+
+## Making a New Package
+
+There are *several* ways to go about making a new R package.
+We're going to go with the "GitHub first" method:
+
+1.  create an empty repository on GitHub with our package's name
+2.  clone that repository as a new R project
+3.  convert that R project into an R package

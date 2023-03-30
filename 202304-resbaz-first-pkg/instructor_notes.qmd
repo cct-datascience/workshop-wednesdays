@@ -10,16 +10,20 @@ Do the slides to give background and context.
 
 Remember to let people know that even if they don't end up making an R package that goes on CRAN (or any R package at all), that the skills they learn in the workshop will be helpful
 
-## Packages needed
-```{r}
-#| eval: false
-install.packages(c("devtools", "here"))
-```
+## Set up build tools
 
-You'll also need build tools.  
+> This may not be strictly necessary until you want to build packages containing C or C++ code.
+> Especially if you are using RStudio, you can set this aside for now.
+> The IDE will alert you and provide support once you try to do something that requires you to setup your development environment
+
+::: callout-important
+If it isn't going to work for someone, they can use Posit Cloud as a fallback.
+Build tools come pre-installed there.
+:::
 
 ### macOS
-For macOS, in terminal:
+
+Check if you already have xcode command line tools installed:
 
 ``` bash
 xcode-select -p
@@ -31,10 +35,22 @@ If you get an error instead of a path like `/Library/Developer/CommandLineTools`
 xcode-select --install
 ```
 
-## Windows
+### Windows
 
-Install Rtools (which is not an R package!)
+Install Rtools from <https://cran.r-project.org/bin/windows/Rtools/>
 
+-   **Do *not*** select the box for \"Edit the system PATH\".
+    devtools and RStudio should put Rtools on the `PATH` automatically when it is needed.
+
+-   **Do** select the box for \"Save version information to registry\".
+    It should be selected by default.
+
+## Install needed packages
+
+```{r}
+#| eval: false
+install.packages(c("devtools", "here"))
+```
 
 ## Configure Git
 
@@ -61,19 +77,21 @@ git_default_branch_configure()
 ```
 
 There are some other things to do in `git_sitrep()`, but first, let's make our first commit.
+Make a commit using the git pane in RStudio.
+Commit message can be something like "initial commit"
 
 ```{r}
 #check how we're doing
 git_sitrep()
 ```
 
-Set up personal access token (PAT)
+Set up personal access token (PAT).
+This is necessary to securely send things between your computer and GitHub.
 
 ```{r}
 #| eval: false
 create_github_token() #takes you to external website. Add description, but keep defaults
 ```
-
 
 ```{r}
 #| eval: false
@@ -85,7 +103,6 @@ gitcreds::gitcreds_set()
 git_sitrep()
 ```
 
-
 Now everything should be set (except maybe `upstream`) with no red x
 
 ## Convert into a package
@@ -96,16 +113,19 @@ here::here() #prints absolute path to current project directory
 create_package(here::here()) #converts current project to skeleton R package.  Overwrites files.
 ```
 
+## Go through the files created
 
-## Make a package
+-   `.gitignore` - list files you don't want to be on GitHub
 
-1.  Install build tools
-    -   Breakout rooms by OS?
-2.  Install necessary R packages
-3.  Many ways to start a package, we are going GitHub first route
-4.  New project from github, then `usethis::create_package(here::here())` to convert current project to package.
-5.  Go through all the files created and explain them
-6.  `use_git()` and troubleshoot. *extremely brief* overview of what git is and super basic use (commit is all they need to start with)
+-   `.Rbuildignore` - files that you want on GitHub, but that can't be part of your R package
+
+-   `DESCRIPTION` - contains package metadata
+
+-   `<package name>.Rproj` - holds settings for the RStudio Project
+
+-   `NAMESPACE` - read-only file that will be generated once we add some functions
+
+-   `R/` - this is where you'll put R code for your package's functions
 
 ## Add a function
 
@@ -145,15 +165,16 @@ create_package(here::here()) #converts current project to skeleton R package.  O
 
 Run `check()` and address stuff:
 
--   DESCRIPTION
+-   Edit author field in `DESCRIPTION`
 
--   `use_mit_license()`
+-   run `use_mit_license()`
 
 ## Add documentation
 
 1.  With cursor in function definition, add roxygen skeleton and fill it out
 2.  `document()` then `?greet`
 3.  Explore and commit changes
+4.  Discuss roxygen2 fields and where to get more help on this
 
 ## `check()` again
 
@@ -162,6 +183,30 @@ should pass
 ## Install
 
 Should be able to install the package now, load it with `library()`, etc.
+
+## Add a README
+
+-   run `use_readme_md()` and edit it.
+
+-   You could use `use_readme_rmd()` if you want a README that executes some code, like running an example.
+
+-   Commit and push changes.
+    View on GitHub
+
+## Add a data set
+
+-   Read in dataset from URL (paste code into chat I guess?)
+
+-   `use_data()` to add dataset to your package
+
+```{r}
+#read in data as an R object
+cupcakes <- read_csv("url/to/cupcakes/dataset.csv")
+#use_data() on the R object to add to your package
+use_data(cupcakes)
+```
+
+-   Inspect files added
 
 ## Ideas...
 
