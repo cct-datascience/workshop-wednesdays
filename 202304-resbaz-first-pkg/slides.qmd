@@ -30,44 +30,66 @@ In the workshop today we will:
 4.  Add unit tests and set up automated testing with GitHub actions
 5.  Give you the resources to learn more
 
+## Naming your package
+
+-   Short, no spaces hyphens or underscores
+
+-   Should reflect what the package does to some extent
+
+-   Shouldn't be the name of an already existing package
+
+-   Check for availability with the [`available` package](https://github.com/r-lib/available)
+
+Today we are making a toy package, so your package name doesn't need to follow these suggestions!
+
+## Making a New Package
+
+There are *several* ways to go about making a new R package that can be shared.
+We're going to go with the "GitHub first" method today:
+
+1.  create an empty repository on GitHub with our package's name
+2.  clone that repository as a new R project
+3.  convert that R project into an R package
+
 ## Git and GitHub
 
--   We will be using git and GitHub in this workshop in it's simplest way
+-   We will be using git and GitHub in this workshop in it's simplest ways
+
+-   Git is a "version control" software that will let you track changes to files and "push" those changes to GitHub
 
 -   GitHub is a website for hosting code "repositories" and it will be how people can find and install our R package
 
--   Git is a "version control" software that will let you track changes and "push" those changes to GitHub
+-   <!--# add link to git/github workshop -->
 
 ## Needed packages
+
+```{r}
+library(devtools)
+library(here)
+#if these lines give errors, you may need to install these packages:
+# install.packages("devtools")
+# install.packages("here")
+```
 
 `devtools` is a "meta package" kind of like `tidyverse`.
 `here` will only be used during the setup process for this workshop.
 
-```{r}
-#code to load packages or install if you don't have them already
-if(!require(devtools)) {
-  install.packages("devtools")
-}
-if(!require(here)) {
-  install.packages("here")
-}
-```
+## Check for git
 
-## Configure git
+Check that RStudio knows where git is on your computer.
+Go to Tools \> Global Options... and select the Git/SVN option.
 
-In the console, run `git_sitrep()` to get a "situation report" of your git setup.
+Make sure the checkbox is checked and there is something in the "Git executable" box
 
-```{r}
-library(devtools)
-git_sitrep()
-```
+![](settings.png)
 
-It is possible you don't have `git` installed.
-To install it:
+## Installing git
+
+If there is nothing in the git executable box, it is possible you need to install git on your system:
 
 ### macOS
 
-In terminal
+In terminal:
 
 ``` bash
 xcode-select --install
@@ -75,13 +97,4 @@ xcode-select --install
 
 ### Windows
 
-<https://git-scm.com/download/win>
-
-## Making a New Package
-
-There are *several* ways to go about making a new R package.
-We're going to go with the "GitHub first" method:
-
-1.  create an empty repository on GitHub with our package's name
-2.  clone that repository as a new R project
-3.  convert that R project into an R package
+Download the installer here: <https://git-scm.com/download/win>

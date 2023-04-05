@@ -39,17 +39,27 @@ xcode-select --install
 
 Install Rtools from <https://cran.r-project.org/bin/windows/Rtools/>
 
--   **Do *not*** select the box for \"Edit the system PATH\".
+-   **Do *not*** select the box for "Edit the system PATH".
     devtools and RStudio should put Rtools on the `PATH` automatically when it is needed.
 
--   **Do** select the box for \"Save version information to registry\".
+-   **Do** select the box for "Save version information to registry".
     It should be selected by default.
 
-## Install needed packages
+## Create empty repo on GitHub
+
+-   repo name = package name
+
+-   Copy https url
+
+## Create new R project from repo
+
+-   New Project \> Version Control \> Git, paste in URL
+
+## Load needed packages
 
 ```{r}
-#| eval: false
-install.packages(c("devtools", "here"))
+library(devtools)
+library(here)
 ```
 
 ## Configure Git
@@ -57,7 +67,6 @@ install.packages(c("devtools", "here"))
 Checklist of what to do to set things up.
 
 ```{r}
-library(usethis)
 git_sitrep()
 ```
 
@@ -109,9 +118,13 @@ Now everything should be set (except maybe `upstream`) with no red x
 
 ```{r}
 #| eval: false
-here::here() #prints absolute path to current project directory
-create_package(here::here()) #converts current project to skeleton R package.  Overwrites files.
+here() #prints absolute path to current project directory
+create_package(here()) #converts current project to skeleton R package.  Overwrites files.
 ```
+
+This will open a new RStudio window, so you can close the old one.
+
+Re-load devtools with `library(devtools)`
 
 ## Go through the files created
 
@@ -126,6 +139,14 @@ create_package(here::here()) #converts current project to skeleton R package.  O
 -   `NAMESPACE` - read-only file that will be generated once we add some functions
 
 -   `R/` - this is where you'll put R code for your package's functions
+
+## Sync with GitHub
+
+-   Commit ("convert to package") and push
+
+-   Inspect GitHub, notice how README.md is rendered
+
+-   Notice how files in .gitignore aren't there
 
 ## Add a function
 
@@ -209,7 +230,7 @@ use_data(baked_goods)
 
 -   Inspect output and see what is changed
 
-    -   lazy data means the dataset is available when you load the package without having to run `data(baked_goods)` .
+    -   lazy data means the dataset is available when you load the package without having to run `data(baked_goods)`.
         Just load your package and `baked_goods` is available.
 
     -   .rda files are for saving R objects
@@ -257,16 +278,33 @@ test_that("greet works with default", {
 
 So you've got `check()` passing on your computer, but will your package work on a different OS?
 With a different version of R?
+
 How can you find out and be alerted if changes you make will break the package for others?
 
-## Ideas...
+Continuous Integration (CI) is a practice of automatically building your package (or running an analysis pipeline) on a variety of systems every time you make changes to your code (and push to GitHub)
 
--   Use `lubridate` or `hms` to say either "good morning", "good afternoon" or "good evening" to practice `use_package()`
+We'll use GitHub Actions and `usethis` to set this up.
 
--   Add a dataset from a .csv online (read it in, wrangle, `use_data()`)
+-   `use_github_action_check_release()` sets up a *basic* action that runs `check()` using the latest release of R running on Linux
 
--   add tests with `use_testthat()`
+-   `use_github_action_check_standard()` runs a more intense check of your package on linux, macOs, and Windows using the latest release of R and the development version of R.
 
--   add github with `use_github()`
+-   Add a badge to your readme with `use_github_actions_badge()`
 
--   add CI with `use_github_actions()`
+-   Commit, push, and inspect GitHub repo
+
+## Installing from GitHub
+
+-   Add instructions to README for using `remotes::install_github("username/reponame")` to install
+
+## Other stuff you can do
+
+-   Add a vignette to your package with `use_vignette()`
+
+-   Add a code of conduct to your repo with `use_code_of_conduct()`
+
+-   Set up a website for your package with `use_pkgdown()` and `use_pkgdown_github_pages()`
+
+-   Make a checklist of what you need to do to submit your package to CRAN with `use_release_issue()`
+
+-   Set up an [r-universe](https://ropensci.org/r-universe/) so people can install your package with `install.pacakges()`
