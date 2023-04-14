@@ -1,34 +1,71 @@
 ---
-title: "Untitled"
-format: revealjs
+title: "Making Your First R Package 📦"
+subtitle: "ResBazAZ 2023"
+author: 
+  - name: Eric R. Scott
+    orcid: 0000-0002-7430-7879
+    affiliations: "Communications & Cyber Technologies, University of Arizona"
+format: 
+  revealjs:
+    theme: simple
 editor: visual
 ---
-
-## What is an R package?
-
--   Provides functions to fit models, wrangle data, create plots, etc.
-
--   A way of documenting and sharing data sets
 
 ## Why make an R package?
 
 -   You find yourself copying and pasting code from one project to another
 
--   You have a great data set you want to document and share
+-   You have data set you want to document and share
 
--   You think your code would be helpful for others working with similar data or analyses
+-   Your R code will be helpful for others doing similar analyses and you want to share
 
--   These things don't already exist in an R package somewhere
+## What makes an R package?
+
+-   DESCRIPTION
+
+    -   Metadata
+
+    -   Dependencies & requirements
+
+-   R code (functions)
+
+-   Data
+
+-   Documentation
 
 ## Overview
 
 In the workshop today we will:
 
-1.  Set up your system for R development
-2.  Make an R package with a function, a data set, documentation, and more!
-3.  Put that package on GitHub so it can be installed by others
-4.  Add unit tests and set up automated testing with GitHub actions
-5.  Give you the resources to learn more
+1.  Make an R package with a function, a data set, documentation, and more!
+2.  Put that package on GitHub so it can be installed by others
+3.  Add unit tests and set up automated testing with GitHub actions
+4.  Give you the resources to learn more
+
+------------------------------------------------------------------------
+
+::: columns
+::: {.column width="50%"}
+![](https://r-pkgs.org/images/cover.png){fig-alt="Cover of R Packages book by Hadley Wickham.  An eagle perches on top of the title block"}
+:::
+
+::: {.column width="50%"}
+[R Packages (2e)](https://r-pkgs.org/) goes into more detail on just about everything we'll cover today **and more**!
+:::
+:::
+
+------------------------------------------------------------------------
+
+::: columns
+::: {.column width="50%"}
+![](https://devguide.ropensci.org/images/cover.png){fig-alt="Cover image for rOpenSci Packages book"}
+:::
+
+::: {.column width="50%"}
+[rOpenSci](https://ropensci.org/) is a great organization that supports development of R packages.
+Their [book](https://devguide.ropensci.org/index.html) is another great resource to learn more.
+:::
+:::
 
 ## Naming your package
 
@@ -38,32 +75,47 @@ In the workshop today we will:
 
 -   Shouldn't be the name of an already existing package
 
--   Check for availability with the [`available` package](https://github.com/r-lib/available)
+. . .
 
+::: callout-tip
+Check for availability of package names with the [`available` package](https://github.com/r-lib/available)
+:::
+
+. . .
+
+::: callout-note
 Today we are making a toy package, so your package name doesn't need to follow these suggestions!
+:::
 
 ## Making a New Package
 
 There are *several* ways to go about making a new R package that can be shared.
 We're going to go with the "GitHub first" method today:
 
-1.  create an empty repository on GitHub with our package's name
-2.  clone that repository as a new R project
-3.  convert that R project into an R package
+1.  Create an empty repository on GitHub with our package's name
+2.  Clone that repository as a new R project
+3.  Convert that R project into an R package
 
 ## Git and GitHub
 
+::: incremental
 -   We will be using git and GitHub in this workshop in it's simplest ways
 
 -   Git is a "version control" software that will let you track changes to files and "push" those changes to GitHub
 
 -   GitHub is a website for hosting code "repositories" and it will be how people can find and install our R package
+:::
 
--   <!--# add link to git/github workshop -->
+. . .
+
+::: callout-tip
+Check out Andrew Antaya's session *Collaborating on code with GitHub* on Wednesday (track B)!
+:::
 
 ## Needed packages
 
 ```{r}
+#| echo: true
 library(devtools)
 library(here)
 #if these lines give errors, you may need to install these packages:
@@ -71,8 +123,9 @@ library(here)
 # install.packages("here")
 ```
 
-`devtools` is a "meta package" kind of like `tidyverse`.
-`here` will only be used during the setup process for this workshop.
+-   `devtools` is a "meta package" kind of like `tidyverse`
+
+-   `here` will only be used during the setup process for this workshop
 
 ## Check for git
 
@@ -98,3 +151,5 @@ xcode-select --install
 ### Windows
 
 Download the installer here: <https://git-scm.com/download/win>
+
+# Let's Get Started!
