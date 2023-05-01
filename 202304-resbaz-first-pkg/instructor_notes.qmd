@@ -1,0 +1,408 @@
+---
+title: "Making Your First R Package 📦 (Instructor Notes)"
+subtitle: "ResBazAZ 2023"
+author: 
+  - name: Eric R. Scott
+    orcid: 0000-0002-7430-7879
+    affiliations: "Communications & Cyber Technologies, University of Arizona"
+format: 
+  html:
+    toc: true
+editor: visual
+execute: 
+  eval: false
+  echo: true
+---
+
+# Introduction
+
+[Slides](https://cct-datascience.quarto.pub/making-your-first-r-pkg-slides/#/title-slide)
+
+::: callout-tip
+Remember, even if you don't ever make an R package that goes on CRAN (or any R package at all), the skills covered in this workshop will be helpful!
+:::
+
+# Project Setup
+
+## Create empty repo on GitHub
+
+-   repo name = package name
+
+-   Copy https url
+
+## Create new R project from repo
+
+-   New Project \> Version Control \> Git, paste in URL
+
+## Load needed packages
+
+```{r}
+#| eval: true
+library(devtools)
+library(here)
+```
+
+# Git/GitHub setup
+
+::: callout-tip
+This is all a one-time per computer setup
+:::
+
+## Configure Git
+
+Get a checklist of what to do to set things up:
+
+```{r}
+#| eval: true
+git_sitrep()
+```
+
+Add a global `.gitignore` to prevent you from accidentally sharing sensitive files on GitHub:
+
+```{r}
+git_vaccinate()
+```
+
+Introduce yourself to git:
+
+```{r}
+use_git_config(
+  user.name = "your name",
+  user.email = "youremail@arizona.com", #email you used to sign up for GitHub account
+)
+
+```
+
+Set a default branch name:
+
+```{r}
+#sets your default branch name to "main"
+git_default_branch_configure()
+```
+
+## Git and GitHub
+
+There are some other things to do in `git_sitrep()`, but first, let's make our first commit.
+Make a commit using the git pane in RStudio.
+Commit message can be something like "initial commit"
+
+```{r}
+#check how we're doing
+git_sitrep()
+```
+
+Set up a personal access token (PAT).
+This is necessary to securely send things between your computer and GitHub.
+
+```{r}
+create_github_token() #takes you to external website. Add description, but keep defaults
+```
+
+Store that token on your computer:
+
+```{r}
+gitcreds::gitcreds_set()
+#paste in PAT from GitHub
+```
+
+Double-check that it worked:
+
+```{r}
+git_sitrep()
+```
+
+Now everything should be set (except maybe `upstream`) with no ❌s
+
+# Package Setup
+
+## Convert into a package
+
+We'll use `create_package()` to convert our current project to a package.
+It takes a `path` argument that we'll supply with `here::here()`
+
+```{r}
+here() #absolute path to current project
+```
+
+```{r}
+create_package(here()) #converts current project to skeleton R package.  Overwrites files.
+```
+
+This will open a new RStudio window, so you can close the old one.
+
+Re-load devtools with `library(devtools)`
+
+## Files created
+
+-   `.gitignore` - list files you don't want to be on GitHub
+
+-   `.Rbuildignore` - files that you want on GitHub, but that can't be part of your R package
+
+-   `DESCRIPTION` - contains package metadata
+
+-   `<package name>.Rproj` - holds settings for the RStudio Project
+
+-   `NAMESPACE` - read-only file that will be generated once we add some functions
+
+-   `R/` - this is where you'll put R code for your package's functions
+
+## Add a README
+
+-   run `use_readme_md()` and edit the README.
+
+-   You could use `use_readme_rmd()` if you want a README that executes some code, like running an example.
+
+## Sync with GitHub
+
+-   Commit (message = "convert to package") and push
+
+-   Inspect GitHub repo, notice how README.md is rendered
+
+-   Notice how files in .gitignore aren't there
+
+# Functions
+
+## Add a function
+
+1.  New .R file, save as greet.R
+
+2.  Start with super simple:
+
+    ```{r}
+    #| eval: true
+    #| filename: greet.R
+    greet <- function() {
+      cat("Hello!")
+    }
+    ```
+
+    ```{r}
+    #| eval: true
+    greet()
+    ```
+
+3.  `load_all()` and run `greet()`
+
+4.  Add argument:
+
+    ```{r}
+    #| eval: true
+    #| filename: greet.R
+    greet <- function(name) {
+      cat("Hello ", name, "!", sep = "")
+    }
+    ```
+
+5.  `load_all()` and `greet("yourname")`
+
+    ```{r}
+    #| eval: true
+    #| error: true
+    greet("Eric")
+    greet()
+    ```
+
+6.  `greet()` errors, so let's add a default
+
+    ```{r}
+    #| eval: true
+    #| filename: greet.R
+    greet <- function(name = "User") {
+      cat("Hello ", name, "!", sep = "")
+    }
+    ```
+
+7.  `load_all()` and `greet()`
+
+    ```{r}
+    #| eval: true
+    greet()
+    ```
+
+## `check()`
+
+Run `check()` and address stuff:
+
+-   Edit author field in `DESCRIPTION`
+
+-   run `use_mit_license()`
+
+## Add documentation
+
+1.  With cursor in function definition, add roxygen skeleton and fill it out
+2.  `document()` then `?greet`
+3.  Explore and commit changes
+4.  Discuss roxygen2 fields and where to get more help on this
+5.  What does `@export` mean? When would you *not* want a function to be exported?
+
+## `check()` again
+
+should pass
+
+## Install
+
+Should be able to install the package now, load it with `library()`, etc.
+
+## Add A dependency
+
+Let's make the output colorful with the `cli` package!
+
+```{r}
+#| eval: true
+#| filename: greet.R
+greet <- function(name = "User") {
+  cat("Hello ", cli::col_cyan(name), "!\n", sep = "")
+}
+```
+
+```{r}
+#| eval: true
+greet("Eric")
+```
+
+1.  Notice the syntax---`pkgname::function()`---this is *essential* so that your package knows which package functions are from!
+
+2.  Run `check()` and notice the warning:
+
+    ```         
+    '::' or ':::' import not declared from: ‘cli’
+    ```
+
+3.  Solution: `use_package("cli")`
+
+4.  Inspect DESCRIPTION and run `check()` again
+
+# Data
+
+## Add a data set
+
+-   Read in dataset from URL (paste code into chat I guess?)
+
+-   `use_data()` to add dataset to your package
+
+```{r}
+#read in data as an R object
+baked_goods <- read.csv("https://www.ericrscott.com/files/baked_goods_long.csv")
+#use_data() on the R object to add to your package
+use_data(baked_goods)
+```
+
+-   Inspect output and see what is changed
+
+    -   lazy data means the dataset is available when you load the package without having to run `data(baked_goods)`.
+        Just load your package and `baked_goods` is available.
+
+    -   .rda files are for saving R objects
+
+-   Document the data set.
+    <https://r-pkgs.org/data.html#sec-documenting-data>
+
+    -   Create a `R/data.R`, paste in the example and edit
+
+    -   Never `@export` a dataset, they're available through lazy loading and this isn't needed.
+
+-   Run `document()` and check `?baked_goods`
+
+-   Run `check()`, commit and push
+
+# Testing
+
+## Writing tests
+
+-   "Unit tests" check that your code gives desired output, errors when it's supposed to, etc.
+
+-   Set up with `use_testthat()`
+
+-   Inspect changes
+
+    -   `tests/`
+
+    -   `DESCRIPTION`
+
+-   Add a test for our function with `use_test("greet")`
+
+-   Run test with button and with `test()` and with `check()`
+
+-   Edit test to make sense for greet
+
+```{r}
+#| filename: test-greet.R
+test_that("greet works with names", {
+  expect_equal(greet("Eric"), "Hello Eric!")
+})
+
+test_that("greet works with default", {
+  expect_equal(greet(), "Hello User!")
+})
+```
+
+## Continuous Integration
+
+So you've got `check()` passing on your computer, but will your package work on a different OS?
+With a different version of R?
+
+How can you find out and be alerted if changes you make will break the package for others?
+
+Continuous Integration (CI) is a practice of automatically building your package (or running an analysis pipeline) on a variety of systems every time you make changes to your code (and push to GitHub)
+
+We'll use GitHub Actions and `usethis` to set this up.
+
+-   `use_github_action_check_release()` sets up a *basic* action that runs `check()` using the latest release of R running on Linux
+
+-   `use_github_action_check_standard()` runs a more intense check of your package on linux, macOs, and Windows using the latest release of R and the development version of R.
+
+-   Add a badge to your readme with `use_github_actions_badge()`
+
+-   Commit, push, and inspect GitHub repo
+
+# Sharing your Package
+
+## Installing from GitHub
+
+-   Add instructions to README for using `remotes::install_github("username/reponame")` to install
+-   Set up a website for your package with `use_pkgdown()` and `use_pkgdown_github_pages()`
+
+# Polishing your Package
+
+-   Add a vignette to your package with `use_vignette()`
+
+-   Add a code of conduct to your repo with `use_code_of_conduct()`
+
+-   Make a checklist of what you need to do to submit your package to CRAN with `use_release_issue()`
+
+# Appendix
+
+## Set up build tools
+
+> This may not be strictly necessary until you want to build packages containing C or C++ code.
+> Especially if you are using RStudio, you can set this aside for now.
+> The IDE will alert you and provide support once you try to do something that requires you to setup your development environment
+
+::: callout-important
+If it isn't going to work for someone, they can use Posit Cloud as a fallback.
+Build tools come pre-installed there.
+:::
+
+### macOS
+
+Check if you already have xcode command line tools installed:
+
+``` bash
+xcode-select -p
+```
+
+If you get an error instead of a path like `/Library/Developer/CommandLineTools`, then you need to install xcode command line tools with:
+
+``` bash
+xcode-select --install
+```
+
+### Windows
+
+Install Rtools from <https://cran.r-project.org/bin/windows/Rtools/>
+
+-   **Do *not*** select the box for "Edit the system PATH".
+    devtools and RStudio should put Rtools on the `PATH` automatically when it is needed.
+
+-   **Do** select the box for "Save version information to registry".
+    It should be selected by default.
