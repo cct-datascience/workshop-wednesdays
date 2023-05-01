@@ -513,11 +513,13 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 <!-- -->
 
-    OPLS-DA
-    30 samples x 29 variables and 1 response
-    standard scaling of predictors and response(s)
-          R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
-    Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+```         
+OPLS-DA
+30 samples x 29 variables and 1 response
+standard scaling of predictors and response(s)
+      R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
+Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+```
 
 ::: incremental
 -   $R^2_X$(cum) = How much variation in ingredients is explained by the axes
@@ -533,11 +535,13 @@ baked_opls <- opls(ingredients, baked_goods$type, predI = 1, orthoI = NA)
 
 <!-- -->
 
-    OPLS-DA
-    30 samples x 29 variables and 1 response
-    standard scaling of predictors and response(s)
-          R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
-    Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+```         
+OPLS-DA
+30 samples x 29 variables and 1 response
+standard scaling of predictors and response(s)
+      R2X(cum) R2Y(cum) Q2(cum) RMSEE pre ort pR2Y  pQ2
+Total    0.189    0.832    0.58 0.214   1   1 0.05 0.05
+```
 
 ::: incremental
 -   RMSEE = Square root of the mean error between the actual and the predicted responses

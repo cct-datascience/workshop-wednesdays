@@ -1,0 +1,8 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: 9a92b9c7-cef1-4ea0-b8d4-7212197fd357
+      url: 'https://quartopub.com/sites/cct-datascience/making-your-first-r-pkg-slides'
+- source: instructor_notes.qmd
+  quarto-pub:
+    - id: 9249abc0-ac32-4e56-bd8f-2fa65b1fc52f
+      url: 'https://quartopub.com/sites/cct-datascience/making-your-first-r-pkg-notes'
