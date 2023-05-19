@@ -1,0 +1,497 @@
+---
+title: "Understanding the foundations of 'ggplot2'"
+author: Jessica Guo
+format: 
+  revealjs:
+    code-copy: true
+    code-link: true
+    df-print: kable
+    slide-number: true
+    chalkboard: true
+    mouse-wheel: false
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
+editor: visual
+execute: 
+  echo: true
+editor_options: 
+  chunk_output_type: console
+---
+
+## June workshop series
+
+::: incremental
+
+In Part 1 of this series, we will:
+
+- Explore the grammar of graphics
+
+- Understand stat_* vs. geom_*
+
+- Navigate 'ggplot2' documentation
+
+- Combine raw and summarized data in one layered plot
+
+- Annotate plots with labels
+
+:::
+
+## What is a grammar?
+
+"The fundamental principles or rules of an art or science" - Oxford English Dictionary
+
+::: incremental
+
+- reveal composition of complicated graphics
+
+- strong foundation for understanding a range of graphics
+
+- guide for well-formed or correct graphics
+
+:::
+
+::: callout-note
+
+See "The Grammar of Graphics" by Wilkinson, Anand, and Grossman (2005) and "A Layered Grammar of Graphics" by Wickham (2010)
+
+:::
+
+## The layered grammar of graphics
+
+::: columns
+::: {.column width="40%"}
+
+```{r}
+#| warning: false
+#| echo: false
+#| fig-width: 4
+#| fig-height: 4
+
+library(palmerpenguins)
+library(ggplot2)
+
+ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, 
+                     size = body_mass_g,
+                     color = species)) +
+  geom_point(alpha = 0.5) +
+  theme_classic(base_size = 16) +
+  scale_color_manual(values = c("#FF8100", "#C75BCB", "#057575")) +
+  guides(size = "none",
+         color = "none")
+```
+
+![](img/penguins.png){width=350 fig-align="center" fig-alt="Cartoon image of three Chinstrap, Gentoo, and Adelie penguins."}
+:::
+
+::: {.column width="60%"}
+A plot contains:
+
+::: incremental
+
+- Data and aesthetic mapping
+
+- Geometric objects
+
+- Statistical transformation
+
+- Scales 
+
+- Coordinate system
+
+:::
+
+:::
+:::
+
+
+## Mapping data to aesthetics 
+
+Subset of original data
+
+```{r}
+#| echo: false
+example <- penguins[c(1:2, 160:161, 283:284), c(1, 3:4, 6)]
+example
+```
+
+## Mapping data to aesthetics 
+
+Variables mapped to aesthetic
+
+```{r}
+#| echo: false
+library(dplyr)
+example <- penguins[c(1:2, 160:161, 283:284), c(1, 3:4, 6)]
+example %>%
+  rename(x = bill_length_mm,
+         y = bill_depth_mm,
+         Size = body_mass_g,
+         Color = species)
+```
+
+## The layered grammar of graphics
+
+A layer contains:
+
+::: incremental
+
+- Data with aesthetic mapping
+
+- A statistical transformation, or *stat*
+
+- A geometric object, or *geom*
+
+- A position adjustment 
+
+::: 
+
+
+## The layered grammar of graphics
+
+A layer contains:
+
+
+- Data with aesthetic mapping
+
+- A statistical transformation, or *stat*
+
+- A geometric object, or *geom*
+
+- A position adjustment 
+
+
+::: {.callout-note collapse="true"}
+
+`geom_*()` or `stat_*()` calls are a shortcut for the `layer()` function. 
+
+`geom_point()` is equivalent to `layer(geom = "point", stat = "identity", position = "identity")`
+
+:::
+
+## A brief explanation of defaults
+
+::: columns
+::: {.column width="50%"}
+
+Defining each of the components of a layer or whole graphic can be tiresome, so 'ggplot2' has a hierarchy of defaults. 
+
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 5
+
+ggplot() +
+  layer(data = penguins,
+        mapping = aes(x = body_mass_g,
+                      y = flipper_length_mm),
+        geom = "point", 
+        stat = "identity",
+        position = "identity") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  coord_cartesian()
+```
+:::
+:::
+
+## Many ways to build a plot
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+#| eval: false
+
+ggplot() +
+  layer(data = penguins,
+        mapping = aes(
+          x = body_mass_g,
+          y = flipper_length_mm),
+        geom = "point", 
+        stat = "identity",
+        position = "identity") +
+  scale_x_continuous() +
+  scale_y_continuous() +
+  coord_cartesian()
+```
+
+```{r}
+#| eval: false
+
+ggplot() +
+  geom_point(data = penguins,
+             mapping = aes(
+               x = body_mass_g,
+               y = flipper_length_mm))
+```
+
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 5
+
+ggplot() +
+  geom_point(data = penguins,
+             mapping = aes(
+               x = body_mass_g,
+               y = flipper_length_mm))
+```
+:::
+:::
+
+## Inheriting and defaults to add layers
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+#| eval: false
+ggplot() +
+  geom_point(data = penguins,
+             mapping = aes(
+               x = body_mass_g,
+               y = flipper_length_mm))
+```
+
+```{r}
+#| eval: false
+ggplot(data = penguins,
+       mapping = aes(x = body_mass_g,
+                     y = flipper_length_mm)) +
+  geom_point() +
+  stat_smooth(method = lm)
+
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| echo: false
+#| fig-width: 5
+#| fig-height: 5
+ggplot(data = penguins,
+       mapping = aes(x = body_mass_g,
+                     y = flipper_length_mm)) +
+  geom_point() +
+  stat_smooth(method = lm)
+
+```
+:::
+:::
+
+## `stat_*` vs. `geom_*`
+
+"Every geom has a default statistic, and every statistic has a default geom." - Wickham (2010)
+
+::: incremental
+- `stat_*` transforms the data
+- By computing or summarizing from original input dataset
+- Returns a new dataset that can be mapped to aesthetics 
+
+- `geom_*` control the type of plot rendered
+
+:::
+
+::: {.callout-tip collapse="true"}
+When in doubt, check the documentation! 
+:::
+
+## Two ways to plot counts (categorical)
+`stat_count()` and `geom_bar()` are equivalent
+
+::: columns
+::: {.column width="50%"}
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data = penguins, 
+       mapping = aes(x = species, 
+                     fill = sex)) +
+  stat_count()
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data = penguins, 
+       mapping = aes(x = species, 
+                     fill = sex)) +
+  geom_bar()
+```
+:::
+
+:::
+
+## Two ways to plot density (continuous)
+`stat_density()` and `geom_density()` are not quite equivalent
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data = penguins, 
+       mapping = aes(x = body_mass_g, 
+                     fill = species)) +
+  stat_density(alpha = 0.5)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+ggplot(data = penguins, 
+       mapping = aes(x = body_mass_g, 
+                     fill = species)) +
+  geom_density(alpha = 0.5)
+```
+:::
+
+:::
+
+## Position adjustment options
+
+::: {.panel-tabset}
+
+### stack
+
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| fig-align: center
+ggplot(data = penguins, mapping = aes(x = species, fill = sex)) +
+  geom_bar(position = "stack")
+```
+
+### fill
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| fig-align: center
+ggplot(data = penguins, mapping = aes(x = species, fill = sex)) +
+  geom_bar(position = "fill")
+```
+
+### dodge
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| fig-align: center
+ggplot(data = penguins, mapping = aes(x = species, 
+                     fill = sex)) +
+  geom_bar(position = "dodge")
+```
+
+
+
+:::
+
+## Position adjustment options
+
+::: {.panel-tabset}
+### identity
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| fig-align: center
+ggplot(data = penguins, mapping = aes(x = species, y = body_mass_g, color = sex)) +
+  geom_point(position = "identity")
+```
+
+### jitter
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| fig-align: center
+ggplot(data = penguins, mapping = aes(x = species, y = body_mass_g, color = sex)) +
+  geom_point(position = "jitter")
+```
+
+### jitterdodge
+```{r}
+#| fig-width: 5
+#| fig-height: 4
+#| fig-align: center
+ggplot(data = penguins, mapping = aes(x = species, y = body_mass_g, color = sex)) +
+  geom_point(position = position_jitterdodge())
+```
+
+:::
+
+## Creating a layered plot
+
+```{r}
+#| echo: false
+#| fig-width: 6
+#| fig-height: 5
+#| fig-align: center
+library(multcompView)
+library(tidyverse)
+
+# Run ANOVA and get letters
+m1 <- aov(body_mass_g ~ species * sex, data = penguins)
+cld <- multcompLetters4(m1, TukeyHSD(m1))
+
+# Create dataframe for plot
+cld_df <- data.frame(letter = cld$`species:sex`$Letters) %>%
+  tibble::rownames_to_column("name") %>%
+  mutate(species = str_extract(name, "^[^\\:]+"),
+         sex = str_extract(name, "(?<=\\:).*"))
+ggplot(data = penguins %>%
+         filter(!is.na(sex)),
+       mapping = aes(x = species, 
+                     y = body_mass_g,
+                     color = sex)) +
+  geom_jitter(alpha = 0.15,
+              position = position_jitterdodge()) +
+  stat_summary(fun = mean,
+               fun.min = function(x) mean(x) - sd(x),
+               fun.max = function(x) mean(x) + sd(x),
+               position = position_dodge(width = 0.75))
+  # geom_text(data = cld_df, 
+  #           mapping = aes(x = species,
+  #                         y = 6000,
+  #                         group = sex,
+  #                         label = letter),
+  #           hjust = 0.5,
+  #           position = position_dodge(width = 0.75),
+  #           color = "black")
+
+```
+
+
+::: callout-note
+What are the two layers in this plot? What kind of data when into each?
+:::
+
+
+
+## Scales control data -> aesthetics
+One scale per aesthetic property used in a layer
+
+
+
+## Coordinate system
+Cartesian coordinate system is most common for 2 dimensions, but also polar coordinates and various map projections
+
+
+
+## Acknowledgements and further resources
+
+Artwork is by Allison Horst. 
+
+Hadley Wickham's "A layered grammar of graphics" (2009)
+
+Hadley Wickham's "ggplot2: Elegant Graphics for Data Analysis, 3rd edition", available [online](https://ggplot2-book.org/)

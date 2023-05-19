@@ -53,6 +53,7 @@ vignettes/*.pdf
 
 
 # large data files, assorted helper files/folders for rendering
+20230605-foundations-ggplot2/slides_files/
 202303-dplyr-joins/slides.html
 202303-dplyr-joins/slides_files/
 202303-dplyr-joins/data_raw/new_data.zip
