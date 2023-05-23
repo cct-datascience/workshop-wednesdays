@@ -1,0 +1,237 @@
+---
+title: "Crafting Publication Quality Data Visualizations with `ggplot2`"
+author: "Eric R. Scott"
+format: html
+editor: visual
+---
+
+::: callout-note
+## Learning Objectives
+
+-   Customize color palettes with accessibility in mind
+-   Customize appearance of plots with themes
+-   Customizing axes (ticks, grid-lines, labels, date axes, transformations)
+-   Create custom legends
+-   Save high resolution or vector formats
+-   Arrange multi-panel figures
+:::
+
+## Required by journals
+
+Journals often require certain modifications to your plots to make them publication-ready
+
+-   High resolution
+-   Specific file types (TIFF, EPS, PDF are common)
+-   Figure size limits
+-   Suggested font size & typeface
+
+## Not required, but good practice
+
+Other modifications to the appearance of your plot are a good idea, but less often required by journals or reviewers
+
+-   Colorblind accessible colors
+-   Grey scale friendly colors
+-   Perceptually-even colors
+-   High [data-ink ratio](https://infovis-wiki.net/wiki/Data-Ink_Ratio) (simplify plot, within reason)
+-   Arrangement of related plots into multi-panel figures
+
+## Example plots
+
+<!--# code for producing 2 or 3 plots that we will eventually arrange into a multi-panel figure.  Ideally two plots with the same legend, and a third related plot with a different legend to fully demonstrate flexibility of `patchwork` -->
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+mean_sd <- function(x) {
+  tibble(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
+}
+```
+
+A version of the plot from part 1 of this workshop series is re-created here.
+
+```{r}
+p1 <-
+  ggplot(data = penguins |> 
+           filter(!is.na(sex)),
+         mapping = aes(x = species, 
+                       y = body_mass_g,
+                       shape = sex)) +
+  geom_point(
+    alpha = 0.15,
+    position = position_jitterdodge(dodge.width = 0.75)
+  ) +
+  stat_summary(
+    fun.data = mean_sd,
+    position = position_dodge(width = 0.75)
+  )
+p1
+```
+
+In addition, I'll create two more basic plots for practice combining plots into multi-panel figures.
+
+```{r}
+#bill length vs. flipper length
+p2 <-
+  ggplot(penguins,
+         aes(
+           x = flipper_length_mm,
+           y = bill_length_mm,
+           color = species,
+           shape = species
+         )) +
+  geom_point() +
+  geom_smooth(method = "lm", aes(fill = species))
+p2
+```
+
+```{r}
+# flipper length to mass ratio vs. bill_length
+p3 <-
+  ggplot(penguins,
+         aes(
+           x = flipper_length_mm,
+           y = bill_depth_mm,
+           color = species,
+           fill = species,
+           shape = species
+         )) +
+  geom_point() +
+  geom_smooth(method = "lm")
+p3
+```
+
+## Color
+
+<!--# This would be better demo with a continuous color scale first, then show with our example using discrete scale -->
+
+There are many ways to change plot colors, including using built-in palettes, packages that add color palettes, and manually.
+It's usually best to choose a color palette that meets these criteria:
+
+-   Colorblind friendly
+-   Greyscale friendly
+-   Perceptually even
+-   High contrast (with background & eachother)
+
+The viridis color palettes built in to `ggplot2` generally meet these criteria and are a good choice if you don't like the `ggplot2` defaults.
+
+Color palettes come in different 'flavors'.
+Choose the flavor that best fits your data:
+
+-   Discrete / qualitative
+-   Continuous
+-   Diverging
+
+```{r}
+v <- 
+  ggplot(penguins,
+         aes(x = bill_length_mm, y = bill_depth_mm, color = body_mass_g)) +
+  geom_point()
+v
+```
+
+```{r}
+#continuous viridis with defaults
+v + scale_color_viridis_c()
+
+#variations with option = "A" through "H"
+v + scale_color_viridis_c(option = "B")
+
+#binned continuous with _b version
+v + scale_color_viridis_b(n.breaks = 5)
+```
+
+The viridis palettes tend to end on a very bright yellow, which doesn't look great on light backgrounds, especially on a projector.
+You can "cap" the scale using `begin` and `end`.
+
+E.g. Begin at 10% in to skip the darkest purples and end at 90% to skip the brightest yellows
+
+```{r}
+v + scale_color_viridis_c()
+v + scale_color_viridis_c(begin = 0.1, end = 0.9)
+```
+
+### Discrete colors
+
+Our initial example plot uses just 3 colors, but we can still use viridis to ensure they are colorblind friendly and perceptually even using `scale_color_viridis_d()` for "discrete".
+The colors still follow a gradient from cool to warm.
+
+```{r}
+p + scale_color_viridis_d(end = 0.9, option = "C")
+```
+
+### Manual color palette
+
+Maybe you don't like the viridis palettes or maybe you want a palette more appropriate for diverging or discrete data.
+
+<!--# Show how to use scale_color_manual() and show R packages / resources for custom palettes -->
+
+-   `colorspace`
+
+-   `cols4all`
+
+-   `paletteer`
+
+-   https://github.com/EmilHvitfeldt/r-color-palettes#readme
+
+```{r}
+my_cols <- c("#B60A1C","#E39802","#309143")
+my_cols
+p + scale_color_manual(values = my_cols)
+```
+
+
+```{r}
+#specify which color goes with which level using named vector
+my_cols <- c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
+my_cols
+p + scale_color_manual(values = my_cols)
+```
+
+## Labeling scales
+
+Each scale (color, fill, shape), including x and y axes, can have a label.
+There are multiple ways to set this, but I'll demonstrate setting it with `labs()`
+
+```{r}
+p + labs(color = "Penguin Species")
+```
+
+This creates a separate legend for color.
+Guides with the same name will get combined when possible.
+
+```{r}
+p + labs(color = "Penguin Species", shape = "Penguin Species")
+```
+
+We can also use `labs()` to re-name the axes
+
+```{r}
+p + 
+  labs(
+    color = "Penguin Species",
+    shape = "Penguin Species",
+    x = "Flipper Length (mm)",
+    y = "Bill Length (mm)"
+  )
+```
+
+## Saving plots
+
+Although we often leave this step until the end, I think it's good to save your plot to a file early on.
+If you have some plot dimensions in mind, this allows you to see how your changes will look with the finished plot.
+
+```{r}
+# ggsave(
+#   filename = , #path to save file to
+#   plot = , #ggplot object.  Def is last plot, but better to specify
+#   width = , 
+#   height = ,
+#   units = , units for width and height
+#   dpi = resolution for raster images (e.g. .tiff, .png, .jpg)
+# )
+```
+
+### Raster vs. Vector
+
+Define these & give examples.
+Discuss limitations (e.g. EPS doesn't do transparency with all graphics devices)
