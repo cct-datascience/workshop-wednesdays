@@ -1,8 +1,14 @@
 ---
 title: "Crafting Publication Quality Data Visualizations with `ggplot2`"
 author: "Eric R. Scott"
-format: html
+format: 
+  html: 
+    code-link: true
+    code-tools: true
 editor: visual
+execute: 
+  warning: false
+bibliography: references.bib
 ---
 
 ::: callout-note
@@ -42,14 +48,15 @@ Other modifications to the appearance of your plot are a good idea, but less oft
 ```{r}
 library(tidyverse)
 library(palmerpenguins)
-mean_sd <- function(x) {
-  tibble(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
-}
 ```
 
 A version of the plot from part 1 of this workshop series is re-created here.
 
 ```{r}
+#| code-fold: true
+mean_sd <- function(x) {
+  tibble(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
+}
 p1 <-
   ggplot(data = penguins |> 
            filter(!is.na(sex)),
@@ -64,12 +71,16 @@ p1 <-
     fun.data = mean_sd,
     position = position_dodge(width = 0.75)
   )
+```
+
+```{r}
 p1
 ```
 
 In addition, I'll create two more basic plots for practice combining plots into multi-panel figures.
 
 ```{r}
+#| code-fold: true
 #bill length vs. flipper length
 p2 <-
   ggplot(penguins,
@@ -81,10 +92,14 @@ p2 <-
          )) +
   geom_point() +
   geom_smooth(method = "lm", aes(fill = species))
+```
+
+```{r}
 p2
 ```
 
 ```{r}
+#| code-fold: true
 # flipper length to mass ratio vs. bill_length
 p3 <-
   ggplot(penguins,
@@ -97,12 +112,13 @@ p3 <-
          )) +
   geom_point() +
   geom_smooth(method = "lm")
+```
+
+```{r}
 p3
 ```
 
 ## Color
-
-<!--# This would be better demo with a continuous color scale first, then show with our example using discrete scale -->
 
 There are many ways to change plot colors, including using built-in palettes, packages that add color palettes, and manually.
 It's usually best to choose a color palette that meets these criteria:
@@ -112,32 +128,37 @@ It's usually best to choose a color palette that meets these criteria:
 -   Perceptually even
 -   High contrast (with background & eachother)
 
-The viridis color palettes built in to `ggplot2` generally meet these criteria and are a good choice if you don't like the `ggplot2` defaults.
+The viridis color palettes built in to `ggplot2` generally meet these criteria and are a good choice for many visualizations.
 
-Color palettes come in different 'flavors'.
-Choose the flavor that best fits your data:
-
--   Discrete / qualitative
--   Continuous
--   Diverging
+Here's an example plot with a color bar:
 
 ```{r}
 v <- 
-  ggplot(penguins,
-         aes(x = bill_length_mm, y = bill_depth_mm, color = body_mass_g)) +
+  ggplot(
+    penguins,
+    aes(x = bill_length_mm, y = bill_depth_mm, color = body_mass_g)
+  ) +
   geom_point()
 v
 ```
 
+For a continuous color scale use `scale_color_viridis_c()`
+
 ```{r}
-#continuous viridis with defaults
 v + scale_color_viridis_c()
+```
 
-#variations with option = "A" through "H"
+Other palettes are available by changing `option`
+
+```{r}
+# Variations with option = "A" through "H"
 v + scale_color_viridis_c(option = "B")
+```
 
-#binned continuous with _b version
-v + scale_color_viridis_b(n.breaks = 5)
+A binned version is available with `scale_color_viridis_b()`
+
+```{r}
+v + scale_color_viridis_b(option = "B", n.breaks = 5)
 ```
 
 The viridis palettes tend to end on a very bright yellow, which doesn't look great on light backgrounds, especially on a projector.
@@ -146,6 +167,7 @@ You can "cap" the scale using `begin` and `end`.
 E.g. Begin at 10% in to skip the darkest purples and end at 90% to skip the brightest yellows
 
 ```{r}
+#| layout-ncol: 2
 v + scale_color_viridis_c()
 v + scale_color_viridis_c(begin = 0.1, end = 0.9)
 ```
@@ -156,35 +178,44 @@ Our initial example plot uses just 3 colors, but we can still use viridis to ens
 The colors still follow a gradient from cool to warm.
 
 ```{r}
-p + scale_color_viridis_d(end = 0.9, option = "C")
+p2 + scale_color_viridis_d(end = 0.9, option = "C")
+```
+
+To apply the same color scale to both "fill" and "color", you can use the `aesthetics` argument to `scale_color_*` or `scale_fill_*` functions.
+
+```{r}
+p2 + scale_color_viridis_d(end = 0.9, option = "C", aesthetics = c("fill", "color"))
 ```
 
 ### Manual color palette
 
 Maybe you don't like the viridis palettes or maybe you want a palette more appropriate for diverging or discrete data.
+There are a ***ton*** of tools for generating color palettes---both R packages that extend ggplot2 and external tools.
 
-<!--# Show how to use scale_color_manual() and show R packages / resources for custom palettes -->
+Packages and resources to check out:
 
--   `colorspace`
+-   [`colorspace`](https://hclwizard.org/r-colorspace/) [@zeileis2019colorspace]
+-   [`cols4all`](https://github.com/mtennekes/cols4all)
+-   [`paletteer`](https://emilhvitfeldt.github.io/paletteer/)
+-   [Comprehensive list of color palettes in r](https://github.com/EmilHvitfeldt/r-color-palettes#readme)
 
--   `cols4all`
-
--   `paletteer`
-
--   https://github.com/EmilHvitfeldt/r-color-palettes#readme
+You can use *any* set of colors as a custom palette with `scale_color_manual()`.
 
 ```{r}
 my_cols <- c("#B60A1C","#E39802","#309143")
-my_cols
-p + scale_color_manual(values = my_cols)
+
+p2 + scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
 ```
 
+Specify which color goes with which penguin species by using a named vector.
 
 ```{r}
-#specify which color goes with which level using named vector
-my_cols <- c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
-my_cols
-p + scale_color_manual(values = my_cols)
+my_cols <- 
+  c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
+
+p2 <- p2 + 
+  scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
+p2
 ```
 
 ## Labeling scales
@@ -193,42 +224,49 @@ Each scale (color, fill, shape), including x and y axes, can have a label.
 There are multiple ways to set this, but I'll demonstrate setting it with `labs()`
 
 ```{r}
-p + labs(color = "Penguin Species")
+p2 + labs(color = "Penguin Species")
 ```
 
 This creates a separate legend for color.
 Guides with the same name will get combined when possible.
 
 ```{r}
-p + labs(color = "Penguin Species", shape = "Penguin Species")
+p2 + 
+  labs(
+    color = "Penguin Species",
+    shape = "Penguin Species",
+    fill = "Penguin Species"
+  )
 ```
 
 We can also use `labs()` to re-name the axes
 
 ```{r}
-p + 
+p2 <- p2 + 
   labs(
     color = "Penguin Species",
     shape = "Penguin Species",
+    fill = "Penguin Species",
     x = "Flipper Length (mm)",
     y = "Bill Length (mm)"
   )
+p2
 ```
 
 ## Saving plots
 
-Although we often leave this step until the end, I think it's good to save your plot to a file early on.
-If you have some plot dimensions in mind, this allows you to see how your changes will look with the finished plot.
+Although we often leave this step until the end, I think it's good to save your plot to a file early on once the plot starts taking shape.
+If you have some plot dimensions in mind, this allows you to see how any further changes will look in the finished plot.
 
 ```{r}
-# ggsave(
-#   filename = , #path to save file to
-#   plot = , #ggplot object.  Def is last plot, but better to specify
-#   width = , 
-#   height = ,
-#   units = , units for width and height
-#   dpi = resolution for raster images (e.g. .tiff, .png, .jpg)
-# )
+ggsave(
+  filename = "penguins.png", # filetype comes from filename extension
+  plot = p2, # default is prev. plot, but good to specify
+  width = 4, 
+  height = 3.5, 
+  units = "in", 
+  dpi = "print" # resolution for raster images
+)
 ```
 
 ### Raster vs. Vector
