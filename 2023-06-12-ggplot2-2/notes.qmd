@@ -5,6 +5,7 @@ format:
   html: 
     code-link: true
     code-tools: true
+    toc: true
 editor: visual
 execute: 
   warning: false
@@ -38,6 +39,7 @@ Other modifications to the appearance of your plot are a good idea, but less oft
 -   Colorblind accessible colors
 -   Grey scale friendly colors
 -   Perceptually-even colors
+-   Screen-reader compatible
 -   High [data-ink ratio](https://infovis-wiki.net/wiki/Data-Ink_Ratio) (simplify plot, within reason)
 -   Arrangement of related plots into multi-panel figures
 
@@ -207,15 +209,18 @@ my_cols <- c("#B60A1C","#E39802","#309143")
 p2 + scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
 ```
 
-Specify which color goes with which penguin species by using a named vector.
+Specify which color goes with which factor level by using a named vector.
 
 ```{r}
 my_cols <- 
   c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
-
 p2 <- p2 + 
   scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
 p2
+
+p3 <- p3 +
+  scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
+p3
 ```
 
 ## Labeling scales
@@ -253,6 +258,38 @@ p2 <- p2 +
 p2
 ```
 
+```{r}
+#| include: false
+p3 <- p3 + 
+  labs(
+    color = "Penguin Species",
+    shape = "Penguin Species",
+    fill = "Penguin Species",
+    x = "Flipper Length (mm)",
+    y = "Bill Depth (mm)"
+  )
+p3
+```
+
+## Custom Axes
+
+<!--# breaks, labels, scales, xlim() vs. coord_cartesian()? -->
+
+## Customizing element appearance with `theme()`
+
+<!--# how to get help with theme(), what element_s are there, show a map of the plot and what stuff is called.  Maybe ask participants to suggest a few changes and we try to figure them out together -->
+
+## Multi-panel figures
+
+<!--# intro patchwork package.  Mention cowplot as alternative.  Demo simple layout, guide collect, and tags.  Point to documentation for more. -->
+
+```{r}
+library(patchwork)
+p1 /
+(p2 + p3) + plot_layout(guides = "collect") + #guide collect not working
+  plot_annotation(tag_levels = "a")
+```
+
 ## Saving plots
 
 Although we often leave this step until the end, I think it's good to save your plot to a file early on once the plot starts taking shape.
@@ -263,13 +300,49 @@ ggsave(
   filename = "penguins.png", # filetype comes from filename extension
   plot = p2, # default is prev. plot, but good to specify
   width = 4, 
-  height = 3.5, 
+  height = 3, 
   units = "in", 
   dpi = "print" # resolution for raster images
 )
 ```
 
+![](penguins.png)
+
+For example, with these dimensions (4x3 in.), the points and lines appear quite large.
+
 ### Raster vs. Vector
 
-Define these & give examples.
-Discuss limitations (e.g. EPS doesn't do transparency with all graphics devices)
+Raster images (e.g. .jpg, .png, .tiff) are made of pixels and the resolution can vary.
+Vector images (e.g. .svg, .eps) are not made of pixels and don't have a resolution.
+
+::: callout-tip
+Try zooming in on the images below in your browser to see the difference
+:::
+
+```{r}
+#| echo: false
+ggsave(
+  filename = "penguins-lores.png", # filetype comes from filename extension
+  plot = p2, # default is prev. plot, but good to specify
+  width = 4, 
+  height = 3.5, 
+  units = "in",
+  dpi = "screen"
+)
+ggsave(
+  filename = "penguins.svg", # filetype comes from filename extension
+  plot = p2, # default is prev. plot, but good to specify
+  width = 4, 
+  height = 3.5, 
+  units = "in"
+)
+```
+
+::: {layout-ncol="2"}
+![Raster (72 dpi .png file)](penguins-lores.png){fig-align="left" width="300"}
+
+![Vector (.svg file)](penguins.svg){fig-align="left" width="300"}
+:::
+
+Vector images should be used whenever possible and accepted by the journal.
+Vector formats are more accessible for screen-readers as well (although you should *always* provide alt-text when possible)
