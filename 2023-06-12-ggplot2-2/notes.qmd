@@ -90,10 +90,11 @@ p2 <-
            x = flipper_length_mm,
            y = bill_length_mm,
            color = species,
+           fill = species,
            shape = species
          )) +
   geom_point() +
-  geom_smooth(method = "lm", aes(fill = species))
+  geom_smooth(method = "lm")
 ```
 
 ```{r}
@@ -273,6 +274,32 @@ p3
 
 ## Custom Axes
 
+Axes are a type of scale and can be modified with ggplot2 functions like `scale_x_continuous()` for continuous data, `scale_x_discrete()` for discrete data, etc.
+
+Our first plot has a discrete x axis and a continuous y axis.
+We can use a `scale_*()` to change the x-axis labels (there are other ways to do this of course) and adjust the number of breaks on the y-axis
+
+```{r}
+scinames <-
+  c("Adelie" = "P. adeliae", "Chinstrap" = "P. antarticus", "Gentoo" = "P. papua")
+p1 <- 
+  p1 + scale_x_discrete(labels = scinames) + scale_y_continuous(n.breaks = 12)
+p1 
+```
+
+You'll notice that `n.breaks=12` doesn't produce *exactly* 12 breaks---it preferences "pretty" breaks at whole numbers and tries to get *about* as many breaks as you asked for.
+Supply a numeric vector to `breaks` if you want to specify the breaks **exactly.**
+
+You can set the range of a axis two ways, and the choice of which way is consequential.
+Setting limits inside of `scale_()` crops the *data* while `coord_cartesian()` only crops the plotting area.
+With `ylim(2000, 5500)` the mean and standard error for our largest penguins are re-drawn using the cropped data while they are unaffected by `coord_cartesian()` (except that they go off the edge of the plotting area now)
+
+```{r}
+p1 + scale_y_continuous(limits = c(2000, 5500), n.breaks = 12)
+# p1 + ylim(2000, 5500) #shortcut, but resets scale
+p1 + coord_cartesian(ylim = c(2000, 5500))
+```
+
 <!--# breaks, labels, scales, xlim() vs. coord_cartesian()? -->
 
 ## Customizing element appearance with `theme()`
@@ -286,7 +313,7 @@ p3
 ```{r}
 library(patchwork)
 p1 /
-(p2 + p3) + plot_layout(guides = "collect") + #guide collect not working
+(p2 + p3) + plot_layout(guides = "collect") + 
   plot_annotation(tag_levels = "a")
 ```
 
