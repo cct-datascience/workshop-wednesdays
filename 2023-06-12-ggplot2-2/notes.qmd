@@ -302,9 +302,53 @@ p1 + coord_cartesian(ylim = c(2000, 5500))
 
 <!--# breaks, labels, scales, xlim() vs. coord_cartesian()? -->
 
-## Customizing element appearance with `theme()`
+We can use `coord_flip()` to make a horizontal graph.
+
+```{r}
+p1 + coord_flip()
+```
+
+::: callout-important
+`coord_flip()` only changes where the x and y axes are ***drawn***.
+In the plot above, the "species" axis is still the x-axis and the body_mass_g axis is still the y-axis.
+:::
+
+## Customizing appearance with `theme()`
 
 <!--# how to get help with theme(), what element_s are there, show a map of the plot and what stuff is called.  Maybe ask participants to suggest a few changes and we try to figure them out together -->
+
+There are default themes built-in to `ggplot2`
+
+```{r}
+p2 + theme_bw()
+p2 + theme_minimal()
+```
+
+And themes available in a variety of packages.
+
+```{r}
+library(ggthemes)
+p1 + theme_solarized()
+```
+
+Customizing themes "manually" involves knowing the name of the theme element and it's corresponding `element_*()` function.
+A good place to start is the help page for `theme()` <https://ggplot2.tidyverse.org/reference/theme.html>
+
+::: callout-note
+## Activity
+
+Name some things about the appearance of `p1` that you want to change and we'll figure it out together!
+:::
+
+::: callout-tip
+It's best to find a built-in `theme_*()` function that gets you most of the way there and then customize with `theme()`
+:::
+
+```{r}
+p1 + 
+  theme_minimal() + 
+  theme(axis.line = element_line(linewidth = 1.5, lineend = "round"))
+```
 
 ## Multi-panel figures
 
