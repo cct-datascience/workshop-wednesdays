@@ -30,7 +30,7 @@ Journals often require certain modifications to your plots to make them publicat
 -   High resolution
 -   Specific file types (TIFF, EPS, PDF are common)
 -   Figure size limits
--   Suggested font size & typeface
+-   Font size suggestions
 
 ## Not required, but good practice
 
@@ -44,8 +44,6 @@ Other modifications to the appearance of your plot are a good idea, but less oft
 -   Arrangement of related plots into multi-panel figures
 
 ## Example plots
-
-<!--# code for producing 2 or 3 plots that we will eventually arrange into a multi-panel figure.  Ideally two plots with the same legend, and a third related plot with a different legend to fully demonstrate flexibility of `patchwork` -->
 
 ```{r}
 library(tidyverse)
@@ -187,7 +185,8 @@ p2 + scale_color_viridis_d(end = 0.9, option = "C")
 To apply the same color scale to both "fill" and "color", you can use the `aesthetics` argument to `scale_color_*` or `scale_fill_*` functions.
 
 ```{r}
-p2 + scale_color_viridis_d(end = 0.9, option = "C", aesthetics = c("fill", "color"))
+p2 + 
+  scale_color_viridis_d(end = 0.9, option = "C", aesthetics = c("fill", "color"))
 ```
 
 ### Manual color palette
@@ -213,6 +212,7 @@ p2 + scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
 Specify which color goes with which factor level by using a named vector.
 
 ```{r}
+#| layout-ncol: 2
 my_cols <- 
   c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
 p2 <- p2 + 
@@ -260,7 +260,6 @@ p2
 ```
 
 ```{r}
-#| include: false
 p3 <- p3 + 
   labs(
     color = "Penguin Species",
@@ -270,6 +269,12 @@ p3 <- p3 +
     y = "Bill Depth (mm)"
   )
 p3
+```
+
+```{r}
+p1 <- p1 +
+  labs(x = "Species", y = "Body Mass (g)", shape = "Sex")
+p1
 ```
 
 ## Custom Axes
@@ -290,13 +295,19 @@ p1
 You'll notice that `n.breaks=12` doesn't produce *exactly* 12 breaks---it preferences "pretty" breaks at whole numbers and tries to get *about* as many breaks as you asked for.
 Supply a numeric vector to `breaks` if you want to specify the breaks **exactly.**
 
-You can set the range of a axis two ways, and the choice of which way is consequential.
+### Axis limits
+
+You can set the range of an axis two ways, and the choice of which way is consequential.
 Setting limits inside of `scale_()` crops the *data* while `coord_cartesian()` only crops the plotting area.
 With `ylim(2000, 5500)` the mean and standard error for our largest penguins are re-drawn using the cropped data while they are unaffected by `coord_cartesian()` (except that they go off the edge of the plotting area now)
 
 ```{r}
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - "Limits set in scale_y_*() or with ylim()"
+#|   - "Limits set in coord_cartesian()"
 p1 + scale_y_continuous(limits = c(2000, 5500), n.breaks = 12)
-# p1 + ylim(2000, 5500) #shortcut, but resets scale
+# p1 + ylim(2000, 5500) #shortcut if you only want to change limits
 p1 + coord_cartesian(ylim = c(2000, 5500))
 ```
 
@@ -310,35 +321,32 @@ p1 + coord_flip()
 
 ::: callout-important
 `coord_flip()` only changes where the x and y axes are ***drawn***.
-In the plot above, the "species" axis is still the x-axis and the body_mass_g axis is still the y-axis.
+In the plot above, the axis labeled "species" is still the x-axis, as far as ggplot2 code is concerned.
 :::
 
 ## Customizing appearance with `theme()`
 
 <!--# how to get help with theme(), what element_s are there, show a map of the plot and what stuff is called.  Maybe ask participants to suggest a few changes and we try to figure them out together -->
 
-There are default themes built-in to `ggplot2`
+There are several complete themes built-in to `ggplot2`, and many more available from other packages.
 
 ```{r}
+#| layout-ncol: 2
+#| fig-cap:
+#|   - "theme_bw()"
+#|   - "theme_minimal()"
 p2 + theme_bw()
 p2 + theme_minimal()
 ```
 
-And themes available in a variety of packages.
-
 ```{r}
+#| fig-cap: "theme_solarized() from ggthemes package"
 library(ggthemes)
 p1 + theme_solarized()
 ```
 
 Customizing themes "manually" involves knowing the name of the theme element and it's corresponding `element_*()` function.
 A good place to start is the help page for `theme()` <https://ggplot2.tidyverse.org/reference/theme.html>
-
-::: callout-note
-## Activity
-
-Name some things about the appearance of `p1` that you want to change and we'll figure it out together!
-:::
 
 ::: callout-tip
 It's best to find a built-in `theme_*()` function that gets you most of the way there and then customize with `theme()`
@@ -347,18 +355,74 @@ It's best to find a built-in `theme_*()` function that gets you most of the way 
 ```{r}
 p1 + 
   theme_minimal() + 
-  theme(axis.line = element_line(linewidth = 1.5, lineend = "round"))
+  theme(axis.line = element_line(linewidth = 0.5, lineend = "round"))
+```
+
+::: callout-note
+## Activity
+
+Name some things about the appearance of `p1` that you want to change and we'll figure it out together!
+:::
+
+You can save your theme as an R object to re-use, or use `theme_set()` at the top of a script to make it the default.
+
+```{r}
+#create a custom theme
+my_theme <- 
+  theme_minimal() + 
+  theme(
+    axis.line = element_line(linewidth = 0.5, lineend = "round"),
+    axis.ticks = element_line(linewidth = 0.2),
+    legend.background = element_rect(linewidth = 0.2)
+  )
+
+#add to a plot
+p2 + my_theme
+
+#or set as default
+theme_set(my_theme)
+
+p3
 ```
 
 ## Multi-panel figures
 
-<!--# intro patchwork package.  Mention cowplot as alternative.  Demo simple layout, guide collect, and tags.  Point to documentation for more. -->
+`patchwork` allows simple composistion of multi-panel figures with `ggplot2` plots
 
 ```{r}
 library(patchwork)
-p1 /
-(p2 + p3) + plot_layout(guides = "collect") + 
-  plot_annotation(tag_levels = "a")
+p1 + p2
+```
+
+-   `+` combines plots
+
+-   `|` combines plots side-by-side
+
+-   `/` combines plots vertically
+
+-   `()` can be used to nest operations
+
+```{r}
+p1 / (p2 | p3)
+```
+
+-   `plot_layout()` controls layout.
+    The *coolest* feature, IMO, is `guides = "collect"` which combines duplicate legends
+
+-   `plot_annotation()` is useful for adding labels to panels
+
+```{r}
+p_combined <-
+  p1 /
+  (p2 + p3 + plot_layout(guides = "collect")) + 
+  plot_annotation(tag_levels = "a", tag_suffix = ")")
+p_combined
+```
+
+You can also apply layers or themes to all sub-plots by using `&` instead of `+`
+
+```{r}
+p_combined & theme_dark()
 ```
 
 ## Saving plots
@@ -369,9 +433,9 @@ If you have some plot dimensions in mind, this allows you to see how any further
 ```{r}
 ggsave(
   filename = "penguins.png", # filetype comes from filename extension
-  plot = p2, # default is prev. plot, but good to specify
-  width = 4, 
-  height = 3, 
+  plot = p_combined, # default is prev. plot, but good to specify
+  width = 7, 
+  height = 5, 
   units = "in", 
   dpi = "print" # resolution for raster images
 )
@@ -379,7 +443,8 @@ ggsave(
 
 ![](penguins.png)
 
-For example, with these dimensions (4x3 in.), the points and lines appear quite large.
+For example, with these dimensions (4x3 in.), the points and lines appear quite large and some of the text is probably larger than it needs to be.
+If we had saved the plot earlier, we wouldn't necessarily have to go back and tweak things.
 
 ### Raster vs. Vector
 
@@ -417,3 +482,25 @@ ggsave(
 
 Vector images should be used whenever possible and accepted by the journal.
 Vector formats are more accessible for screen-readers as well (although you should *always* provide alt-text when possible)
+
+## Getting help
+
+Besides adding `ggplot2` to search terms, there a few good places to look for help or inspiration in improving or modifying the appearance of `ggplot2` plots:
+
+-   The [`ggplot2` documentation](https://ggplot2.tidyverse.org/) itself, in particular the examples on the [`theme()` page](https://ggplot2.tidyverse.org/reference/theme.html#ref-examples) and the [FAQ on customization](https://ggplot2.tidyverse.org/articles/faq-customising.html).
+
+-   The [R Graph Gallery](https://r-graph-gallery.com/) has a wide variety of plots with R code walkthroughs.
+
+-   The `ggplot2` book: <https://ggplot2-book.org/>
+
+You can always come by our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) to ask questions as well!
+
+## Part 3 next week!
+
+#### "Exploring the wide world of `ggplot2` extensions" 
+
+🗓️ June 26, 11:00am--1:00pm
+
+::: {style="text-align: center;"}
+[<button style="border-radius:4px;background-color:#259443">Register</button>](https://datascience.cct.arizona.edu/drop-in-hours)
+:::
