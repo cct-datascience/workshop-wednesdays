@@ -29,13 +29,14 @@ In Part 1 of this series, we will:
 
 -   Map data to aesthetics
 
--   Understand stat\_\* vs. geom\_\*
+-   Understand layer components
 
--   Interpret 'ggplot2' documentation
+-   Interpret `ggplot2` documentation
 
--   Combine raw and summarized data in one layered plot
+-   Create a layered plot
 
--   Explain function and syntax of common visual elements
+-   Introduce function and syntax of visual elements
+
 :::
 
 # The grammar of graphics
@@ -126,7 +127,7 @@ A plot contains:
 ::: incremental
 -   Data and aesthetic mapping
 
--   Layers containing geometric object(s) and statistical transformation(s)
+-   Layer(s) containing geometric object(s) and statistical transformation(s)
 
 -   Scales
 
@@ -307,8 +308,9 @@ ggplot(penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
 
 ```{r}
 #| eval: false
-ggplot(penguins) +
-  geom_point(aes(x = body_mass_g, y = flipper_length_mm, color = species))
+ggplot() +
+  geom_point(data = penguins,
+             aes(x = body_mass_g, y = flipper_length_mm, color = species))
 ```
 
 ## Inheritance of aesthetics by layers {.smaller}
@@ -366,14 +368,15 @@ Specifying a constant inside `aes()` with quotes creates a legend on the fly
 ::: {.column width="50%"}
 ```{r}
 #| eval: false
-ggplot(penguins, aes(x = body_mass_g,
-                     color = species)) +
+ggplot(penguins, 
+       aes(x = body_mass_g,
+           color = species)) +
   geom_point(aes(y = bill_length_mm, 
-                 shape = "bill length")) +
+                 shape = "Length")) +
   geom_point(aes(y = bill_depth_mm, 
-                 shape = "bill depth")) +
+                 shape = "Depth")) +
   ylab("Bill dimensions (mm)") +
-  labs(shape = "method")
+  labs(shape = "dimension")
 ```
 :::
 
@@ -382,13 +385,15 @@ ggplot(penguins, aes(x = body_mass_g,
 #| echo: false
 #| fig-width: 5
 #| fig-height: 4
-
-ggplot(penguins, aes(x = body_mass_g,
-                     color = species)) +
-  geom_point(aes(y = bill_length_mm, shape = "bill length")) +
-  geom_point(aes(y = bill_depth_mm, shape = "bill depth")) +
+ggplot(penguins, 
+       aes(x = body_mass_g,
+           color = species)) +
+  geom_point(aes(y = bill_length_mm, 
+                 shape = "Length")) +
+  geom_point(aes(y = bill_depth_mm, 
+                 shape = "Depth")) +
   ylab("Bill dimensions (mm)") +
-  labs(shape = "method")
+  labs(shape = "dimension")
 ```
 :::
 :::
@@ -414,14 +419,17 @@ A layer contains:
 ```{r}
 #| eval: false
 ggplot() +
+  geom_point()
+```
+
+```{r}
+#| eval: false
+ggplot() +
   layer(mapping = NULL,
         data = NULL,
         geom = "point",
         stat = "identity",
         position = "identity")
-
-ggplot() +
-  geom_point()
 
 ```
 :::
@@ -471,9 +479,8 @@ ggplot() +
 #| eval: false
 ggplot() +
   geom_point(data = penguins,
-             mapping = aes(
-               x = body_mass_g,
-               y = flipper_length_mm))
+             mapping = aes(x = body_mass_g,
+                           y = flipper_length_mm))
 
 ```
 :::
@@ -486,9 +493,8 @@ ggplot() +
 
 ggplot() +
   geom_point(data = penguins,
-             mapping = aes(
-               x = body_mass_g,
-               y = flipper_length_mm))
+             mapping = aes(x = body_mass_g,
+                           y = flipper_length_mm))
 ```
 :::
 :::
@@ -501,10 +507,8 @@ ggplot() +
 #| eval: false
 ggplot() +
   geom_point(data = penguins,
-             mapping = aes(
-               x = body_mass_g,
-               y = flipper_length_mm))
-
+             mapping = aes(x = body_mass_g,
+                           y = flipper_length_mm))
 ```
 
 ```{r}
@@ -530,12 +534,10 @@ ggplot() +
 #| echo: false
 #| fig-width: 5
 #| fig-height: 5
-
 ggplot() +
   geom_point(data = penguins,
-             mapping = aes(
-               x = body_mass_g,
-               y = flipper_length_mm))
+             mapping = aes(x = body_mass_g,
+                           y = flipper_length_mm))
 ```
 :::
 :::
@@ -585,7 +587,7 @@ ggplot(data = penguins,
 
 ## Two ways to plot density (continuous)
 
-`stat_density()` and `geom_density()` are not quite equivalent
+`stat_density()` and `geom_density()` are not equivalent
 
 ::: columns
 ::: {.column width="50%"}
@@ -988,7 +990,7 @@ ggplot(penguins, aes(x = body_mass_g,
 Controls non-data elements of plots (e.g., to match a style guide).
 
 ::: incremental
-1.  Theme <b>elements</b> specify the non-data [elements](https://ggplot2.tidyverse.org/reference/theme.html#ref-examples) you can control: `plot.title`, `legend.position`
+1.  Theme <b>elements</b> specify the non-data [elements](https://ggplot2.tidyverse.org/reference/theme.html) you can control: `plot.title`, `legend.position`
 
 2.  Each element has an <b>element function</b> to describe its visual properties: `element_text()`, `element_blank()`
 
@@ -1091,7 +1093,7 @@ ggplot(penguins,
 ::: incremental
 -   Penguin artwork by @allison_horst  
 
--   Hadley Wickham's "A layered grammar of graphics" (2009)
+-   Hadley Wickham's "A layered grammar of graphics" (2010)
 
 -   Hadley Wickham's "ggplot2: Elegant Graphics for Data Analysis, 3rd edition", now available [online](https://ggplot2-book.org/)
 

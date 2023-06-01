@@ -1,4 +1,5 @@
 # Plotting script for `Foundations of ggplot2`
+# Layered plot with geom_point() and stat_summary(), 2 ways
 
 library(tidyverse)
 library(palmerpenguins)
