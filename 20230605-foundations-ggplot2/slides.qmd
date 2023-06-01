@@ -54,7 +54,7 @@ In Part 1 of this series, we will:
 :::
 
 ::: callout-note
-See "The Grammar of Graphics" by Wilkinson, Anand, and Grossman (2005) and ["A Layered Grammar of Graphics"](https://vita.had.co.nz/papers/layered-grammar.html) by Wickham (2010)
+See ["The Grammar of Graphics"](https://link.springer.com/book/10.1007/0-387-28695-0) by Leland Wilkinson (2005) and ["A Layered Grammar of Graphics"](https://vita.had.co.nz/papers/layered-grammar.html) by Hadley Wickham (2010)
 :::
 
 ## Layered grammar of graphics
