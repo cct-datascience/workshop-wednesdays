@@ -5,10 +5,15 @@ format:
   revealjs:
     code-link: true
     incremental: true
+    fig-width: 7
+    fig-height: 3.5
     theme: [custom.scss]
 editor: visual
 execute: 
   echo: true
+knitr: 
+  opts_chunk: 
+    fig.align: "center"
 ---
 
 ## Learning Objectives
@@ -266,6 +271,8 @@ We can use the `labels` argument and a named vector.
 ```{r}
 #| output-location: slide
 #| code-line-numbers: "|1-3|7"
+#| fig-width: 9
+#| fig-height: 5
 scinames <- c("Adelie" = "P. adeliae",
               "Chinstrap" = "P. antarticus",
               "Gentoo" = "P. papua")
@@ -285,6 +292,8 @@ Let's do the same for `p3`:
 
 ```{r}
 #| output-location: slide
+#| fig-width: 9
+#| fig-height: 5
 p3 <- p3 +
   scale_color_manual(
     values = my_cols,
@@ -296,26 +305,19 @@ p3
 
 # Axes
 
-::: columns
-::: {.column width="60%"}
-::: nonincremental
--   Axes are also a type of scale
--   E.g. `scale_x_discrete()` applies a discrete (categorical) scale to the x-axis
-:::
-:::
+## Axes
 
-::: {.column width="40%"}
+Axes are also a type of scale.
+In `p1` the x-axis corresponds to `scale_x_discrete()` and the y-axis corresponds to `scale_y_continuous()`.
+
 ```{r}
 #| echo: false
-#| fig-width: 5
 p1
 ```
-:::
-:::
 
 ## Custom labels
 
-We can use what we learned before to customize the categorical x-axis labels in `p1`
+Use what we learned before to customize the categorical x-axis labels in `p1`!
 
 ```{r}
 (p1 <- p1 + scale_x_discrete(name = "Species", labels = scinames))
@@ -323,14 +325,15 @@ We can use what we learned before to customize the categorical x-axis labels in 
 
 ## Custom breaks
 
-Change the number of breaks in a continuous axis with `n.breaks=`
+Change the (approximate) number of breaks with `n.breaks=`
 
 ```{r}
-(p1 <- 
-  p1 + scale_y_continuous(name = "Body Mass (g)", n.breaks = 12))
+(p1 <- p1 + scale_y_continuous(name = "Body Mass (g)", n.breaks = 12))
 ```
 
-This doesn't produce *exactly* 12 breaks---it preferences breaks at "pretty" numbers
+::: notes
+This uses "pretty" breaks at whole numbers, so you don't get *exactly* `n.breaks`
+:::
 
 ## Custom breaks
 
@@ -368,18 +371,6 @@ p1 +
 ```
 :::
 :::
-
-## Axis limits
-
-```{r}
-#| layout-ncol: 2
-#| fig-cap: 
-#|   - "Limits set in scale_y_*() or with ylim()"
-#|   - "Limits set in coord_cartesian()"
-#| fig-width: 5
-p1 + ylim(2000, 5500) 
-p1 + coord_cartesian(ylim = c(2000, 5500))
-```
 
 ## Other useful `coord_`s
 
