@@ -358,18 +358,25 @@ Two ways to set axis limits:
 ::: {.column width="50%"}
 ```{r}
 #| fig-width: 5
+#| fig-height: 5
 p1 + 
-  scale_y_continuous(limits = c(2000, 5500), n.breaks = 12, name = "Body Mass (g)")
+  scale_y_continuous(limits = c(2500, 5500), n.breaks = 12, name = "Body Mass (g)")
 ```
 :::
 
 ::: {.column width="50%"}
 ```{r}
 #| fig-width: 5
+#| fig-height: 5
 p1 + 
-  coord_cartesian(ylim = c(2000, 5500))
+  coord_cartesian(ylim = c(2500, 5500))
 ```
 :::
+:::
+
+::: notes
+In the first example, the limits are removing data points *before* `stat_summary()` does its calculations, so no data points above 5500 g are used in calculating the mean and standard deviations used to draw the error bars and black points.
+In the second example, the error bars are calculated using all the data and the plot area just cuts off at \> 5500 g
 :::
 
 ## Other useful `coord_`s
@@ -387,5 +394,50 @@ Horizontal plots with `coord_flip()`
 ```{r}
 (p1 <- p1 + coord_flip())
 ```
+
+# Themes
+
+## Complete themes
+
+There are several complete themes built-in to `ggplot2`, and many more available from other packages such as `ggthemes`.
+
+```{r}
+#| layout-ncol: 2
+#| fig-cap:
+#|   - "theme_bw()"
+#|   - "theme_minimal()"
+p2 + theme_bw()
+p2 + theme_minimal()
+```
+
+## Custom themes
+
+Customizing themes "manually" involves knowing the name of the theme element and it's corresponding `element_*()` function.
+
+```{r}
+p1 + theme(axis.title.x = element_text(face = "bold", colour = "darkblue"))
+```
+
+## Custom themes
+
+-   It's best to find a built-in `theme_*()` function that gets you most of the way there and then customize with `theme()`
+
+```{r}
+p1 + 
+  theme_minimal() + 
+  theme(axis.line = element_line(linewidth = 0.5, lineend = "round"))
+```
+
+## Custom themes
+
+::: callout-note
+## Activity
+
+Name some things about the appearance of `p1` that you want to change and we'll figure it out together!
+:::
+
+::: callout-tip
+Check the examples in the help page for `theme()` <https://ggplot2.tidyverse.org/reference/theme.html> to figure out the names of theme elements
+:::
 
 <!--# at the very end, supply FULL code for multi-panel plot in scrollable slide -->
