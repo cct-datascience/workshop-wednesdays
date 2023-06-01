@@ -406,11 +406,13 @@ Jessica Guo
 <li class="fragment"><p>Explore the grammar of graphics</p></li>
 <li class="fragment"><p>Map data to aesthetics</p></li>
 <li class="fragment"><p>Understand stat_* vs.&nbsp;geom_*</p></li>
-<li class="fragment"><p>Navigate ‘ggplot2’ documentation</p></li>
+<li class="fragment"><p>Interpret ‘ggplot2’ documentation</p></li>
 <li class="fragment"><p>Combine raw and summarized data in one layered plot</p></li>
 <li class="fragment"><p>Explain function and syntax of common visual elements</p></li>
 </ul>
 </div>
+</section><section><section id="the-grammar-of-graphics" class="title-slide slide level1 center"><h1>The grammar of graphics</h1>
+
 </section><section id="what-is-a-grammar" class="slide level2"><h2>What is a grammar?</h2>
 <p>“The fundamental principles or rules of an art or science” - Oxford English Dictionary</p>
 <div>
@@ -433,7 +435,7 @@ Jessica Guo
 </div>
 </div>
 </div>
-</section><section id="a-layered-grammar-of-graphics" class="slide level2"><h2>A layered grammar of graphics</h2>
+</section><section id="layered-grammar-of-graphics" class="slide level2"><h2>Layered grammar of graphics</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -446,11 +448,16 @@ Jessica Guo
 </figure>
 </div>
 </div><div class="column" style="width:60%;">
-<p>In <code>ggplot2</code>, complex plots can be build iteratively, one layer at a time.</p>
-<p>What are the necessary components of a plot, and what are necessary components of a layer?</p>
+<p><code>ggplot2</code> builds complex plots iteratively, one layer at a time.</p>
+<div>
+<ul>
+<li class="fragment"><p>What are the necessary components of a plot?</p></li>
+<li class="fragment"><p>What are necessary components of a layer?</p></li>
+</ul>
 </div>
 </div>
-</section><section id="a-layered-grammar-of-graphics-1" class="slide level2"><h2>A layered grammar of graphics</h2>
+</div>
+</section><section id="components-of-a-plot" class="slide level2"><h2>Components of a plot</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -467,16 +474,15 @@ Jessica Guo
 <div>
 <ul>
 <li class="fragment"><p>Data and aesthetic mapping</p></li>
-<li class="fragment"><p>Geometric object(s)</p></li>
-<li class="fragment"><p>Statistical transformation(s)</p></li>
+<li class="fragment"><p>Layers containing geometric object(s) and statistical transformation(s)</p></li>
 <li class="fragment"><p>Scales</p></li>
 <li class="fragment"><p>Coordinate system</p></li>
-<li class="fragment"><p>Optional faceting or theming</p></li>
+<li class="fragment"><p>(Optional) facets or themes</p></li>
 </ul>
 </div>
 </div>
 </div>
-</section><section id="a-layered-grammar-of-graphics-2" class="slide level2"><h2>A layered grammar of graphics</h2>
+</section><section id="components-of-a-layer" class="slide level2"><h2>Components of a layer</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -500,7 +506,9 @@ Jessica Guo
 </div>
 </div>
 </div>
-</section><section id="mapping-data-to-aesthetics" class="slide level2"><h2>Mapping data to aesthetics</h2>
+</section></section><section><section id="mapping-data-to-aesthetics" class="title-slide slide level1 center"><h1>Mapping data to aesthetics</h1>
+
+</section><section id="what-data-inputs-are-needed" class="slide level2"><h2>What data inputs are needed?</h2>
 <p>Data can be added to either the entire ggplot object or a particular layer.</p>
 <p>Input data must be a dataframe in ‘tidy’ format:</p>
 <div>
@@ -523,8 +531,7 @@ Jessica Guo
 </div>
 </div>
 </div>
-</section><section id="mapping-data-to-aesthetics-1" class="slide level2"><h2>Mapping data to aesthetics</h2>
-<p>Subset of original data:</p>
+</section><section id="example-dataset---raw" class="slide level2"><h2>Example dataset - raw</h2>
 <div class="cell">
 <div class="cell-output-display">
 <div class="kable-table">
@@ -577,7 +584,7 @@ Jessica Guo
 </div>
 </div>
 </div>
-</section><section id="mapping-data-to-aesthetics-2" class="slide level2"><h2>Mapping data to aesthetics</h2>
+</section><section id="example-dataset---mapped" class="slide level2"><h2>Example dataset - mapped</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="cell">
@@ -648,13 +655,30 @@ Jessica Guo
 </div>
 </div>
 </section><section id="where-to-specify-aesthetics" class="slide level2"><h2>Where to specify aesthetics?</h2>
-<p>Can be supplied to initial <code>ggplot()</code> call, in individual layers, or a combination.</p>
-<p><code>ggplot()</code> data and aesthetics are inherited, but can be overridden.</p>
-<div class="columns">
-<div class="column" style="width:50%;">
+<div>
+<ul>
+<li class="fragment"><p>Can be supplied to initial <code>ggplot()</code> call, in individual layers, or a combo</p></li>
+<li class="fragment"><p><code>ggplot()</code> data and aesthetics are inherited, but can be overridden</p></li>
+</ul>
+</div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> flipper_length_mm, <span class="at">color =</span> species)) <span class="sc">+</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+</section><section id="where-to-specify-aesthetics-1" class="slide level2"><h2>Where to specify aesthetics?</h2>
+<ul>
+<li><p>Can be supplied to initial <code>ggplot()</code> call, in individual layers, or a combo</p></li>
+<li><p><code>ggplot()</code> data and aesthetics are inherited, but can be overridden</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> flipper_length_mm, </span>
+<span id="cb2-2"><a href="#cb2-2"></a>                     <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
@@ -664,42 +688,24 @@ Jessica Guo
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, <span class="at">y =</span> flipper_length_mm, <span class="at">color =</span> species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div><div class="column" style="width:50%;">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="480"></p>
-</div>
-</div>
-</div>
-</div>
-</section><section id="where-to-specify-aesthetics-1" class="slide level2"><h2>Where to specify aesthetics?</h2>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby">
-<li><a data-tabby-default="" href="#tabset-1-1">Single</a></li>
-<li><a href="#tabset-1-2">Multiple</a></li>
-</ul>
-<div class="tab-content">
-<div id="tabset-1-1">
+</section><section id="inheritance-of-aesthetics-by-layers" class="slide level2 smaller"><h2>Inheritance of aesthetics by layers</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
-<span id="cb5-2"><a href="#cb5-2"></a>                     <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, </span>
-<span id="cb5-5"><a href="#cb5-5"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-6"><a href="#cb5-6"></a>              <span class="at">color =</span> <span class="st">"black"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2"></a>                     <span class="at">y =</span> flipper_length_mm, </span>
+<span id="cb5-3"><a href="#cb5-3"></a>                     <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="480"></p>
+</div>
 </div>
 </div><div class="column" style="width:&quot;50%;">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-13-1.png" width="384"></p>
+
 </div>
 </div>
-</div>
-</div>
-</div>
-<div id="tabset-1-2">
+</section><section id="inheritance-of-aesthetics-by-layers-1" class="slide level2 smaller"><h2>Inheritance of aesthetics by layers</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
@@ -707,47 +713,50 @@ Jessica Guo
 <span id="cb6-2"><a href="#cb6-2"></a>                     <span class="at">y =</span> flipper_length_mm, </span>
 <span id="cb6-3"><a href="#cb6-3"></a>                     <span class="at">color =</span> species)) <span class="sc">+</span></span>
 <span id="cb6-4"><a href="#cb6-4"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, </span>
-<span id="cb6-6"><a href="#cb6-6"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-5"><a href="#cb6-5"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-15-1.png" width="480"></p>
+</div>
 </div>
 </div><div class="column" style="width:&quot;50%;">
 <div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb7-2"><a href="#cb7-2"></a>                     <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, </span>
+<span id="cb7-5"><a href="#cb7-5"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-15-1.png" width="384"></p>
-</div>
-</div>
-</div>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-16-1.png" width="480"></p>
 </div>
 </div>
 </div>
 </div>
 </section><section id="mapping-aesthetics-to-constants" class="slide level2"><h2>Mapping aesthetics to constants</h2>
-<p>What happens when we name a layer inside <code>aes()</code> with quotes?</p>
+<p>Specifying a constant inside <code>aes()</code> with quotes creates a legend on the fly</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
-<span id="cb7-2"><a href="#cb7-2"></a>                     <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">linetype =</span> <span class="st">"lm"</span>), </span>
-<span id="cb7-5"><a href="#cb7-5"></a>              <span class="at">method =</span> <span class="st">"lm"</span>, </span>
-<span id="cb7-6"><a href="#cb7-6"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb7-7"><a href="#cb7-7"></a>              <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">linetype =</span> <span class="st">"loess"</span>), </span>
-<span id="cb7-9"><a href="#cb7-9"></a>              <span class="at">method =</span> <span class="st">"loess"</span>, </span>
-<span id="cb7-10"><a href="#cb7-10"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb7-11"><a href="#cb7-11"></a>              <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
-<span id="cb7-12"><a href="#cb7-12"></a>  <span class="fu">labs</span>(<span class="at">linetype =</span> <span class="st">"method"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
+<span id="cb8-2"><a href="#cb8-2"></a>                     <span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> bill_length_mm, </span>
+<span id="cb8-4"><a href="#cb8-4"></a>                 <span class="at">shape =</span> <span class="st">"bill length"</span>)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> bill_depth_mm, </span>
+<span id="cb8-6"><a href="#cb8-6"></a>                 <span class="at">shape =</span> <span class="st">"bill depth"</span>)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>  <span class="fu">ylab</span>(<span class="st">"Bill dimensions (mm)"</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>  <span class="fu">labs</span>(<span class="at">shape =</span> <span class="st">"method"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div><div class="column" style="width:&quot;50%;">
+</div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-17-1.png" width="384"></p>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-18-1.png" width="480"></p>
 </div>
 </div>
 </div>
 </div>
-</section><section id="the-layered-grammar-of-graphics" class="slide level2"><h2>The layered grammar of graphics</h2>
+</section></section><section><section id="customizing-layers" class="title-slide slide level1 center"><h1>Customizing layers</h1>
+
+</section><section id="under-the-hood-with-layer" class="slide level2"><h2>Under the hood with <code>layer()</code>
+</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p>A layer contains:</p>
@@ -759,15 +768,15 @@ Jessica Guo
 </ul>
 </div><div class="column" style="width:40%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a>  <span class="fu">layer</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>,</span>
-<span id="cb8-3"><a href="#cb8-3"></a>        <span class="at">data =</span> <span class="cn">NULL</span>,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>        <span class="at">geom =</span> <span class="st">"point"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5"></a>        <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
-<span id="cb8-6"><a href="#cb8-6"></a>        <span class="at">position =</span> <span class="st">"identity"</span>)</span>
-<span id="cb8-7"><a href="#cb8-7"></a></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">layer</span>(<span class="at">mapping =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-3"><a href="#cb9-3"></a>        <span class="at">data =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>        <span class="at">geom =</span> <span class="st">"point"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5"></a>        <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6"></a>        <span class="at">position =</span> <span class="st">"identity"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -780,39 +789,31 @@ Jessica Guo
 <p><strong>Note</strong></p>
 </div>
 <div class="callout-content">
-<p><code>geom_*()</code> or <code>stat_*()</code> calls are a shortcut for the <code>layer()</code> function.</p>
+<p>All <code>geom_*()</code> or <code>stat_*()</code> calls are customized shortcuts for the <code>layer()</code> function.</p>
 </div>
 </div>
 </div>
-</section><section id="a-brief-explanation-of-defaults" class="slide level2"><h2>A brief explanation of defaults</h2>
+</section><section id="the-expediency-of-defaults" class="slide level2"><h2>The expediency of defaults</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p>Defining each of the components of a layer or whole graphic can be tiresome, so <code>ggplot2</code> has a hierarchy of defaults</p>
-<p>Makes it possible to make graphs in 2 lines of code!</p>
+<div>
+<ul>
+<li class="fragment"><p>Defining each of the components of a layer or whole graphic can be tiresome</p></li>
+<li class="fragment"><p><code>ggplot2</code> has a hierarchy of defaults</p></li>
+<li class="fragment"><p>So you can make a graph in 2 lines of code!</p></li>
+</ul>
+</div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-19-1.png" width="480"></p>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-20-1.png" width="480"></p>
 </div>
 </div>
 </div>
 </div>
-</section><section id="the-long-way-and-the-short-way" class="slide level2"><h2>The long way and the short way</h2>
+</section><section id="the-short-way-and-the-long-way" class="slide level2"><h2>The short way and the long way</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb9-2"><a href="#cb9-2"></a>  <span class="fu">layer</span>(<span class="at">data =</span> penguins,</span>
-<span id="cb9-3"><a href="#cb9-3"></a>        <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
-<span id="cb9-4"><a href="#cb9-4"></a>          <span class="at">x =</span> body_mass_g,</span>
-<span id="cb9-5"><a href="#cb9-5"></a>          <span class="at">y =</span> flipper_length_mm),</span>
-<span id="cb9-6"><a href="#cb9-6"></a>        <span class="at">geom =</span> <span class="st">"point"</span>, </span>
-<span id="cb9-7"><a href="#cb9-7"></a>        <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8"></a>        <span class="at">position =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>  <span class="fu">scale_x_continuous</span>() <span class="sc">+</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a>  <span class="fu">scale_y_continuous</span>() <span class="sc">+</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a>  <span class="fu">coord_cartesian</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> penguins,</span>
@@ -824,6 +825,37 @@ Jessica Guo
 <div class="cell">
 <div class="cell-output-display">
 <p><img data-src="slides_files/figure-revealjs/unnamed-chunk-22-1.png" width="480"></p>
+</div>
+</div>
+</div>
+</div>
+</section><section id="the-short-way-and-the-long-way-1" class="slide level2"><h2>The short way and the long way</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> penguins,</span>
+<span id="cb11-3"><a href="#cb11-3"></a>             <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb11-4"><a href="#cb11-4"></a>               <span class="at">x =</span> body_mass_g,</span>
+<span id="cb11-5"><a href="#cb11-5"></a>               <span class="at">y =</span> flipper_length_mm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">layer</span>(<span class="at">data =</span> penguins,</span>
+<span id="cb12-3"><a href="#cb12-3"></a>        <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb12-4"><a href="#cb12-4"></a>          <span class="at">x =</span> body_mass_g,</span>
+<span id="cb12-5"><a href="#cb12-5"></a>          <span class="at">y =</span> flipper_length_mm),</span>
+<span id="cb12-6"><a href="#cb12-6"></a>        <span class="at">geom =</span> <span class="st">"point"</span>, </span>
+<span id="cb12-7"><a href="#cb12-7"></a>        <span class="at">stat =</span> <span class="st">"identity"</span>,</span>
+<span id="cb12-8"><a href="#cb12-8"></a>        <span class="at">position =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a>  <span class="fu">scale_x_continuous</span>() <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a>  <span class="fu">scale_y_continuous</span>() <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a>  <span class="fu">coord_cartesian</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-25-1.png" width="480"></p>
 </div>
 </div>
 </div>
@@ -854,7 +886,7 @@ Jessica Guo
 <p><strong>Tip</strong></p>
 </div>
 <div class="callout-content">
-<p>When in doubt, check the documentation!</p>
+<p>When in doubt, check the <a href="https://ggplot2.tidyverse.org/reference/index.html!">documentation</a></p>
 </div>
 </div>
 </div>
@@ -863,22 +895,22 @@ Jessica Guo
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
-<span id="cb11-2"><a href="#cb11-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
-<span id="cb11-3"><a href="#cb11-3"></a>                     <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>  <span class="fu">stat_count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
+<span id="cb13-2"><a href="#cb13-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
+<span id="cb13-3"><a href="#cb13-3"></a>                     <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">stat_count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-23-1.png" width="480"></p>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-26-1.png" width="480"></p>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
-<span id="cb12-2"><a href="#cb12-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
-<span id="cb12-3"><a href="#cb12-3"></a>                     <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
+<span id="cb14-2"><a href="#cb14-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
+<span id="cb14-3"><a href="#cb14-3"></a>                     <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-24-1.png" width="480"></p>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-27-1.png" width="480"></p>
 </div>
 </div>
 </div>
@@ -888,35 +920,102 @@ Jessica Guo
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
-<span id="cb13-2"><a href="#cb13-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
-<span id="cb13-3"><a href="#cb13-3"></a>                     <span class="at">fill =</span> species)) <span class="sc">+</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>  <span class="fu">stat_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
+<span id="cb15-2"><a href="#cb15-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb15-3"><a href="#cb15-3"></a>                     <span class="at">fill =</span> species)) <span class="sc">+</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>  <span class="fu">stat_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-25-1.png" width="480"></p>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-28-1.png" width="480"></p>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
-<span id="cb14-2"><a href="#cb14-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
-<span id="cb14-3"><a href="#cb14-3"></a>                     <span class="at">fill =</span> species)) <span class="sc">+</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, </span>
+<span id="cb16-2"><a href="#cb16-2"></a>       <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g, </span>
+<span id="cb16-3"><a href="#cb16-3"></a>                     <span class="at">fill =</span> species)) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-26-1.png" width="480"></p>
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-29-1.png" width="480"></p>
 </div>
 </div>
 </div>
 </div>
-</section><section id="layer-options-galore" class="slide level2"><h2>Layer options galore!</h2>
-<p>Keep track of <a href="https://ggplot2-book.org/layers.html#sec-geom">geom</a> and <a href="https://ggplot2-book.org/layers.html#sec-stat">stat</a> options</p>
+</section><section id="when-to-use-which" class="slide level2 smaller"><h2>When to use which?</h2>
+<p>In general, use <code>geom_*()</code> unless you are trying to:</p>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby">
+<li><a data-tabby-default="" href="#tabset-1-1">Override</a></li>
+<li><a href="#tabset-1-2">Customize</a></li>
+<li><a href="#tabset-1-3">Summarize</a></li>
+</ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>penguins <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">count</span>(species) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> n)) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-31-1.png" width="480"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(penguins, <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
+<span id="cb18-2"><a href="#cb18-2"></a>                     <span class="at">y =</span> <span class="fu">after_stat</span>(prop),</span>
+<span id="cb18-3"><a href="#cb18-3"></a>                     <span class="at">group =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-33-1.png" width="480"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-3">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(penguins) <span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">stat_summary</span>(<span class="fu">aes</span>(<span class="at">x =</span> species,</span>
+<span id="cb19-3"><a href="#cb19-3"></a>                   <span class="at">y =</span> body_mass_g),</span>
+<span id="cb19-4"><a href="#cb19-4"></a>               <span class="at">fun.min =</span> min,</span>
+<span id="cb19-5"><a href="#cb19-5"></a>               <span class="at">fun.max =</span> max,</span>
+<span id="cb19-6"><a href="#cb19-6"></a>               <span class="at">fun =</span> mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="slides_files/figure-revealjs/unnamed-chunk-35-1.png" width="480"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="a-panopoly-of-layer-options" class="slide level2"><h2>A panopoly of layer options!</h2>
+<p>Track all <a href="https://ggplot2-book.org/layers.html#sec-geom">geom</a> and <a href="https://ggplot2-book.org/layers.html#sec-stat">stat</a> options</p>
 <div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
 <div class="callout-caption">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Tip</strong></p>
+<p><strong>Exercise</strong></p>
 </div>
 <div class="callout-content">
 <p>For each of the following problems, suggest a useful geom:</p>
@@ -940,11 +1039,11 @@ Jessica Guo
 <div class="tab-content">
 <div id="tabset-2-1">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"stack"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"stack"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-27-1.png" width="480"></p>
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-36-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -952,11 +1051,11 @@ Jessica Guo
 </div>
 <div id="tabset-2-2">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-28-1.png" width="480"></p>
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-37-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -964,12 +1063,12 @@ Jessica Guo
 </div>
 <div id="tabset-2-3">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
-<span id="cb17-2"><a href="#cb17-2"></a>                     <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, </span>
+<span id="cb22-2"><a href="#cb22-2"></a>                     <span class="at">fill =</span> sex)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-29-1.png" width="480"></p>
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-38-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -987,11 +1086,11 @@ Jessica Guo
 <div class="tab-content">
 <div id="tabset-3-1">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="st">"identity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-30-1.png" width="480"></p>
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-39-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -999,11 +1098,11 @@ Jessica Guo
 </div>
 <div id="tabset-3-2">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="st">"jitter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="st">"jitter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-31-1.png" width="480"></p>
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-40-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -1011,11 +1110,11 @@ Jessica Guo
 </div>
 <div id="tabset-3-3">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitterdodge</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> penguins, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> species, <span class="at">y =</span> body_mass_g, <span class="at">color =</span> sex)) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitterdodge</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-32-1.png" width="480"></p>
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-41-1.png" width="480"></p>
 </figure>
 </div>
 </div>
@@ -1023,7 +1122,7 @@ Jessica Guo
 </div>
 </div>
 </div>
-</section><section id="position-adjustments-limited-to-few-geoms" class="slide level2"><h2>Position adjustments limited to few geoms</h2>
+</section><section id="position-adjustments-limitations" class="slide level2"><h2>Position adjustments limitations</h2>
 <p>For example, boxplots and errorbars can’t be stacked.</p>
 <div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
@@ -1031,7 +1130,7 @@ Jessica Guo
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Tip</strong></p>
+<p><strong>Exercise</strong></p>
 </div>
 <div class="callout-content">
 <ul>
@@ -1041,66 +1140,80 @@ Jessica Guo
 </div>
 </div>
 </div>
-</section><section id="making-a-layered-plot" class="slide level2"><h2>Making a layered plot</h2>
+</section></section><section><section id="code-along-exercise" class="title-slide slide level1 center"><h1>Code-along exercise</h1>
 
-<img data-src="slides_files/figure-revealjs/unnamed-chunk-33-1.png" width="576" class="r-stretch quarto-figure-center"><div class="callout callout-tip callout-captioned callout-style-default">
+</section><section id="recreating-a-layered-plot" class="slide level2"><h2>Recreating a layered plot</h2>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-42-1.png" width="576" class="r-stretch quarto-figure-center"><div class="callout callout-tip callout-captioned callout-style-default">
 <div class="callout-body">
 <div class="callout-caption">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Tip</strong></p>
+<p><strong>Exercise</strong></p>
 </div>
 <div class="callout-content">
 <p>What are the two layers in this plot? What data when into each?</p>
 </div>
 </div>
 </div>
+</section></section><section><section id="adjusting-visual-elements" class="title-slide slide level1 center"><h1>Adjusting visual elements</h1>
+
 </section><section id="scales-and-guides" class="slide level2"><h2>Scales and guides</h2>
 <div>
-<p>Each scale is a function that translate data space (in data units) into aesthetic space (e.g., pixels)</p>
-<p>A guide (axis or legend) is the inverse function, that converts visual properties back to data</p>
+<ul>
+<li class="fragment"><p>Each scale is a function that translate data space (in data units) into aesthetic space (e.g., pixels)</p></li>
+<li class="fragment"><p>A guide (axis or legend) is the inverse function, that converts visual properties back to data</p></li>
+</ul>
 </div>
+</section><section id="scales-and-guides-1" class="slide level2"><h2>Scales and guides</h2>
+<ul>
+<li><p>Each scale is a function that translate data space (in data units) into aesthetic space (e.g., pixels)</p></li>
+<li><p>A guide (axis or legend) is the inverse function, that converts visual properties back to data</p></li>
+</ul>
 
 <img data-src="img/scale-guides.png" alt="Labeled ggplot figure indicating similarity between axes and legends" width="700" class="r-stretch quarto-figure-center"><p class="caption">Are axes and legends equivalent?</p></section><section id="scale-specification" class="slide level2"><h2>Scale specification</h2>
 <p>Every aesthetic in a plot is associated with exactly one scale.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">ggplot</span>(penguins, </span>
-<span id="cb21-2"><a href="#cb21-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
-<span id="cb21-3"><a href="#cb21-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb26-2"><a href="#cb26-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
+<span id="cb26-3"><a href="#cb26-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">ggplot</span>(penguins, </span>
-<span id="cb22-2"><a href="#cb22-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
-<span id="cb22-3"><a href="#cb22-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">scale_x_continuous</span>() <span class="sc">+</span> </span>
-<span id="cb22-6"><a href="#cb22-6"></a>  <span class="fu">scale_y_continuous</span>() <span class="sc">+</span> </span>
-<span id="cb22-7"><a href="#cb22-7"></a>  <span class="fu">scale_colour_discrete</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb27-2"><a href="#cb27-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
+<span id="cb27-3"><a href="#cb27-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a>  <span class="fu">scale_x_continuous</span>() <span class="sc">+</span> </span>
+<span id="cb27-6"><a href="#cb27-6"></a>  <span class="fu">scale_y_continuous</span>() <span class="sc">+</span> </span>
+<span id="cb27-7"><a href="#cb27-7"></a>  <span class="fu">scale_colour_discrete</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
-<p>Scale functions names are made of 3 pieces separated by “_“:</p>
+<p>Scale functions names are made of 3 pieces separated by “_”:</p>
+<div>
 <ol type="1">
-<li><p><code>scale</code></p></li>
-<li><p>the name of the primary aesthetic (<code>color</code>, <code>shape</code>, <code>x</code>)</p></li>
-<li><p>the name of the scale (<code>discrete</code>, <code>continuous</code>, <code>brewer</code>)</p></li>
-</ol></section><section id="coordinate-system" class="slide level2"><h2>Coordinate system</h2>
-<p>Coordinate systems have 2 primary jobs:</p>
+<li class="fragment"><p><code>scale</code></p></li>
+<li class="fragment"><p>the name of the primary aesthetic (<code>color</code>, <code>shape</code>, <code>x</code>)</p></li>
+<li class="fragment"><p>the name of the scale (<code>discrete</code>, <code>continuous</code>, <code>brewer</code>)</p></li>
+</ol>
+</div>
+</section><section id="what-does-a-coordinate-system-do" class="slide level2"><h2>What does a coordinate system do?</h2>
+<p>Coordinate systems have 2 primary roles:</p>
 <div>
 <ol type="1">
 <li class="fragment"><p>Combine the <code>x</code> and <code>y</code> position aesthetics to produce a 2-dimensional position on the plot</p></li>
 <li class="fragment"><p>In coordination with faceting (optional), draw axes and panel backgrounds</p></li>
 </ol>
 </div>
-</section><section id="coordinate-system-1" class="slide level2"><h2>Coordinate system</h2>
+</section><section id="types-of-coordinate-systems" class="slide level2 smaller"><h2>Types of coordinate systems</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
-<p>Linear coordinate systems:</p>
+<p>Linear:</p>
 <ul>
 <li><p><code>coord_cartesian()</code>: common default</p></li>
 <li><p><code>coord_flip()</code>: x and y axes flipped</p></li>
@@ -1109,41 +1222,139 @@ Jessica Guo
 </div><div class="column" style="width:5%;">
 
 </div><div class="column" style="width:55%;">
-<p>Non-linear coordinate systems:</p>
+<p>Non-linear:</p>
+<div>
 <ul>
-<li><p><code>coord_map()</code>/<code>coord_quickmap()</code>/<code>coord_sf()</code>: map projections, <code>x</code> and <code>y</code> become longitude and latitude</p></li>
-<li><p><code>coord_polar()</code>: polar coordinates, <code>x</code> and <code>y</code> become angle and radius</p></li>
-<li><p><code>coord_trans()</code>: apply arbitrary transformations</p></li>
+<li class="fragment"><p><code>coord_map()</code>/<code>coord_quickmap()</code>/<code>coord_sf()</code>: map projections, <code>x</code> and <code>y</code> become longitude and latitude</p></li>
+<li class="fragment"><p><code>coord_polar()</code>: polar coordinates, <code>x</code> and <code>y</code> become angle and radius</p></li>
+<li class="fragment"><p><code>coord_trans()</code>: apply transformations</p></li>
 </ul>
 </div>
 </div>
+</div>
 </section><section id="faceting" class="slide level2"><h2>Faceting</h2>
-<p>Creating small multiples to show different subsets:</p>
+<p>Creates small multiples to show different subsets:</p>
 <ul>
 <li><p><code>facet_null()</code>: default</p></li>
 <li><p><code>facet_wrap()</code>: “wraps” a 1d ribbon of panels into 2d</p></li>
 <li><p><code>facet_grid()</code>: 2d grid of panels defined by row and column</p></li>
 </ul>
 
-<img data-src="img/position-facets.png" alt="Comparison of facet_wrap and facet_grid organization " width="500" class="r-stretch quarto-figure-center"></section><section id="theming" class="slide level2"><h2>Theming</h2>
-<p>Theming allows for fine control over non-data elements of plots, to make plots more aesthetically pleasing or to match a style guide.</p>
+<img data-src="img/position-facets.png" alt="Comparison of facet_wrap and facet_grid organization " width="500" class="r-stretch quarto-figure-center"></section><section id="keeping-points-of-reference" class="slide level2"><h2>Keeping points of reference</h2>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Exercise</strong></p>
+</div>
+<div class="callout-content">
+<p>Recreate the figure below. How would you get the gray points to show up on all facets?</p>
+</div>
+</div>
+</div>
+
+<img data-src="slides_files/figure-revealjs/unnamed-chunk-45-1.png" width="960" class="r-stretch quarto-figure-center"></section><section id="theming" class="slide level2"><h2>Theming</h2>
+<p>Controls non-data elements of plots (e.g., to match a style guide).</p>
 <div>
 <ol type="1">
-<li class="fragment"><p>Theme <b>elements</b> specify the non-data elements you can control: <code>plot.title</code>, <code>legend.position</code></p></li>
+<li class="fragment"><p>Theme <b>elements</b> specify the non-data <a href="https://ggplot2.tidyverse.org/reference/theme.html#ref-examples">elements</a> you can control: <code>plot.title</code>, <code>legend.position</code></p></li>
 <li class="fragment"><p>Each element has an <b>element function</b> to describe its visual properties: <code>element_text()</code>, <code>element_blank()</code></p></li>
 <li class="fragment"><p>The <code>theme()</code> function allows overriding of the default theme: <code>theme(legend.title = element_blank())</code></p></li>
-<li class="fragment"><p>Complete themes, like <code>theme_bw()</code></p></li>
 </ol>
 </div>
-</section><section id="acknowledgements-and-further-resources" class="slide level2"><h2>Acknowledgements and further resources</h2>
-<p>Artwork is by Allison Horst.</p>
-<p>Hadley Wickham’s “A layered grammar of graphics” (2009)</p>
-<p>Hadley Wickham’s “ggplot2: Elegant Graphics for Data Analysis, 3rd edition”, available <a href="https://ggplot2-book.org/">online</a></p>
+</section><section id="complete-themes" class="slide level2"><h2>Complete themes</h2>
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby">
+<li><a data-tabby-default="" href="#tabset-4-1">theme_bw()</a></li>
+<li><a href="#tabset-4-2">theme_minimal()</a></li>
+<li><a href="#tabset-4-3">theme_classic()</a></li>
+</ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb28-2"><a href="#cb28-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
+<span id="cb28-3"><a href="#cb28-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-47-1.png" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb29-2"><a href="#cb29-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
+<span id="cb29-3"><a href="#cb29-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-49-1.png" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-3">
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">ggplot</span>(penguins, </span>
+<span id="cb30-2"><a href="#cb30-2"></a>       <span class="fu">aes</span>(<span class="at">x =</span> body_mass_g,</span>
+<span id="cb30-3"><a href="#cb30-3"></a>           <span class="at">y =</span> flipper_length_mm)) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> species)) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure><p><img data-src="slides_files/figure-revealjs/unnamed-chunk-51-1.png" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="further-resources" class="slide level2"><h2>Further resources</h2>
+<div>
+<ul>
+<li class="fragment"><p>Penguin artwork by <span class="citation" data-cites="allison_horst">@allison_horst</span>,</p></li>
+<li class="fragment"><p>Hadley Wickham’s “A layered grammar of graphics” (2009)</p></li>
+<li class="fragment"><p>Hadley Wickham’s “ggplot2: Elegant Graphics for Data Analysis, 3rd edition”, now available <a href="https://ggplot2-book.org/">online</a></p></li>
+<li class="fragment"><p>“R for Data Science”, by Hadley Wickham, Mine Cetinkaya-Rundel, &amp; Garret Grolemund, especially chapters <a href="https://r4ds.hadley.nz/data-visualize.html">2</a>, <a href="https://r4ds.hadley.nz/layers.html">10</a>, and <a href="https://r4ds.hadley.nz/communication.html">12</a></p></li>
+<li class="fragment"><p>See us at <a href="https://datascience.cct.arizona.edu/drop-in-hours">drop-in hours</a></p></li>
+</ul>
+</div>
 
 <img src="logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
 </div>
-</section>
+</section></section>
 </div>
   </div>
 
