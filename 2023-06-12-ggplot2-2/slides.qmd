@@ -420,7 +420,7 @@ p1 + theme(axis.title.x = element_text(face = "bold", colour = "darkblue"))
 
 ## Custom themes
 
--   It's best to find a built-in `theme_*()` function that gets you most of the way there and then customize with `theme()`
+It's best to find a built-in `theme_*()` function that gets you most of the way there and then customize with `theme()`
 
 ```{r}
 p1 + 
