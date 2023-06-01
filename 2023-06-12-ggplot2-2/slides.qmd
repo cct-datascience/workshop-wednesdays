@@ -1,0 +1,400 @@
+---
+title: "Crafting Publication Quality Data Visualizations with `ggplot2`"
+author: "Eric R. Scott"
+format: 
+  revealjs:
+    code-link: true
+    incremental: true
+    theme: [custom.scss]
+editor: visual
+execute: 
+  echo: true
+---
+
+## Learning Objectives
+
+-   Customize color palettes with accessibility in mind
+-   Customize legends
+-   Customizing axes (ticks, grid-lines, labels, date axes, transformations)
+-   Customize appearance of plots with themes
+-   Arrange multi-panel figures
+-   Save high resolution or vector formats
+
+## Required Packages
+
+```{r}
+library(tidyverse) #includes ggplot2
+library(palmerpenguins) #for data
+library(patchwork) #multi-panel figures
+library(colorspace)
+```
+
+Take a moment to check if these load and install them if you need to.
+
+## Journal Requirements
+
+Journals often require certain modifications to your plots to make them publication-ready
+
+-   High resolution
+-   Specific file types (TIFF, EPS, PDF are common)
+-   Figure size limits
+-   Font size suggestions
+
+## Not required, but good practice
+
+Other modifications to the appearance of your plot are a good idea, but less often required by journals or reviewers
+
+-   Colorblind accessible colors
+-   Grey scale friendly colors
+-   Perceptually-even colors
+-   Screen-reader compatible
+-   High [data-ink ratio](https://infovis-wiki.net/wiki/Data-Ink_Ratio) (simplify plot, within reason)
+-   Arrangement of related plots into multi-panel figures
+
+## Example plot 1 {.smaller}
+
+```{r}
+#| code-line-numbers: "|1-3|6|7|8-9|10-11"
+mean_sd <- function(x) {
+  data.frame(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
+}
+
+p1 <-
+  ggplot(penguins |> filter(!is.na(sex)),
+         aes(x = species, y = body_mass_g, shape = sex)) +
+  geom_point(alpha = 0.2,
+    position = position_jitterdodge(dodge.width = 0.75)) +
+  stat_summary(fun.data = mean_sd,
+    position = position_dodge(width = 0.75))
+p1
+```
+
+## Example plot 2 {.smaller}
+
+```{r}
+#| code-line-numbers: "|2|3-9|10|11"
+p2 <-
+  ggplot(penguins,
+         aes(
+           x = flipper_length_mm,
+           y = bill_length_mm,
+           color = species,
+           fill = species,
+           shape = species
+         )) +
+  geom_point() +
+  geom_smooth(method = "lm")
+p2
+```
+
+## Example plot 3 {.smaller}
+
+```{r}
+#| code-line-numbers: "|5"
+p3 <-
+  ggplot(penguins,
+         aes(
+           x = flipper_length_mm,
+           y = bill_depth_mm,
+           color = species,
+           fill = species,
+           shape = species
+         )) +
+  geom_point() +
+  geom_smooth(method = "lm")
+p3
+```
+
+# Custom Colors {.rainbow}
+
+## Color Palettes
+
+Choose a color palette that is:
+
+-   Colorblind friendly
+-   Greyscale friendly
+-   Perceptually even
+-   High contrast (with background & within palette)
+
+## Viridis {.smaller}
+
+The viridis color palettes meet most of these criteria and are built-in to `ggplot2`.
+They are available with `scale_fill_viridis_*()` and `scale_color_viridis_*()` functions.
+
+```{r}
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - "Default color scale"
+#|   - "Viridis color scale"
+v <- ggplot(penguins,
+            aes(x = bill_length_mm, y = bill_depth_mm, color = body_mass_g)) +
+  geom_point(size = 4)
+v #default colors
+v + scale_color_viridis_c() #viridis colors
+```
+
+## Viridis variants {.smaller}
+
+Other viridis palettes are available by changing `option` in the scale function
+
+```{r}
+#| layout-ncol: 3
+#| code-fold: true
+v + scale_color_viridis_c(option = "magma")
+v + scale_color_viridis_c(option = "inferno")
+v + scale_color_viridis_c(option = "plasma")
+v + scale_color_viridis_c(option = "cividis")
+v + scale_color_viridis_c(option = "rocket")
+v + scale_color_viridis_c(option = "mako")
+
+```
+
+## Viridis customization
+
+The upper end of viridis palettes tends to be very bright yellow.
+You can limit the range of colors used with the `begin` and `end` arguments
+
+```{r}
+#| layout-ncol: 2
+v + scale_color_viridis_c()
+v + scale_color_viridis_c(begin = 0.1, end = 0.9)
+```
+
+## Viridis for discrete data {.smaller}
+
+The viridis palette can be used for discrete / categorical data with `scale_color_viridis_d()`.
+
+```{r}
+p2 + scale_color_viridis_d(end = 0.9, option = "C")
+```
+
+::: callout-warning
+## Uh oh!
+
+This only applied the new palette to the `color` aesthetic!
+:::
+
+## Applying palettes to multiple aesthetics {.smaller}
+
+*Usually* `color` and `fill` are mapped to the same data.
+You can add both `scale_color_*()` and `scale_fill_*()` to a plot OR you can use the `aesthetics` argument.
+
+```{r}
+p2 + 
+  scale_color_viridis_d(aesthetics = c("color", "fill"), end = 0.9, option = "C")
+```
+
+## Other color palettes
+
+There are ***many*** places to get additional color palettes.
+
+A few of my favorites:
+
+::: nonincremental
+-   [`colorspace`](https://hclwizard.org/r-colorspace/)
+-   [`cols4all`](https://github.com/mtennekes/cols4all)
+-   [`paletteer`](https://emilhvitfeldt.github.io/paletteer/)
+-   [Comprehensive list of color palettes in r](https://github.com/EmilHvitfeldt/r-color-palettes#readme)
+:::
+
+::: callout-note
+## Activity
+
+Let's find a palette we like using `cols4all::4a_gui()`
+:::
+
+## Manual color palettes
+
+You can always use your own colors using `scale_color_manual()` if you know the hex codes.
+
+```{r}
+my_cols <- c("#B60A1C","#E39802","#309143")
+
+p2 + 
+  scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
+```
+
+## Manual color palettes
+
+Use a **named vector** to specify which colors go with which factor level
+
+```{r}
+#| code-line-numbers: "1-2|4|"
+my_cols <- 
+  c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
+p2 <- p2 + 
+  scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
+p3 <- p3 +
+  scale_color_manual(values = my_cols, aesthetics = c("color", "fill"))
+```
+
+. . .
+
+```{r}
+#| echo: false
+#| layout-ncol: 2
+p2;p3
+```
+
+# Legends
+
+## Legend titles
+
+We can set the name for scales a few ways: with `labs()` or with the `names=` argument of the scale.
+
+```{r}
+p2 + labs(color = "Penguin Species")
+# Code below replaces existing color scale
+# p2 + scale_color_discrete(name = "Penguin Species") 
+```
+
+## Legend titles
+
+Legends for scales with the **same name** will be combined if possible
+
+```{r}
+p2 + labs(color = "Penguin Species",
+          shape = "Penguin Species",
+          fill = "Penguin Species")
+```
+
+## Legend labels
+
+What if we want to use the Latin name for the penguin species?
+We can use the `labels` argument and a named vector.
+
+```{r}
+#| output-location: slide
+#| code-line-numbers: "|1-3|7"
+scinames <- c("Adelie" = "P. adeliae",
+              "Chinstrap" = "P. antarticus",
+              "Gentoo" = "P. papua")
+p2 <- p2 +
+  scale_color_manual(
+    values = my_cols,
+    labels = scinames,
+    aesthetics = c("color", "fill")
+  )
+
+p2
+```
+
+## Legend labels
+
+Let's do the same for `p3`:
+
+```{r}
+#| output-location: slide
+p3 <- p3 +
+  scale_color_manual(
+    values = my_cols,
+    labels = scinames,
+    aesthetics = c("color", "fill")
+  )
+p3
+```
+
+# Axes
+
+::: columns
+::: {.column width="60%"}
+::: nonincremental
+-   Axes are also a type of scale
+-   E.g. `scale_x_discrete()` applies a discrete (categorical) scale to the x-axis
+:::
+:::
+
+::: {.column width="40%"}
+```{r}
+#| echo: false
+#| fig-width: 5
+p1
+```
+:::
+:::
+
+## Custom labels
+
+We can use what we learned before to customize the categorical x-axis labels in `p1`
+
+```{r}
+(p1 <- p1 + scale_x_discrete(name = "Species", labels = scinames))
+```
+
+## Custom breaks
+
+Change the number of breaks in a continuous axis with `n.breaks=`
+
+```{r}
+(p1 <- 
+  p1 + scale_y_continuous(name = "Body Mass (g)", n.breaks = 12))
+```
+
+This doesn't produce *exactly* 12 breaks---it preferences breaks at "pretty" numbers
+
+## Custom breaks
+
+Specify breaks *exactly* with `breaks=`
+
+```{r}
+p1 + scale_y_continuous(breaks = c(3333, 5000, 5555))
+```
+
+## Axis limits
+
+Two ways to set axis limits:
+
+::: nonincremental
+-   In `scale_*()` or with `xlim()`/`ylim()` --- drops **data** outside of range
+-   With `coord_*()` --- only crops plot area
+:::
+
+## Axis limits
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+p1 + 
+  scale_y_continuous(limits = c(2000, 5500), n.breaks = 12, name = "Body Mass (g)")
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-width: 5
+p1 + 
+  coord_cartesian(ylim = c(2000, 5500))
+```
+:::
+:::
+
+## Axis limits
+
+```{r}
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - "Limits set in scale_y_*() or with ylim()"
+#|   - "Limits set in coord_cartesian()"
+#| fig-width: 5
+p1 + ylim(2000, 5500) 
+p1 + coord_cartesian(ylim = c(2000, 5500))
+```
+
+## Other useful `coord_`s
+
+1:1 (or custom) ratio of axes with `coord_fixed()`
+
+```{r}
+p2 + coord_fixed()
+```
+
+## Other useful `coord_`s
+
+Horizontal plots with `coord_flip()`
+
+```{r}
+(p1 <- p1 + coord_flip())
+```
+
+<!--# at the very end, supply FULL code for multi-panel plot in scrollable slide -->
