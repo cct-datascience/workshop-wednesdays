@@ -258,9 +258,21 @@ p2 + labs(color = "Penguin Species")
 Legends for scales with the **same name** will be combined if possible
 
 ```{r}
-p2 + labs(color = "Penguin Species",
-          shape = "Penguin Species",
-          fill = "Penguin Species")
+(p2 <- 
+  p2 + labs(color = "Penguin Species",
+            shape = "Penguin Species",
+            fill = "Penguin Species"))
+```
+
+## Legend titles
+
+Let's do the same for `p3`
+
+```{r}
+(p3 <- 
+  p3 + labs(color = "Penguin Species",
+            shape = "Penguin Species",
+            fill = "Penguin Species"))
 ```
 
 ## Legend labels
@@ -270,7 +282,7 @@ We can use the `labels` argument and a named vector.
 
 ```{r}
 #| output-location: slide
-#| code-line-numbers: "|1-3|7"
+#| code-line-numbers: "|1-3|7|10"
 #| fig-width: 9
 #| fig-height: 5
 scinames <- c("Adelie" = "P. adeliae",
@@ -281,14 +293,15 @@ p2 <- p2 +
     values = my_cols,
     labels = scinames,
     aesthetics = c("color", "fill")
-  )
+  ) +
+  scale_shape_discrete(labels = scinames)
 
 p2
 ```
 
 ## Legend labels
 
-Let's do the same for `p3`:
+Let's do the same for `p3`
 
 ```{r}
 #| output-location: slide
@@ -299,9 +312,14 @@ p3 <- p3 +
     values = my_cols,
     labels = scinames,
     aesthetics = c("color", "fill")
-  )
+  ) +
+  scale_shape_discrete(labels = scinames)
 p3
 ```
+
+::: callout-tip
+If there are many aesthetics that map to the same variable, it might be easier to change the factor levels in the data once instead of inside of every scale
+:::
 
 # Axes
 
@@ -321,6 +339,16 @@ Use what we learned before to customize the categorical x-axis labels in `p1`!
 
 ```{r}
 (p1 <- p1 + scale_x_discrete(name = "Species", labels = scinames))
+```
+
+## Custom labels
+
+If you only want to change the axis title, you can also do that in `labs()`
+
+```{r}
+#| layout-ncol: 2 
+(p2 <- p2 + labs(x = "Flipper Length (mm)", y = "Bill Length (mm)"))
+(p3 <- p3 + labs(x = "Flipper Length (mm)", y = "Bill Depth (mm)"))
 ```
 
 ## Custom breaks
@@ -410,6 +438,14 @@ p2 + theme_bw()
 p2 + theme_minimal()
 ```
 
+## Fonts
+
+You can customize font size and family with complete themes.
+
+```{r}
+p2 + theme_bw(base_size = 9, base_family = "Times New Roman")
+```
+
 ## Custom themes
 
 Customizing themes "manually" involves knowing the name of the theme element and it's corresponding `element_*()` function.
@@ -424,7 +460,7 @@ It's best to find a built-in `theme_*()` function that gets you most of the way 
 
 ```{r}
 p1 + 
-  theme_minimal() + 
+  theme_minimal(base_size = 10) + 
   theme(axis.line = element_line(linewidth = 0.5, lineend = "round"))
 ```
 
@@ -440,4 +476,285 @@ Name some things about the appearance of `p1` that you want to change and we'll 
 Check the examples in the help page for `theme()` <https://ggplot2.tidyverse.org/reference/theme.html> to figure out the names of theme elements
 :::
 
-<!--# at the very end, supply FULL code for multi-panel plot in scrollable slide -->
+## Re-using custom themes
+
+You can save a custom theme as an R object and supply it to your plots.
+
+```{r}
+my_theme <- 
+  theme_minimal() + 
+  theme(
+    axis.line = element_line(linewidth = 0.5, lineend = "round"),
+    axis.ticks = element_line(linewidth = 0.2),
+    legend.background = element_rect(linewidth = 0.2)
+  )
+
+p2 + my_theme
+```
+
+## Re-using custom themes
+
+Or you can set your theme as the default at the top of your R script
+
+```{r}
+theme_set(my_theme)
+p3
+```
+
+# Multi-panel figures
+
+## Combine plots
+
+The `patchwork` package makes it easy to combine `ggplot2` plots
+
+```{r}
+library(patchwork)
+p1 + p2
+```
+
+## Control layout
+
+::: columns
+::: {.column width="50%"}
+::: nonincremental
+-   `+` wraps plots
+-   `|` combines plots horizontally
+-   `/` combines plots vertically
+-   `()` can be used to nest operations
+:::
+:::
+
+::: {.column width="50%"}
+```{r}
+#| fig-width: 8
+#| fig-height: 5
+p1 / (p2 | p3)
+```
+:::
+:::
+
+## Multi-panel figures {.smaller}
+
+::: nonincremental
+-   `plot_layout(guides = "collect")` combines duplicate legends
+-   `plot_annotation(tag_levels = "a")` adds labels to sub-plots
+:::
+
+```{r}
+#| code-line-numbers: "|2|3|4"
+#| fig-width: 8
+#| fig-height: 5
+p_combined <-
+  p1 /
+  (p2 + p3 + plot_layout(guides = "collect")) + 
+  plot_annotation(tag_levels = "a", tag_suffix = ")")
+p_combined
+```
+
+# Saving plots 💾
+
+## Saving plots
+
+If you know the dimensions, it's good to save plots early on and adjust theme to fit.
+
+::: columns
+::: {.column width="50%"}
+```{r}
+#| code-line-numbers: "|2|3|4-7"
+ggsave(
+  filename = "penguins.png",
+  plot = p_combined,
+  width = 7, 
+  height = 5, 
+  units = "in", 
+  dpi = "print"
+)
+```
+:::
+
+::: {.column width="50%"}
+![](penguins.png)
+:::
+:::
+
+::: notes
+The file type is figured out based on the extension in `filename`.
+
+By default, the last plot is the one saved, but it's good practice to specify `plot` anyways
+
+Dimensions can be specified in pixels, inches, mm, etc.
+
+`dpi` is resolution and only applies to raster images.
+
+Notice how the legends and points look too large with these dimensions.
+It might be good to fix that.
+:::
+
+## Raster vs. Vector {.smaller}
+
+::: nonincremental
+-   Raster images (e.g. .jpg, .png, .tiff) are made of pixels and the resolution can vary.
+-   Vector images (e.g. .svg, .eps) are not made of pixels and don't have a resolution.
+-   Vector formats should be used whenever possible
+:::
+
+```{r}
+#| echo: false
+ggsave(
+  filename = "penguins-lores.png", # filetype comes from filename extension
+  plot = p2, # default is prev. plot, but good to specify
+  width = 4, 
+  height = 3.5, 
+  units = "in",
+  dpi = "screen"
+)
+ggsave(
+  filename = "penguins.svg", # filetype comes from filename extension
+  plot = p2, # default is prev. plot, but good to specify
+  width = 4, 
+  height = 3.5, 
+  units = "in"
+)
+```
+
+::: {layout-ncol="2"}
+![Raster (72 dpi .png file)](penguins-lores.png){fig-align="left" width="300"}
+
+![Vector (.svg file)](penguins.svg){fig-align="left" width="300"}
+:::
+
+::: notes
+Open images in a new tab and zoom in on browser to demo the difference.
+
+Vector formats are not only resolution-less, they are more compatible with screen readers and therefore more accessible.
+:::
+
+## Finished product!
+
+```{r}
+#| output-location: slide
+#| fig-width: 7
+#| fig-height: 5
+library(tidyverse) #includes ggplot2
+library(palmerpenguins) #for data
+library(patchwork) #multi-panel figures
+
+# Custom theme
+my_theme <- 
+  theme_minimal(base_size = 10) + 
+  theme(
+    axis.line = element_line(linewidth = 0.5, lineend = "round"),
+    axis.ticks = element_line(linewidth = 0.2),
+    legend.background = element_rect(linewidth = 0.2)
+  )
+theme_set(my_theme)
+
+# plot 1
+
+## Custom function for stat_summary
+mean_sd <- function(x) {
+  data.frame(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
+}
+
+## For labeling with latin names
+scinames <- c("Adelie" = "P. adeliae",
+              "Chinstrap" = "P. antarticus",
+              "Gentoo" = "P. papua")
+
+p1 <-
+  ggplot(penguins |> filter(!is.na(sex)),
+         aes(x = species, y = body_mass_g, shape = sex)) +
+  geom_point(alpha = 0.2,
+    position = position_jitterdodge(dodge.width = 0.75)) +
+  stat_summary(fun.data = mean_sd,
+    position = position_dodge(width = 0.75)) +
+  scale_x_discrete(labels = scinames) +
+  scale_y_continuous(n.breaks = 12) +
+  coord_flip() +
+  labs(x = "Species", y = "Body Mass (g)")
+
+# Color palette for plot 2 and 3
+my_cols <- 
+  c("Chinstrap" = "#B60A1C", "Gentoo" = "#E39802", "Adelie" = "#309143")
+
+p2 <-
+  ggplot(penguins,
+         aes(
+           x = flipper_length_mm,
+           y = bill_length_mm,
+           color = species,
+           fill = species,
+           shape = species
+         )) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+    scale_color_manual(
+      values = my_cols,
+      labels = scinames,
+      aesthetics = c("color", "fill")
+    ) +
+    scale_shape_discrete(labels = scinames) +
+    labs(
+      color = "Penguin Species",
+      shape = "Penguin Species",
+      fill = "Penguin Species",
+      x = "Flipper Length (mm)",
+      y = "Bill Length (mm)"
+    )
+
+p3 <-
+  ggplot(penguins,
+         aes(
+           x = flipper_length_mm,
+           y = bill_depth_mm,
+           color = species,
+           fill = species,
+           shape = species
+         )) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+    scale_color_manual(
+      values = my_cols,
+      labels = scinames,
+      aesthetics = c("color", "fill")
+    ) +
+    scale_shape_discrete(labels = scinames) +
+    labs(
+      color = "Penguin Species",
+      shape = "Penguin Species",
+      fill = "Penguin Species",
+      x = "Flipper Length (mm)",
+      y = "Bill Length (mm)"
+    )
+
+# combine into multi-panel figure
+p_combined <-
+  p1 /
+  (p2 + p3 + plot_layout(guides = "collect")) + 
+  plot_annotation(tag_levels = "a", tag_suffix = ")")
+
+p_combined
+  
+```
+
+## Getting help
+
+::: nonincremental
+-   The [`ggplot2` documentation](https://ggplot2.tidyverse.org/) itself, in particular the examples on the [`theme()` page](https://ggplot2.tidyverse.org/reference/theme.html#ref-examples) and the [FAQ on customization](https://ggplot2.tidyverse.org/articles/faq-customising.html).
+
+-   The [R Graph Gallery](https://r-graph-gallery.com/) has a wide variety of plots with R code walkthroughs.
+
+-   The `ggplot2` book: <https://ggplot2-book.org/>
+:::
+
+You can always come by our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) to ask questions as well!
+
+## Part 3 next week!
+
+#### "Exploring the wide world of `ggplot2` extensions"
+
+🗓️ June 26
+
+⌚️ 11:00am--1:00pm
+
+[**Registration**](https://datascience.cct.arizona.edu/events/202-part-3-exploring-wide-world-ggplot2-extensions)
