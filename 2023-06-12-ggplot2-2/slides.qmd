@@ -1,9 +1,10 @@
 ---
-title: "Crafting Publication Quality Data Visualizations with `ggplot2`"
+title: "Crafting Publication Quality Data Visualizations with ggplot2"
 author: "Eric R. Scott"
 format: 
   revealjs:
     code-link: true
+    link-external-icon: true
     incremental: true
     fig-width: 7
     fig-height: 3.5
@@ -209,9 +210,8 @@ There are ***many*** places to get additional color palettes.
 A few of my favorites:
 
 ::: nonincremental
--   [`colorspace`](https://hclwizard.org/r-colorspace/)
--   [`cols4all`](https://github.com/mtennekes/cols4all)
--   [`paletteer`](https://emilhvitfeldt.github.io/paletteer/)
+-   [colorspace 📦](https://hclwizard.org/r-colorspace/)
+-   [cols4all 📦](https://github.com/mtennekes/cols4all)
 -   [Comprehensive list of color palettes in r](https://github.com/EmilHvitfeldt/r-color-palettes#readme)
 :::
 
