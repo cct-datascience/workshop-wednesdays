@@ -8,3 +8,8 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+// make logo slightly bigger
+.reveal .slide-logo {
+  max-height: 3.5rem !important;
+}
