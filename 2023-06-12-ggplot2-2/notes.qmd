@@ -54,9 +54,6 @@ A version of the plot from part 1 of this workshop series is re-created here.
 
 ```{r}
 #| code-fold: true
-mean_sd <- function(x) {
-  tibble(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
-}
 p1 <-
   ggplot(data = penguins |> 
            filter(!is.na(sex)),
@@ -68,7 +65,7 @@ p1 <-
     position = position_jitterdodge(dodge.width = 0.75)
   ) +
   stat_summary(
-    fun.data = mean_sd,
+    fun.data = mean_sdl,
     position = position_dodge(width = 0.75)
   )
 ```
@@ -497,7 +494,7 @@ You can always come by our [drop-in hours](https://datascience.cct.arizona.edu/d
 
 ## Part 3 next week!
 
-#### "Exploring the wide world of `ggplot2` extensions" 
+#### "Exploring the wide world of `ggplot2` extensions"
 
 🗓️ June 26, 11:00am--1:00pm
 
