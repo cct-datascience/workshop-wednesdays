@@ -150,6 +150,13 @@ Other viridis palettes are available by changing `option` in the scale function
 ```{r}
 #| layout-ncol: 3
 #| code-fold: true
+#| fig-cap: 
+#|   - "magma"
+#|   - "inferno"
+#|   - "plasma"
+#|   - "cividis"
+#|   - "rocket"
+#|   - "mako"
 v + scale_color_viridis_c(option = "magma")
 v + scale_color_viridis_c(option = "inferno")
 v + scale_color_viridis_c(option = "plasma")
