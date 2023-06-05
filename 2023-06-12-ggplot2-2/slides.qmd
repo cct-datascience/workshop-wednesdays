@@ -64,20 +64,21 @@ Other modifications to the appearance of your plot are a good idea, but less oft
 ## Example plot 1 {.smaller}
 
 ```{r}
-#| code-line-numbers: "|1-3|6|7|8-9|10-11"
-mean_sd <- function(x) {
-  data.frame(y = mean(x), ymin = mean(x) - sd(x), ymax = mean(x) + sd(x))
-}
-
+#| code-line-numbers: "|2|3|4-5|6-7"
 p1 <-
   ggplot(penguins |> filter(!is.na(sex)),
          aes(x = species, y = body_mass_g, shape = sex)) +
   geom_point(alpha = 0.2,
     position = position_jitterdodge(dodge.width = 0.75)) +
-  stat_summary(fun.data = mean_sd,
+  stat_summary(fun.data = mean_sdl,
     position = position_dodge(width = 0.75))
 p1
 ```
+
+::: notes
+Walk through construction of basic plots *briefly*.
+Encourage students to copy and paste code.
+:::
 
 ## Example plot 2 {.smaller}
 
