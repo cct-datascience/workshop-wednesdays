@@ -36,7 +36,6 @@ In Part 1 of this series, we will:
 -   Create a layered plot
 
 -   Introduce function and syntax of visual elements
-
 :::
 
 # The grammar of graphics
@@ -554,7 +553,7 @@ ggplot() +
 :::
 
 ::: {.callout-tip collapse="true"}
-When in doubt, check the [documentation](https://ggplot2.tidyverse.org/reference/index.html!)
+When in doubt, check the [documentation](https://ggplot2.tidyverse.org/reference/index.html)
 :::
 
 ## Two ways to plot counts (categorical)
@@ -1091,7 +1090,7 @@ ggplot(penguins,
 ## Further resources
 
 ::: incremental
--   Penguin artwork by @allison_horst  
+-   Penguin artwork by @allison_horst
 
 -   Hadley Wickham's "A layered grammar of graphics" (2010)
 
@@ -1101,4 +1100,3 @@ ggplot(penguins,
 
 -   See us at [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
 :::
-
