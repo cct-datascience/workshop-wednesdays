@@ -6,7 +6,7 @@ Instructor: Jessica Guo
 
 Date/time: Monday, June 5, 2023
 
-Links: [slides](https://viz.datascience.arizona.edu/foundations-ggplot2-slides/), [recording]()
+Links: [slides](https://viz.datascience.arizona.edu/foundations-ggplot2-slides/), [recording](https://studio.youtube.com/video/ke9R4C0E-k0/edit?c=UCiBfho07gp4LMbWY3_EG8Iw)
 
 In this workshop you'll gain a better understanding of the "grammar of graphics"---the theory underlying the `ggplot2` package. Using practical examples, you'll learn how understanding the grammar of graphics can help you build more creative, complex, information-rich visualizations.
 
