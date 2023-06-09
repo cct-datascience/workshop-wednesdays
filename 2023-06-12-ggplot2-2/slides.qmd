@@ -733,12 +733,11 @@ p1 <-
   ggplot(penguins |> filter(!is.na(sex)),
          aes(x = species, y = body_mass_g, shape = sex)) +
   geom_point(alpha = 0.2,
-    position = position_jitterdodge(dodge.width = 0.75)) +
+             position = position_jitterdodge(dodge.width = 0.75)) +
   stat_summary(fun.data = mean_sd,
-    position = position_dodge(width = 0.75)) +
+               position = position_dodge(width = 0.75)) +
   scale_x_discrete(labels = scinames) +
   scale_y_continuous(n.breaks = 12) +
-  coord_flip() +
   labs(x = "Species", y = "Body Mass (g)")
 
 # Color palette for plot 2 and 3
@@ -756,19 +755,19 @@ p2 <-
          )) +
   geom_point() +
   geom_smooth(method = "lm") +
-    scale_color_manual(
-      values = my_cols,
-      labels = scinames,
-      aesthetics = c("color", "fill")
-    ) +
-    scale_shape_discrete(labels = scinames) +
-    labs(
-      color = "Penguin Species",
-      shape = "Penguin Species",
-      fill = "Penguin Species",
-      x = "Flipper Length (mm)",
-      y = "Bill Length (mm)"
-    )
+  scale_color_manual(
+    values = my_cols,
+    labels = scinames,
+    aesthetics = c("color", "fill")
+  ) +
+  scale_shape_discrete(labels = scinames) +
+  labs(
+    color = "Penguin Species",
+    shape = "Penguin Species",
+    fill = "Penguin Species",
+    x = "Flipper Length (mm)",
+    y = "Bill Length (mm)"
+  )
 
 p3 <-
   ggplot(penguins,
@@ -781,19 +780,19 @@ p3 <-
          )) +
   geom_point() +
   geom_smooth(method = "lm") +
-    scale_color_manual(
-      values = my_cols,
-      labels = scinames,
-      aesthetics = c("color", "fill")
-    ) +
-    scale_shape_discrete(labels = scinames) +
-    labs(
-      color = "Penguin Species",
-      shape = "Penguin Species",
-      fill = "Penguin Species",
-      x = "Flipper Length (mm)",
-      y = "Bill Length (mm)"
-    )
+  scale_color_manual(
+    values = my_cols,
+    labels = scinames,
+    aesthetics = c("color", "fill")
+  ) +
+  scale_shape_discrete(labels = scinames) +
+  labs(
+    color = "Penguin Species",
+    shape = "Penguin Species",
+    fill = "Penguin Species",
+    x = "Flipper Length (mm)",
+    y = "Bill Length (mm)"
+  )
 
 # combine into multi-panel figure
 p_combined <-
