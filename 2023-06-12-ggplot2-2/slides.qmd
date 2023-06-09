@@ -5,6 +5,7 @@ format:
   revealjs:
     code-link: true
     link-external-icon: true
+    link-external-newwindow: true
     incremental: true
     fig-width: 7
     fig-height: 3.5
@@ -51,6 +52,10 @@ Journals often require certain modifications to your plots to make them publicat
 -   Figure size limits
 -   Font size suggestions
 
+::: notes
+Get audience suggestions before advancing bullets
+:::
+
 ## Not required, but good practice
 
 Other modifications to the appearance of your plot are a good idea, but less often required by journals or reviewers
@@ -61,6 +66,10 @@ Other modifications to the appearance of your plot are a good idea, but less oft
 -   Screen-reader compatible
 -   High [data-ink ratio](https://infovis-wiki.net/wiki/Data-Ink_Ratio) (simplify plot, within reason)
 -   Arrangement of related plots into multi-panel figures
+
+::: notes
+Get audience suggestions before advancing bullets
+:::
 
 ## Example plot 1 {.smaller}
 
@@ -258,11 +267,11 @@ p2;p3
 
 ## Legend titles
 
-We can set the name for scales a few ways: with `labs()` or with the `names=` argument of the scale.
+We can set the name for scales a few ways: with `labs()` or with the `name=` argument of the scale.
 
 ```{r}
 p2 + labs(color = "Penguin Species")
-# Code below replaces existing color scale
+# Equivalent, but replaces existing color scale:
 # p2 + scale_color_discrete(name = "Penguin Species") 
 ```
 
@@ -334,6 +343,37 @@ p3
 If there are many aesthetics that map to the same variable, it might be easier to change the factor levels in the data once instead of inside of every scale
 :::
 
+## Applying what we learned
+
+Let's apply what we learned to `p1` to capitalize the words in the legend
+
+-   Which `scale_` function?
+
+-   Which argument changes legend *title*?
+
+-   Which argument changes *labels*?
+
+```{r}
+#| echo: false
+p1
+```
+
+## Applying what we learned
+
+```{r}
+p1 <- p1 +
+  scale_shape(
+    name = "Sex",
+    labels = c("male" = "Male", "female" = "Female")
+  )
+p1
+```
+
+::: notes
+Code auto-complete isn't very helpful here because the only arguments to `scale_shape()` are `…` and `solid`.
+This is a good opportunity to talk about what `…` do and how to learn what arguments a function with `…` can take by looking at what function `…` are passed to in the help file.
+:::
+
 # Axes
 
 ## Axes
@@ -353,6 +393,10 @@ Use what we learned before to customize the categorical x-axis labels in `p1`!
 ```{r}
 (p1 <- p1 + scale_x_discrete(name = "Species", labels = scinames))
 ```
+
+::: notes
+The nice thing about `ggplot2` is that it is designed around a *grammar*---once you learn how to do something once, you can usually apply it easily to new situations.
+:::
 
 ## Custom labels
 
@@ -384,7 +428,7 @@ Specify breaks *exactly* with `breaks=`
 p1 + scale_y_continuous(breaks = c(3333, 5000, 5555))
 ```
 
-## Axis limits
+## Axis limits {visibility="hidden"}
 
 Two ways to set axis limits:
 
@@ -393,7 +437,7 @@ Two ways to set axis limits:
 -   With `coord_*()` --- only crops plot area
 :::
 
-## Axis limits
+## Axis limits {visibility="hidden"}
 
 ::: columns
 ::: {.column width="50%"}
@@ -420,7 +464,7 @@ In the first example, the limits are removing data points *before* `stat_summary
 In the second example, the error bars are calculated using all the data and the plot area just cuts off at \> 5500 g
 :::
 
-## Other useful `coord_`s
+## Other useful `coord_`s {visibility="hidden"}
 
 1:1 (or custom) ratio of axes with `coord_fixed()`
 
@@ -428,12 +472,12 @@ In the second example, the error bars are calculated using all the data and the 
 p2 + coord_fixed()
 ```
 
-## Other useful `coord_`s
+## Other useful `coord_`s {visibility="hidden"}
 
 Horizontal plots with `coord_flip()`
 
 ```{r}
-(p1 <- p1 + coord_flip())
+p1 + coord_flip()
 ```
 
 # Themes
@@ -464,8 +508,13 @@ p2 + theme_bw(base_size = 9, base_family = "Times New Roman")
 Customizing themes "manually" involves knowing the name of the theme element and it's corresponding `element_*()` function.
 
 ```{r}
-p1 + theme(axis.title.x = element_text(face = "bold", colour = "darkblue"))
+p1 + theme(axis.title = element_text(face = "bold", colour = "red"))
 ```
+
+::: notes
+Theme elements are hierarchical.
+E.g. `title` affects all title elements, `axis.title` affects all axis titles, `axis.title.x` only affects x-axis titles, and `axis.title.x.bottom` affects only the bottom x-axis title (in the case that there is a second x-axis on the top).
+:::
 
 ## Custom themes
 
