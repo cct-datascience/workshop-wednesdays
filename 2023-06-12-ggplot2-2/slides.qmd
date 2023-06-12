@@ -816,7 +816,7 @@ p_combined
 
 You can always come by our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) to ask questions as well!
 
-## Part 3 next week!
+## Part 3 in two weeks!
 
 #### "Exploring the wide world of `ggplot2` extensions"
 
