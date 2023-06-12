@@ -27,7 +27,7 @@ knitr:
 
 -   Customize color palettes with accessibility in mind
 -   Customize legends
--   Customizing axes (ticks, grid-lines, labels, date axes, transformations)
+-   Customizing axes (titles, labels, breaks)
 -   Customize appearance of plots with themes
 -   Arrange multi-panel figures
 -   Save high resolution or vector formats
