@@ -1,0 +1,100 @@
+---
+title: "Exploring the Wide World of ggplot2 Extensions"
+author: 
+  - "Eric R. Scott"
+  - "Kristina Riemer"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: true
+    link-external-icon: true
+    link-external-newwindow: true
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: logo.png
+execute: 
+  echo: true
+editor: visual
+---
+
+## Learning Objectives
+
+-   Understand where to find packages that extend `ggplot2`
+-   Make animated plots with `gganimate`
+-   Interactively create plots with `esquisse`
+-   Convert `ggplot2` plots to interactive `plotly` plots
+-   Label data with `ggrepel`
+
+## Packages
+
+```{r}
+library(ggplot2)
+library(palmerpenguins)
+```
+
+## Extensions to `ggplot2`
+
+There are many kinds of extensions to `ggplot2`, but many of them can be put into one of two "bins"
+
+1.  Packages that add new layers
+2.  Packages that wrap multiple layers for convenience
+
+## Packages that extend `ggplot2`
+
+Some packages add new layers or themes that can be combined with standard `ggplot2` functions.
+
+```{r}
+#| code-line-numbers: "|1,4"
+library(ggbeeswarm)
+ggplot(penguins, aes(x = species, y = body_mass_g)) +
+  geom_boxplot() +
+  geom_beeswarm()
+
+```
+
+::: notes
+`geom_beeswarm()` can easily be added to other `geom_`s
+:::
+
+## Packages that wrap `ggplot2`
+
+Other packages provide convenience "all-in-one" functions that combine multiple layers for you.
+
+```{r}
+#| code-line-numbers: "|1-3"
+library(ggpubr)
+ggstripchart(penguins, x = "species", y = "body_mass_g",
+             add = "boxplot") +
+  scale_y_continuous("Body Mass (g)", n.breaks = 10)
+```
+
+::: notes
+Notice that `ggstripchart()` totally replaces `ggplot(aes(…))` .
+However, it still makes a ggplot object that you can add layers to.
+:::
+
+## Finding Extensions
+
+-   Browse the `ggplot2` [extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/)
+
+-   Check out the [Awesome `ggplot2`](https://github.com/erikgahner/awesome-ggplot2#readme) list
+
+-   [The R Graph Gallery](https://r-graph-gallery.com/)
+
+-   Google search with "ggplot2" keyword
+
+# Package Demos
+
+# Anything we missed?
+
+Got a `ggplot2` question we didn't cover in this workshop series?
+Let's figure it out together!
+
+## Getting Help
+
+-   Website / documentation for extension packages
+
+-   Our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
+
+-   [UA Data Science Slack](https://join.slack.com/t/uadatascience/shared_invite/zt-1xjxht9k0-E489WA6axO_SRVeKQh3cXg)
