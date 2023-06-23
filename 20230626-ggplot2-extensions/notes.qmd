@@ -1,0 +1,113 @@
+---
+title: "Exploring the Wide World of ggplot2 Extensions"
+subtitle: "Instructor notes"
+authors:
+  - Eric R. Scott
+  - Kristina Riemer
+format: html
+editor: visual
+---
+
+```{r}
+library(palmerpenguins)
+library(ggplot2)
+```
+
+# Intro
+
+Go through introductory [slides](https://cct-datascience.quarto.pub/exploring-the-wide-world-of-ggplot2-extensions/) to start.
+Spend time looking through the ggplot extension gallery and ask if there are any particular packages that look useful to folks.
+Get people to share their discoveries.
+
+# Demonstrations
+
+Go through vignette or other short demo of several extension packages.
+
+## `gganimate`
+
+## `esquisse`
+
+## `plotly`
+
+```{r}
+library(plotly)
+```
+
+-   `plotly` R package is interface to a JavaScript library
+
+-   Only important to know that because if you search for `plotly` help, sometimes you'll get JavaScript code examples.
+
+-   `plotly` *kind of* uses the grammar of graphics, but building a plot from scratch is tricky
+
+-   `plotly` functions mostly take lists are arguments, which makes it very difficult to figure out what default values are or even what arguments functions can take.
+
+-   `ggplotly()` **transforms** `ggplot` objects into interactive `plotly` plots.
+    90% of the time it gets you 90% of the way there
+
+```{r}
+p <- 
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)", color = "Penguin Species") +
+  theme_bw()
+
+ggplotly(p)
+```
+
+By default, you get:
+
+-   Drag a box to zoom, double-click to zoom out
+
+-   Tooltips on hover
+
+-   Ability to hide and show points by clicking on the legend
+
+-   Toolbar with tools including ability to download a PNG of the plot
+
+This works in R Markdown or Quarto documents (i.e. there's not a way to make these plots "stand-alone"---they're rendered as HTML)
+
+### Types of plots
+
+Works for most (all?) built-in geoms.
+Works for some plots made with ggplot2 extensions also.
+Demo a few different geoms like `geom_boxplot()`, `geom_hisotgram()`, `geom_smooth()`
+
+### Customize tooltip
+
+You can customize the info displayed in the tooltip with `ggplotly` .
+Give it additional aesthetic `text` to include something *only* as a tooltip.
+
+```{r}
+p <- 
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  #Ignore unknown aesthetics warning
+  geom_point(aes(text = sex)) +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)", color = "Penguin Species") +
+  theme_bw()
+
+ggplotly(p, tooltip = c("text", "bill_depth_mm", "bill_length_mm"))
+```
+
+### Animations
+
+You can use `ggplotly()` to make interactive animated plots by using the `frame` aesthetic
+
+```{r}
+library(gapminder) #dataset
+head(gapminder)
+p2 <- ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
+  geom_point(aes(size = pop, frame = year, ids = country)) +
+  scale_x_log10()
+
+ggplotly(p2)
+
+```
+
+## `ggrepel`
+
+# Wrap-up
+
+Go through "where to find help" slides.
+Plug next workshop (our fall reproducibility series)
+
+Ask if there are any other remaining `ggplot2`-related roadblocks people are experiencing and workshop it live.
