@@ -86,15 +86,15 @@ However, it still makes a ggplot object that you can add layers to.
 
 # Package Demos
 
-# Anything we missed?
-
-Got a `ggplot2` question we didn't cover in this workshop series?
-Let's figure it out together!
-
 ## Getting Help
 
--   Website / documentation for extension packages
+-   `gplotly()`: https://plotly.com/ggplot2/
 
 -   Our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
 
 -   [UA Data Science Slack](https://join.slack.com/t/uadatascience/shared_invite/zt-1xjxht9k0-E489WA6axO_SRVeKQh3cXg)
+
+# Anything we missed?
+
+Got a `ggplot2` question we didn't cover in this workshop series?
+Let's figure it out together!
