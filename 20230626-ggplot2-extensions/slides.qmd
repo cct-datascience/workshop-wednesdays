@@ -145,7 +145,8 @@ ggplotly(p)
 
 ::: columns
 ::: {.column width="35%"}
-```{r, eval=FALSE}
+```{r}
+#| eval: false
 library(dplyr)
 library(esquisse)
 
