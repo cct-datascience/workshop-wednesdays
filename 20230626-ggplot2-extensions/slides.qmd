@@ -70,8 +70,7 @@ ggstripchart(penguins, x = "species", y = "body_mass_g",
 ```
 
 ::: notes
-Notice that `ggstripchart()` totally replaces `ggplot(aes(…))` .
-However, it still makes a ggplot object that you can add layers to.
+Notice that `ggstripchart()` totally replaces `ggplot(aes(…))` . However, it still makes a ggplot object that you can add layers to.
 :::
 
 ## Finding Extensions
@@ -86,15 +85,52 @@ However, it still makes a ggplot object that you can add layers to.
 
 # Package Demos
 
+## `gganimate`
+
+```{r}
+library(gganimate)
+
+ggplot(penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point() +
+  transition_time(year) + 
+  labs(title = "Year: {frame_time}")
+```
+
+## `gganimate`
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point() +
+  transition_states(year, transition_length = 0.5) +
+  labs(title = "Year: {closest_state}") +
+  shadow_wake(wake_length = 0.1)
+```
+
+```{r, eval=FALSE}
+anim_save("~/Desktop/test_anim.gif")
+```
+
+## `esquisse`
+
+::: columns
+::: {.column width="45%"}
+```{r, eval=FALSE}
+library(dplyr)
+library(esquisse)
+
+penguins <- penguins %>% na.omit()
+esquisser(penguins)
+```
+:::
+
+::: {.column width="50%"}
+![](images/esquisse_diag.png)
+:::
+:::
+
 ## Getting Help
 
--   `gganimate`: [Getting started guide](https://gganimate.com/articles/gganimate.html), [reference](https://gganimate.com/reference/index.html)
-
--   `esquisse`: [Getting started guide](https://dreamrs.github.io/esquisse/articles/get-started.html#launch-the-addin), [reference](https://dreamrs.github.io/esquisse/reference/index.html)
-
 -   `gplotly()`: https://plotly.com/ggplot2/
-
--   `ggrepel`: Gallery of [examples](https://ggrepel.slowkow.com/articles/examples.html#examples), list of [available aesthetics](https://ggrepel.slowkow.com/articles/examples.html#aesthetics) you can map data to.
 
 -   Our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
 
@@ -102,5 +138,4 @@ However, it still makes a ggplot object that you can add layers to.
 
 # Anything we missed?
 
-Got a `ggplot2` question we didn't cover in this workshop series?
-Let's figure it out together!
+Got a `ggplot2` question we didn't cover in this workshop series? Let's figure it out together!
