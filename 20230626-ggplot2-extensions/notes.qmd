@@ -105,6 +105,93 @@ ggplotly(p2)
 
 ## `ggrepel`
 
+The `ggrepel` package is helpful for directly labeling plots, especially when labels would otherwise overlap.
+
+```{r}
+#make rownames into columns
+dat <- mtcars |> tibble::rownames_to_column(var = "car")
+dat
+p3 <- 
+  ggplot(dat,
+  aes(wt, mpg, label = car, colour = factor(cyl))) +
+  geom_point()
+
+#without ggrepel
+p3 + geom_text()
+p3 + geom_label()
+
+library(ggrepel)
+p3 + geom_text_repel()
+p3 + geom_label_repel()
+```
+
+### Adjust appearance of labels
+
+By default, little segments are drawn connecting labels to points only when labels are far enough away.
+This can be adjusted.
+
+```{r}
+p3 + geom_label_repel(min.segment.length = 0)
+```
+
+### Overlapping labels
+
+You see a warning about labels being removed due to overlaps.
+Make text smaller, plot larger, adjust `max.overlaps` , force labels further apart, make it try harder to find positions that don't overlap.
+
+```{r}
+#don't usually need to do all of these things, but they're some options
+p4 <- 
+  p3 + 
+  geom_label_repel(
+    min.segment.length = 0,
+    #smaller labels
+    size = 3, 
+    label.padding = 0.15,
+    #draw labels even if overlapping with things
+    max.overlaps = 15, #default is 10, increase to get more labels drawn
+    #force labels further from point
+    force = 5,
+    #ask it to try harder
+    max.time = 2,
+    max.iter = 15000,
+    show.legend = FALSE
+  )
+p4
+```
+
+### Labels are random
+
+Labels are positioned randomly, so they're different every time a plot is rendered
+
+```{r}
+#| layout-ncol: 2
+p4
+p4
+```
+
+You can `set.seed()` at the top of your script to ensure reproducibility.
+
+```{r}
+#| layout-ncol: 2
+set.seed(123)
+p4
+set.seed(123)
+p4
+```
+
+### Label just some points
+
+You can label just select points
+
+```{r}
+cars <- c("Volvo 142E", "Merc 230")
+
+ggplot(dat, aes(wt, mpg, label = ifelse(car %in% cars, car, ""))) +
+  geom_point(color = "red") +
+  geom_label_repel(min.segment.length = 0, nudge_x = 0.5, nudge_y = 3)
+```
+
 # Wrap-up
 
 Go through "where to find help" slides.
