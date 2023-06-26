@@ -15,6 +15,7 @@ format:
     logo: logo.png
 execute: 
   echo: true
+  cache: true
 editor: visual
 ---
 
@@ -70,7 +71,8 @@ ggstripchart(penguins, x = "species", y = "body_mass_g",
 ```
 
 ::: notes
-Notice that `ggstripchart()` totally replaces `ggplot(aes(…))` . However, it still makes a ggplot object that you can add layers to.
+Notice that `ggstripchart()` totally replaces `ggplot(aes(…))` .
+However, it still makes a ggplot object that you can add layers to.
 :::
 
 ## Finding Extensions
@@ -110,27 +112,89 @@ ggplot(penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
 anim_save("~/Desktop/test_anim.gif")
 ```
 
-## `esquisse`
+## `plotly`
+
+```{r}
+library(plotly)
+```
+
+::: incremental
+-   `plotly` R package is interface to a JavaScript library
+
+-   Only important to know that because if you search for `plotly` help, sometimes you'll get JavaScript code examples.
+
+-   `plotly` *kind of* uses the grammar of graphics, but building a plot from scratch is tricky
+
+-   `ggplotly()` **transforms** `ggplot` objects into interactive `plotly` plots.
+    90% of the time it gets you 90% of the way there
+:::
+
+## `plotly` {.smaller}
+
+```{r}
+p <- 
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)", color = "Penguin Species") +
+  theme_bw()
+
+ggplotly(p)
+```
+
+## `esquisse` {.smaller}
 
 ::: columns
-::: {.column width="45%"}
+::: {.column width="35%"}
 ```{r, eval=FALSE}
 library(dplyr)
 library(esquisse)
 
-penguins <- penguins %>% na.omit()
+penguins <- 
+  penguins %>%
+  na.omit()
 esquisser(penguins)
 ```
 :::
 
-::: {.column width="50%"}
-![](images/esquisse_diag.png)
+::: {.column width="65%"}
+![](esquisse_diag.png)
 :::
 :::
+
+## `ggrepel`
+
+The `ggrepel` package is helpful for directly labeling plots, especially when labels would otherwise overlap.
+
+```{r}
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - "geom_text()"
+#|   - "geom_text_repel()"
+#make rownames into columns
+dat <- mtcars |> tibble::rownames_to_column(var = "car")
+# dat
+p3 <- 
+  ggplot(dat,
+  aes(wt, mpg, label = car, colour = factor(cyl))) +
+  geom_point()
+#without ggrepel
+p3 + geom_text()
+# p3 + geom_label()
+library(ggrepel)
+p3 + geom_text_repel()
+# p3 + geom_label_repel()
+```
 
 ## Getting Help
 
+-   `gganimate`: [Getting started guide](https://gganimate.com/articles/gganimate.html), [reference](https://gganimate.com/reference/index.html)
+
 -   `gplotly()`: https://plotly.com/ggplot2/
+
+-   `esquisse`: [Getting started guide](https://dreamrs.github.io/esquisse/articles/get-started.html#launch-the-addin), [reference](https://dreamrs.github.io/esquisse/reference/index.html)
+
+-   `ggrepel`: Gallery of [examples](https://ggrepel.slowkow.com/articles/examples.html#examples), list of [available aesthetics](https://ggrepel.slowkow.com/articles/examples.html#aesthetics) you can map data to.
 
 -   Our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
 
@@ -138,4 +202,5 @@ esquisser(penguins)
 
 # Anything we missed?
 
-Got a `ggplot2` question we didn't cover in this workshop series? Let's figure it out together!
+Got a `ggplot2` question we didn't cover in this workshop series?
+Let's figure it out together!
