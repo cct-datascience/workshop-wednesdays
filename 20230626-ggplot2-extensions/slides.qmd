@@ -88,7 +88,13 @@ However, it still makes a ggplot object that you can add layers to.
 
 ## Getting Help
 
+-   `gganimate`: [Getting started guide](https://gganimate.com/articles/gganimate.html), [reference](https://gganimate.com/reference/index.html)
+
+-   `esquisse`: [Getting started guide](https://dreamrs.github.io/esquisse/articles/get-started.html#launch-the-addin), [reference](https://dreamrs.github.io/esquisse/reference/index.html)
+
 -   `gplotly()`: https://plotly.com/ggplot2/
+
+-   `ggrepel`: Gallery of [examples](https://ggrepel.slowkow.com/articles/examples.html#examples), list of [available aesthetics](https://ggrepel.slowkow.com/articles/examples.html#aesthetics) you can map data to.
 
 -   Our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
 
