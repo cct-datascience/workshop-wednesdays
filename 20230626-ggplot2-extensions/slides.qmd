@@ -1,0 +1,246 @@
+---
+title: "Exploring the Wide World of ggplot2 Extensions"
+author: 
+  - "Eric R. Scott"
+  - "Kristina Riemer"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: true
+    link-external-icon: true
+    link-external-newwindow: true
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: logo.png
+execute: 
+  echo: true
+  cache: true
+editor: visual
+---
+
+## Learning Objectives
+
+-   Understand where to find packages that extend `ggplot2`
+-   Make animated plots with `gganimate`
+-   Interactively create plots with `esquisse`
+-   Convert `ggplot2` plots to interactive `plotly` plots
+-   Label data with `ggrepel`
+
+## Packages
+
+```{r}
+library(ggplot2)
+library(palmerpenguins)
+```
+
+## Extensions to `ggplot2`
+
+There are many kinds of extensions to `ggplot2`, but many of them can be put into one of two "bins"
+
+1.  Packages that add new layers
+2.  Packages that wrap multiple layers for convenience
+
+## Packages that extend `ggplot2`
+
+Some packages add new layers or themes that can be combined with standard `ggplot2` functions.
+
+```{r}
+#| code-line-numbers: "|1,4"
+library(ggbeeswarm)
+ggplot(penguins, aes(x = species, y = body_mass_g)) +
+  geom_boxplot() +
+  geom_beeswarm()
+
+```
+
+::: notes
+`geom_beeswarm()` can easily be added to other `geom_`s
+:::
+
+## Packages that wrap `ggplot2`
+
+Other packages provide convenience "all-in-one" functions that combine multiple layers for you.
+
+```{r}
+#| code-line-numbers: "|1-3"
+library(ggpubr)
+ggstripchart(penguins, x = "species", y = "body_mass_g",
+             add = "boxplot") +
+  scale_y_continuous("Body Mass (g)", n.breaks = 10)
+```
+
+::: notes
+Notice that `ggstripchart()` totally replaces `ggplot(aes(…))` .
+However, it still makes a ggplot object that you can add layers to.
+:::
+
+## Finding Extensions
+
+-   Browse the `ggplot2` [extensions gallery](https://exts.ggplot2.tidyverse.org/gallery/)
+
+-   Check out the [Awesome `ggplot2`](https://github.com/erikgahner/awesome-ggplot2#readme) list
+
+-   [The R Graph Gallery](https://r-graph-gallery.com/)
+
+-   Google search with "ggplot2" keyword
+
+# Package Demos
+
+## `gganimate`
+
+```{r}
+library(gganimate)
+
+ggplot(penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point() +
+  transition_time(year) + 
+  labs(title = "Year: {frame_time}")
+```
+
+## `gganimate`
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = flipper_length_mm)) +
+  geom_point() +
+  transition_states(year, transition_length = 0.5) +
+  labs(title = "Year: {closest_state}") +
+  shadow_wake(wake_length = 0.1)
+```
+
+```{r, eval=FALSE}
+anim_save("~/Desktop/test_anim.gif")
+```
+
+## `plotly`
+
+```{r}
+library(plotly)
+```
+
+::: incremental
+-   `plotly` R package is interface to a JavaScript library for making interactive data visualizations
+
+-   Only important to know that because if you search for `plotly` help, sometimes you'll get JavaScript code examples.
+
+-   `plotly` *kind of* uses the grammar of graphics, but building a plot from scratch is tricky
+
+-   `ggplotly()` **transforms** `ggplot` objects into interactive `plotly` plots.
+    90% of the time it gets you 90% of the way there
+:::
+
+## Basic interactive plot with `plotly` {.smaller}
+
+```{r}
+p <- 
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  geom_point() +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)", color = "Penguin Species") +
+  theme_bw()
+
+ggplotly(p)
+```
+
+## Customize tooltip
+
+You can customize the info displayed in the tooltip with `ggplotly()`.
+Give it additional aesthetic `text` to include something *only* as a tooltip.
+
+```{r}
+#| eval: false
+p2 <- 
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  #Ignore unknown aesthetics warning
+  geom_point(aes(text = sex)) +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)", color = "Penguin Species") +
+  theme_bw()
+
+ggplotly(p2, tooltip = c("text", "bill_depth_mm", "bill_length_mm"))
+```
+
+::: callout-warning
+Output not shown because currently `plotly` does not play nicely with Quarto revealjs slides (how this slide deck was made)
+:::
+
+## Animate plots with `plotly`
+
+You can use `ggplotly()` to make interactive animated plots by using the `frame` aesthetic
+
+```{r}
+#| eval: false
+library(gapminder) #dataset
+p3 <- ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
+  geom_point(aes(size = pop, frame = year, ids = country)) +
+  scale_x_log10()
+
+ggplotly(p3)
+```
+
+::: callout-warning
+Output not shown because currently `plotly` does not play nicely with Quarto revealjs slides (how this slide deck was made)
+:::
+
+## `esquisse` {.smaller}
+
+::: columns
+::: {.column width="35%"}
+```{r}
+#| eval: false
+library(dplyr)
+library(esquisse)
+
+penguins <- 
+  penguins %>%
+  na.omit()
+esquisser(penguins)
+```
+:::
+
+::: {.column width="65%"}
+![](esquisse_diag.png)
+:::
+:::
+
+## `ggrepel`
+
+The `ggrepel` package is helpful for directly labeling plots, especially when labels would otherwise overlap.
+
+```{r}
+#| echo: false
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - "geom_text()"
+#|   - "geom_text_repel()"
+#make rownames into columns
+dat <- mtcars |> tibble::rownames_to_column(var = "car")
+# dat
+p3 <- 
+  ggplot(dat,
+  aes(wt, mpg, label = car, colour = factor(cyl))) +
+  geom_point()
+#without ggrepel
+p3 + geom_text()
+# p3 + geom_label()
+library(ggrepel)
+p3 + geom_text_repel()
+# p3 + geom_label_repel()
+```
+
+## Getting Help
+
+-   `gganimate`: [Getting started guide](https://gganimate.com/articles/gganimate.html), [reference](https://gganimate.com/reference/index.html)
+
+-   `gplotly()`: <https://plotly.com/ggplot2/>
+
+-   `esquisse`: [Getting started guide](https://dreamrs.github.io/esquisse/articles/get-started.html#launch-the-addin), [reference](https://dreamrs.github.io/esquisse/reference/index.html)
+
+-   `ggrepel`: Gallery of [examples](https://ggrepel.slowkow.com/articles/examples.html#examples), list of [available aesthetics](https://ggrepel.slowkow.com/articles/examples.html#aesthetics) you can map data to.
+
+-   Our [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours)
+
+-   [UA Data Science Slack](https://join.slack.com/t/uadatascience/shared_invite/zt-1xjxht9k0-E489WA6axO_SRVeKQh3cXg)
+
+# Anything we missed?
+
+Got a `ggplot2` question we didn't cover in this workshop series?
+Let's figure it out together!
