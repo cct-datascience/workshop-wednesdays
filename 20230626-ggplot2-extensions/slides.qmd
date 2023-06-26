@@ -119,7 +119,7 @@ library(plotly)
 ```
 
 ::: incremental
--   `plotly` R package is interface to a JavaScript library
+-   `plotly` R package is interface to a JavaScript library for making interactive data visualizations
 
 -   Only important to know that because if you search for `plotly` help, sometimes you'll get JavaScript code examples.
 
