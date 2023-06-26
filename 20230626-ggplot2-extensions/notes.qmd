@@ -15,9 +15,7 @@ library(ggplot2)
 
 # Intro
 
-Go through introductory [slides](https://cct-datascience.quarto.pub/exploring-the-wide-world-of-ggplot2-extensions/) to start.
-Spend time looking through the ggplot extension gallery and ask if there are any particular packages that look useful to folks.
-Get people to share their discoveries.
+Go through introductory [slides](https://cct-datascience.quarto.pub/exploring-the-wide-world-of-ggplot2-extensions/) to start. Spend time looking through the ggplot extension gallery and ask if there are any particular packages that look useful to folks. Get people to share their discoveries.
 
 # Demonstrations
 
@@ -25,7 +23,55 @@ Go through vignette or other short demo of several extension packages.
 
 ## `gganimate`
 
+```{r}
+library(gganimate)
+```
+
+-   Animate plots and save as gifs
+
+-   Takes some getting used to lingo
+
+-   Can control: what changes over time with `transition_*`, how the view of the axes changes with `view_*`, how much "memory" of the change there is, with `shadow_*`, and how data appears and disappears with `enter_*` and `exit_*`
+
+-   Use `?` with functions to figure out what label name is
+
+-   These penguin plots don't really make sense because the data isn't same individuals over the years; should set group in `transition_states`
+
+-   Mention `animate()` for more control
+
+-   Resources:
+
+    -   [Bat data slides](https://goodekat.github.io/presentations/2019-isugg-gganimate-spooky/slides.html#1)
+
+    -   [Penguins code source](https://adiradaniel.netlify.app/post/gganimate/)
+
 ## `esquisse`
+
+```{r}
+library(esquisse)
+library(dplyr)
+```
+
+-   "Esquisse" means rough first sketch in French
+
+-   `esquisse` [vignette](https://dreamrs.github.io/esquisse/articles/get-started.html)
+
+-   Point and click to generate ggplot plots from data
+
+-   Good for exploring datasets (look at data too)
+
+-   Still have to modify dataset outside of tool, e.g., recoding factors
+
+```{r}
+penguins <- penguins %>% na.omit()
+esquisser(penguins)
+```
+
+-   Helpful things: color codes variables, suggests plot types
+
+-   Save plot as image file, or copy and paste code into console (uses `tidyverse`)
+
+-   Can add to Shiny app to let non-R users create ggplots of data
 
 ## `plotly`
 
@@ -41,8 +87,7 @@ library(plotly)
 
 -   `plotly` functions mostly take lists are arguments, which makes it very difficult to figure out what default values are or even what arguments functions can take.
 
--   `ggplotly()` **transforms** `ggplot` objects into interactive `plotly` plots.
-    90% of the time it gets you 90% of the way there
+-   `ggplotly()` **transforms** `ggplot` objects into interactive `plotly` plots. 90% of the time it gets you 90% of the way there
 
 ```{r}
 p <- 
@@ -68,14 +113,11 @@ This works in R Markdown or Quarto documents (i.e. there's not a way to make the
 
 ### Types of plots
 
-Works for most (all?) built-in geoms.
-Works for some plots made with ggplot2 extensions also.
-Demo a few different geoms like `geom_boxplot()`, `geom_hisotgram()`, `geom_smooth()`
+Works for most (all?) built-in geoms. Works for some plots made with ggplot2 extensions also. Demo a few different geoms like `geom_boxplot()`, `geom_hisotgram()`, `geom_smooth()`
 
 ### Customize tooltip
 
-You can customize the info displayed in the tooltip with `ggplotly` .
-Give it additional aesthetic `text` to include something *only* as a tooltip.
+You can customize the info displayed in the tooltip with `ggplotly` . Give it additional aesthetic `text` to include something *only* as a tooltip.
 
 ```{r}
 p <- 
@@ -107,7 +149,6 @@ ggplotly(p2)
 
 # Wrap-up
 
-Go through "where to find help" slides.
-Plug next workshop (our fall reproducibility series)
+Go through "where to find help" slides. Plug next workshop (our fall reproducibility series)
 
 Ask if there are any other remaining `ggplot2`-related roadblocks people are experiencing and workshop it live.
