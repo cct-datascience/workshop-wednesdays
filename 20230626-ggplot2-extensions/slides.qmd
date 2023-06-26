@@ -129,7 +129,7 @@ library(plotly)
     90% of the time it gets you 90% of the way there
 :::
 
-## `plotly` {.smaller}
+## Basic interactive plot with `plotly` {.smaller}
 
 ```{r}
 p <- 
@@ -140,6 +140,45 @@ p <-
 
 ggplotly(p)
 ```
+
+## Customize tooltip
+
+You can customize the info displayed in the tooltip with `ggplotly()`.
+Give it additional aesthetic `text` to include something *only* as a tooltip.
+
+```{r}
+#| eval: false
+p2 <- 
+  ggplot(penguins, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+  #Ignore unknown aesthetics warning
+  geom_point(aes(text = sex)) +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)", color = "Penguin Species") +
+  theme_bw()
+
+ggplotly(p2, tooltip = c("text", "bill_depth_mm", "bill_length_mm"))
+```
+
+::: callout-warning
+Output not shown because currently `plotly` does not play nicely with Quarto revealjs slides (how this slide deck was made)
+:::
+
+## Animate plots with `plotly`
+
+You can use `ggplotly()` to make interactive animated plots by using the `frame` aesthetic
+
+```{r}
+#| eval: false
+library(gapminder) #dataset
+p3 <- ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
+  geom_point(aes(size = pop, frame = year, ids = country)) +
+  scale_x_log10()
+
+ggplotly(p3)
+```
+
+::: callout-warning
+Output not shown because currently `plotly` does not play nicely with Quarto revealjs slides (how this slide deck was made)
+:::
 
 ## `esquisse` {.smaller}
 
@@ -191,7 +230,7 @@ p3 + geom_text_repel()
 
 -   `gganimate`: [Getting started guide](https://gganimate.com/articles/gganimate.html), [reference](https://gganimate.com/reference/index.html)
 
--   `gplotly()`: https://plotly.com/ggplot2/
+-   `gplotly()`: <https://plotly.com/ggplot2/>
 
 -   `esquisse`: [Getting started guide](https://dreamrs.github.io/esquisse/articles/get-started.html#launch-the-addin), [reference](https://dreamrs.github.io/esquisse/reference/index.html)
 
