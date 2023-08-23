@@ -22,6 +22,8 @@ In this workshop, we'll include the basics of Quarto, and use it to create and c
 
 [Workshop website page]()
 
+[Workshop slides](https://docs.google.com/presentation/d/1mMLSKTrjV-BHYnRCIqmB9L1Hr9RrcBWSyt1VWI0Ba_c/edit#slide=id.g276754c9c2f_0_1)
+
 ## Objectives
 
 1.  Get familiar with RStudio and Quarto
@@ -38,6 +40,10 @@ In this workshop, we'll include the basics of Quarto, and use it to create and c
     -   Products from Posit (formerly called RStudio)
 -   Create website by publishing multiple documents into a unit
     -   Specify layout, navigation, and style
+-   Potential uses
+    -   A professional website to share your work and experiences
+    -   A website to showcase work from a research project
+    -   A website for teaching materials/syllabus, such as the [fall workshop series website](https://cct-datascience.github.io/repro-data-sci/)
 
 ### RStudio overview
 
@@ -89,7 +95,7 @@ In this workshop, we'll include the basics of Quarto, and use it to create and c
 
 ### Set up initial website
 
--   [Quarto quickstart](https://quarto.org/docs/websites/#config-file)
+-   [Quarto quickstart](https://quarto.org/docs/websites/)
 -   Can point-and-click to create skeleton of website
 -   Do with different platforms
     -   RStudio is user-friendly point-and-click
@@ -110,8 +116,11 @@ In this workshop, we'll include the basics of Quarto, and use it to create and c
         -   `about.qmd` & `index.qmd`
         -   These are pages on the website
 -   See what website looks like
-    -   Open any `.qmd` file
-    -   Use "Render" button, just like with Quarto files
+    -   One way to render:
+        -   Open any `.qmd` file
+        -   Use "Render" button, just like with Quarto files
+    -   Another (better) way to render:
+        -   In the "Build" tab, hit "Render Website" button
     -   Steps will show in "Background Jobs" tab
     -   Website preview should show up in specified location
     -   Compare file contents to website preview
@@ -179,12 +188,24 @@ In this workshop, we'll include the basics of Quarto, and use it to create and c
     -   Do more fancy things with CSS
         -   Beyond scope of this workshop
 -   Get inspiration from some great Quarto websites!
-    -   [Eric](https://ericrscott.com/)
-    -   [Maya Gans](https://maya.rbind.io/)
-    -   [Heidi Steiner](https://heidiesteiner.netlify.app/)
+    -   [Eric](https://ericrscott.com/) (code at <https://github.com/Aariq/website-quarto>)
+    -   [Maya Gans](https://maya.rbind.io/) (code at <https://github.com/MayaGans/mywebsite>)
+    -   [Heidi Steiner](https://heidiesteiner.netlify.app/) (code at <https://github.com/hidyverse/website>)
 
 ### Resources
 
--   See files for my example website in the [GitHub repo](https://github.com/KristinaRiemer/teaching_website)
--   https://quarto.org/docs/websites/
--   https://ucsb-meds.github.io/creating-quarto-websites/#looking-forward
+-   Workshop slides: <https://docs.google.com/presentation/d/1mMLSKTrjV-BHYnRCIqmB9L1Hr9RrcBWSyt1VWI0Ba_c/edit#slide=id.g276754c9c2f_0_1> 
+
+-   Workshop notes: <https://github.com/cct-datascience/CALS-workshops/202308-quarto-websites/quarto-websites-notes.qmd> 
+
+-   Workshop example website files: <https://github.com/KristinaRiemer/teaching_website> 
+
+-   Quarto website quickstart: <https://quarto.org/docs/websites/> 
+
+-   Another quickstart: <https://ucsb-meds.github.io/creating-quarto-websites/> 
+
+-   Themes: <https://bootswatch.com/>
+
+-   How to add blog posts: <https://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/> 
+
+-   Markdown basics: <https://quarto.org/docs/authoring/markdown-basics.html> 
