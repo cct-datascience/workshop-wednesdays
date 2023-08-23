@@ -1,0 +1,211 @@
+---
+title: "Making professional websites with Quarto & RStudio"
+author: "Kristina Riemer"
+format: html
+editor: visual
+---
+
+# Making professional websites with Quarto & RStudio
+
+## Overview
+
+|                |                           |
+|----------------|---------------------------|
+| **Date**       | Wednesday August 23, 2023 |
+| **Time**       | 11am - 1pm                |
+| **Instructor** | Kristina                  |
+| **Helper**     | Eric                      |
+
+Professional websites are a useful way to connect and share your work with others. While there are a lot of tools available to create websites, we will show you how to create yours with Quarto. Quarto is a free scientific and technical publishing system for creating documents, presentations, and websites. This platform evolved from R Markdown (though don't worry if you haven't heard of either Quarto or R Markdown).
+
+In this workshop, we'll include the basics of Quarto, and use it to create and customize a website. You will leave this workshop with your own initial website published on the web. This can easily be used as a personal website or for research projects or other endeavors.
+
+[Workshop website page]()
+
+[Workshop slides](https://docs.google.com/presentation/d/1mMLSKTrjV-BHYnRCIqmB9L1Hr9RrcBWSyt1VWI0Ba_c/edit#slide=id.g276754c9c2f_0_1)
+
+## Objectives
+
+1.  Get familiar with RStudio and Quarto
+
+2.  Create and deploy a website
+
+3.  Get some ideas for how to customize a website
+
+## Content Notes
+
+### Intro
+
+-   Use Quarto and RStudio
+    -   Products from Posit (formerly called RStudio)
+-   Create website by publishing multiple documents into a unit
+    -   Specify layout, navigation, and style
+-   Potential uses
+    -   A professional website to share your work and experiences
+    -   A website to showcase work from a research project
+    -   A website for teaching materials/syllabus, such as the [fall workshop series website](https://cct-datascience.github.io/repro-data-sci/)
+
+### RStudio overview
+
+-   Define RStudio
+    -   IDE = integrated development environment
+    -   Nice programs for writing code
+    -   RStudio is most common IDE for R
+    -   Others such as PyCharm or Visual Studio
+-   Layout
+    -   Upper left for displaying files that will make up website
+    -   Lower right hand "Files" tab shows folder structure and files on computer
+-   Projects
+    -   Organize work into self-contained units
+    -   Creates one folder with everything in it
+    -   Also solves working directory problems
+
+### Quarto documents
+
+-   These notes are an example
+-   Files with `.qmd` extension
+-   Next generation of R Markdown (`.rmd` files)
+-   What is Quarto?
+    -   Plain text files that are rendered to HTML
+    -   Specify formatting with special characters
+        -   Use markup language called markdown
+-   Why use Quarto?
+    -   Easy to read plain text files as-is
+    -   More control over formatting text files
+    -   Can switch back and forth between source and visual
+    -   Can intersperse with code (R or other languages)
+-   What are parts of a Quarto file?
+    -   Chunk at top
+        -   Contains file metadata
+        -   Uses another markup language called YAML
+        -   Will use in entire file later on
+    -   Body of file
+        -   Contains markdown
+-   Common markdown syntax
+    -   [Markdown Basics page](https://quarto.org/docs/authoring/markdown-basics.html)
+    -   Asterisks to bold or italicize text
+    -   Pound symbols for headers
+    -   Square brackets and parenthesis for links
+    -   Asterisks, dashes, or numbers for lists
+    -   Backticks for code
+-   View rendered document
+    -   Visual tab
+    -   Click "Render" button
+        -   Use gear button drop-down to choose where it shows up
+
+### Set up initial website
+
+-   [Quarto quickstart](https://quarto.org/docs/websites/)
+-   Can point-and-click to create skeleton of website
+-   Do with different platforms
+    -   RStudio is user-friendly point-and-click
+    -   Other IDEs
+    -   Command line, which is language-agnostic
+-   Create new project for website
+    -   "New Project" -\> "New Directory" -\> "Quarto Website"
+    -   Choose name and location for project files to be stored
+-   Recommend using visual markdown editor option
+    -   Renders files on the fly
+    -   Used to be buggy
+-   Creates files needed for skeleton of a website
+    -   `.Rproj` is for project
+    -   `_quarto.yml` is config file
+        -   Specify metadata about website and its different pages
+        -   Customize navigation, page layout, and theme
+    -   Two `.qmd` files
+        -   `about.qmd` & `index.qmd`
+        -   These are pages on the website
+-   See what website looks like
+    -   One way to render:
+        -   Open any `.qmd` file
+        -   Use "Render" button, just like with Quarto files
+    -   Another (better) way to render:
+        -   In the "Build" tab, hit "Render Website" button
+    -   Steps will show in "Background Jobs" tab
+    -   Website preview should show up in specified location
+    -   Compare file contents to website preview
+    -   Creates files in `_sites` folder
+        -   Do not manually edit these
+    -   Update after changing files by rendering again
+    -   Can also do from command line with `quarto preview`
+
+### Deploy website
+
+-   Do this to make website available online to others
+-   Straightforward to do
+-   Many possible platforms, some free and some paid
+    -   Posit Connect
+        -   We have this at UA - primarily for research
+    -   Netlify
+        -   Can get custom domain
+        -   Can make private sites available to authenticated users
+    -   GitHub pages
+        -   Need GH account + git knowledge
+    -   Quarto Pub
+        -   Easy and free
+        -   Only public content
+        -   Need an account
+-   Publish example website to Quarto Pub
+    -   No point-and-click way to do this (yet)
+    -   In RStudio "Terminal" tab
+    -   Should already be in correct directory because of RStudio project
+    -   Type in and execute `quarto publish quarto-pub`
+    -   Need to be logged into Quarto Pub in browser
+    -   Authorize with `Y` in Terminal, then hit "Allow" button in browser
+-   Deployed website on Quarto Pub
+    -   Link to website is at top
+    -   Can change slug (end part of URL) in right hand pane
+-   Update deployed website
+    -   Make a change (website title in `index.qmd` & `_quarto.yml` to name)
+    -   Run `quarto publish quarto-pub` command again
+-   Suggested workflow
+    -   Make a bunch of changes locally, then publish
+
+### Customizing website
+
+-   Lots of customization options
+    -   Add a page
+        -   Create new `.qmd` file, adding a title and content
+        -   Add file under `navbar` in `_quarto.yml`
+        -   Name of page on website comes from yml
+    -   Use template for "About" page
+        -   [About templates](https://quarto.org/docs/websites/website-about.html#templates)
+        -   Add `image` and `about` to `index.qmd`
+        -   Add image file to main-level project folder
+        -   Turn "Home" into "About"
+        -   Add social media links with `links`
+        -   Follow yml formatting correctly
+    -   Change theme
+        -   Built-in options from [Bootswatch](https://bootswatch.com/)
+        -   Update at `theme` in `_quarto.yml`
+    -   Add logo to navbar
+        -   Find and save image file in main-level project folder
+        -   Add `logo` under `navbar`
+    -   Add blog with posts
+        -   Nice for sharing code examples or outputs
+        -   Not actually going to go through this
+        -   [How to](https://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/)
+    -   Do more fancy things with CSS
+        -   Beyond scope of this workshop
+-   Get inspiration from some great Quarto websites!
+    -   [Eric](https://ericrscott.com/) (code at <https://github.com/Aariq/website-quarto>)
+    -   [Maya Gans](https://maya.rbind.io/) (code at <https://github.com/MayaGans/mywebsite>)
+    -   [Heidi Steiner](https://heidiesteiner.netlify.app/) (code at <https://github.com/hidyverse/website>)
+
+### Resources
+
+-   Workshop slides: <https://docs.google.com/presentation/d/1mMLSKTrjV-BHYnRCIqmB9L1Hr9RrcBWSyt1VWI0Ba_c/edit#slide=id.g276754c9c2f_0_1> 
+
+-   Workshop notes: <https://github.com/cct-datascience/CALS-workshops/202308-quarto-websites/quarto-websites-notes.qmd> 
+
+-   Workshop example website files: <https://github.com/KristinaRiemer/teaching_website> 
+
+-   Quarto website quickstart: <https://quarto.org/docs/websites/> 
+
+-   Another quickstart: <https://ucsb-meds.github.io/creating-quarto-websites/> 
+
+-   Themes: <https://bootswatch.com/>
+
+-   How to add blog posts: <https://samanthacsik.github.io/posts/2022-10-24-quarto-blogs/> 
+
+-   Markdown basics: <https://quarto.org/docs/authoring/markdown-basics.html> 
