@@ -1,0 +1,140 @@
+---
+title: "Sharing research as Quarto reports"
+author: "Renata Diaz - December 6, 2023"
+format: uaz-revealjs
+editor: source
+---
+
+
+# Overview
+
+| Topic                                   | Time          |
+|:-----------------------------------------|:---------------|
+| Welcome and setup                       | 11:00 - 11:05 |
+| What is Quarto? What can it do?         | 11:05 - 11:15 |
+| Creating an example Quarto report       | 11:15 - 11:45 |
+| Ways to share Quarto reports            | 11:45 - 11:55 |
+| BREAK                                   | 11:55 - 12:05 |
+| Creating a report from your script      | 12:05 - 12:35 |
+| Sharing your report                     | 12:35 - 12:45 |
+| Where to get more help                  | 12:45 - 12:50 |
+| Bonus: Other uses of Quarto             | 12:50 - 1:00 |
+
+# Welcome!
+
+::: notes
+
+Slot here to show results of pre-workshop survey on who here knows about/uses Quarto.
+
+:::
+
+# Before we get started
+
+::: incremental
+
+* These slides (and links!) are available at: 
+* Please make sure you have RStudio and Quarto installed
+    * Instructions to check and install here:
+    
+:::
+
+# Learning objectives
+
+::: incremental 
+
+* Know what Quarto is, what it can do, and how it differs from specific *programming languages* and *markup languages* you may know of.
+* Create your own Quarto report documenting your research.
+* Share your report using Quarto Pub, Posit Connect, email, and/or Github.
+* Know where to go for additional help and/or adventures in Quarto.
+
+:::
+
+# What is Quarto?
+
+# What can Quarto do?
+
+# What about RMarkdown? Markdown?
+
+# Quarto - RMarkdown - Markdown comparison
+
+# Example Quarto report
+
+Switch to live coding!
+
+Example report document available here: 
+
+# Options for sharing Quarto reports
+
+::: incremental 
+
+* **Publishing**: Hosted online with a shareable URL
+  * QuartoPub
+  * Posit Connect
+  * GitHub
+* **Shareable documents**: Static documents that can be shared person-to-person
+  * HTML, .pdf, .docx output formats
+  * .qmd documents
+
+:::
+
+# QuartoPub
+
+# Posit Connect
+
+# GitHub
+
+# Sharing rendered documents
+
+# Sharing source documents
+
+# Break!
+
+# Practice time: Create a Quarto report from your script
+
+# Practice time: Share your report
+
+Pick one (or more!) of the following options:
+
+::: incremental
+
+* Create a QuartoPub account and publish your report
+* Render your report as a GitHub document and push it to your GitHub
+* Render your report as an HTML file and email it to yourself
+
+:::
+
+# Quarto resources
+
+
+# CCT-Data Science
+
+::: incremental
+  * Drop-in hours
+  * Incubator projects
+  * Upcoming workshops
+  
+:::
+
+# Data science @ UA
+
+::: incremental
+  * Coffee & Code
+  * The Data Science Institute
+:::
+
+# Online Quarto communities
+
+::: incremental
+* Blogs
+* StackOverflow
+* RStudio message board
+:::
+
+# Bonus Quarto applications
+
+# Thank you!
+
+Thank you for attending!
+
+For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our [website](https://datascience.cct.arizona.edu)!
+
