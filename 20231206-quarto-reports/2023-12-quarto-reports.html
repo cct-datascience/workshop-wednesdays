@@ -408,9 +408,10 @@ Renata Diaz - December 6, 2023
 <div>
 <ul>
 <li class="fragment">These slides (and links!) are available at:</li>
-<li class="fragment">Please make sure you have RStudio and Quarto installed
+<li class="fragment">Please make sure you have RStudio (ver. &gt;= 2022.07.1) and Quarto installed.
 <ul>
-<li class="fragment">Instructions to check and install here:</li>
+<li class="fragment">You can check your RStudio version at “Help &gt; About RStudio”. The most recent version of RStudio is available <a href="https://posit.co/download/rstudio-desktop/">here</a>.</li>
+<li class="fragment">You can check if Quarto is installed by opening a terminal and running <code>quarto --version</code>. Install Quarto <a href="https://quarto.org/docs/get-started/">here</a>.</li>
 </ul></li>
 </ul>
 </div>
@@ -430,26 +431,106 @@ Renata Diaz - December 6, 2023
 
 <section id="what-is-quarto" class="title-slide slide level1 center">
 <h1>What is Quarto?</h1>
-
+<div>
+<ul>
+<li class="fragment"><em>“An open-source scientific publishing system</em></li>
+<li class="fragment">Integrate code, results, and formatted text within one document</li>
+<li class="fragment">Document types range from static .html pages, to slideshows, to interactive dashboards!</li>
+<li class="fragment">Published by Posit (formerly RStudio)</li>
+<li class="fragment">“Literate programming”</li>
+</ul>
+</div>
+<aside class="notes">
+<p>“Open-source publishing system”: Sounds vague, but this is what it is.</p>
+<p>More specifically, it’s a framework for integrating code, executing that code and showing the results, and text into one document.</p>
+<p>Document types can be broad.</p>
+<p>Published by Posit, but it’s <em>free</em> and <em>not just for R</em>.</p>
+<p>This general type of system is called “Literate programming”.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 
-<section id="what-can-quarto-do" class="title-slide slide level1 center">
-<h1>What can Quarto do?</h1>
-
+<section id="a-quarto-example" class="title-slide slide level1 center">
+<h1>A Quarto example</h1>
+<p>[Example Quarto document]</p>
+<p>:::</p>
+<aside class="notes">
+<p>Point out:</p>
+<ul>
+<li><p>Formatting</p></li>
+<li><p>In-line code, figures, tables</p></li>
+<li><p>Dynamic updating</p></li>
+<li><p>Figure captions</p></li>
+<li><p>Citations</p></li>
+<li><p>Scholarly author tracking</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 
-<section id="what-about-rmarkdown-markdown" class="title-slide slide level1 center">
-<h1>What about RMarkdown? Markdown?</h1>
+<section id="benefits-of-literate-programming" class="title-slide slide level1 center">
+<h1>Benefits of literate programming</h1>
+<div>
+<ul>
+<li class="fragment">Reproducible (including for future-you)!</li>
+<li class="fragment">Shareable</li>
+<li class="fragment">Automate away formatting headaches</li>
+</ul>
+</div>
+</section>
 
+<section id="what-about-rmarkdown" class="title-slide slide level1 center">
+<h1>What about RMarkdown?</h1>
+<ul>
+<li>Quarto is the “successor” to .Rmd</li>
+<li>.Rmd documents translate easily to Quarto</li>
+<li><em>Quarto supports languages beyond R</em></li>
+<li><em>Quarto has a greatly expanded range of document types</em></li>
+</ul>
 </section>
 
 <section id="quarto---rmarkdown---markdown-comparison" class="title-slide slide level1 center">
 <h1>Quarto - RMarkdown - Markdown comparison</h1>
-
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Quarto</th>
+<th style="text-align: left;">RMarkdown</th>
+<th style="text-align: left;">Markdown</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Markup syntax (<code>**</code> for emphasis, etc)</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+</tr>
+</tbody>
+</table>
 </section>
 
-<section id="example-quarto-report" class="title-slide slide level1 center">
-<h1>Example Quarto report</h1>
+<section id="how-do-i-create-a-quarto-document" class="title-slide slide level1 center">
+<h1>How do I create a Quarto document?</h1>
 <p>Switch to live coding!</p>
 <p>Example report document available here:</p>
 </section>

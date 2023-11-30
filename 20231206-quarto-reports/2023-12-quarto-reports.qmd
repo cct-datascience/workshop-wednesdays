@@ -33,10 +33,13 @@ Slot here to show results of pre-workshop survey on who here knows about/uses Qu
 ::: incremental
 
 * These slides (and links!) are available at: 
-* Please make sure you have RStudio and Quarto installed
-    * Instructions to check and install here:
-    
+* Please make sure you have RStudio (ver. >= 2022.07.1) and Quarto installed.
+    * You can check your RStudio version at "Help > About RStudio". The most recent version of RStudio is available [here](https://posit.co/download/rstudio-desktop/).
+    * You can check if Quarto is installed by opening a terminal and running `quarto --version`. Install Quarto [here](https://quarto.org/docs/get-started/).
+
 :::
+
+
 
 # Learning objectives
 
@@ -51,13 +54,76 @@ Slot here to show results of pre-workshop survey on who here knows about/uses Qu
 
 # What is Quarto?
 
-# What can Quarto do?
+::: incremental 
 
-# What about RMarkdown? Markdown?
+* *"An open-source scientific publishing system*
+* Integrate code, results, and formatted text within one document
+* Document types range from static .html pages, to slideshows, to interactive dashboards!
+* Published by Posit (formerly RStudio)
+* "Literate programming"
+
+:::
+
+::: notes
+
+"Open-source publishing system": Sounds vague, but this is what it is. 
+
+More specifically, it's a framework for integrating code, executing that code and showing the results, and text into one document. 
+
+Document types can be broad.
+
+Published by Posit, but it's *free* and *not just for R*.
+
+This general type of system is called "Literate programming".
+
+:::
+
+# A Quarto example
+
+[Example Quarto document]
+
+:::
+
+::: notes
+
+Point out:
+
+* Formatting
+* In-line code, figures, tables
+* Dynamic updating
+
+* Figure captions
+* Citations
+* Scholarly author tracking
+
+:::
+
+# Benefits of literate programming
+
+::: incremental
+
+* Reproducible (including for future-you)!
+* Shareable
+* Automate away formatting headaches
+
+:::
+
+# What about RMarkdown? 
+
+* Quarto is the "successor" to .Rmd
+* .Rmd documents translate easily to Quarto
+* *Quarto supports languages beyond R*
+* *Quarto has a greatly expanded range of document types*
+
 
 # Quarto - RMarkdown - Markdown comparison
 
-# Example Quarto report
+| Feature     | Quarto |  RMarkdown | Markdown |
+|:------------|:-------|:-----------|:---------|
+| Markup syntax (`**` for emphasis, etc)    | x | x | x |
+
+
+# How do I create a Quarto document?
 
 Switch to live coding!
 
