@@ -121,14 +121,26 @@ Let's start from this R script: [https://]
 
 Example report document available here:
 
-## .R to .Qmd {.smaller}
+## .R to .Qmd 
 
 ::: incremental
 
 1. Create a Quarto document
-2. Move code chunks over
-3. Add descriptive text
-4. 
+1. Move code chunks over
+1. Add descriptive text
+1. Add references
+1. Add figure/table cross-references and captions
+
+:::
+
+## .Rmd to .Qmd
+
+::: incremental
+
+1. Run `knitr::convert_chunk_header`
+1. Add additional Quarto features 
+
+:::
 
 ## Technical changes from .Rmd to Quarto
 
