@@ -2,7 +2,9 @@
 title: "Mouse report"
 author: "Renata Diaz"
 format: 
-    html:
+    # html:
+    #   code-fold: true
+    gfm: 
       code-fold: true
 editor: visual
 bibliography: portal_ref.bib
