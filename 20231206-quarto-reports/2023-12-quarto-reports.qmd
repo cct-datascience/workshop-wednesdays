@@ -5,153 +5,203 @@ format: uaz-revealjs
 editor: source
 ---
 
-
 # Overview
 
-| Topic                                   | Time          |
-|:-----------------------------------------|:---------------|
-| Welcome and setup                       | 11:00 - 11:05 |
-| What is Quarto? What can it do?         | 11:05 - 11:15 |
-| Creating an example Quarto report       | 11:15 - 11:45 |
-| Ways to share Quarto reports            | 11:45 - 11:55 |
-| BREAK                                   | 11:55 - 12:05 |
-| Creating a report from your script      | 12:05 - 12:35 |
-| Sharing your report                     | 12:35 - 12:45 |
-| Where to get more help                  | 12:45 - 12:50 |
-| Bonus: Other uses of Quarto             | 12:50 - 1:00 |
+| Topic | Time | Topic | Time |
+|:----------------|:------------|:----------------|:------------|
+| Welcome and setup | 11:00 - 11:05 | BREAK | 11:55 - 12:05 |
+| What is Quarto? What can it do? | 11:05 - 11:15 | Creating a report from your script | 12:05 - 12:35 | 
+| Creating Quarto reports from .R, .Rmd files | 11:15 - 11:45 | Sharing your report | 12:35 - 12:45 |
+| Ways to share Quarto reports | 11:45 - 11:55 | Where to get more help | 12:45 - 12:50 |
 
 # Welcome!
 
 ::: notes
-
 Slot here to show results of pre-workshop survey on who here knows about/uses Quarto.
-
 :::
 
 # Before we get started
 
 ::: incremental
-
-* These slides (and links!) are available at: 
-* Please make sure you have RStudio (ver. >= 2022.07.1) and Quarto installed.
-    * You can check your RStudio version at "Help > About RStudio". The most recent version of RStudio is available [here](https://posit.co/download/rstudio-desktop/).
-    * You can check if Quarto is installed by opening a terminal and running `quarto --version`. Install Quarto [here](https://quarto.org/docs/get-started/).
-
+-   These slides (and links!) are available at:
+-   Please make sure you have RStudio (ver. \>= 2022.07.1) and Quarto installed.
+    -   You can check your RStudio version at "Help \> About RStudio". The most recent version of RStudio is available [here](https://posit.co/download/rstudio-desktop/).
+    -   You can check if Quarto is installed by opening a terminal and running `quarto --version`. Install Quarto [here](https://quarto.org/docs/get-started/).
 :::
-
-
 
 # Learning objectives
 
-::: incremental 
-
-* Know what Quarto is, what it can do, and how it differs from specific *programming languages* and *markup languages* you may know of.
-* Create your own Quarto report documenting your research.
-* Share your report using Quarto Pub, Posit Connect, email, and/or Github.
-* Know where to go for additional help and/or adventures in Quarto.
-
+::: incremental
+-   Know what Quarto is, what it can do, and how it differs from specific *programming languages* and *markup languages* you may know of.
+-   Create your own Quarto report documenting your research.
+-   Share your report using Quarto Pub, Posit Connect, email, and/or Github.
+-   Know where to go for additional help and/or adventures in Quarto.
 :::
 
 # What is Quarto?
 
-::: incremental 
-
-* *"An open-source scientific publishing system*
-* Integrate code, results, and formatted text within one document
-* Document types range from static .html pages, to slideshows, to interactive dashboards!
-* Published by Posit (formerly RStudio)
-* "Literate programming"
-
+::: incremental
+-   *"An open-source scientific publishing system"*
+-   Integrate code, results, and formatted text within one document
+-   Document types range from static .html pages, to slideshows, to interactive dashboards!
+-   Published by Posit (formerly RStudio)
 :::
 
+# What is Quarto?
+
+ ![](quarto_order.png)
+
 ::: notes
+"Open-source publishing system": Sounds vague, but this is what it is.
 
-"Open-source publishing system": Sounds vague, but this is what it is. 
-
-More specifically, it's a framework for integrating code, executing that code and showing the results, and text into one document. 
+More specifically, it's a framework for integrating code, executing that code and showing the results, and text into one document.
 
 Document types can be broad.
 
 Published by Posit, but it's *free* and *not just for R*.
 
 This general type of system is called "Literate programming".
-
 :::
 
 # A Quarto example
 
-[Example Quarto document]
+[An example Quarto research report](https://viz.datascience.arizona.edu/quarto-workshop-example1/)
 
-:::
+Or go to the URL: https://viz.datascience.arizona.edu/quarto-workshop-example1/
+
+[Source code for this example](https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass.qmd)
+
+Or go to the URL: https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass.qmd
 
 ::: notes
-
 Point out:
 
-* Formatting
-* In-line code, figures, tables
-* Dynamic updating
-
-* Figure captions
-* Citations
-* Scholarly author tracking
-
+-   Formatting
+-   In-line code, figures, tables
+-   Figure captions
+-   Citations
+-   Scholarly author tracking
 :::
 
-# Benefits of literate programming
+# Cool, but tricky. What are the benefits?
 
 ::: incremental
+-   Reproducibility
 
-* Reproducible (including for future-you)!
-* Shareable
-* Automate away formatting headaches
+-   Dynamic updating
 
+-   Easy to share - from coauthors to journals to web audiences
 :::
 
-# What about RMarkdown? 
+# What about RMarkdown?
 
-* Quarto is the "successor" to .Rmd
-* .Rmd documents translate easily to Quarto
-* *Quarto supports languages beyond R*
-* *Quarto has a greatly expanded range of document types*
+::: incremental
+-   Quarto is the "successor" to .Rmd
+-   .Rmd documents translate easily to Quarto
+-   *Quarto supports languages beyond R*
+-   *Quarto has a greatly expanded range of document types*
+:::
 
+# Comparison
 
-# Quarto - RMarkdown - Markdown comparison
-
-| Feature     | Quarto |  RMarkdown | Markdown |
-|:------------|:-------|:-----------|:---------|
-| Markup syntax (`**` for emphasis, etc)    | x | x | x |
-
+| Feature                                                       | Quarto | Rmd | Markdown |
+|:--------------------------------------------------------------|:-------|:----|:---------|
+| Markup syntax (`**` for emphasis, etc)                        | x      | x   | x        |
+| Render to multiple document types                             | x      | x   | x        |
+| Interweave text and code                                      | x      | x   | x        |
+| Interweave text and *executed* R code                         | x      | x   |          |
+| Execute *non-R* code                                          | x      |     |          |
+| Expanded set of document types (dashboards, manuscripts, ...) | x      |     |          |
 
 # How do I create a Quarto document?
 
 Switch to live coding!
 
-Example report document available here: 
+Example report document available here:
 
-# Options for sharing Quarto reports
+# How do I turn an .Rmd into a Quarto document?
 
-::: incremental 
+Example report document available here:
 
-* **Publishing**: Hosted online with a shareable URL
-  * QuartoPub
-  * Posit Connect
-  * GitHub
-* **Shareable documents**: Static documents that can be shared person-to-person
-  * HTML, .pdf, .docx output formats
-  * .qmd documents
+# Technical changes from .Rmd to Quarto
 
+::: incremental
+-   **Most .Rmd documents will render as-is!**
+
+-   Document-level options moved to header
+
+-   `output` changed to `format`
+
+-   Chunk-level options moved from ```` ```{r ....} ```` to `#|` within the chunk
+
+-   `knitr::convert_chunk_header(<file_path>)` helps with conversion
+
+-   https://quarto.org/docs/faq/rmarkdown.html
 :::
+
+# Sharing Quarto reports
+
+
+| Hosted online with a shareable URL                                                    |  Static documents to share person-to-person |
+|:-------------------------|:-------------------------|
+| Quarto Pub | Rendered HTML, pdf, docx outputs |
+| Posit Connect | Source .qmd files |
+| GitHub | 
+
+
+
 
 # QuartoPub
 
+::: incremental
+-   https://quartopub.com/
+
+-   Create a free account
+
+-   Published reports are **public**
+
+-   Example: https://cct-datascience.quarto.pub/quartoworkshopexample1/
+:::
+
 # Posit Connect
+
+::: incremental
+-   https://viz.datascience.arizona.edu
+
+-   For **university research**; accounts available but restricted
+
+-   Published reports can be public or private
+
+-   Example: https://viz.datascience.arizona.edu/quarto-workshop-example1/
+:::
 
 # GitHub
 
+::: incremental
+-   Render using the `gfm` output format
+
+-   Resulting .md files are visible online on GitHub
+
+-   Published reports may be public or private (depending on repo scopes)
+
+-   Example: https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.md
+:::
+
 # Sharing rendered documents
 
+::: incremental
+-   Render to `html`, `docx`, or `pdf`
+
+-   Resulting documents are portable
+:::
+
 # Sharing source documents
+
+::: incremental
+-   Share, edit, and re-render a single .qmd
+
+-   Especially for collaboration on GitHub
+:::
 
 # Break!
 
@@ -162,45 +212,48 @@ Example report document available here:
 Pick one (or more!) of the following options:
 
 ::: incremental
-
-* Create a QuartoPub account and publish your report
-* Render your report as a GitHub document and push it to your GitHub
-* Render your report as an HTML file and email it to yourself
-
+-   Create a QuartoPub account and publish your report
+-   Render your report as a GitHub document and push it to your GitHub
+-   Render your report as an HTML file and email it to yourself
 :::
 
 # Quarto resources
 
+# Quarto docs
+
+::: incremental
+-   https://quarto.org
+
+-   https://quarto.org/docs/guide/
+
+-   Cheatsheet: https://rstudio.github.io/cheatsheets/quarto.pdf
+:::
 
 # CCT-Data Science
 
 ::: incremental
-  * Drop-in hours
-  * Incubator projects
-  * Upcoming workshops
-  
+-   Drop-in hours - Tuesdays, 9-10
+-   Incubator projects
+-   Upcoming workshops
 :::
 
-# Data science @ UA
+# Data science \@ UA
 
 ::: incremental
-  * Coffee & Code
-  * The Data Science Institute
+-   Coffee & Code
+-   UA Data Science Slack
 :::
 
 # Online Quarto communities
 
 ::: incremental
-* Blogs
-* StackOverflow
-* RStudio message board
+-   Blogs
+-   StackOverflow
+-   RStudio message board: <https://community.rstudio.com>
 :::
-
-# Bonus Quarto applications
 
 # Thank you!
 
 Thank you for attending!
 
 For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our [website](https://datascience.cct.arizona.edu)!
-

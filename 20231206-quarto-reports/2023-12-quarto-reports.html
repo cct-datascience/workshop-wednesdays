@@ -339,8 +339,16 @@ Renata Diaz - December 6, 2023
 <section id="overview" class="title-slide slide level1 center">
 <h1>Overview</h1>
 <table>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 21%">
+<col style="width: 28%">
+<col style="width: 21%">
+</colgroup>
 <thead>
 <tr class="header">
+<th style="text-align: left;">Topic</th>
+<th style="text-align: left;">Time</th>
 <th style="text-align: left;">Topic</th>
 <th style="text-align: left;">Time</th>
 </tr>
@@ -349,38 +357,26 @@ Renata Diaz - December 6, 2023
 <tr class="odd">
 <td style="text-align: left;">Welcome and setup</td>
 <td style="text-align: left;">11:00 - 11:05</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">What is Quarto? What can it do?</td>
-<td style="text-align: left;">11:05 - 11:15</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Creating an example Quarto report</td>
-<td style="text-align: left;">11:15 - 11:45</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Ways to share Quarto reports</td>
-<td style="text-align: left;">11:45 - 11:55</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">BREAK</td>
 <td style="text-align: left;">11:55 - 12:05</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">What is Quarto? What can it do?</td>
+<td style="text-align: left;">11:05 - 11:15</td>
 <td style="text-align: left;">Creating a report from your script</td>
 <td style="text-align: left;">12:05 - 12:35</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">Creating Quarto reports from .R, .Rmd files</td>
+<td style="text-align: left;">11:15 - 11:45</td>
 <td style="text-align: left;">Sharing your report</td>
 <td style="text-align: left;">12:35 - 12:45</td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">Ways to share Quarto reports</td>
+<td style="text-align: left;">11:45 - 11:55</td>
 <td style="text-align: left;">Where to get more help</td>
 <td style="text-align: left;">12:45 - 12:50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Bonus: Other uses of Quarto</td>
-<td style="text-align: left;">12:50 - 1:00</td>
 </tr>
 </tbody>
 </table>
@@ -433,14 +429,18 @@ Renata Diaz - December 6, 2023
 <h1>What is Quarto?</h1>
 <div>
 <ul>
-<li class="fragment"><em>“An open-source scientific publishing system</em></li>
+<li class="fragment"><em>“An open-source scientific publishing system”</em></li>
 <li class="fragment">Integrate code, results, and formatted text within one document</li>
 <li class="fragment">Document types range from static .html pages, to slideshows, to interactive dashboards!</li>
 <li class="fragment">Published by Posit (formerly RStudio)</li>
-<li class="fragment">“Literate programming”</li>
 </ul>
 </div>
-<aside class="notes">
+</section>
+
+<section id="what-is-quarto-1" class="title-slide slide level1 center">
+<h1>What is Quarto?</h1>
+
+<img data-src="quarto_order.png" class="r-stretch"><aside class="notes">
 <p>“Open-source publishing system”: Sounds vague, but this is what it is.</p>
 <p>More specifically, it’s a framework for integrating code, executing that code and showing the results, and text into one document.</p>
 <p>Document types can be broad.</p>
@@ -461,17 +461,18 @@ Renata Diaz - December 6, 2023
 
 <section id="a-quarto-example" class="title-slide slide level1 center">
 <h1>A Quarto example</h1>
-<p>[Example Quarto document]</p>
-<p>:::</p>
+<p><a href="https://viz.datascience.arizona.edu/quarto-workshop-example1/">An example Quarto research report</a></p>
+<p>Or go to the URL: https://viz.datascience.arizona.edu/quarto-workshop-example1/</p>
+<p><a href="https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass.qmd">Source code for this example</a></p>
+<p>Or go to the URL: https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass.qmd</p>
 <aside class="notes">
 <p>Point out:</p>
 <ul>
-<li><p>Formatting</p></li>
-<li><p>In-line code, figures, tables</p></li>
-<li><p>Dynamic updating</p></li>
-<li><p>Figure captions</p></li>
-<li><p>Citations</p></li>
-<li><p>Scholarly author tracking</p></li>
+<li>Formatting</li>
+<li>In-line code, figures, tables</li>
+<li>Figure captions</li>
+<li>Citations</li>
+<li>Scholarly author tracking</li>
 </ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -486,35 +487,43 @@ Renata Diaz - December 6, 2023
       }</style></aside>
 </section>
 
-<section id="benefits-of-literate-programming" class="title-slide slide level1 center">
-<h1>Benefits of literate programming</h1>
+<section id="cool-but-tricky.-what-are-the-benefits" class="title-slide slide level1 center">
+<h1>Cool, but tricky. What are the benefits?</h1>
 <div>
 <ul>
-<li class="fragment">Reproducible (including for future-you)!</li>
-<li class="fragment">Shareable</li>
-<li class="fragment">Automate away formatting headaches</li>
+<li class="fragment"><p>Reproducibility</p></li>
+<li class="fragment"><p>Dynamic updating</p></li>
+<li class="fragment"><p>Easy to share - from coauthors to journals to web audiences</p></li>
 </ul>
 </div>
 </section>
 
 <section id="what-about-rmarkdown" class="title-slide slide level1 center">
 <h1>What about RMarkdown?</h1>
+<div>
 <ul>
-<li>Quarto is the “successor” to .Rmd</li>
-<li>.Rmd documents translate easily to Quarto</li>
-<li><em>Quarto supports languages beyond R</em></li>
-<li><em>Quarto has a greatly expanded range of document types</em></li>
+<li class="fragment">Quarto is the “successor” to .Rmd</li>
+<li class="fragment">.Rmd documents translate easily to Quarto</li>
+<li class="fragment"><em>Quarto supports languages beyond R</em></li>
+<li class="fragment"><em>Quarto has a greatly expanded range of document types</em></li>
 </ul>
+</div>
 </section>
 
-<section id="quarto---rmarkdown---markdown-comparison" class="title-slide slide level1 center">
-<h1>Quarto - RMarkdown - Markdown comparison</h1>
-<table>
+<section id="comparison" class="title-slide slide level1 center">
+<h1>Comparison</h1>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 73%">
+<col style="width: 9%">
+<col style="width: 5%">
+<col style="width: 11%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Feature</th>
 <th style="text-align: left;">Quarto</th>
-<th style="text-align: left;">RMarkdown</th>
+<th style="text-align: left;">Rmd</th>
 <th style="text-align: left;">Markdown</th>
 </tr>
 </thead>
@@ -524,6 +533,36 @@ Renata Diaz - December 6, 2023
 <td style="text-align: left;">x</td>
 <td style="text-align: left;">x</td>
 <td style="text-align: left;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Render to multiple document types</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Interweave text and code</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Interweave text and <em>executed</em> R code</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Execute <em>non-R</em> code</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Expanded set of document types (dashboards, manuscripts, …)</td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
 </tr>
 </tbody>
 </table>
@@ -535,48 +574,109 @@ Renata Diaz - December 6, 2023
 <p>Example report document available here:</p>
 </section>
 
-<section id="options-for-sharing-quarto-reports" class="title-slide slide level1 center">
-<h1>Options for sharing Quarto reports</h1>
+<section id="how-do-i-turn-an-.rmd-into-a-quarto-document" class="title-slide slide level1 center">
+<h1>How do I turn an .Rmd into a Quarto document?</h1>
+<p>Example report document available here:</p>
+</section>
+
+<section id="technical-changes-from-.rmd-to-quarto" class="title-slide slide level1 center">
+<h1>Technical changes from .Rmd to Quarto</h1>
 <div>
 <ul>
-<li class="fragment"><strong>Publishing</strong>: Hosted online with a shareable URL
-<ul>
-<li class="fragment">QuartoPub</li>
-<li class="fragment">Posit Connect</li>
-<li class="fragment">GitHub</li>
-</ul></li>
-<li class="fragment"><strong>Shareable documents</strong>: Static documents that can be shared person-to-person
-<ul>
-<li class="fragment">HTML, .pdf, .docx output formats</li>
-<li class="fragment">.qmd documents</li>
-</ul></li>
+<li class="fragment"><p><strong>Most .Rmd documents will render as-is!</strong></p></li>
+<li class="fragment"><p>Document-level options moved to header</p></li>
+<li class="fragment"><p><code>output</code> changed to <code>format</code></p></li>
+<li class="fragment"><p>Chunk-level options moved from <code>```{r ....}</code> to <code>#|</code> within the chunk</p></li>
+<li class="fragment"><p><code>knitr::convert_chunk_header(&lt;file_path&gt;)</code> helps with conversion</p></li>
+<li class="fragment"><p>https://quarto.org/docs/faq/rmarkdown.html</p></li>
 </ul>
 </div>
 </section>
 
+<section id="sharing-quarto-reports" class="title-slide slide level1 center">
+<h1>Sharing Quarto reports</h1>
+<table>
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hosted online with a shareable URL</th>
+<th style="text-align: left;">Static documents to share person-to-person</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Quarto Pub</td>
+<td style="text-align: left;">Rendered HTML, pdf, docx outputs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Posit Connect</td>
+<td style="text-align: left;">Source .qmd files</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GitHub</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</section>
+
 <section id="quartopub" class="title-slide slide level1 center">
 <h1>QuartoPub</h1>
-
+<div>
+<ul>
+<li class="fragment"><p>https://quartopub.com/</p></li>
+<li class="fragment"><p>Create a free account</p></li>
+<li class="fragment"><p>Published reports are <strong>public</strong></p></li>
+<li class="fragment"><p>Example: https://cct-datascience.quarto.pub/quartoworkshopexample1/</p></li>
+</ul>
+</div>
 </section>
 
 <section id="posit-connect" class="title-slide slide level1 center">
 <h1>Posit Connect</h1>
-
+<div>
+<ul>
+<li class="fragment"><p>https://viz.datascience.arizona.edu</p></li>
+<li class="fragment"><p>For <strong>university research</strong>; accounts available but restricted</p></li>
+<li class="fragment"><p>Published reports can be public or private</p></li>
+<li class="fragment"><p>Example: https://viz.datascience.arizona.edu/quarto-workshop-example1/</p></li>
+</ul>
+</div>
 </section>
 
 <section id="github" class="title-slide slide level1 center">
 <h1>GitHub</h1>
-
+<div>
+<ul>
+<li class="fragment"><p>Render using the <code>gfm</code> output format</p></li>
+<li class="fragment"><p>Resulting .md files are visible online on GitHub</p></li>
+<li class="fragment"><p>Published reports may be public or private (depending on repo scopes)</p></li>
+<li class="fragment"><p>Example: https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.md</p></li>
+</ul>
+</div>
 </section>
 
 <section id="sharing-rendered-documents" class="title-slide slide level1 center">
 <h1>Sharing rendered documents</h1>
-
+<div>
+<ul>
+<li class="fragment"><p>Render to <code>html</code>, <code>docx</code>, or <code>pdf</code></p></li>
+<li class="fragment"><p>Resulting documents are portable</p></li>
+</ul>
+</div>
 </section>
 
 <section id="sharing-source-documents" class="title-slide slide level1 center">
 <h1>Sharing source documents</h1>
-
+<div>
+<ul>
+<li class="fragment"><p>Share, edit, and re-render a single .qmd</p></li>
+<li class="fragment"><p>Especially for collaboration on GitHub</p></li>
+</ul>
+</div>
 </section>
 
 <section id="break" class="title-slide slide level1 center">
@@ -606,11 +706,22 @@ Renata Diaz - December 6, 2023
 
 </section>
 
+<section id="quarto-docs" class="title-slide slide level1 center">
+<h1>Quarto docs</h1>
+<div>
+<ul>
+<li class="fragment"><p>https://quarto.org</p></li>
+<li class="fragment"><p>https://quarto.org/docs/guide/</p></li>
+<li class="fragment"><p>Cheatsheet: https://rstudio.github.io/cheatsheets/quarto.pdf</p></li>
+</ul>
+</div>
+</section>
+
 <section id="cct-data-science" class="title-slide slide level1 center">
 <h1>CCT-Data Science</h1>
 <div>
 <ul>
-<li class="fragment">Drop-in hours</li>
+<li class="fragment">Drop-in hours - Tuesdays, 9-10</li>
 <li class="fragment">Incubator projects</li>
 <li class="fragment">Upcoming workshops</li>
 </ul>
@@ -622,7 +733,7 @@ Renata Diaz - December 6, 2023
 <div>
 <ul>
 <li class="fragment">Coffee &amp; Code</li>
-<li class="fragment">The Data Science Institute</li>
+<li class="fragment">UA Data Science Slack</li>
 </ul>
 </div>
 </section>
@@ -633,14 +744,9 @@ Renata Diaz - December 6, 2023
 <ul>
 <li class="fragment">Blogs</li>
 <li class="fragment">StackOverflow</li>
-<li class="fragment">RStudio message board</li>
+<li class="fragment">RStudio message board: <a href="https://community.rstudio.com" class="uri">https://community.rstudio.com</a></li>
 </ul>
 </div>
-</section>
-
-<section id="bonus-quarto-applications" class="title-slide slide level1 center">
-<h1>Bonus Quarto applications</h1>
-
 </section>
 
 <section id="thank-you" class="title-slide slide level1 center">
