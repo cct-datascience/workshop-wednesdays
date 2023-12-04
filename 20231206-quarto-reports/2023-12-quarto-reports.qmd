@@ -5,14 +5,14 @@ format: uaz-revealjs
 editor: source
 ---
 
-# Overview
+## Overview   {.smaller}
 
-| Topic | Time | Topic | Time |
-|:----------------|:------------|:----------------|:------------|
-| Welcome and setup | 11:00 - 11:05 | BREAK | 11:55 - 12:05 |
-| What is Quarto? What can it do? | 11:05 - 11:15 | Creating a report from your script | 12:05 - 12:35 | 
-| Creating Quarto reports from .R, .Rmd files | 11:15 - 11:45 | Sharing your report | 12:35 - 12:45 |
-| Ways to share Quarto reports | 11:45 - 11:55 | Where to get more help | 12:45 - 12:50 |
+| Topic                                       | Time          | Topic                              | Time          |
+|:------------------|:----------------|:------------------|:----------------|
+| Welcome and setup                           | 11:00 - 11:05 | BREAK                              | 11:55 - 12:05 |
+| What is Quarto? What can it do?             | 11:05 - 11:15 | Creating a report from your script | 12:05 - 12:35 |
+| Creating Quarto reports from .R, .Rmd files | 11:15 - 11:45 | Sharing your report                | 12:35 - 12:45 |
+| Ways to share Quarto reports                | 11:45 - 11:55 | Where to get more help             | 12:45 - 12:50 |
 
 # Welcome!
 
@@ -20,7 +20,7 @@ editor: source
 Slot here to show results of pre-workshop survey on who here knows about/uses Quarto.
 :::
 
-# Before we get started
+## Before we get started
 
 ::: incremental
 -   These slides (and links!) are available at:
@@ -29,7 +29,7 @@ Slot here to show results of pre-workshop survey on who here knows about/uses Qu
     -   You can check if Quarto is installed by opening a terminal and running `quarto --version`. Install Quarto [here](https://quarto.org/docs/get-started/).
 :::
 
-# Learning objectives
+## Learning objectives
 
 ::: incremental
 -   Know what Quarto is, what it can do, and how it differs from specific *programming languages* and *markup languages* you may know of.
@@ -38,7 +38,7 @@ Slot here to show results of pre-workshop survey on who here knows about/uses Qu
 -   Know where to go for additional help and/or adventures in Quarto.
 :::
 
-# What is Quarto?
+## What is Quarto?
 
 ::: incremental
 -   *"An open-source scientific publishing system"*
@@ -47,9 +47,9 @@ Slot here to show results of pre-workshop survey on who here knows about/uses Qu
 -   Published by Posit (formerly RStudio)
 :::
 
-# What is Quarto?
+## What is Quarto?
 
- ![](quarto_order.png)
+![](quarto_order.png)
 
 ::: notes
 "Open-source publishing system": Sounds vague, but this is what it is.
@@ -63,15 +63,15 @@ Published by Posit, but it's *free* and *not just for R*.
 This general type of system is called "Literate programming".
 :::
 
-# A Quarto example
+## A Quarto example
 
-[An example Quarto research report](https://viz.datascience.arizona.edu/quarto-workshop-example1/)
+-   [An example Quarto research report](https://viz.datascience.arizona.edu/quarto-workshop-example/)
 
-Or go to the URL: https://viz.datascience.arizona.edu/quarto-workshop-example1/
+    -   Or go to the URL: <https://viz.datascience.arizona.edu/quarto-workshop-example/>
 
-[Source code for this example](https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass.qmd)
+-   [Source code for this example](https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd)
 
-Or go to the URL: https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass.qmd
+    -   Or go to the URL: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd>
 
 ::: notes
 Point out:
@@ -83,7 +83,7 @@ Point out:
 -   Scholarly author tracking
 :::
 
-# Cool, but tricky. What are the benefits?
+## Cool, but tricky. What are the benefits?
 
 ::: incremental
 -   Reproducibility
@@ -93,7 +93,7 @@ Point out:
 -   Easy to share - from coauthors to journals to web audiences
 :::
 
-# What about RMarkdown?
+## What about RMarkdown?
 
 ::: incremental
 -   Quarto is the "successor" to .Rmd
@@ -102,10 +102,10 @@ Point out:
 -   *Quarto has a greatly expanded range of document types*
 :::
 
-# Comparison
+## Comparison  {.smaller}
 
 | Feature                                                       | Quarto | Rmd | Markdown |
-|:--------------------------------------------------------------|:-------|:----|:---------|
+|:-----------------------------------------|:---------|:---------|:---------|
 | Markup syntax (`**` for emphasis, etc)                        | x      | x   | x        |
 | Render to multiple document types                             | x      | x   | x        |
 | Interweave text and code                                      | x      | x   | x        |
@@ -113,20 +113,20 @@ Point out:
 | Execute *non-R* code                                          | x      |     |          |
 | Expanded set of document types (dashboards, manuscripts, ...) | x      |     |          |
 
-# How do I create a Quarto document?
+## How do I create a Quarto document?
 
 Switch to live coding!
 
 Example report document available here:
 
-# How do I turn an .Rmd into a Quarto document?
+## How do I turn an .Rmd into a Quarto document?
 
 Example report document available here:
 
-# Technical changes from .Rmd to Quarto
+## Technical changes from .Rmd to Quarto
 
 ::: incremental
--   **Most .Rmd documents will render as-is!**
+**Most .Rmd documents will render as-is!**
 
 -   Document-level options moved to header
 
@@ -136,46 +136,42 @@ Example report document available here:
 
 -   `knitr::convert_chunk_header(<file_path>)` helps with conversion
 
--   https://quarto.org/docs/faq/rmarkdown.html
+-   <https://quarto.org/docs/faq/rmarkdown.html>
 :::
 
-# Sharing Quarto reports
+## Sharing Quarto reports
 
+| Hosted online with a shareable URL | Static documents to share person-to-person |
+|:-----------------------------------|:-----------------------------------|
+| Quarto Pub                         | Rendered HTML, pdf, docx outputs           |
+| Posit Connect                      | Source .qmd files                          |
+| GitHub                             |                                            |
 
-| Hosted online with a shareable URL                                                    |  Static documents to share person-to-person |
-|:-------------------------|:-------------------------|
-| Quarto Pub | Rendered HTML, pdf, docx outputs |
-| Posit Connect | Source .qmd files |
-| GitHub | 
-
-
-
-
-# QuartoPub
+## QuartoPub
 
 ::: incremental
--   https://quartopub.com/
+-   <https://quartopub.com/>
 
 -   Create a free account
 
 -   Published reports are **public**
 
--   Example: https://cct-datascience.quarto.pub/quartoworkshopexample1/
+-   Example: <https://cct-datascience.quarto.pub/quarto-workshop-example/>
 :::
 
-# Posit Connect
+## Posit Connect
 
 ::: incremental
--   https://viz.datascience.arizona.edu
+-   <https://viz.datascience.arizona.edu>
 
 -   For **university research**; accounts available but restricted
 
 -   Published reports can be public or private
 
--   Example: https://viz.datascience.arizona.edu/quarto-workshop-example1/
+-   Example: <https://viz.datascience.arizona.edu/quarto-workshop-example/>
 :::
 
-# GitHub
+## GitHub
 
 ::: incremental
 -   Render using the `gfm` output format
@@ -184,10 +180,10 @@ Example report document available here:
 
 -   Published reports may be public or private (depending on repo scopes)
 
--   Example: https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.md
+-   Example: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.md>
 :::
 
-# Sharing rendered documents
+## Sharing rendered documents
 
 ::: incremental
 -   Render to `html`, `docx`, or `pdf`
@@ -195,7 +191,7 @@ Example report document available here:
 -   Resulting documents are portable
 :::
 
-# Sharing source documents
+## Sharing source documents
 
 ::: incremental
 -   Share, edit, and re-render a single .qmd
@@ -205,9 +201,9 @@ Example report document available here:
 
 # Break!
 
-# Practice time: Create a Quarto report from your script
+## Practice time: Create a Quarto report from your script
 
-# Practice time: Share your report
+## Practice time: Share your report
 
 Pick one (or more!) of the following options:
 
@@ -219,17 +215,17 @@ Pick one (or more!) of the following options:
 
 # Quarto resources
 
-# Quarto docs
+## Quarto docs
 
 ::: incremental
--   https://quarto.org
+-   <https://quarto.org>
 
--   https://quarto.org/docs/guide/
+-   <https://quarto.org/docs/guide/>
 
--   Cheatsheet: https://rstudio.github.io/cheatsheets/quarto.pdf
+-   Cheatsheet: <https://rstudio.github.io/cheatsheets/quarto.pdf>
 :::
 
-# CCT-Data Science
+## CCT-Data Science
 
 ::: incremental
 -   Drop-in hours - Tuesdays, 9-10
@@ -237,14 +233,14 @@ Pick one (or more!) of the following options:
 -   Upcoming workshops
 :::
 
-# Data science \@ UA
+## Data science \@ UA
 
 ::: incremental
 -   Coffee & Code
 -   UA Data Science Slack
 :::
 
-# Online Quarto communities
+## Online Quarto communities
 
 ::: incremental
 -   Blogs
