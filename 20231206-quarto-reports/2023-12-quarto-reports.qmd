@@ -115,13 +115,20 @@ Point out:
 
 ## How do I create a Quarto document?
 
-Switch to live coding!
-
-Example report document available here:
+Let's start from this R script: [https://]
 
 ## How do I turn an .Rmd into a Quarto document?
 
 Example report document available here:
+
+## .R to .Qmd {.smaller}
+
+::: incremental
+
+1. Create a Quarto document
+2. Move code chunks over
+3. Add descriptive text
+4. 
 
 ## Technical changes from .Rmd to Quarto
 
