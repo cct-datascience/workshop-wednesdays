@@ -259,7 +259,9 @@ Pick one (or more!) of the following options:
 ## Data science \@ UA
 
 ::: incremental
--   Coffee & Code
+- [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
+    - Coffee & Code
+    - Hack Hour
 -   UA Data Science Slack
 :::
 
