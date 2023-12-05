@@ -1,23 +1,43 @@
 ---
 title: "Sharing research as Quarto reports"
 author: "Renata Diaz - December 6, 2023"
-format: uaz-revealjs
+format: 
+  uaz-revealjs:
+      logo: "../logo.png"
 editor: source
 ---
 
 ## Overview   {.smaller}
 
-| Topic                                       | Time          | Topic                              | Time          |
-|:------------------|:----------------|:------------------|:----------------|
-| Welcome and setup                           | 11:00 - 11:05 | BREAK                              | 11:55 - 12:05 |
-| What is Quarto? What can it do?             | 11:05 - 11:15 | Creating a report from your script | 12:05 - 12:35 |
-| Creating Quarto reports from .R, .Rmd files | 11:15 - 11:45 | Sharing your report                | 12:35 - 12:45 |
-| Ways to share Quarto reports                | 11:45 - 11:55 | Where to get more help             | 12:45 - 12:50 |
+| Topic                                       | Time          | 
+|:------------------|:----------------|
+| Welcome and setup                           | 11:00 - 11:05 |
+| What is Quarto? What can it do?             | 11:05 - 11:15 |
+| Creating Quarto reports from .R, .Rmd files | 11:15 - 11:45 | 
+| Ways to share Quarto reports                | 11:45 - 11:55 | 
+| BREAK                              | 11:55 - 12:05 |
+| Creating a report from your script | 12:05 - 12:35 |
+| Sharing your report                | 12:35 - 12:45 |
+| Where to get more help             | 12:45 - 12:50 |
 
 # Welcome!
 
 ::: notes
 Slot here to show results of pre-workshop survey on who here knows about/uses Quarto.
+:::
+
+## CCT-Data Science
+
+#### Supporting  reproducible research, data pipelines, and software development in ALVSCE
+
+::: incremental
+
+* Workshops
+* Drop-in hours
+* "Incubator" program
+* Longer-term collaborations
+* Learn more: <https://datascience.cct.arizona.edu>
+
 :::
 
 ## Before we get started {.smaller}
@@ -162,11 +182,29 @@ Example report document available here: <https://github.com/cct-datascience/work
 
 ## Sharing Quarto reports
 
-| Hosted online with a shareable URL | Static documents to share person-to-person |
-|:-----------------------------------|:-----------------------------------|
-| Quarto Pub                         | Rendered HTML, pdf, docx outputs           |
-| Posit Connect                      | Source .qmd files                          |
-| GitHub                             |                                            |
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Hosted online with a shareable URL
+
+* Quarto Pub
+* Posit Connect
+* GitHub
+
+:::
+
+::: {.column width="50%"}
+
+Static documents to share
+
+* Rendered HTML, pdf, docx outputs  
+* Source .qmd files
+
+:::
+
+::::
+
 
 ## QuartoPub
 
