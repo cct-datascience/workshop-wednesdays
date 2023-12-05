@@ -168,7 +168,7 @@ Example report document available here: <https://github.com/cct-datascience/work
 | Posit Connect                      | Source .qmd files                          |
 | GitHub                             |                                            |
 
-## QuartoPub
+## Quarto Pub
 
 ::: incremental
 -   <https://quartopub.com/>
