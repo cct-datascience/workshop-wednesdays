@@ -1,0 +1,4 @@
+- source: 2023-12-quarto-reports.qmd
+  quarto-pub:
+    - id: 08c40058-caaa-4214-af2f-d0feb1b36356
+      url: 'https://cct-datascience.quarto.pub/sharing-research-as-quarto-reports'

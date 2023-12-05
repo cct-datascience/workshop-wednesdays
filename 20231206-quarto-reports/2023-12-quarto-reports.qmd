@@ -20,10 +20,10 @@ editor: source
 Slot here to show results of pre-workshop survey on who here knows about/uses Quarto.
 :::
 
-## Before we get started
+## Before we get started {.smaller}
 
 ::: incremental
--   These slides (and links!) are available at:
+-   These slides (and links!) are available at: <https://cct-datascience.quarto.pub/sharing-research-as-quarto-reports/>
 -   Please make sure you have RStudio (ver. \>= 2022.07.1) and Quarto installed.
     -   You can check your RStudio version at "Help \> About RStudio". The most recent version of RStudio is available [here](https://posit.co/download/rstudio-desktop/).
     -   You can check if Quarto is installed by opening a terminal and running `quarto --version`. Install Quarto [here](https://quarto.org/docs/get-started/).
@@ -65,9 +65,9 @@ This general type of system is called "Literate programming".
 
 ## A Quarto example
 
--   [An example Quarto research report](https://viz.datascience.arizona.edu/quarto-workshop-example/)
+-   [An example Quarto research report](https://cct-datascience.quarto.pub/quarto-workshop-example)
 
-    -   Or go to the URL: <https://viz.datascience.arizona.edu/quarto-workshop-example/>
+    -   Or go to the URL: <https://cct-datascience.quarto.pub/quarto-workshop-example>
 
 -   [Source code for this example](https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd)
 
@@ -115,11 +115,7 @@ Point out:
 
 ## How do I create a Quarto document?
 
-Let's start from this R script: [https://]
-
-## How do I turn an .Rmd into a Quarto document?
-
-Example report document available here:
+Let's start from this R script: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report.R>
 
 ## .R to .Qmd 
 
@@ -133,14 +129,10 @@ Example report document available here:
 
 :::
 
-## .Rmd to .Qmd
+## How do I turn an .Rmd into a Quarto document?
 
-::: incremental
+Example report document available here: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report_RMD.Rmd>
 
-1. Run `knitr::convert_chunk_header`
-1. Add additional Quarto features 
-
-:::
 
 ## Technical changes from .Rmd to Quarto
 
@@ -156,6 +148,16 @@ Example report document available here:
 -   `knitr::convert_chunk_header(<file_path>)` helps with conversion
 
 -   <https://quarto.org/docs/faq/rmarkdown.html>
+:::
+
+
+## .Rmd to .Qmd
+
+::: incremental
+
+1. Run `knitr::convert_chunk_header`
+1. Add additional Quarto features 
+
 :::
 
 ## Sharing Quarto reports
@@ -216,6 +218,8 @@ Example report document available here:
 -   Share, edit, and re-render a single .qmd
 
 -   Especially for collaboration on GitHub
+
+-   Example: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd>
 :::
 
 # Break!
