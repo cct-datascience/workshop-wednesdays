@@ -185,7 +185,7 @@ Example report document available here: <https://github.com/cct-datascience/work
 ::: incremental
 -   <https://viz.datascience.arizona.edu>
 
--   For **university research**; accounts available but restricted
+-   For **university research**; accounts available for University of Arizona researchers: https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect
 
 -   Published reports can be public or private
 
