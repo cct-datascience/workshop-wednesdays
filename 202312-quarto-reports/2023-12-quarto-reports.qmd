@@ -263,6 +263,9 @@ Pick one (or more!) of the following options:
     - Coffee & Code
     - Hack Hour
 -   UA Data Science Slack
+    - Sign up here: https://jcoliver.github.io/uadatascience-slack/user-guide.html 
+- [UA Libraries Data & Viz Drop-In Hours](https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w)
+-   UA Data Science Institute
 :::
 
 ## Online Quarto communities
