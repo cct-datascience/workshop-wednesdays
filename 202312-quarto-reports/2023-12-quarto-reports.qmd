@@ -223,7 +223,7 @@ Static documents to share
 ::: incremental
 -   <https://viz.datascience.arizona.edu>
 
--   For **university research**; accounts available for University of Arizona researchers: https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect
+-   For **university research**; accounts available for University of Arizona researchers: <https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect>
 
 -   Published reports can be public or private
 
@@ -248,6 +248,10 @@ Static documents to share
 -   Render to `html`, `docx`, or `pdf`
 
 -   Resulting documents are portable
+
+-   Example .pdf: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.pdf>
+
+-   Example .docx (download): <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.docx>
 :::
 
 ## Sharing source documents
@@ -301,7 +305,7 @@ Pick one (or more!) of the following options:
     - Coffee & Code
     - Hack Hour
 -   UA Data Science Slack
-    - Sign up here: https://jcoliver.github.io/uadatascience-slack/user-guide.html 
+    - Sign up here: <https://jcoliver.github.io/uadatascience-slack/user-guide.html>
 - [UA Libraries Data & Viz Drop-In Hours](https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w)
 -   UA Data Science Institute
 :::
