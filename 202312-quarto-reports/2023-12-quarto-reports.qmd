@@ -135,7 +135,7 @@ Point out:
 
 ## How do I create a Quarto document?
 
-Let's start from this R script: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report.R>
+Let's start from this R script: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report.R>
 
 ## .R to .Qmd 
 
@@ -151,7 +151,7 @@ Let's start from this R script: <https://github.com/cct-datascience/workshop-wed
 
 ## How do I turn an .Rmd into a Quarto document?
 
-Example report document available here: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report_RMD.Rmd>
+Example report document available here: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report_RMD.Rmd>
 
 
 ## Technical changes from .Rmd to Quarto

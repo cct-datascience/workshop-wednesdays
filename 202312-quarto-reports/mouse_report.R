@@ -6,8 +6,8 @@ library(ggplot2)
 
 ## ----download files--------------------------------------------------------------------------------
 
-download.file("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/2023-quarto-reports/20231206-quarto-reports/portal_mouse_data.csv", destfile = "mouse_data.csv")
-download.file("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/2023-quarto-reports/20231206-quarto-reports/portal_ref.bib", destfile = "portal_ref.bib")
+download.file("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/2023-quarto-reports/202312-quarto-reports/portal_mouse_data.csv", destfile = "mouse_data.csv")
+download.file("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/2023-quarto-reports/202312-quarto-reports/portal_ref.bib", destfile = "portal_ref.bib")
 
 
 
