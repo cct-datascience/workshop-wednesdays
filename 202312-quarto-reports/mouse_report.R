@@ -36,6 +36,8 @@ mouse_data_ranked <- mouse_data |>
   ungroup() |>
   arrange(desc(totalabundance))
 
-knitr::kable(head(mouse_data_ranked))
+head(mouse_data_ranked)
+
+## Link to DM: https://github.com/cct-datascience/CALS-workshops/blob/2023-quarto-reports/202312-quarto-reports/merriams.JPG?raw=true
 
 

@@ -71,7 +71,7 @@ knitr::kable(head(mouse_data_ranked))
 
 # A famous face
 
-![Merriam's kangaroo rat](https://github.com/cct-datascience/CALS-workshops/blob/2023-quarto-reports/20231206-quarto-reports/merriams.JPG?raw=true){#fig-merriams}
+![Merriam's kangaroo rat](https://github.com/cct-datascience/CALS-workshops/blob/2023-quarto-reports/202312-quarto-reports/merriams.JPG?raw=true){#fig-merriams}
 
 Merriam's kangaroo rat (@fig-merriams) is the most highly abundant species over time (@tbl-abundances).
 
