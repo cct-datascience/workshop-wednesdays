@@ -1,0 +1,70 @@
+---
+title: "Creating Lab Handbooks with Quarto"
+author: "Eric R. Scott"
+bibliography: references.bib
+---
+
+# Notes
+
+The goal of this workshop is to provide a framework (Quarto book hosted on GitHub) for labs to create their own editable lab handbooks.
+
+The workshop will consist of an introductory lecture/discussion section and a hands-on section where participants create a lab organization (if applicable), create a repo from a template, edit it and check that it deploys.
+
+## Learning objectives
+
+-   understand the benefits of having a lab handbook
+-   have a basic understanding of what git and github are
+-   be able to edit files on GitHub
+-   understand markdown basics
+-   get a taste of the potential of Quarto (e.g. cross-refs, citations, callouts, etc.) and where to go for more info
+
+## What goes in the slides
+
+-   Summary of @tendler2023
+    -   Benefits:
+        -   Enables quality leadership
+        -   articulating lab ethos is constructive
+        -   creating it brings the lab together
+        -   can aid recruitment
+-   Figure 1 from @tendler2023
+    -   Maybe modified with git/github terminology??
+-   Many links to example lab handbooks and how to credit them if you lift text from them
+-   What is Quarto and why is a quarto book hosted on github a good choice for this? (like, why not just make a word doc?)
+    -   Quarto is useful for researchers (reproducible reports, manuscripts, professional websites, etc.)
+    -   GitHub is useful for researchers (link to @braga2023)
+    -   On GitHub, edits are versioned along with a required comment and can be explored and reverted
+    -   Set up to automatically deploy to a website so can be easily shared to group members and recruits
+
+## What goes in template repo
+
+-   Quarto book
+
+-   "Edit this page" button enabled
+
+-   Placeholders for lab logo, lab mission statement
+
+-   PR & issue templates
+
+-   workflow to automate deployment to github pages
+
+-   Contribution Guide
+
+    -   From GitHub
+
+        -   Pros: no setup needed other than a GitHub account
+
+        -   Cons: no visual editor, preview isn't 100% accurate
+
+        -   Good for simple edits that are just changes to text
+
+    -   Fork/Clone and edit in RStudio or VSCode
+
+        -   Pros: full access to Quarto visual editor and all its features, preview entire book with `quarto preview`
+
+        -   Cons: need to setup git, GitHub PAT, and use workflow from `usethis` to clone and make PR
+
+-   UA resources page
+
+    -   links to things like how to report research misconduct and harassment
+
+    -   link to <https://datascience.cct.arizona.edu/>
