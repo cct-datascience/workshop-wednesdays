@@ -7,19 +7,17 @@
 
 ## Pre-workshop checklist:
 
--   [ ] Create a Zoom meeting with registration
--   [ ] Write up announcement and record on the [Workshops HackMD](https://hackmd.io/-hSaZbuzQI-gAPP3pASvRw)
--   [ ] Advertise
-    -   [ ] Edit upcoming workshops section of [group website workshops page](https://datascience.cals.arizona.edu/workshops)
-    -   [ ] Add to Data Science Institute calendar <https://datascience.arizona.edu/calendar>
-    -   [ ] Send out announcement to mailing list
-    -   [ ] Twitter
--   [ ] Provide homework / background reading as appropriate (installation, references, etc.)
--   [ ] Send out reminders
--   [ ] Create pre- and post-workshop surveys
--   [ ] Send out pre-workshop survey [WIP]
+- [ ] Create a Zoom meeting with registration
+- [ ] Write up announcement and record on the [Workshops HackMD](https://hackmd.io/-hSaZbuzQI-gAPP3pASvRw)
+- [ ] Advertise
+  - [ ] Create event on [group website workshops page](https://datascience.cals.arizona.edu/workshops)
+  - [ ] Add to [Data Science Institute calendar](https://datascience.arizona.edu/calendar)
+  - [ ] Send out announcement to mailing list
+  - [ ] Share on resBazAZ and UA Data Science Slack
+- [ ] Provide homework / background reading as appropriate (installation, references, etc.)
+- [ ] Send out reminders
 
-Full checklist here: https://osf.io/tzmhp/wiki/Workshops/
+Full checklist here: https://cct-datascience.github.io/group-procedures/workshops.html
 
 ## Materials
 
@@ -28,5 +26,5 @@ Create a folder in the format YYYYMM-short-title and include:
 - [ ] Slides (if applicable)
 - [ ] Notes
 
-Use .md, .Rmd with `output: github_document`, or .qmd with `format: gfm` OR render to RStudio Connect or something like that.
+Use .md, .Rmd with `output: github_document`, or .qmd with `format: gfm` OR render to cct-datascience.quarto.pub
 
