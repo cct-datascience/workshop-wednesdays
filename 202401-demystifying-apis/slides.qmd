@@ -3,6 +3,8 @@ title: "Demystifying APIs for Researchers"
 author: "Eric R. Scott"
 date: "2024-01-24"
 format: revealjs
+execute: 
+  echo: true
 ---
 
 <!--# modify David's slides: https://docs.google.com/presentation/d/e/2PACX-1vTAx2NWH4xRwshbXvm7e-hXUyF0DBiAOSBOgzCIp_dI71GrCYDlyeEISKUscdIqI_4k2UVoOEtu73Gu/pub?start=false&loop=false&delayms=3000&slide=id.p -->
@@ -26,13 +28,12 @@ Including web interfaces.
 ## Getting data on the web
 
 -   Made for humans
-
 -   Point and click
 
-E.g. [gbif.org](https://www.gbif.org/)
+E.g. [CAS Common Chemistry](https://commonchemistry.cas.org/)
 
-1.  Search for a species (common names are accepted)
-2.  Click on the "Species" tab
+1.  Search for the name of a chemical (e.g. hexanol)
+2.  Click on a result to get more info
 
 ## What's missing?
 
@@ -43,144 +44,115 @@ There's no easy way to get the results in a ready-to-analyze form!
 **This is where an API is useful**
 
 -   Made for machines
-
 -   Programmable
 
-<https://www.gbif.org/developer/summary>
+<https://commonchemistry.cas.org/api-overview>
 
 ## Getting data directly from an API
 
-Instead of <https://www.gbif.org/occurrence/search?q=puma>
+Every API is a little different, but here the API equivalent to <https://commonchemistry.cas.org/results?q=hexanol> is <https://commonchemistry.cas.org/api/search?q=hexanol>.
 
-Do <https://api.gbif.org/v1/occurrence/search?q=puma>
-
-::: callout-note
-This pattern won't work for every API!
-:::
+![](json_example.png){fig-align="center"}
 
 ## What am I looking at?
 
-The result of <https://api.gbif.org/v1/occurrence/search?q=puma> is in a format called JSON.
+The result of <https://commonchemistry.cas.org/api/search?q=caffeine> is in a format called JSON.
 It's made of nested key: value pairs.
 For example
 
 ``` json
 {
-  results: {
-    key: 1,
-    species: Lynx lynx,
-    continent: Eurasia
-  },
-  {
-    key: 2,
-    species: Lynx canadensis,
-    continent: North America
-  }
+  "count": 2,
+  "results": [
+    {
+      "rn": "111-27-3",
+      "name": "1-Hexanol",
+      "image": "<svg ...</svg>"
+    },
+    {
+      "rn": "25917-35-5",
+      "name": "Hexanol",
+      "image": "<svg ...</svg>"
+    }
+  ]
 }
 ```
 
-## How to know how to use an API
-
-Let's look at some API documentation: <https://www.gbif.org/developer/species>
-
-RESTful APIs most common kind of API??
-Not sure how important it is to know difference between REST and SOAP or whatever
-
-Methods:
-
--   GET: get some data
-
--   PUT: create a record
-
--   POST: update a record
-
--   DELETE: delete a record
-
-Usually you are only allowed to do GET
-
 ## Structure of an API request
 
-https://api.gbif.org/v1/species?n
-ame=Lynx%20canadensis
+![](api_structure.png){fig-align="center"}
 
-<!--# annotate like David's slide to show protocol, domain, api version, endpoint, and query -->
+::: callout-note
+This is a *fairly standard* API, but not all APIs take requests structured in the same way!
+You'll have to find the documentation for each particular API to figure out how to build a query.
+:::
+
+::: notes
+Different endpoints generally return different data or correspond to different databases.
+
+Sometimes you can have multiple queries in an API, but this one only takes one
+:::
+
+## How to know how to use an API
+
+Let's look at some API documentation: <https://commonchemistry.cas.org/api-overview>
+
+What endpoints are available?
+What queries can you use?
+
+::: callout-note
+This API only allows one "method"—GET.
+Other methods exist (e.g. POST), but GET is the most common.
+:::
 
 ## Building an API request in R
 
-<!--# This is where the workshop diverges from David's slides -->
+-   Reproducible queries
+
+-   Iterate over many queries
+
+-   Create re-usable functions
 
 ```{r}
 library(httr2)
 ```
 
+## 1. Create a request
+
 Start a request with the domain
 
 ```{r}
-req <- 
-  request("https://api.gbif.org/")
-req
+req_search <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("search") |> 
+  req_url_query(q = "caffeine")
+
+req_search
 ```
 
-Notice it prints some info.
-Default method is GET which lines up with what we saw in the documentation, so that is good.
+::: notes
+Notice the default method is GET, which is what we want.
+:::
 
-Add v1
+## 2. Perform the request
 
 ```{r}
-req <- 
-  req |> 
-  req_url_path("v1")
-req
+resp_search <- 
+  req_perform(req_search)
+resp_search
 ```
 
-Notice that `httr2` works well with the pipe (`|>` or `%>%`)
+::: notes
+The data is in there as json.
+:::
 
-Add the endpoint with `req_url_path_append()`
+## 3. Get the results
 
 ```{r}
-req <-
-  req |> 
-  req_url_path_append("species")
-req
+results_search <- resp_body_json(resp_search)
+str(results_search)
 ```
 
-Notice that it takes care of the `/` for you.
+# Live Demo
 
-Now add the query with `req_url_query()`
-
-```{r}
-req <-
-  req |>
-  req_url_query(name = "Lynx canadensis")
-req
-```
-
-Notice that it takes care of all the URL encoding for you.
-Nice.
-
-Now make the request with `req_perform()`
-
-```{r}
-resp <- 
-  req |> 
-  req_perform()
-resp
-```
-
-Notice that `resp` prints the metadata only.
-
-Now let's get that JSON
-
-```{r}
-data_raw <-
-  resp |> 
-  resp_body_json()
-View(data_raw)
-```
-
-Notice that the `results` piece is where everything we care about is.
-
-## But don't use `httr2` for GBIF because there's already an R Package
-
-More generally, discuss how/when you should look for existing solutions before creating your own API interface with `httr2`.
-Link to rOpenSci search page.
+<!--# Switch over to participatory live coding working through notes.qmd in a fresh document -->
