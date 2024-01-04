@@ -1,0 +1,213 @@
+---
+title: "Playing around with the commonchemistry API"
+format: html
+editor: visual
+---
+
+```{r}
+library(httr2)
+library(tidyverse) #used later on for wrangling results
+# library(listviewer) #has some functions to render lists as collapsible HTML widgets, but I want something even simpler.
+```
+
+## Search
+
+### Build the query
+
+```{r}
+req_search <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("search") |> 
+  req_url_query(q = "caffeine")
+req_search
+```
+
+### Perform the request
+
+```{r}
+resp_search <- 
+  req_search |> 
+  req_perform()
+resp_search
+```
+
+### Get the results as a list
+
+```{r}
+caffeine_search <- 
+  resp_search |> resp_body_json()
+caffeine_search
+```
+
+There's only one result here, so we'll simplify this list a bit by just pulling out the first (only) element of the results.
+
+```{r}
+caffeine <- caffeine_search$results[[1]]
+caffeine
+```
+
+One of the things it give us is the SVG (scaleable vector graphics) code for the image, which we can display in a rendered RMarkdown or Quarto document.
+Here we use a couple of "tricks" to get this to work.
+We use the chunk option `output: asis` to tell Quarto to render the output as plain text and not put it inside of a box or anything.
+Then we use `cat()` rather than `print()` to display the SVG code "naked" and not as a length 1 character vector.
+The result is that the SVG code is interpreted as HTML and rendered as an image.
+
+```{r}
+#| output: asis
+#| echo: fenced
+cat(caffeine$image)
+```
+
+We could also include this image in an HTML table, like one made with `gt`.
+That would be pretty cool!
+
+## Detail
+
+Now let's get more information with the `/detail` endpoint
+
+### Build the query
+
+We can pass the registry number directly from our first query into this one.
+
+```{r}
+req_detail <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("detail") |> 
+  req_url_query(cas_rn = caffeine$rn)
+req_detail
+```
+
+### Perform the request
+
+```{r}
+resp_detail <-
+  req_detail |> 
+  req_perform()
+resp_detail
+```
+
+### Get the results
+
+```{r}
+caffeine_detail <- 
+  resp_detail |>
+  resp_body_json()
+caffeine_detail
+```
+
+### Wrangle the results
+
+Lists are hard to work with!
+Let's try to turn this into a tibble.
+
+```{r}
+#| error: true
+as_tibble(caffeine_detail)
+```
+
+The list isn't a nice rectangle, so it can't be easily converted into a tibble.
+
+We can take subsets of the list where all elements are the same length and make those into data frames
+
+Let's take all the elements with length == 1 and turn those into a data frame
+
+```{r}
+caffeine_basics <- caffeine_detail |> 
+  purrr::keep(\(x) length(x) == 1) |> 
+  as_tibble()
+```
+
+Ok, I gotta try that `gt` thing where we make a table with the image of the molecule:
+
+```{r}
+library(gt)
+gt(caffeine_basics) |> 
+  fmt_markdown(columns = c(image, molecularFormula)) #molecular formula was also HTML
+```
+
+Nice!
+
+## Iterating
+
+The *true* power of accessing APIs programatically is that we can iterate!
+For example, we can take a list of chemicals, search for the registry number for all of them, get the results for all of them, and turn it into a single output table.
+
+::: callout-important
+Many APIs have a **rate limit** that limits how quickly you can make requests (e.g. 10 per minute).
+Sometimes this rate limit is documented on the API website, sometimes you'll just get errors if you make too many requests (surprise!).
+Slow down your requests with `req_throttle()`.
+:::
+
+```{r}
+chemical_names <- c("caffeine", "vanillin", "bergamotene") #vanilla earl grey anyone?
+```
+
+All queries will start like this
+
+```{r}
+req_search_base <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("search")
+```
+
+Then we want to generate queries for each of the chemicals by plugging the elements of `chemical_names` into `req_url_query(q = <chemical_name>)`.
+We can do that with `map()` from the `purr` package.
+The first argument is the thing to iterate over—`chemical_names` in our case.
+The second argument is a function to perform.
+Here I've used R's "shortcut" for creating an anonymous function: `\(arg_name) do_things_to(arg_name)`
+
+```{r}
+req_list <- map(chemical_names, \(x) req_search_base |> req_url_query(q = x))
+req_list
+```
+
+So now we have a list of three queries.
+We can use `map()` again to perform all of them.
+This time, we don't even need the anonymous function because `req_perform()` just takes the request as it's first unnamed argument.
+
+```{r}
+resp_list <- map(req_list, req_perform)
+resp_list
+```
+
+And again, we can use `map` to extract all the results
+
+```{r}
+map(resp_list, resp_body_json)
+```
+
+Now here it's gotten a little complicated because we now have a list of lists.
+So instead of just maping `resp_body_json()`, let's do some data extraction *inside* of `map()`.
+It's usually easiest to figure out how to do this by first testing it out on just a single element.
+
+```{r}
+resp_list[[1]] |> 
+  resp_body_json() |> 
+  pluck("results", 1) |> #equivalent to x[[results]][[1]]
+  as_tibble()
+```
+
+Then we can put this code inside an anonymous function `\(x)` and replace `resp_list[[1]]` with `x`
+
+```{r}
+df_list <- map(resp_list, \(x) {
+  x |> 
+    resp_body_json() |> 
+    pluck("results", 1) |> #equivalent to x[[results]][[1]]
+    as_tibble()
+})
+```
+
+Now we have a list of tibbles that we can combine with `list_rbind()`
+
+```{r}
+search_results <- list_rbind(df_list)
+search_results
+```
+
+(and then we can do the cool `gt` thing)
+
+```{r}
+gt(search_results) |> 
+  fmt_markdown(columns = image)
+```
