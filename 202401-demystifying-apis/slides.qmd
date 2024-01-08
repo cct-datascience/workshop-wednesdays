@@ -1,8 +1,20 @@
 ---
 title: "Demystifying APIs for Researchers"
+subtitle: "{{< li dmgxtuzn colors='primary:#EF4056,secondary:#EF4056' trigger='loop' scale=100 >}}"
 author: "Eric R. Scott"
 date: "2024-01-24"
-format: revealjs
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: true
+    link-external-icon: true
+    link-external-newwindow: true
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
+    mermaid:
+      theme: forest
 execute: 
   echo: true
 ---
@@ -17,7 +29,7 @@ execute:
 
 ## What is an API
 
-<!--# Adapt David's figure-->
+![](api_slide.png){fig-align="center"}
 
 ::: notes
 APIs provide a way that data can be accessed from the web via URLs.
@@ -156,3 +168,7 @@ str(results_search)
 # Live Demo
 
 <!--# Switch over to participatory live coding working through notes.qmd in a fresh document -->
+
+## References
+
+Title slide API icon by [Lordicon.com](https://lordicon.com/)

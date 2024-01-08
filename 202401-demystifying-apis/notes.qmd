@@ -10,6 +10,7 @@ library(tidyverse) #used later on for wrangling results
 # library(listviewer) #has some functions to render lists as collapsible HTML widgets, but I want something even simpler.
 ```
 
+
 ## Search
 
 ### Build the query
