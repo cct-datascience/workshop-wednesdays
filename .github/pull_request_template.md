@@ -23,7 +23,7 @@ More detailed instructions for specific steps here: <https://cct-datascience.git
 
 ## Materials
 
-Create a folder in the format YYYYMM-short-title and include:
+Create a folder on [GitHub](https://github.com/cct-datascience/workshop-wednesdays) in the format YYYYMM-short-title and include:
 
 - [ ] Slides (if applicable)
 - [ ] Notes
