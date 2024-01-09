@@ -19,15 +19,13 @@ execute:
   echo: true
 ---
 
-<!--# modify David's slides: https://docs.google.com/presentation/d/e/2PACX-1vTAx2NWH4xRwshbXvm7e-hXUyF0DBiAOSBOgzCIp_dI71GrCYDlyeEISKUscdIqI_4k2UVoOEtu73Gu/pub?start=false&loop=false&delayms=3000&slide=id.p -->
-
 ## Learning Objectives
 
 -   Understand what an API (application programming interface) is
 -   Get a sense of what kinds of data are available via APIs
 -   Understand how to get data from an API into R programmatically
 
-## What is an API
+## What is an API {background-color="white"}
 
 ![](api_slide.png){fig-align="center"}
 
@@ -58,17 +56,20 @@ There's no easy way to get the results in a ready-to-analyze form!
 -   Made for machines
 -   Programmable
 
-<https://commonchemistry.cas.org/api-overview>
+APIs exist for many data portals
 
 ## Getting data directly from an API
 
 Every API is a little different, but here the API equivalent to <https://commonchemistry.cas.org/results?q=hexanol> is <https://commonchemistry.cas.org/api/search?q=hexanol>.
 
+(I'll show you how I figured this out in a bit)
+
 ![](json_example.png){fig-align="center"}
 
 ## What am I looking at?
 
-The result of <https://commonchemistry.cas.org/api/search?q=caffeine> is in a format called JSON.
+The result of https://commonchemistry.cas.org/api/search?q
+=hexanol is in a format called JSON.
 It's made of nested key: value pairs.
 For example
 
@@ -134,13 +135,18 @@ library(httr2)
 Start a request with the domain
 
 ```{r}
+#| message: true
 req_search <-
-  request("https://commonchemistry.cas.org/api") |> 
-  req_url_path_append("search") |> 
-  req_url_query(q = "caffeine")
+  request("https://commonchemistry.cas.org/api") |> #<1>
+  req_url_path_append("search") |>                  #<2>
+  req_url_query(q = "hexanol")                      #<3>
 
 req_search
 ```
+
+1.  Set the base URL
+2.  Append the URL with the search endpoint
+3.  Add a query
 
 ::: notes
 Notice the default method is GET, which is what we want.
@@ -149,6 +155,7 @@ Notice the default method is GET, which is what we want.
 ## 2. Perform the request
 
 ```{r}
+#| message: true
 resp_search <- 
   req_perform(req_search)
 resp_search
@@ -161,13 +168,30 @@ The data is in there as json.
 ## 3. Get the results
 
 ```{r}
-results_search <- resp_body_json(resp_search)
+results_search <- 
+  resp_body_json(resp_search)
 str(results_search)
 ```
 
 # Live Demo
 
 <!--# Switch over to participatory live coding working through notes.qmd in a fresh document -->
+
+## Other useful functions
+
+-   `req_throttle()` for obeying API rate limits
+
+-   `req_retry()` for automatically retrying requests that fail
+
+-   `req_oauth_auth_code()` and associated helpers for APIs that require access tokens or passwords.
+    See this [OAuth article](https://httr2.r-lib.org/articles/oauth.html).
+
+## What about R packages?
+
+-   Look for an R package before writing your own `httr2` code!
+
+-   rOpenSci has over 100 data access R packages!
+    <https://ropensci.org/packages/data-access/>
 
 ## References
 
