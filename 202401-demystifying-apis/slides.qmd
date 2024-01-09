@@ -135,18 +135,22 @@ library(httr2)
 Start a request with the domain
 
 ```{r}
-#| message: true
 req_search <-
   request("https://commonchemistry.cas.org/api") |> #<1>
   req_url_path_append("search") |>                  #<2>
   req_url_query(q = "hexanol")                      #<3>
-
-req_search
 ```
 
 1.  Set the base URL
 2.  Append the URL with the search endpoint
 3.  Add a query
+
+. . .
+
+```{r}
+#| message: true
+req_search
+```
 
 ::: notes
 Notice the default method is GET, which is what we want.
@@ -193,6 +197,16 @@ str(results_search)
 -   rOpenSci has over 100 data access R packages!
     <https://ropensci.org/packages/data-access/>
 
-## References
+## Getting Help
 
+-   CCT Data Science drop-in hours: [datascience.cct.arizona.edu/drop-in-hours](https://datascience.cct.arizona.edu/drop-in-hours)
+
+-   Email us: [cct-datascience\@arizona.edu](mailto:cct-datascience@arizona.edu)
+
+-   Book an appointment: [datascience.cct.arizona.edu/people](https://datascience.cct.arizona.edu/people)
+
+-   Data Science Incubator program: [datascience.cct.arizona.edu/cct-data-science-incubator](https://datascience.cct.arizona.edu/cct-data-science-incubator)
+
+::: footer
 Title slide API icon by [Lordicon.com](https://lordicon.com/)
+:::
