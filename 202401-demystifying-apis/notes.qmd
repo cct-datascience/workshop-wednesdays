@@ -1,15 +1,20 @@
 ---
-title: "Playing around with the commonchemistry API"
-format: html
+title: "Demystifying APIs for Researchers: Live-Coding"
+subtitle: "Playing around with the commonchemistry API"
+author: "Eric R. Scott"
+format: 
+  html:
+    toc: true
 editor: visual
 ---
+
+These are notes for the participatory live-coding portion of a workshop.
+Slides are here: <https://cct-datascience.quarto.pub/demystifying-apis-slides/>
 
 ```{r}
 library(httr2)
 library(tidyverse) #used later on for wrangling results
-# library(listviewer) #has some functions to render lists as collapsible HTML widgets, but I want something even simpler.
 ```
-
 
 ## Search
 
@@ -43,24 +48,17 @@ caffeine_search
 There's only one result here, so we'll simplify this list a bit by just pulling out the first (only) element of the results.
 
 ```{r}
-caffeine <- caffeine_search$results[[1]]
+caffeine <- caffeine_search[["results"]][[1]]
 caffeine
 ```
 
-One of the things it give us is the SVG (scaleable vector graphics) code for the image, which we can display in a rendered RMarkdown or Quarto document.
-Here we use a couple of "tricks" to get this to work.
-We use the chunk option `output: asis` to tell Quarto to render the output as plain text and not put it inside of a box or anything.
-Then we use `cat()` rather than `print()` to display the SVG code "naked" and not as a length 1 character vector.
-The result is that the SVG code is interpreted as HTML and rendered as an image.
+### Convert to data frame
+
+We can convert this to a data frame or tibble.
 
 ```{r}
-#| output: asis
-#| echo: fenced
-cat(caffeine$image)
+as_tibble(caffeine)
 ```
-
-We could also include this image in an HTML table, like one made with `gt`.
-That would be pretty cool!
 
 ## Detail
 
@@ -110,7 +108,16 @@ The list isn't a nice rectangle, so it can't be easily converted into a tibble.
 
 We can take subsets of the list where all elements are the same length and make those into data frames
 
-Let's take all the elements with length == 1 and turn those into a data frame
+One way to "drill down" into lists is with `purrr::pluck()`
+
+```{r}
+caffeine_detail |> pluck("name")
+caffeine_detail |> pluck(1)
+caffeine_detail |> pluck("experimentalProperties", 1, "property")
+```
+
+We can instead use `purrr::keep()` to supply a *function* to determine which elements to extract.
+For example, let's take all the elements with length == 1 and turn those into a data frame.
 
 ```{r}
 caffeine_basics <- caffeine_detail |> 
@@ -118,7 +125,13 @@ caffeine_basics <- caffeine_detail |>
   as_tibble()
 ```
 
-Ok, I gotta try that `gt` thing where we make a table with the image of the molecule:
+This uses an **anonymous function**, `\(x) length(x) == 1`, which is saying "for list element `x`, is the length of `x` 1?".
+`keep()` iterates like a for loop where `x` is representing `caffeine_detail[[1]]` through `caffeine_detail[[15]]`.
+
+::: callout-tip
+## Bonus
+
+Now that we have a data frame, we can make a table with `gt` that displays the SVG data as an image of the molecule!
 
 ```{r}
 library(gt)
@@ -127,6 +140,8 @@ gt(caffeine_basics) |>
 ```
 
 Nice!
+This isn't a `gt` workshop, but there is a **lot** you can do with `gt` to make publication quality tables.
+:::
 
 ## Iterating
 
@@ -155,10 +170,11 @@ Then we want to generate queries for each of the chemicals by plugging the eleme
 We can do that with `map()` from the `purr` package.
 The first argument is the thing to iterate over—`chemical_names` in our case.
 The second argument is a function to perform.
-Here I've used R's "shortcut" for creating an anonymous function: `\(arg_name) do_things_to(arg_name)`
+Here I've again used R's "shortcut" for creating an anonymous function: `\(arg_name) do_things_to(arg_name)`
 
 ```{r}
-req_list <- map(chemical_names, \(x) req_search_base |> req_url_query(q = x))
+req_list <- 
+  map(chemical_names, \(x) req_search_base |> req_url_query(q = x))
 req_list
 ```
 
@@ -178,7 +194,7 @@ map(resp_list, resp_body_json)
 ```
 
 Now here it's gotten a little complicated because we now have a list of lists.
-So instead of just maping `resp_body_json()`, let's do some data extraction *inside* of `map()`.
+So instead of just `map()`ing `resp_body_json()`, let's do some data extraction *inside* of `map()`.
 It's usually easiest to figure out how to do this by first testing it out on just a single element.
 
 ```{r}
@@ -197,6 +213,7 @@ df_list <- map(resp_list, \(x) {
     pluck("results", 1) |> #equivalent to x[[results]][[1]]
     as_tibble()
 })
+
 ```
 
 Now we have a list of tibbles that we can combine with `list_rbind()`
@@ -206,9 +223,17 @@ search_results <- list_rbind(df_list)
 search_results
 ```
 
-(and then we can do the cool `gt` thing)
+::: callout-tip
+## Bonus
+
+We can do the cool `gt` thing with multiple rows now
 
 ```{r}
 gt(search_results) |> 
   fmt_markdown(columns = image)
 ```
+:::
+
+## Try it on your own!
+
+As an exercise, use the three CAS registry numbers in `search_results` to search the `detail/` endpoint and make a table of chemical representations (InChI, InChIKey, SMILES, and canonical SMILES) for each molecule.
