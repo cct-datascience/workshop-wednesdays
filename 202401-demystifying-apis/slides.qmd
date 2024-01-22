@@ -25,6 +25,8 @@ execute:
 -   Get a sense of what kinds of data are available via APIs
 -   Understand how to get data from an API into R programmatically
 
+Slides: <https://cct-datascience.quarto.pub/demystifying-apis-slides/>
+
 ## What is an API {background-color="white"}
 
 ![](api_slide.png){fig-align="center"}
