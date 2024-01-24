@@ -1,0 +1,8 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: b730f676-7bfb-4c3d-9f31-f2dd7db3506d
+      url: 'https://cct-datascience.quarto.pub/demystifying-apis-slides'
+- source: notes.qmd
+  quarto-pub:
+    - id: cb51b36f-eb1f-4bbd-a388-fac37b7b8c3f
+      url: 'https://cct-datascience.quarto.pub/demystifying-apis-notes'
