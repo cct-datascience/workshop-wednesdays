@@ -93,6 +93,11 @@ For example
 }
 ```
 
+::: notes
+JSON can be tricky to understand!
+We will be reading it into R as a list, which might be more familiar to you if you already use R.
+:::
+
 ## Structure of an API request
 
 ![](api_structure.png){fig-align="center"}
@@ -192,12 +197,12 @@ str(results_search)
 -   `req_oauth_auth_code()` and associated helpers for APIs that require access tokens or passwords.
     See this [OAuth article](https://httr2.r-lib.org/articles/oauth.html).
 
-## What about R packages?
+## Don't re-invent the wheel!
 
--   Look for an R package before writing your own `httr2` code!
+-   Many APIs have an R package or Python library to access them.
+    Look for these before writing your own `httr2` code!
 
--   rOpenSci has over 100 data access R packages!
-    <https://ropensci.org/packages/data-access/>
+-   rOpenSci has over 100 data access R packages: <https://ropensci.org/packages/data-access/>
 
 ## Getting Help
 
