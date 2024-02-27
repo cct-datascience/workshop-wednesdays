@@ -7,289 +7,100 @@ format:
 editor: source
 ---
 
-## Overview   {.smaller}
+## Overview {.smaller}
 
-| Topic                                  | Time |
-|:-------------------------------------------|:---------|
-| Welcome & intros                           |          |
-| R options for resumes                      |          |
-| datadrivencv overview                      |          |
-| create generic cv                          |          |
-| create individual cv - individual hands on |          |
-| customize                                  |          |
-| putting online                             |          |
+| Topic                                | Time          |
+|:-------------------------------------|:--------------|
+| Welcome & intros                     | 11:00 - 11:05 |
+| What are R tool options for resumes? | 11:05 - 11:15 |
+| Overview of `datadrivencv`           | 11:15 - 11:45 |
+| Create resumes                       | 11:45 - 11:55 |
+| Customize resumes                    | 12:05 - 12:35 |
+| BREAK                                | 12:35 - 12:45 |
 
 # Welcome!
 
-::: notes
-Slot here to show results of pre-workshop survey on who here knows about/uses Quarto.
-:::
+## CCT Data Science Team
 
-## CCT-Data Science
-
-#### Supporting  reproducible research, data pipelines, and software development in ALVSCE
+#### Supporting reproducible research, data pipelines, and software development in ALVSCE
 
 ::: incremental
-
-* Workshops
-* Drop-in hours
-* "Incubator" program
-* Longer-term collaborations
-* Learn more: <https://datascience.cct.arizona.edu>
-
+-   Workshops
+-   Drop-in hours
+-   "Incubator" program
+-   Longer-term collaborations
+-   Learn more: <https://datascience.cct.arizona.edu>
 :::
 
 ## Before we get started {.smaller}
 
 ::: incremental
--   These slides (and links!) are available at: <https://cct-datascience.quarto.pub/sharing-research-as-quarto-reports/>
--   Please make sure you have RStudio (ver. \>= 2022.07.1) and Quarto installed.
-    -   You can check your RStudio version at "Help \> About RStudio". The most recent version of RStudio is available [here](https://posit.co/download/rstudio-desktop/).
-    -   You can check if Quarto is installed by opening a terminal and running `quarto --version`. Install Quarto [here](https://quarto.org/docs/get-started/).
+-   These slides (and links!) are available at: \<\>
+-   Please make sure you have R and RStudio installed
+- Additionally will need `datadrivencv` R packaged installed
+  - To do so, use `devtools::install_github("cct-datascience/datadrivencv")`
+  - This requires having `devtools` R package installed
 :::
 
 ## Learning objectives
 
 ::: incremental
--   Know what Quarto is, what it can do, and how it differs from specific *programming languages* and *markup languages* you may know of.
--   Create your own Quarto report documenting your research.
--   Share your report using Quarto Pub, Posit Connect, email, and/or Github.
--   Know where to go for additional help and/or adventures in Quarto.
+We will not be learning: 
+- what *content* your CV or resume should have
+- how to program in the R language
+
 :::
 
-## What is Quarto?
+## Learning objectives
 
 ::: incremental
--   *"An open-source scientific publishing system"*
--   Integrate code, results, and formatted text within one document
--   Document types range from static .html pages, to slideshows, to interactive dashboards!
--   Published by Posit (formerly RStudio)
+We will be learning: 
+- the pros and cons of different R tools for creating custom resumes
+- about how to use the `datadrivencv` R package to create and customize resumes
+- 
+
+You should be able to leave this workshop with a custom (though probably not complete) resume!
+
+
 :::
 
-## What is Quarto?
 
-![](quarto_order.png)
+## Current options in R for creating resumes
 
-::: notes
-"Open-source publishing system": Sounds vague, but this is what it is.
+(table)
 
-More specifically, it's a framework for integrating code, executing that code and showing the results, and text into one document.
+## datadrivencv overview
 
-Document types can be broad.
+## some history
 
-Published by Posit, but it's *free* and *not just for R*.
+not maintained, so installing can be finicky
+we made our own version of it to fix these problems
+if you have problems with this in future, create issue in repo or email us and we will try to keep a working version
 
-This general type of system is called "Literate programming".
-:::
+## check installations
 
-## A Quarto example
+we have an alternative route if people can't / don't want to get `datadrivencv` installed
 
--   [An example Quarto research report](https://cct-datascience.quarto.pub/quarto-workshop-example)
+## Create generic CV from blank input data
 
-    -   Or go to the URL: <https://cct-datascience.quarto.pub/quarto-workshop-example>
+```
+library(datadrivencv)
+use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.com/spreadsheets/d/1mq7H8ZiF6k7H_f6rY2eA0sq2Xyxf9msmXv3LPsvSYoo/edit#gid=1730172225")
+```
 
--   [Source code for this example](https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd)
-
-    -   Or go to the URL: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd>
-
-::: notes
-Point out:
-
--   Formatting
--   In-line code, figures, tables
--   Figure captions
--   Citations
--   Scholarly author tracking
-:::
-
-## Cool, but tricky. What are the benefits?
+## Creates 4 files
 
 ::: incremental
--   Reproducibility
+automatically opens: 
+- `cv.rmd`: 
+- `render_cv.r`
 
--   Dynamic updating
-
--   Easy to share - from coauthors to journals to web audiences
+created but not opened: 
+- `dd_cv.css`: 
+- `cv_printing_functions.r`: 
 :::
 
-## What about RMarkdown?
-
-::: incremental
--   Quarto is the "successor" to .Rmd
--   .Rmd documents translate easily to Quarto
--   *Quarto supports languages beyond R*
--   *Quarto has a greatly expanded range of document types*
-:::
-
-## Comparison  {.smaller}
-
-| Feature                                                       | Quarto | Rmd | Markdown |
-|:-----------------------------------------|:---------|:---------|:---------|
-| Markup syntax (`**` for emphasis, etc)                        | x      | x   | x        |
-| Render to multiple document types                             | x      | x   | x        |
-| Interweave text and code                                      | x      | x   | x        |
-| Interweave text and *executed* R code                         | x      | x   |          |
-| Execute *non-R* code                                          | x      |     |          |
-| Expanded set of document types (dashboards, manuscripts, ...) | x      |     |          |
-
-## How do I create a Quarto document?
-
-Let's start from this R script: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report.R>
-
-## .R to .Qmd 
-
-::: incremental
-
-1. Create a Quarto document
-1. Move code chunks over
-1. Add descriptive text
-1. Add references
-1. Add figure/table cross-references and captions
-
-:::
-
-## How do I turn an .Rmd into a Quarto document?
-
-Example report document available here: <https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report_RMD.Rmd>
-
-
-## Technical changes from .Rmd to Quarto
-
-::: incremental
-**Most .Rmd documents will render as-is!**
-
--   Document-level options moved to header
-
--   `output` changed to `format`
-
--   Chunk-level options moved from ```` ```{r ....} ```` to `#|` within the chunk
-
--   `knitr::convert_chunk_header(<file_path>)` helps with conversion
-
--   <https://quarto.org/docs/faq/rmarkdown.html>
-:::
-
-
-## .Rmd to .Qmd
-
-::: incremental
-
-1. Run `knitr::convert_chunk_header`
-1. Add additional Quarto features 
-
-:::
-
-## Sharing Quarto reports
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-Hosted online with a shareable URL
-
-* Quarto Pub
-* Posit Connect
-* GitHub
-
-:::
-
-::: {.column width="50%"}
-
-Static documents to share
-
-* Rendered HTML, pdf, docx outputs  
-* Source .qmd files
-
-:::
-
-::::
-
-
-## Quarto Pub
-
-::: incremental
--   <https://quartopub.com/>
-
--   Create a free account
-
--   Published reports are **public**
-
--   Example: <https://cct-datascience.quarto.pub/quarto-workshop-example/>
-:::
-
-## Posit Connect
-
-::: incremental
--   <https://viz.datascience.arizona.edu>
-
--   For **university research**; accounts available for University of Arizona researchers: <https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect>
-
--   Published reports can be public or private
-
--   Example: <https://viz.datascience.arizona.edu/quarto-workshop-example/>
-:::
-
-## GitHub
-
-::: incremental
--   Render using the `gfm` output format
-
--   Resulting .md files are visible online on GitHub
-
--   Published reports may be public or private (depending on repo scopes)
-
--   Example: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.md>
-:::
-
-## Sharing rendered documents
-
-::: incremental
--   Render to `html`, `docx`, or `pdf`
-
--   Resulting documents are portable
-
--   Example .pdf: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.pdf>
-
--   Example .docx (download): <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.docx>
-:::
-
-## Sharing source documents
-
-::: incremental
--   Share, edit, and re-render a single .qmd
-
--   Especially for collaboration on GitHub
-
--   Example: <https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.qmd>
-:::
-
-# Break!
-
-## Practice time: Create a Quarto report from your script
-
-## Practice time: Share your report
-
-Pick one (or more!) of the following options:
-
-::: incremental
--   Create a QuartoPub account and publish your report
--   Render your report as a GitHub document and push it to your GitHub
--   Render your report as an HTML file and email it to yourself
-:::
-
-# Quarto resources
-
-## Quarto docs
-
-::: incremental
--   <https://quarto.org>
-
--   <https://quarto.org/docs/guide/>
-
--   Cheatsheet: <https://rstudio.github.io/cheatsheets/quarto.pdf>
-:::
-
-## CCT-Data Science
+## CCT Data Science opportunities
 
 ::: incremental
 -   Drop-in hours - Tuesdays, 9-10
@@ -300,21 +111,13 @@ Pick one (or more!) of the following options:
 ## Data science \@ UA
 
 ::: incremental
-- [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
-    - Coffee & Code
-    - Hack Hour
+-   [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
+    -   Coffee & Code
+    -   Hack Hour
 -   UA Data Science Slack
-    - Sign up here: <https://jcoliver.github.io/uadatascience-slack/user-guide.html>
-- [UA Libraries Data & Viz Drop-In Hours](https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w)
+    -   Sign up here: <https://jcoliver.github.io/uadatascience-slack/user-guide.html>
+-   [UA Libraries Data & Viz Drop-In Hours](https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w)
 -   UA Data Science Institute
-:::
-
-## Online Quarto communities
-
-::: incremental
--   Blogs
--   StackOverflow
--   RStudio message board: <https://community.rstudio.com>
 :::
 
 # Thank you!
