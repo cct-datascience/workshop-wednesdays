@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="2024-02-cv-resume-r_files/libs/revealjs/dist/theme/quarto.css">
   <link href="2024-02-cv-resume-r_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -336,8 +401,8 @@ Kristina Riemer
 </div>
 
 </section>
-<section id="overview" class="slide level2 smaller">
-<h2>Overview</h2>
+<section id="schedule" class="slide level2 smaller">
+<h2>⏰ Schedule ⏰</h2>
 <aside class="notes">
 <p>remember to record</p>
 <style type="text/css">
@@ -384,7 +449,7 @@ Kristina Riemer
 <td style="text-align: left;">12:00 - 12:30</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Put online</td>
+<td style="text-align: left;">Online hosting</td>
 <td style="text-align: left;">12:30 - 12:35</td>
 </tr>
 <tr class="even">
@@ -416,9 +481,9 @@ Kristina Riemer
 <h2>Before we get started</h2>
 <div>
 <ul>
-<li class="fragment">These slides (and links!) are available at: &lt;&gt;</li>
+<li class="fragment">These slides (and links!) are available at: <a href="https://cct-datascience.quarto.pub/customizable-resumes-with-r-tools/" class="uri">https://cct-datascience.quarto.pub/customizable-resumes-with-r-tools/</a></li>
 <li class="fragment">Please make sure you have R and RStudio installed</li>
-<li class="fragment">Additionally will need <code>datadrivencv</code> R packaged installed
+<li class="fragment">Additionally will need <code>datadrivencv</code> R package installed
 <ul>
 <li class="fragment">To do so, use <code>devtools::install_github("cct-datascience/datadrivencv")</code></li>
 <li class="fragment">Requires having <code>devtools</code> R package installed</li>
@@ -445,7 +510,7 @@ Kristina Riemer
 <p>We <em>will</em> be learning:</p>
 <ul>
 <li class="fragment">The pros and cons of different R tools for creating resumes</li>
-<li class="fragment">How to use the <code>datadrivencv</code> R package to create and customize resumes</li>
+<li class="fragment">How to create and customize resumes the <code>datadrivencv</code> R package</li>
 </ul>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
@@ -560,8 +625,8 @@ Kristina Riemer
 </section>
 <section id="generate-initial-files" class="slide level2">
 <h2>Generate initial files</h2>
-<pre><code>library(datadrivencv)
-use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.com/spreadsheets/d/1mq7H8ZiF6k7H_f6rY2eA0sq2Xyxf9msmXv3LPsvSYoo/edit#gid=1730172225")</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(datadrivencv)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">use_datadriven_cv</span>(<span class="at">full_name =</span> <span class="st">"Your Name"</span>, <span class="at">data_location =</span> <span class="st">"https://docs.google.com/spreadsheets/d/1mq7H8ZiF6k7H_f6rY2eA0sq2Xyxf9msmXv3LPsvSYoo/edit#gid=1730172225"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div>
 <ul>
 <li class="fragment">Create files with <code>use_datadriven_cv</code></li>
@@ -570,7 +635,7 @@ use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.
 </ul>
 </div>
 </section>
-<section id="description-of-initial-files" class="slide level2">
+<section id="description-of-initial-files" class="slide level2 smaller">
 <h2>Description of initial files</h2>
 <aside class="notes">
 <p>walk through each of these</p>
@@ -606,18 +671,20 @@ use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.
 <section id="under-the-hood-details" class="slide level2">
 <h2>Under the hood details</h2>
 <p>This uses <code>pagedown</code> R package: turns R Markdown into multi-page PDF without Latex, and can include css</p>
+<p>Google Sheet is read in using <code>googlesheets4</code> R package</p>
+<p>R Markdown is turned into html with <code>rmarkdown</code></p>
 </section></section>
 <section>
 <section id="break" class="title-slide slide level1 center">
-<h1>Break!</h1>
-<p>☕</p>
+<h1>Break! ☕</h1>
+
 </section>
 <section id="customize-info" class="slide level2">
 <h2>Customize info</h2>
 <p>Info is in data files, which have two options:</p>
 <ol type="1">
-<li>Google Sheet ➡️ copy blank Google Sheet and change URL</li>
-<li>Local files ➡️ create with <code>datadrivencv</code> function <code>use_csv_data_storage</code></li>
+<li>Google Sheet ➡️ Copy blank Google Sheet and change URL</li>
+<li>Local files ➡️ Create with <code>datadrivencv</code> function <code>use_csv_data_storage</code></li>
 </ol>
 <p>Update these and then rerun <code>render_cv.r</code></p>
 </section>
@@ -662,7 +729,10 @@ use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<p>Turn folder into git and GitHub repo</p>
+<ul>
+<li>Turn folder into git and GitHub repo</li>
+<li>Use <code>pdf_location</code>, <code>html_location</code>, &amp; <code>source_location</code> arguments in <code>use_datadriven_cv</code></li>
+</ul>
 </section>
 <section id="cct-data-science-opportunities" class="slide level2">
 <h2>CCT Data Science opportunities</h2>
@@ -678,6 +748,7 @@ use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.
 <h2>Data science @ UA</h2>
 <div>
 <ul>
+<li class="fragment"><a href="https://widstucson.org/">Tucson WiDS 2024</a> coming up!</li>
 <li class="fragment"><a href="https://researchbazaar.arizona.edu/">Research Bazaar Arizona</a>
 <ul>
 <li class="fragment">Coffee &amp; Code</li>

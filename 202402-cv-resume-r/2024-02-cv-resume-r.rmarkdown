@@ -7,7 +7,8 @@ format:
 editor: source
 ---
 
-## ⏰ Schedule ⏰ {.smaller}
+
+## Overview {.smaller}
 
 ::: notes
 remember to record
@@ -21,7 +22,7 @@ remember to record
 | Create resume                        | 11:25 - 11:50 |
 | BREAK                                | 11:50 - 12:00 |
 | Customize resume                     | 12:00 - 12:30 |
-| Online hosting                           | 12:30 - 12:35 |
+| Put online                           | 12:30 - 12:35 |
 | Questions & more customization       | 12:35 - 1:00  |
 
 # Welcome!
@@ -64,7 +65,7 @@ We will not be learning:
 We *will* be learning:
 
 -   The pros and cons of different R tools for creating resumes
--   How to create and customize resumes the `datadrivencv` R package
+-   How to use the `datadrivencv` R package to create and customize resumes
 
 ::: callout-note
 You will leave this workshop with a partially complete, custom resume!
@@ -118,10 +119,12 @@ If you can't install `datadrivencv`, we have a [template repo](https://github.co
 
 ## Generate initial files
 
-``` r
+
+```{r}
 library(datadrivencv)
 use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.com/spreadsheets/d/1mq7H8ZiF6k7H_f6rY2eA0sq2Xyxf9msmXv3LPsvSYoo/edit#gid=1730172225")
 ```
+
 
 ::: incremental
 -   Create files with `use_datadriven_cv`
@@ -129,7 +132,7 @@ use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.
 -   Many additional arguments, see `?use_datadriven_cv`
 :::
 
-## Description of initial files {.smaller}
+## Description of initial files
 
 ::: notes
 walk through each of these
@@ -161,7 +164,9 @@ Google Sheet is read in using `googlesheets4` R package
 
 R Markdown is turned into html with `rmarkdown`
 
-# Break! ☕
+# Break!
+
+☕
 
 ## Customize info
 
@@ -204,8 +209,7 @@ Takes some playing around & trial and error
 we won't walk through this, but we can help people do this
 :::
 
-- Turn folder into git and GitHub repo
-- Use `pdf_location`, `html_location`, & `source_location` arguments in `use_datadriven_cv`
+Turn folder into git and GitHub repo
 
 ## CCT Data Science opportunities
 
@@ -218,7 +222,6 @@ we won't walk through this, but we can help people do this
 ## Data science \@ UA
 
 ::: incremental
-- [Tucson WiDS 2024](https://widstucson.org/) coming up! 
 -   [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
     -   Coffee & Code
     -   Hack Hour
@@ -233,3 +236,4 @@ we won't walk through this, but we can help people do this
 Thank you for attending!
 
 For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our [website](https://datascience.cct.arizona.edu)!
+
