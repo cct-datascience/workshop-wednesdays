@@ -338,6 +338,19 @@ Kristina Riemer
 </section>
 <section id="overview" class="slide level2 smaller">
 <h2>Overview</h2>
+<aside class="notes">
+<p>remember to record</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <table>
 <thead>
 <tr class="header">
@@ -348,27 +361,35 @@ Kristina Riemer
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Welcome &amp; intros</td>
-<td style="text-align: left;">11:00 - 11:05</td>
+<td style="text-align: left;">11:00 - 11:10</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">What are R tool options for resumes?</td>
-<td style="text-align: left;">11:05 - 11:15</td>
+<td style="text-align: left;">11:10 - 11:20</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Overview of <code>datadrivencv</code></td>
-<td style="text-align: left;">11:15 - 11:45</td>
+<td style="text-align: left;">11:20 - 11:25</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Create resumes</td>
-<td style="text-align: left;">11:45 - 11:55</td>
+<td style="text-align: left;">Create resume</td>
+<td style="text-align: left;">11:25 - 11:50</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Customize resumes</td>
-<td style="text-align: left;">12:05 - 12:35</td>
+<td style="text-align: left;">BREAK</td>
+<td style="text-align: left;">11:50 - 12:00</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">BREAK</td>
-<td style="text-align: left;">12:35 - 12:45</td>
+<td style="text-align: left;">Customize resume</td>
+<td style="text-align: left;">12:00 - 12:30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Put online</td>
+<td style="text-align: left;">12:30 - 12:35</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Questions &amp; more customization</td>
+<td style="text-align: left;">12:35 - 1:00</td>
 </tr>
 </tbody>
 </table>
@@ -391,7 +412,7 @@ Kristina Riemer
 </ul>
 </div>
 </section>
-<section id="before-we-get-started" class="slide level2 smaller">
+<section id="before-we-get-started" class="slide level2">
 <h2>Before we get started</h2>
 <div>
 <ul>
@@ -400,7 +421,7 @@ Kristina Riemer
 <li class="fragment">Additionally will need <code>datadrivencv</code> R packaged installed
 <ul>
 <li class="fragment">To do so, use <code>devtools::install_github("cct-datascience/datadrivencv")</code></li>
-<li class="fragment">This requires having <code>devtools</code> R package installed</li>
+<li class="fragment">Requires having <code>devtools</code> R package installed</li>
 </ul></li>
 </ul>
 </div>
@@ -408,42 +429,240 @@ Kristina Riemer
 <section id="learning-objectives" class="slide level2">
 <h2>Learning objectives</h2>
 <div>
-<p>We will not be learning: - what <em>content</em> your CV or resume should have - how to program in the R language</p>
+<p>We will not be learning:</p>
+<ul>
+<li class="fragment">The <em>content</em> your CV or resume should have
+<ul>
+<li class="fragment">Check out campus resources like <a href="https://career.arizona.edu/channels/resume-cv-cover-letter/">Student Engagement &amp; Career Development</a> &amp; <a href="https://gradcenter.arizona.edu/career-services">Graduate Center Career Services</a></li>
+</ul></li>
+<li class="fragment">How to program in the R language</li>
+</ul>
 </div>
 </section>
 <section id="learning-objectives-1" class="slide level2">
 <h2>Learning objectives</h2>
 <div>
-<p>We will be learning: - the pros and cons of different R tools for creating custom resumes - about how to use the <code>datadrivencv</code> R package to create and customize resumes -</p>
-<p>You should be able to leave this workshop with a custom (though probably not complete) resume!</p>
+<p>We <em>will</em> be learning:</p>
+<ul>
+<li class="fragment">The pros and cons of different R tools for creating resumes</li>
+<li class="fragment">How to use the <code>datadrivencv</code> R package to create and customize resumes</li>
+</ul>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>You will leave this workshop with a partially complete, custom resume!</p>
+</div>
+</div>
+</div>
 </div>
 </section>
-<section id="current-options-in-r-for-creating-resumes" class="slide level2">
-<h2>Current options in R for creating resumes</h2>
-<p>(table)</p>
+<section id="why-use-r-to-do-this" class="slide level2">
+<h2>Why use R to do this?</h2>
+<ul>
+<li>Minimize fiddling with formatting</li>
+<li>Easy to add / update information</li>
+<li>Increase familiarity with R literate programming tools</li>
+</ul>
+
+<img data-src="images/microsoft-word.gif" class="r-stretch quarto-figure-center"></section>
+<section id="r-resume-options" class="slide level2 smaller">
+<h2>R resume options</h2>
+<aside class="notes">
+<p>has anyone used Latex before?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Link</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Quarto template (Latex)</td>
+<td><a href="https://github.com/schochastics/quarto-cv">quarto-cv repo</a></td>
+<td>Multiple templates</td>
+<td>Uses Latex</td>
+</tr>
+<tr class="even">
+<td>Quarto template (css)</td>
+<td><a href="https://www.cynthiahqy.com/posts/cv-html-pdf/">Cynthia Huang blog post</a></td>
+<td>No Latex</td>
+<td>Requires command line program</td>
+</tr>
+<tr class="odd">
+<td>R Markdown template (Latex)</td>
+<td><a href="https://github.com/mitchelloharawild/vitae">vitae R package</a></td>
+<td>Maintained package &amp; multiple templates</td>
+<td>Uses Latex</td>
+</tr>
+<tr class="even">
+<td>R Markdown template (css)</td>
+<td><a href="https://github.com/nstrayer/datadrivencv">datadrivencv R package</a></td>
+<td>No Latex</td>
+<td>Unmaintained package</td>
+</tr>
+</tbody>
+</table>
 </section>
-<section id="datadrivencv-overview" class="slide level2">
-<h2>datadrivencv overview</h2>
+<section id="r-resume-options-notes" class="slide level2">
+<h2>R resume options notes</h2>
+<ul>
+<li>Quarto is newer version of R Markdown
+<ul>
+<li>Changing because it’s still in active development</li>
+<li>Lots of cool new features</li>
+<li>No sign that Posit will support resume-making</li>
+</ul></li>
+<li>Latex used to format technical documents
+<ul>
+<li>Difficult to use</li>
+<li>New and easier tool is <a href="https://typst.app/">typst</a>!</li>
+</ul></li>
+</ul>
 </section>
-<section id="some-history" class="slide level2">
-<h2>some history</h2>
-<p>not maintained, so installing can be finicky we made our own version of it to fix these problems if you have problems with this in future, create issue in repo or email us and we will try to keep a working version</p>
+<section id="datadrivencv" class="slide level2 smaller">
+<h2><code>datadrivencv</code></h2>
+<ul>
+<li>Best option for workshop</li>
+<li>Created <a href="https://github.com/cct-datascience/datadrivencv">our own version</a> of it to fix problems
+<ul>
+<li>We plan to maintain this</li>
+<li>Email us if you have problems!</li>
+</ul></li>
+<li>Designed to be used once</li>
+</ul>
+
+<img data-src="images/Screen%20Shot%202024-02-28%20at%209.12.01%20AM.png" class="r-stretch"><p>If you can’t install <code>datadrivencv</code>, we have a <a href="https://github.com/cct-datascience/template_resume_datadrivencv?tab=readme-ov-file">template repo</a> of needed files</p>
+</section></section>
+<section>
+<section id="lets-check-everyones-installations" class="title-slide slide level1 center">
+<h1>Let’s check everyone’s installations!</h1>
+
 </section>
-<section id="check-installations" class="slide level2">
-<h2>check installations</h2>
-<p>we have an alternative route if people can’t / don’t want to get <code>datadrivencv</code> installed</p>
-</section>
-<section id="create-generic-cv-from-blank-input-data" class="slide level2">
-<h2>Create generic CV from blank input data</h2>
+<section id="generate-initial-files" class="slide level2">
+<h2>Generate initial files</h2>
 <pre><code>library(datadrivencv)
 use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.com/spreadsheets/d/1mq7H8ZiF6k7H_f6rY2eA0sq2Xyxf9msmXv3LPsvSYoo/edit#gid=1730172225")</code></pre>
-</section>
-<section id="creates-4-files" class="slide level2">
-<h2>Creates 4 files</h2>
 <div>
-<p>automatically opens: - <code>cv.rmd</code>: - <code>render_cv.r</code></p>
-<p>created but not opened: - <code>dd_cv.css</code>: - <code>cv_printing_functions.r</code>:</p>
+<ul>
+<li class="fragment">Create files with <code>use_datadriven_cv</code></li>
+<li class="fragment">Use mostly blank Google Sheet</li>
+<li class="fragment">Many additional arguments, see <code>?use_datadriven_cv</code></li>
+</ul>
 </div>
+</section>
+<section id="description-of-initial-files" class="slide level2">
+<h2>Description of initial files</h2>
+<aside class="notes">
+<p>walk through each of these</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div>
+<p>Automatically opens in RStudio:</p>
+<ul>
+<li class="fragment"><code>cv.rmd</code>: main file for formatting, reading in data files, and some content, e.g., name, logo, section icons</li>
+<li class="fragment"><code>render_cv.r</code>: run this to get html and pdf files</li>
+</ul>
+<p>Created but not opened:</p>
+<ul>
+<li class="fragment"><code>dd_cv.css</code>: contains css to specify a lot of the formatting, including colors, margins, spacing</li>
+<li class="fragment"><code>cv_printing_functions.r</code>: contains R functions that do a lot of the printing and parsing; grabs and cleans up parts of data files; these functions are used in <code>cv.rmd</code></li>
+</ul>
+</div>
+</section>
+<section id="create-resume-files" class="slide level2">
+<h2>Create resume files</h2>
+<p>Run <code>render_cv.r</code> to create <code>cv.html</code> and <code>cv.pdf</code></p>
+<p>Click on pdf file to view</p>
+</section>
+<section id="under-the-hood-details" class="slide level2">
+<h2>Under the hood details</h2>
+<p>This uses <code>pagedown</code> R package: turns R Markdown into multi-page PDF without Latex, and can include css</p>
+</section></section>
+<section>
+<section id="break" class="title-slide slide level1 center">
+<h1>Break!</h1>
+<p>☕</p>
+</section>
+<section id="customize-info" class="slide level2">
+<h2>Customize info</h2>
+<p>Info is in data files, which have two options:</p>
+<ol type="1">
+<li>Google Sheet ➡️ copy blank Google Sheet and change URL</li>
+<li>Local files ➡️ create with <code>datadrivencv</code> function <code>use_csv_data_storage</code></li>
+</ol>
+<p>Update these and then rerun <code>render_cv.r</code></p>
+</section>
+<section id="customize-info-1" class="slide level2">
+<h2>Customize info</h2>
+<p>🌟 Time to practice! 🌟</p>
+<ul>
+<li>Change to your name</li>
+<li>Add a degree</li>
+<li>Add your email address</li>
+</ul>
+</section>
+<section id="customize-appearance" class="slide level2">
+<h2>Customize appearance</h2>
+<p>Many things can be changed, including:</p>
+<ul>
+<li><p>Colors</p></li>
+<li><p>Fonts</p></li>
+<li><p>Image</p></li>
+<li><p>Icons</p></li>
+</ul>
+<p>Multiple places where they could be changed: <code>cv.rmd</code>, <code>dd_cv.css</code>, data files</p>
+<p>Takes some playing around &amp; trial and error</p>
+</section></section>
+<section>
+<section id="what-do-you-want-to-see-changed" class="title-slide slide level1 center">
+<h1>What do you want to see changed?</h1>
+
+</section>
+<section id="putting-resume-online" class="slide level2">
+<h2>Putting resume online</h2>
+<aside class="notes">
+<p>we won’t walk through this, but we can help people do this</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<p>Turn folder into git and GitHub repo</p>
 </section>
 <section id="cct-data-science-opportunities" class="slide level2">
 <h2>CCT Data Science opportunities</h2>

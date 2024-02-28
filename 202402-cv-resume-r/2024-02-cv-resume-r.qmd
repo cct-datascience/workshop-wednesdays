@@ -9,14 +9,20 @@ editor: source
 
 ## Overview {.smaller}
 
+::: notes
+remember to record
+:::
+
 | Topic                                | Time          |
 |:-------------------------------------|:--------------|
-| Welcome & intros                     | 11:00 - 11:05 |
-| What are R tool options for resumes? | 11:05 - 11:15 |
-| Overview of `datadrivencv`           | 11:15 - 11:45 |
-| Create resumes                       | 11:45 - 11:55 |
-| Customize resumes                    | 12:05 - 12:35 |
-| BREAK                                | 12:35 - 12:45 |
+| Welcome & intros                     | 11:00 - 11:10 |
+| What are R tool options for resumes? | 11:10 - 11:20 |
+| Overview of `datadrivencv`           | 11:20 - 11:25 |
+| Create resume                        | 11:25 - 11:50 |
+| BREAK                                | 11:50 - 12:00 |
+| Customize resume                     | 12:00 - 12:30 |
+| Put online                           | 12:30 - 12:35 |
+| Questions & more customization       | 12:35 - 1:00  |
 
 # Welcome!
 
@@ -32,73 +38,171 @@ editor: source
 -   Learn more: <https://datascience.cct.arizona.edu>
 :::
 
-## Before we get started {.smaller}
+## Before we get started
 
 ::: incremental
 -   These slides (and links!) are available at: \<\>
 -   Please make sure you have R and RStudio installed
-- Additionally will need `datadrivencv` R packaged installed
-  - To do so, use `devtools::install_github("cct-datascience/datadrivencv")`
-  - This requires having `devtools` R package installed
+-   Additionally will need `datadrivencv` R package installed
+    -   To do so, use `devtools::install_github("cct-datascience/datadrivencv")`
+    -   Requires having `devtools` R package installed
 :::
 
 ## Learning objectives
 
 ::: incremental
-We will not be learning: 
-- what *content* your CV or resume should have
-- how to program in the R language
+We will not be learning:
 
+-   The *content* your CV or resume should have
+    -   Check out campus resources like [Student Engagement & Career Development](https://career.arizona.edu/channels/resume-cv-cover-letter/) & [Graduate Center Career Services](https://gradcenter.arizona.edu/career-services)
+-   How to program in the R language
 :::
 
 ## Learning objectives
 
 ::: incremental
-We will be learning: 
-- the pros and cons of different R tools for creating custom resumes
-- about how to use the `datadrivencv` R package to create and customize resumes
-- 
+We *will* be learning:
 
-You should be able to leave this workshop with a custom (though probably not complete) resume!
+-   The pros and cons of different R tools for creating resumes
+-   How to use the `datadrivencv` R package to create and customize resumes
 
-
+::: callout-note
+You will leave this workshop with a partially complete, custom resume!
+:::
 :::
 
+## Why use R to do this?
 
-## Current options in R for creating resumes
+-   Minimize fiddling with formatting
+-   Easy to add / update information
+-   Increase familiarity with R literate programming tools
 
-(table)
+![](images/microsoft-word.gif){fig-align="center"}
 
-## datadrivencv overview
+## R resume options {.smaller}
 
-## some history
+::: notes
+has anyone used Latex before?
+:::
 
-not maintained, so installing can be finicky
-we made our own version of it to fix these problems
-if you have problems with this in future, create issue in repo or email us and we will try to keep a working version
+| Option                      | Link                                                                     | Pros                                    | Cons                          |
+|------------------|------------------|------------------|------------------|
+| Quarto template (Latex)     | [quarto-cv repo](https://github.com/schochastics/quarto-cv)              | Multiple templates                      | Uses Latex                    |
+| Quarto template (css)       | [Cynthia Huang blog post](https://www.cynthiahqy.com/posts/cv-html-pdf/) | No Latex                                | Requires command line program |
+| R Markdown template (Latex) | [vitae R package](https://github.com/mitchelloharawild/vitae)            | Maintained package & multiple templates | Uses Latex                    |
+| R Markdown template (css)   | [datadrivencv R package](https://github.com/nstrayer/datadrivencv)       | No Latex                                | Unmaintained package          |
 
-## check installations
+## R resume options notes
 
-we have an alternative route if people can't / don't want to get `datadrivencv` installed
+-   Quarto is newer version of R Markdown
+    -   Changing because it's still in active development
+    -   Lots of cool new features
+    -   No sign that Posit will support resume-making
+-   Latex used to format technical documents
+    -   Difficult to use
+    -   New and easier tool is [typst](https://typst.app/)!
 
-## Create generic CV from blank input data
+## `datadrivencv` {.smaller}
 
-```
+-   Best option for workshop
+-   Created [our own version](https://github.com/cct-datascience/datadrivencv) of it to fix problems
+    -   We plan to maintain this
+    -   Email us if you have problems!
+-   Designed to be used once
+
+![](images/Screen%20Shot%202024-02-28%20at%209.12.01%20AM.png)
+
+If you can't install `datadrivencv`, we have a [template repo](https://github.com/cct-datascience/template_resume_datadrivencv?tab=readme-ov-file) of needed files
+
+# Let's check everyone's installations!
+
+## Generate initial files
+
+```         
 library(datadrivencv)
 use_datadriven_cv(full_name = "Your Name", data_location = "https://docs.google.com/spreadsheets/d/1mq7H8ZiF6k7H_f6rY2eA0sq2Xyxf9msmXv3LPsvSYoo/edit#gid=1730172225")
 ```
 
-## Creates 4 files
+::: incremental
+-   Create files with `use_datadriven_cv`
+-   Use mostly blank Google Sheet
+-   Many additional arguments, see `?use_datadriven_cv`
+:::
+
+## Description of initial files
+
+::: notes
+walk through each of these
+:::
 
 ::: incremental
-automatically opens: 
-- `cv.rmd`: 
-- `render_cv.r`
+Automatically opens in RStudio:
 
-created but not opened: 
-- `dd_cv.css`: 
-- `cv_printing_functions.r`: 
+-   `cv.rmd`: main file for formatting, reading in data files, and some content, e.g., name, logo, section icons
+-   `render_cv.r`: run this to get html and pdf files
+
+Created but not opened:
+
+-   `dd_cv.css`: contains css to specify a lot of the formatting, including colors, margins, spacing
+-   `cv_printing_functions.r`: contains R functions that do a lot of the printing and parsing; grabs and cleans up parts of data files; these functions are used in `cv.rmd`
 :::
+
+## Create resume files
+
+Run `render_cv.r` to create `cv.html` and `cv.pdf`
+
+Click on pdf file to view
+
+## Under the hood details
+
+This uses `pagedown` R package: turns R Markdown into multi-page PDF without Latex, and can include css
+
+# Break!
+
+☕
+
+## Customize info
+
+Info is in data files, which have two options:
+
+1.  Google Sheet ➡️ Copy blank Google Sheet and change URL
+2.  Local files ➡️ Create with `datadrivencv` function `use_csv_data_storage`
+
+Update these and then rerun `render_cv.r`
+
+## Customize info
+
+🌟 Time to practice! 🌟
+
+-   Change to your name
+-   Add a degree
+-   Add your email address
+
+## Customize appearance
+
+Many things can be changed, including:
+
+-   Colors
+
+-   Fonts
+
+-   Image
+
+-   Icons
+
+Multiple places where they could be changed: `cv.rmd`, `dd_cv.css`, data files
+
+Takes some playing around & trial and error
+
+# What do you want to see changed? 
+
+## Putting resume online
+
+::: notes
+we won't walk through this, but we can help people do this
+:::
+
+Turn folder into git and GitHub repo
 
 ## CCT Data Science opportunities
 
