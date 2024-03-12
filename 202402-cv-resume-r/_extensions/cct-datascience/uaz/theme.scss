@@ -1,0 +1,77 @@
+/*-- scss:defaults --*/
+
+// fonts
+$font-family-sans-serif: "Proxima Nova", Calibri, sans-serif !default;
+$font-family-monospace: Menlo, SFMono-Regular, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+
+// colors from https://brand.arizona.edu/applying-the-brand/colors
+$body-bg: #1E5288 !default; //"azurite"
+$body-color: white !default;
+$link-color: #EF4056 !default; //"bloom"--also controls tabset links, highlight color, and hover over code line numbers color
+$code-block-bg: #001C48 !default; //"midnight"--background of code boxes
+$code-bg: #001C48 !default; //"midnight"--background of inline code
+$code-color: white !default; //color of inline code
+$tabset-border-color: white !default;
+
+// headings
+$presentation-heading-color: white !default;
+
+/*-- scss:rules --*/
+
+//set code output background same as code background
+.reveal pre code {
+  background-color: $code-block-bg; 
+}
+
+//reduce size of inline code to better match text
+.reveal p code {
+  font-size: 85%; 
+}
+
+//add space between code and output
+.reveal div.sourceCode {
+  margin-bottom: 10px !important;
+}
+
+.reveal img.slide-logo {
+  z-index: 1;
+}
+
+//make blockquotes fancier
+blockquote{
+  display:block !important;
+  background: white !important;
+  color: #666 !important; //text color slightly grey
+  padding: 15px 20px 15px 45px !important;
+  margin: 0 0 20px !important;
+  position: relative !important;
+  
+  
+  /*Borders - (Optional)*/
+  border-left: 15px solid #AB0520 !important; //"arizona red"
+  border-right: 2px solid #AB0520 !important;
+  
+  /*Box Shadow - (Optional)*/
+  -moz-box-shadow: 2px 2px 15px darken($body-bg, 15%) !important;
+  -webkit-box-shadow: 2px 2px 15px darken($body-bg, 15%) !important;
+  box-shadow: 2px 2px 15px darken($body-bg, 15%) !important;
+}
+
+blockquote::before{
+  content: "\201C"; /*Unicode for Left Double Quote*/
+  
+  /*Font*/
+  font-size: 75px;
+  font-weight: bold;
+  color: #999;
+  
+  /*Positioning*/
+  position: absolute;
+  left: 10px;
+  top:5px;
+}
+
+blockquote::after{
+  /*Reset to make sure*/
+  content: "";
+}
