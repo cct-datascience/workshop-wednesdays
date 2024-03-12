@@ -1,4 +1,4 @@
 - source: 2024-02-cv-resume-r.qmd
   quarto-pub:
     - id: 23a468c1-712b-4df5-92a5-37875b500dee
-      url: 'https://cct-datascience.quarto.pub/customizable-resumes-with-r-tools-db26'
+      url: 'https://cct-datascience.quarto.pub/customizable-resumes-with-r-tools'

@@ -21,7 +21,7 @@ remember to record
 | Create resume                        | 11:25 - 11:50 |
 | BREAK                                | 11:50 - 12:00 |
 | Customize resume                     | 12:00 - 12:30 |
-| Online hosting                           | 12:30 - 12:35 |
+| Online hosting                       | 12:30 - 12:35 |
 | Questions & more customization       | 12:35 - 1:00  |
 
 # Welcome!
@@ -65,10 +65,12 @@ We *will* be learning:
 
 -   The pros and cons of different R tools for creating resumes
 -   How to create and customize resumes the `datadrivencv` R package
+:::
+
+. . .
 
 ::: callout-note
 You will leave this workshop with a partially complete, custom resume!
-:::
 :::
 
 ## Why use R to do this?
@@ -113,6 +115,12 @@ has anyone used Latex before?
 ![](images/Screen%20Shot%202024-02-28%20at%209.12.01%20AM.png)
 
 If you can't install `datadrivencv`, we have a [template repo](https://github.com/cct-datascience/template_resume_datadrivencv?tab=readme-ov-file) of needed files
+
+## The "data-driven" approach
+
+[![](images/csv_to_cv.png){fig-align="center"}](https://github.com/nstrayer/datadrivencv/blob/master/man/figures/csv_to_cv.png)
+
+Put your info in a spreadsheet, get out a nicely formatted document!
 
 # Let's check everyone's installations!
 
@@ -196,6 +204,8 @@ Multiple places where they could be changed: `cv.rmd`, `dd_cv.css`, data files
 
 Takes some playing around & trial and error
 
+See more ideas in the [`pagedown::html_resume` documentation](https://pagedown.rbind.io/#resume)
+
 # What do you want to see changed?
 
 ## Putting resume online
@@ -204,8 +214,8 @@ Takes some playing around & trial and error
 we won't walk through this, but we can help people do this
 :::
 
-- Turn folder into git and GitHub repo
-- Use `pdf_location`, `html_location`, & `source_location` arguments in `use_datadriven_cv`
+-   Turn folder into git and GitHub repo
+-   Use `pdf_location`, `html_location`, & `source_location` arguments in `use_datadriven_cv`
 
 ## CCT Data Science opportunities
 
@@ -218,7 +228,7 @@ we won't walk through this, but we can help people do this
 ## Data science \@ UA
 
 ::: incremental
-- [Tucson WiDS 2024](https://widstucson.org/) coming up! 
+-   [Tucson WiDS 2024](https://widstucson.org/) coming up!
 -   [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
     -   Coffee & Code
     -   Hack Hour
