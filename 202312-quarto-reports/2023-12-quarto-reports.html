@@ -339,16 +339,8 @@ Renata Diaz - December 6, 2023
 <section id="overview" class="slide level2 smaller">
 <h2>Overview</h2>
 <table>
-<colgroup>
-<col style="width: 26%">
-<col style="width: 23%">
-<col style="width: 26%">
-<col style="width: 23%">
-</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Topic</th>
-<th style="text-align: left;">Time</th>
 <th style="text-align: left;">Topic</th>
 <th style="text-align: left;">Time</th>
 </tr>
@@ -357,24 +349,32 @@ Renata Diaz - December 6, 2023
 <tr class="odd">
 <td style="text-align: left;">Welcome and setup</td>
 <td style="text-align: left;">11:00 - 11:05</td>
-<td style="text-align: left;">BREAK</td>
-<td style="text-align: left;">11:55 - 12:05</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">What is Quarto? What can it do?</td>
 <td style="text-align: left;">11:05 - 11:15</td>
-<td style="text-align: left;">Creating a report from your script</td>
-<td style="text-align: left;">12:05 - 12:35</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Creating Quarto reports from .R, .Rmd files</td>
 <td style="text-align: left;">11:15 - 11:45</td>
-<td style="text-align: left;">Sharing your report</td>
-<td style="text-align: left;">12:35 - 12:45</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Ways to share Quarto reports</td>
 <td style="text-align: left;">11:45 - 11:55</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BREAK</td>
+<td style="text-align: left;">11:55 - 12:05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Creating a report from your script</td>
+<td style="text-align: left;">12:05 - 12:35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sharing your report</td>
+<td style="text-align: left;">12:35 - 12:45</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">Where to get more help</td>
 <td style="text-align: left;">12:45 - 12:50</td>
 </tr>
@@ -397,6 +397,19 @@ Renata Diaz - December 6, 2023
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+</section>
+<section id="cct-data-science" class="slide level2">
+<h2>CCT-Data Science</h2>
+<h4 id="supporting-reproducible-research-data-pipelines-and-software-development-in-alvsce">Supporting reproducible research, data pipelines, and software development in ALVSCE</h4>
+<div>
+<ul>
+<li class="fragment">Workshops</li>
+<li class="fragment">Drop-in hours</li>
+<li class="fragment">“Incubator” program</li>
+<li class="fragment">Longer-term collaborations</li>
+<li class="fragment">Learn more: <a href="https://datascience.cct.arizona.edu" class="uri">https://datascience.cct.arizona.edu</a></li>
+</ul>
+</div>
 </section>
 <section id="before-we-get-started" class="slide level2 smaller">
 <h2>Before we get started</h2>
@@ -567,7 +580,7 @@ Renata Diaz - December 6, 2023
 </section>
 <section id="how-do-i-create-a-quarto-document" class="slide level2">
 <h2>How do I create a Quarto document?</h2>
-<p>Let’s start from this R script: <a href="https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report.R" class="uri">https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report.R</a></p>
+<p>Let’s start from this R script: <a href="https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report.R" class="uri">https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report.R</a></p>
 </section>
 <section id="r-to-.qmd" class="slide level2">
 <h2>.R to .Qmd</h2>
@@ -583,7 +596,7 @@ Renata Diaz - December 6, 2023
 </section>
 <section id="how-do-i-turn-an-.rmd-into-a-quarto-document" class="slide level2">
 <h2>How do I turn an .Rmd into a Quarto document?</h2>
-<p>Example report document available here: <a href="https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report_RMD.Rmd" class="uri">https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/20231206-quarto-reports/mouse_report_RMD.Rmd</a></p>
+<p>Example report document available here: <a href="https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report_RMD.Rmd" class="uri">https://github.com/cct-datascience/workshop-wednesdays/blob/2023-quarto-reports/202312-quarto-reports/mouse_report_RMD.Rmd</a></p>
 </section>
 <section id="technical-changes-from-.rmd-to-quarto" class="slide level2">
 <h2>Technical changes from .Rmd to Quarto</h2>
@@ -609,35 +622,26 @@ Renata Diaz - December 6, 2023
 </section>
 <section id="sharing-quarto-reports" class="slide level2">
 <h2>Sharing Quarto reports</h2>
-<table>
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Hosted online with a shareable URL</th>
-<th style="text-align: left;">Static documents to share person-to-person</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Quarto Pub</td>
-<td style="text-align: left;">Rendered HTML, pdf, docx outputs</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Posit Connect</td>
-<td style="text-align: left;">Source .qmd files</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">GitHub</td>
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Hosted online with a shareable URL</p>
+<ul>
+<li>Quarto Pub</li>
+<li>Posit Connect</li>
+<li>GitHub</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>Static documents to share</p>
+<ul>
+<li>Rendered HTML, pdf, docx outputs<br>
+</li>
+<li>Source .qmd files</li>
+</ul>
+</div>
+</div>
 </section>
-<section id="quartopub" class="slide level2">
-<h2>QuartoPub</h2>
+<section id="quarto-pub" class="slide level2">
+<h2>Quarto Pub</h2>
 <div>
 <ul>
 <li class="fragment"><p><a href="https://quartopub.com/" class="uri">https://quartopub.com/</a></p></li>
@@ -652,7 +656,7 @@ Renata Diaz - December 6, 2023
 <div>
 <ul>
 <li class="fragment"><p><a href="https://viz.datascience.arizona.edu" class="uri">https://viz.datascience.arizona.edu</a></p></li>
-<li class="fragment"><p>For <strong>university research</strong>; accounts available but restricted</p></li>
+<li class="fragment"><p>For <strong>university research</strong>; accounts available for University of Arizona researchers: <a href="https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect" class="uri">https://datascience.arizona.edu/analytics-powerhouse/rstudio-connect</a></p></li>
 <li class="fragment"><p>Published reports can be public or private</p></li>
 <li class="fragment"><p>Example: <a href="https://viz.datascience.arizona.edu/quarto-workshop-example/" class="uri">https://viz.datascience.arizona.edu/quarto-workshop-example/</a></p></li>
 </ul>
@@ -675,6 +679,8 @@ Renata Diaz - December 6, 2023
 <ul>
 <li class="fragment"><p>Render to <code>html</code>, <code>docx</code>, or <code>pdf</code></p></li>
 <li class="fragment"><p>Resulting documents are portable</p></li>
+<li class="fragment"><p>Example .pdf: <a href="https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.pdf" class="uri">https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.pdf</a></p></li>
+<li class="fragment"><p>Example .docx (download): <a href="https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.docx" class="uri">https://github.com/diazrenata/squareone-quarto/blob/main/s3_biomass_as_quarto.docx</a></p></li>
 </ul>
 </div>
 </section>
@@ -722,7 +728,7 @@ Renata Diaz - December 6, 2023
 </ul>
 </div>
 </section>
-<section id="cct-data-science" class="slide level2">
+<section id="cct-data-science-1" class="slide level2">
 <h2>CCT-Data Science</h2>
 <div>
 <ul>
@@ -736,8 +742,17 @@ Renata Diaz - December 6, 2023
 <h2>Data science @ UA</h2>
 <div>
 <ul>
+<li class="fragment"><a href="https://researchbazaar.arizona.edu/">Research Bazaar Arizona</a>
+<ul>
 <li class="fragment">Coffee &amp; Code</li>
-<li class="fragment">UA Data Science Slack</li>
+<li class="fragment">Hack Hour</li>
+</ul></li>
+<li class="fragment">UA Data Science Slack
+<ul>
+<li class="fragment">Sign up here: <a href="https://jcoliver.github.io/uadatascience-slack/user-guide.html" class="uri">https://jcoliver.github.io/uadatascience-slack/user-guide.html</a></li>
+</ul></li>
+<li class="fragment"><a href="https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w">UA Libraries Data &amp; Viz Drop-In Hours</a></li>
+<li class="fragment">UA Data Science Institute</li>
 </ul>
 </div>
 </section>
@@ -756,7 +771,7 @@ Renata Diaz - December 6, 2023
 <p>Thank you for attending!</p>
 <p>For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our <a href="https://datascience.cct.arizona.edu">website</a>!</p>
 
-<img src="_extensions/cct-datascience/uaz/logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
+<img src="logo.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
 </div>
 </section>

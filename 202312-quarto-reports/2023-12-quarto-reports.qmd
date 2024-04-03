@@ -3,7 +3,7 @@ title: "Sharing research as Quarto reports"
 author: "Renata Diaz - December 6, 2023"
 format: 
   uaz-revealjs:
-      logo: "../logo.png"
+      logo: "logo.png"
 editor: source
 ---
 
