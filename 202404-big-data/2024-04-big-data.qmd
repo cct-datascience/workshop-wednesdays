@@ -5,6 +5,8 @@ format:
   uaz-revealjs:
       logo: "_extensions/cct-datascience/uaz/logo.png"
 editor: source
+execute:
+  freeze: true  
 ---
 
 ## ⏰ Schedule ⏰ {.smaller}
@@ -71,20 +73,326 @@ remember to record
 
 ## Apache arrow
 
+<https://arrow.apache.org/>
+
+![](images/clipboard-1025653811.png)
+
+## Apache arrow
+
+::: incremental
+-   **Format** (columnar data storage = fast!)
+-   **Libraries** to interface with many programming languages/platforms
+-   Emphasis on **interoperability**
+-   `arrow` libraries work with many data formats - you do not need to use parquet/arrow to get performance gains!
+:::
+
+## arrow R library
+
+<https://arrow.apache.org/docs/r/>
+
+![](images/clipboard-1388851838.png)
+
 ## duckdb
 
-# Using arrow in R
+<https://duckdb.org/>
 
-## arrow data formats
+![](images/clipboard-2911850815.png)
 
-## Single-file datasets
+## duckdb
 
-## Dataset schemas
+::: incremental
+-   Database format + API
+-   "SQLite for analytics"
+-   Complements arrow
+-   Handles **relational** data more naturally than arrow
+:::
 
-## Multi-file datasets
+## duckdb and R
 
-## dplyr pipelines in arrow
+<https://duckdb.org/docs/api/r.html>
 
+![](images/clipboard-2016618240.png)
+
+## 
+
+::: callout-important
+You can use either, or both!
+
+Today we will cover arrow and duckdb separately and then show how to combine them.
+:::
+
+# Today's data: the Breeding Bird Survey
+
+-   Annual counts of birds observed along \>2500 monitoring routes throughout United States and Canada.
+-   These aren't **big** big data, but are big enough to show performance gains.
+
+# Today's data: the Breeding Bird Survey
+
+-   Download for today:
+-   Source: Ziolkowski Jr., D.J., Lutmerding, M., Aponte, V.I., and Hudson, M-A.R., 2022, North American Breeding Bird Survey Dataset 1966 - 2021: U.S. Geological Survey data release, https://doi.org/10.5066/P97WAZE5.
+
+# Loading data using arrow
+
+## `read.csv` vs. `read_csv_arrow`
+
+```{r, echo = F}
+
+library(tictoc)
+library(arrow)
+library(dplyr)
+```
+
+::: columns
+::: {.column width="50%"}
+```{r, cache = TRUE, echo = TRUE, include = T}
+
+tic()
+
+birds_csv <- read.csv(
+  here::here("202404-big-data", 
+             "data",
+             "all_routes_all_stops.csv"))
+
+toc()
+
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+
+tic()
+
+birds_arrow_csv <-
+  arrow::read_csv_arrow(
+    file = here::here("202404-big-data",
+               "data",
+               "all_routes_all_stops.csv"))
+
+toc()
+
+```
+:::
+:::
+
+## `read.csv` vs. `read_csv_arrow`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  colnames()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_csv |>
+  nrow()
+
+birds_arrow_csv |>
+  colnames()
+
+```
+:::
+:::
+
+## `read.csv` vs. `read_csv_arrow`
+
+::: callout-important
+`read_csv_arrow` is much faster than `read.csv`.
+
+Both functions **read data into memory** and won't work if your data is too big for R to load.
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r, cache = TRUE, echo = TRUE, include = T}
+
+tic()
+
+birds_csv <- read.csv(
+  here::here("202404-big-data", 
+             "data",
+             "all_routes_all_stops.csv"))
+
+toc()
+
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+
+tic()
+
+birds_arrow_dataset <-
+  arrow::open_dataset(
+    sources = here::here("202404-big-data",
+               "data",
+               "all_routes_all_stops.csv"),
+    format = "csv")
+
+toc()
+
+```
+:::
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  colnames()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_dataset |>
+  nrow()
+
+birds_arrow_dataset |>
+  colnames()
+
+```
+:::
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  colnames()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_dataset |>
+  nrow()
+
+birds_arrow_dataset |>
+  colnames()
+
+birds_arrow_dataset |>
+  head() |>
+  collect() |>
+  colnames()
+
+```
+:::
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: callout-important
+`open_dataset` connects to the data but **does not pull it into memory**.
+
+Computations happen with `arrow`'s C++ library.
+
+To get the **results** into R, use `collect()`.
+:::
+
+## Hive partitioning
+
+::: columns
+
+::: {.column width="50%"}
+
+![](images/clipboard-2806566351.png)
+
+:::
+
+::: {.column width="50%"}
+
+
+![](images/clipboard-1412599253.png)
+
+:::
+:::
+
+## Hive partitioning
+
+```{r, echo = T}
+
+birds_arrow_hive <-
+  arrow::open_dataset(
+    sources = here::here("202404-big-data",
+               "data",
+               "hive"),
+    format = "csv",
+    partitioning = "StateNum")
+
+birds_arrow_hive |>
+  nrow()
+
+
+birds_arrow_hive |>
+  head() |>
+  collect() |>
+  colnames()
+
+```
+
+## Hive partitioning
+
+:::callout-important
+
+Hive partitioning breaks a dataset into many smaller files based on one or more variables.
+
+You can recombine them with `open_dataset` and it will behave the same as one big file.
+
+This can help with portability.
+
+:::
+
+## `dplyr` pipelines in `arrow`
+
+## `dplyr` pipelines in `arrow`
+
+:::callout-important
+
+Many `dplyr` functions have arrow bindings.
+
+Some have close cousins.
+
+Some are not implemented.
+
+For details, see the documentation: <https://arrow.apache.org/docs/r/articles/data_wrangling.html>
+
+:::
+
+:::callout-tip
+
+## What do I do if a function isn't supported?
+
+Stay tuned...
+
+:::
 # Break
 
 # Using duckdb in R
@@ -110,7 +418,8 @@ remember to record
 | Focus on one big table              | Multiple related tables   | Specialized/advanced operations |
 | `dplyr`-focused workflow            | `dplyr` + reshaping       |                                 |
 | High value on data interoperability | .duckdb format acceptable |                                 |
-#### ✨ You can use multiple tools within one workflow!✨ 
+
+#### ✨ You can use multiple tools within one workflow!✨
 
 # Side quests
 
@@ -132,10 +441,10 @@ remember to record
 
 ::: incremental
 -   [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
-    -   Coffee & Code
-    -   Hack Hour
+-   Coffee & Code
+-   Hack Hour
 -   UA Data Science Slack
-    -   Sign up here: <https://jcoliver.github.io/uadatascience-slack/user-guide.html>
+-   Sign up here: <https://jcoliver.github.io/uadatascience-slack/user-guide.html>
 -   [UA Libraries Data & Viz Drop-In Hours](https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w)
 -   UA Data Science Institute
 :::

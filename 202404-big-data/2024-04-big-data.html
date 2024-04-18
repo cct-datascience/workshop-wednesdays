@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
   </style>
   <link rel="stylesheet" href="2024-04-big-data_files/libs/revealjs/dist/theme/quarto.css">
   <link href="2024-04-big-data_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -458,29 +523,446 @@ Renata Diaz
 </section>
 <section id="apache-arrow" class="slide level2">
 <h2>Apache arrow</h2>
+<p><a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
+
+<img data-src="images/clipboard-1025653811.png" class="r-stretch"></section>
+<section id="apache-arrow-1" class="slide level2">
+<h2>Apache arrow</h2>
+<div>
+<ul>
+<li class="fragment"><strong>Format</strong> (columnar data storage = fast!)</li>
+<li class="fragment"><strong>Libraries</strong> to interface with many programming languages/platforms</li>
+<li class="fragment">Emphasis on <strong>interoperability</strong></li>
+<li class="fragment"><code>arrow</code> libraries work with many data formats - you do not need to use parquet/arrow to get performance gains!</li>
+</ul>
+</div>
 </section>
+<section id="arrow-r-library" class="slide level2">
+<h2>arrow R library</h2>
+<p><a href="https://arrow.apache.org/docs/r/" class="uri">https://arrow.apache.org/docs/r/</a></p>
+
+<img data-src="images/clipboard-1388851838.png" class="r-stretch"></section>
 <section id="duckdb" class="slide level2">
 <h2>duckdb</h2>
+<p><a href="https://duckdb.org/" class="uri">https://duckdb.org/</a></p>
+
+<img data-src="images/clipboard-2911850815.png" class="r-stretch"></section>
+<section id="duckdb-1" class="slide level2">
+<h2>duckdb</h2>
+<div>
+<ul>
+<li class="fragment">Database format + API</li>
+<li class="fragment">“SQLite for analytics”</li>
+<li class="fragment">Complements arrow</li>
+<li class="fragment">Handles <strong>relational</strong> data more naturally than arrow</li>
+</ul>
+</div>
+</section>
+<section id="duckdb-and-r" class="slide level2">
+<h2>duckdb and R</h2>
+<p><a href="https://duckdb.org/docs/api/r.html" class="uri">https://duckdb.org/docs/api/r.html</a></p>
+
+<img data-src="images/clipboard-2016618240.png" class="r-stretch"></section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>You can use either, or both!</p>
+<p>Today we will cover arrow and duckdb separately and then show how to combine them.</p>
+</div>
+</div>
+</div>
 </section></section>
+<section id="todays-data-the-breeding-bird-survey" class="title-slide slide level1 center">
+<h1>Today’s data: the Breeding Bird Survey</h1>
+<ul>
+<li>Annual counts of birds observed along &gt;2500 monitoring routes throughout United States and Canada.</li>
+<li>These aren’t <strong>big</strong> big data, but are big enough to show performance gains.</li>
+</ul>
+</section>
+
+<section id="todays-data-the-breeding-bird-survey-1" class="title-slide slide level1 center">
+<h1>Today’s data: the Breeding Bird Survey</h1>
+<ul>
+<li>Download for today:</li>
+<li>Source: Ziolkowski Jr., D.J., Lutmerding, M., Aponte, V.I., and Hudson, M-A.R., 2022, North American Breeding Bird Survey Dataset 1966 - 2021: U.S. Geological Survey data release, https://doi.org/10.5066/P97WAZE5.</li>
+</ul>
+</section>
+
 <section>
-<section id="using-arrow-in-r" class="title-slide slide level1 center">
-<h1>Using arrow in R</h1>
+<section id="loading-data-using-arrow" class="title-slide slide level1 center">
+<h1>Loading data using arrow</h1>
 
 </section>
-<section id="arrow-data-formats" class="slide level2">
-<h2>arrow data formats</h2>
+<section id="read.csv-vs.-read_csv_arrow" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>read_csv_arrow</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb1-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"202404-big-data"</span>, </span>
+<span id="cb1-5"><a href=""></a>             <span class="st">"data"</span>,</span>
+<span id="cb1-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb1-7"><a href=""></a></span>
+<span id="cb1-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>53.62 sec elapsed</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a>birds_arrow_csv <span class="ot">&lt;-</span></span>
+<span id="cb3-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">read_csv_arrow</span>(</span>
+<span id="cb3-5"><a href=""></a>    <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"202404-big-data"</span>,</span>
+<span id="cb3-6"><a href=""></a>               <span class="st">"data"</span>,</span>
+<span id="cb3-7"><a href=""></a>               <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb3-8"><a href=""></a></span>
+<span id="cb3-9"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5.84 sec elapsed</code></pre>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="single-file-datasets" class="slide level2">
-<h2>Single-file datasets</h2>
+<section id="read.csv-vs.-read_csv_arrow-1" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>read_csv_arrow</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "X"           "RouteDataID" "CountryNum"  "StateNum"    "Route"      
+ [6] "RPID"        "Year"        "AOU"         "Stop1"       "Stop2"      
+[11] "Stop3"       "Stop4"       "Stop5"       "Stop6"       "Stop7"      
+[16] "Stop8"       "Stop9"       "Stop10"      "Stop11"      "Stop12"     
+[21] "Stop13"      "Stop14"      "Stop15"      "Stop16"      "Stop17"     
+[26] "Stop18"      "Stop19"      "Stop20"      "Stop21"      "Stop22"     
+[31] "Stop23"      "Stop24"      "Stop25"      "Stop26"      "Stop27"     
+[36] "Stop28"      "Stop29"      "Stop30"      "Stop31"      "Stop32"     
+[41] "Stop33"      "Stop34"      "Stop35"      "Stop36"      "Stop37"     
+[46] "Stop38"      "Stop39"      "Stop40"      "Stop41"      "Stop42"     
+[51] "Stop43"      "Stop44"      "Stop45"      "Stop46"      "Stop47"     
+[56] "Stop48"      "Stop49"      "Stop50"     </code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ""            "RouteDataID" "CountryNum"  "StateNum"    "Route"      
+ [6] "RPID"        "Year"        "AOU"         "Stop1"       "Stop2"      
+[11] "Stop3"       "Stop4"       "Stop5"       "Stop6"       "Stop7"      
+[16] "Stop8"       "Stop9"       "Stop10"      "Stop11"      "Stop12"     
+[21] "Stop13"      "Stop14"      "Stop15"      "Stop16"      "Stop17"     
+[26] "Stop18"      "Stop19"      "Stop20"      "Stop21"      "Stop22"     
+[31] "Stop23"      "Stop24"      "Stop25"      "Stop26"      "Stop27"     
+[36] "Stop28"      "Stop29"      "Stop30"      "Stop31"      "Stop32"     
+[41] "Stop33"      "Stop34"      "Stop35"      "Stop36"      "Stop37"     
+[46] "Stop38"      "Stop39"      "Stop40"      "Stop41"      "Stop42"     
+[51] "Stop43"      "Stop44"      "Stop45"      "Stop46"      "Stop47"     
+[56] "Stop48"      "Stop49"      "Stop50"     </code></pre>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="dataset-schemas" class="slide level2">
-<h2>Dataset schemas</h2>
+<section id="read.csv-vs.-read_csv_arrow-2" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>read_csv_arrow</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><code>read_csv_arrow</code> is much faster than <code>read.csv</code>.</p>
+<p>Both functions <strong>read data into memory</strong> and won’t work if your data is too big for R to load.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="multi-file-datasets" class="slide level2">
-<h2>Multi-file datasets</h2>
+<section id="read.csv-vs.-open_dataset" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb13-2"><a href=""></a></span>
+<span id="cb13-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb13-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"202404-big-data"</span>, </span>
+<span id="cb13-5"><a href=""></a>             <span class="st">"data"</span>,</span>
+<span id="cb13-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb13-7"><a href=""></a></span>
+<span id="cb13-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>64.87 sec elapsed</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb15-2"><a href=""></a></span>
+<span id="cb15-3"><a href=""></a>birds_arrow_dataset <span class="ot">&lt;-</span></span>
+<span id="cb15-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb15-5"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"202404-big-data"</span>,</span>
+<span id="cb15-6"><a href=""></a>               <span class="st">"data"</span>,</span>
+<span id="cb15-7"><a href=""></a>               <span class="st">"all_routes_all_stops.csv"</span>),</span>
+<span id="cb15-8"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>)</span>
+<span id="cb15-9"><a href=""></a></span>
+<span id="cb15-10"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.06 sec elapsed</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-1" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "X"           "RouteDataID" "CountryNum"  "StateNum"    "Route"      
+ [6] "RPID"        "Year"        "AOU"         "Stop1"       "Stop2"      
+[11] "Stop3"       "Stop4"       "Stop5"       "Stop6"       "Stop7"      
+[16] "Stop8"       "Stop9"       "Stop10"      "Stop11"      "Stop12"     
+[21] "Stop13"      "Stop14"      "Stop15"      "Stop16"      "Stop17"     
+[26] "Stop18"      "Stop19"      "Stop20"      "Stop21"      "Stop22"     
+[31] "Stop23"      "Stop24"      "Stop25"      "Stop26"      "Stop27"     
+[36] "Stop28"      "Stop29"      "Stop30"      "Stop31"      "Stop32"     
+[41] "Stop33"      "Stop34"      "Stop35"      "Stop36"      "Stop37"     
+[46] "Stop38"      "Stop39"      "Stop40"      "Stop41"      "Stop42"     
+[51] "Stop43"      "Stop44"      "Stop45"      "Stop46"      "Stop47"     
+[56] "Stop48"      "Stop49"      "Stop50"     </code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-2" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "X"           "RouteDataID" "CountryNum"  "StateNum"    "Route"      
+ [6] "RPID"        "Year"        "AOU"         "Stop1"       "Stop2"      
+[11] "Stop3"       "Stop4"       "Stop5"       "Stop6"       "Stop7"      
+[16] "Stop8"       "Stop9"       "Stop10"      "Stop11"      "Stop12"     
+[21] "Stop13"      "Stop14"      "Stop15"      "Stop16"      "Stop17"     
+[26] "Stop18"      "Stop19"      "Stop20"      "Stop21"      "Stop22"     
+[31] "Stop23"      "Stop24"      "Stop25"      "Stop26"      "Stop27"     
+[36] "Stop28"      "Stop29"      "Stop30"      "Stop31"      "Stop32"     
+[41] "Stop33"      "Stop34"      "Stop35"      "Stop36"      "Stop37"     
+[46] "Stop38"      "Stop39"      "Stop40"      "Stop41"      "Stop42"     
+[51] "Stop43"      "Stop44"      "Stop45"      "Stop46"      "Stop47"     
+[56] "Stop48"      "Stop49"      "Stop50"     </code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ""            "RouteDataID" "CountryNum"  "StateNum"    "Route"      
+ [6] "RPID"        "Year"        "AOU"         "Stop1"       "Stop2"      
+[11] "Stop3"       "Stop4"       "Stop5"       "Stop6"       "Stop7"      
+[16] "Stop8"       "Stop9"       "Stop10"      "Stop11"      "Stop12"     
+[21] "Stop13"      "Stop14"      "Stop15"      "Stop16"      "Stop17"     
+[26] "Stop18"      "Stop19"      "Stop20"      "Stop21"      "Stop22"     
+[31] "Stop23"      "Stop24"      "Stop25"      "Stop26"      "Stop27"     
+[36] "Stop28"      "Stop29"      "Stop30"      "Stop31"      "Stop32"     
+[41] "Stop33"      "Stop34"      "Stop35"      "Stop36"      "Stop37"     
+[46] "Stop38"      "Stop39"      "Stop40"      "Stop41"      "Stop42"     
+[51] "Stop43"      "Stop44"      "Stop45"      "Stop46"      "Stop47"     
+[56] "Stop48"      "Stop49"      "Stop50"     </code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-3" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><code>open_dataset</code> connects to the data but <strong>does not pull it into memory</strong>.</p>
+<p>Computations happen with <code>arrow</code>’s C++ library.</p>
+<p>To get the <strong>results</strong> into R, use <code>collect()</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="hive-partitioning" class="slide level2">
+<h2>Hive partitioning</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="images/clipboard-2806566351.png"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="images/clipboard-1412599253.png"></p>
+</div>
+</div>
+</section>
+<section id="hive-partitioning-1" class="slide level2">
+<h2>Hive partitioning</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>birds_arrow_hive <span class="ot">&lt;-</span></span>
+<span id="cb35-2"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb35-3"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"202404-big-data"</span>,</span>
+<span id="cb35-4"><a href=""></a>               <span class="st">"data"</span>,</span>
+<span id="cb35-5"><a href=""></a>               <span class="st">"hive"</span>),</span>
+<span id="cb35-6"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>,</span>
+<span id="cb35-7"><a href=""></a>    <span class="at">partitioning =</span> <span class="st">"StateNum"</span>)</span>
+<span id="cb35-8"><a href=""></a></span>
+<span id="cb35-9"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
+<span id="cb35-10"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ""            "RouteDataID" "CountryNum"  "Route"       "RPID"       
+ [6] "Year"        "AOU"         "Stop1"       "Stop2"       "Stop3"      
+[11] "Stop4"       "Stop5"       "Stop6"       "Stop7"       "Stop8"      
+[16] "Stop9"       "Stop10"      "Stop11"      "Stop12"      "Stop13"     
+[21] "Stop14"      "Stop15"      "Stop16"      "Stop17"      "Stop18"     
+[26] "Stop19"      "Stop20"      "Stop21"      "Stop22"      "Stop23"     
+[31] "Stop24"      "Stop25"      "Stop26"      "Stop27"      "Stop28"     
+[36] "Stop29"      "Stop30"      "Stop31"      "Stop32"      "Stop33"     
+[41] "Stop34"      "Stop35"      "Stop36"      "Stop37"      "Stop38"     
+[46] "Stop39"      "Stop40"      "Stop41"      "Stop42"      "Stop43"     
+[51] "Stop44"      "Stop45"      "Stop46"      "Stop47"      "Stop48"     
+[56] "Stop49"      "Stop50"      "StateNum"   </code></pre>
+</div>
+</div>
+</section>
+<section id="hive-partitioning-2" class="slide level2">
+<h2>Hive partitioning</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Hive partitioning breaks a dataset into many smaller files based on one or more variables.</p>
+<p>You can recombine them with <code>open_dataset</code> and it will behave the same as one big file.</p>
+<p>This can help with portability.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="dplyr-pipelines-in-arrow" class="slide level2">
-<h2>dplyr pipelines in arrow</h2>
+<h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
+</section>
+<section id="dplyr-pipelines-in-arrow-1" class="slide level2">
+<h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Many <code>dplyr</code> functions have arrow bindings.</p>
+<p>Some have close cousins.</p>
+<p>Some are not implemented.</p>
+<p>For details, see the documentation: <a href="https://arrow.apache.org/docs/r/articles/data_wrangling.html" class="uri">https://arrow.apache.org/docs/r/articles/data_wrangling.html</a></p>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>What do I do if a function isn’t supported?</strong></p>
+</div>
+<div class="callout-content">
+<p>Stay tuned…</p>
+</div>
+</div>
+</div>
 </section></section>
 <section id="break" class="title-slide slide level1 center">
 <h1>Break</h1>
@@ -582,15 +1064,11 @@ Renata Diaz
 <h2>Data science @ UA</h2>
 <div>
 <ul>
-<li class="fragment"><a href="https://researchbazaar.arizona.edu/">Research Bazaar Arizona</a>
-<ul>
+<li class="fragment"><a href="https://researchbazaar.arizona.edu/">Research Bazaar Arizona</a></li>
 <li class="fragment">Coffee &amp; Code</li>
 <li class="fragment">Hack Hour</li>
-</ul></li>
-<li class="fragment">UA Data Science Slack
-<ul>
+<li class="fragment">UA Data Science Slack</li>
 <li class="fragment">Sign up here: <a href="https://jcoliver.github.io/uadatascience-slack/user-guide.html" class="uri">https://jcoliver.github.io/uadatascience-slack/user-guide.html</a></li>
-</ul></li>
 <li class="fragment"><a href="https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w">UA Libraries Data &amp; Viz Drop-In Hours</a></li>
 <li class="fragment">UA Data Science Institute</li>
 </ul>
@@ -817,6 +1295,82 @@ Renata Diaz
         ]
       });
     </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
