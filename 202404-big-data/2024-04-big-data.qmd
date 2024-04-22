@@ -372,6 +372,19 @@ This can help with portability.
 
 ## `dplyr` pipelines in `arrow`
 
+Supported:
+
+* Filter
+* Mutate
+* Rename
+* Sum 
+* Group by summarize
+* Joins
+
+Show compute vs collect
+
+Show non-supported function
+
 ## `dplyr` pipelines in `arrow`
 
 :::callout-important
@@ -382,7 +395,7 @@ Some have close cousins.
 
 Some are not implemented.
 
-For details, see the documentation: <https://arrow.apache.org/docs/r/articles/data_wrangling.html>
+For details, see the [data wrangling vignette](https://arrow.apache.org/docs/r/articles/data_wrangling.html) and list of [supported dplyr functions](https://arrow.apache.org/docs/r/reference/acero.html) in the documentation. 
 
 :::
 
@@ -395,39 +408,64 @@ Stay tuned...
 :::
 # Break
 
-# Using duckdb in R
-
-## .duckdb databases
-
-## dplyr pipelines in duckdb
-
-## `duckplyr`
-
 # `arrow` + `duckdb`: Stronger together
+
+## `duckdb`: a reminder
+
+::: callout-note
+`duckdb` is a **database format** with an **R API**.
+:::
+
+## `duckdb` with `arrow`
+::: incremental
+
+* The `duckdb` API can implement some functions that arrow can't.
+* You can pass data between `duckdb` and `arrow` to execute functions from either package with minimal additional overhead. 
+
+:::
 
 ## `arrow::to_duckdb`
 
-# When these tools aren't enough
+# `duckdb` as an alternative to `arrow`
 
-## DBI
+# `duckdb` alone
+
+::: incremental
+* You can use `duckdb` to wrangle data stored as a .duckdb database.
+* `duckdb` can open csv, parquet, and many other file formats
+* `duckdb` can be configured to load data over HTTPS
+* Unlike `arrow`, `duckdb` naturally supports multiple related tables stored within one database
+:::
+
+# `duckdb` and `R`: options
+
+::: incremental
+
+* `duckdb` integrates with the `DBI` and `dbplyr` packages to support `dplyr` verbs
+* The `duckplyr` package provides a more direct interface to `duckdb`, but is brand-new
+:::
+
+# `dplyr` pipelines with `duckdb`
+
+# Non-dplyr operations with `duckdb`
+
+# In summary
 
 ## Choosing your tools
 
 | `arrow`                             | `duckdb`                  | `DBI`                           |
 |------------------------|------------------------|------------------------|
 | Focus on one big table              | Multiple related tables   | Specialized/advanced operations |
-| `dplyr`-focused workflow            | `dplyr` + reshaping       |                                 |
+| `dplyr`-focused workflow            | `dplyr` + additional verbs       |                                 |
 | High value on data interoperability | .duckdb format acceptable |                                 |
 
 #### ✨ You can use multiple tools within one workflow!✨
 
-# Side quests
-
-## Access data over the web
-
-## Spatial data
-
 # Resources
+
+## `arrow`
+
+## `duckdb`
 
 ## CCT Data Science opportunities
 

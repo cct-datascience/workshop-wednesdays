@@ -630,7 +630,7 @@ Renata Diaz
 <span id="cb3-8"><a href=""></a></span>
 <span id="cb3-9"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>5.84 sec elapsed</code></pre>
+<pre><code>12.82 sec elapsed</code></pre>
 </div>
 </div>
 </div>
@@ -737,7 +737,7 @@ Renata Diaz
 <span id="cb15-9"><a href=""></a></span>
 <span id="cb15-10"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.06 sec elapsed</code></pre>
+<pre><code>0.11 sec elapsed</code></pre>
 </div>
 </div>
 </div>
@@ -931,6 +931,17 @@ Renata Diaz
 </section>
 <section id="dplyr-pipelines-in-arrow" class="slide level2">
 <h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
+<p>Supported:</p>
+<ul>
+<li>Filter</li>
+<li>Mutate</li>
+<li>Rename</li>
+<li>Sum</li>
+<li>Group by summarize</li>
+<li>Joins</li>
+</ul>
+<p>Show compute vs collect</p>
+<p>Show non-supported function</p>
 </section>
 <section id="dplyr-pipelines-in-arrow-1" class="slide level2">
 <h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
@@ -946,7 +957,7 @@ Renata Diaz
 <p>Many <code>dplyr</code> functions have arrow bindings.</p>
 <p>Some have close cousins.</p>
 <p>Some are not implemented.</p>
-<p>For details, see the documentation: <a href="https://arrow.apache.org/docs/r/articles/data_wrangling.html" class="uri">https://arrow.apache.org/docs/r/articles/data_wrangling.html</a></p>
+<p>For details, see the <a href="https://arrow.apache.org/docs/r/articles/data_wrangling.html">data wrangling vignette</a> and list of <a href="https://arrow.apache.org/docs/r/reference/acero.html">supported dplyr functions</a> in the documentation.</p>
 </div>
 </div>
 </div>
@@ -970,34 +981,79 @@ Renata Diaz
 </section>
 
 <section>
-<section id="using-duckdb-in-r" class="title-slide slide level1 center">
-<h1>Using duckdb in R</h1>
-
-</section>
-<section id="duckdb-databases" class="slide level2">
-<h2>.duckdb databases</h2>
-</section>
-<section id="dplyr-pipelines-in-duckdb" class="slide level2">
-<h2>dplyr pipelines in duckdb</h2>
-</section>
-<section id="duckplyr" class="slide level2">
-<h2><code>duckplyr</code></h2>
-</section></section>
-<section>
 <section id="arrow-duckdb-stronger-together" class="title-slide slide level1 center">
 <h1><code>arrow</code> + <code>duckdb</code>: Stronger together</h1>
 
 </section>
+<section id="duckdb-a-reminder" class="slide level2">
+<h2><code>duckdb</code>: a reminder</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><code>duckdb</code> is a <strong>database format</strong> with an <strong>R API</strong>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="duckdb-with-arrow" class="slide level2">
+<h2><code>duckdb</code> with <code>arrow</code></h2>
+<div>
+<ul>
+<li class="fragment">The <code>duckdb</code> API can implement some functions that arrow can’t.</li>
+<li class="fragment">You can pass data between <code>duckdb</code> and <code>arrow</code> to execute functions from either package with minimal additional overhead.</li>
+</ul>
+</div>
+</section>
 <section id="arrowto_duckdb" class="slide level2">
 <h2><code>arrow::to_duckdb</code></h2>
 </section></section>
-<section>
-<section id="when-these-tools-arent-enough" class="title-slide slide level1 center">
-<h1>When these tools aren’t enough</h1>
+<section id="duckdb-as-an-alternative-to-arrow" class="title-slide slide level1 center">
+<h1><code>duckdb</code> as an alternative to <code>arrow</code></h1>
 
 </section>
-<section id="dbi" class="slide level2">
-<h2>DBI</h2>
+
+<section id="duckdb-alone" class="title-slide slide level1 center">
+<h1><code>duckdb</code> alone</h1>
+<div>
+<ul>
+<li class="fragment">You can use <code>duckdb</code> to wrangle data stored as a .duckdb database.</li>
+<li class="fragment"><code>duckdb</code> can open csv, parquet, and many other file formats</li>
+<li class="fragment"><code>duckdb</code> can be configured to load data over HTTPS</li>
+<li class="fragment">Unlike <code>arrow</code>, <code>duckdb</code> naturally supports multiple related tables stored within one database</li>
+</ul>
+</div>
+</section>
+
+<section id="duckdb-and-r-options" class="title-slide slide level1 center">
+<h1><code>duckdb</code> and <code>R</code>: options</h1>
+<div>
+<ul>
+<li class="fragment"><code>duckdb</code> integrates with the <code>DBI</code> and <code>dbplyr</code> packages to support <code>dplyr</code> verbs</li>
+<li class="fragment">The <code>duckplyr</code> package provides a more direct interface to <code>duckdb</code>, but is brand-new</li>
+</ul>
+</div>
+</section>
+
+<section id="dplyr-pipelines-with-duckdb" class="title-slide slide level1 center">
+<h1><code>dplyr</code> pipelines with <code>duckdb</code></h1>
+
+</section>
+
+<section id="non-dplyr-operations-with-duckdb" class="title-slide slide level1 center">
+<h1>Non-dplyr operations with <code>duckdb</code></h1>
+
+</section>
+
+<section>
+<section id="in-summary" class="title-slide slide level1 center">
+<h1>In summary</h1>
+
 </section>
 <section id="choosing-your-tools" class="slide level2">
 <h2>Choosing your tools</h2>
@@ -1022,7 +1078,7 @@ Renata Diaz
 </tr>
 <tr class="even">
 <td><code>dplyr</code>-focused workflow</td>
-<td><code>dplyr</code> + reshaping</td>
+<td><code>dplyr</code> + additional verbs</td>
 <td></td>
 </tr>
 <tr class="odd">
@@ -1035,20 +1091,15 @@ Renata Diaz
 <h4 id="you-can-use-multiple-tools-within-one-workflow">✨ You can use multiple tools within one workflow!✨</h4>
 </section></section>
 <section>
-<section id="side-quests" class="title-slide slide level1 center">
-<h1>Side quests</h1>
-
-</section>
-<section id="access-data-over-the-web" class="slide level2">
-<h2>Access data over the web</h2>
-</section>
-<section id="spatial-data" class="slide level2">
-<h2>Spatial data</h2>
-</section></section>
-<section>
 <section id="resources" class="title-slide slide level1 center">
 <h1>Resources</h1>
 
+</section>
+<section id="arrow" class="slide level2">
+<h2><code>arrow</code></h2>
+</section>
+<section id="duckdb-2" class="slide level2">
+<h2><code>duckdb</code></h2>
 </section>
 <section id="cct-data-science-opportunities" class="slide level2">
 <h2>CCT Data Science opportunities</h2>
