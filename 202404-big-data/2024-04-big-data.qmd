@@ -3,7 +3,7 @@ title: "Wrangling larger-than-memory data in R"
 author: "Renata Diaz"
 format: 
   uaz-revealjs:
-      logo: "_extensions/cct-datascience/uaz/logo.png"
+      logo: "../logo.png"
 editor: source
 execute:
   freeze: true
