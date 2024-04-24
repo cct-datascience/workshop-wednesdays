@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="2024-04-big-data_files/libs/clipboard/clipboard.min.js"></script>
+<script src="2024-04-big-data_files/libs/quarto-html/tabby.min.js"></script>
+<script src="2024-04-big-data_files/libs/quarto-html/popper.min.js"></script>
+<script src="2024-04-big-data_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="2024-04-big-data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="2024-04-big-data_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="2024-04-big-data_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="2024-04-big-data_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.553">
+
+  <meta name="author" content="Renata Diaz">
+  <title>Wrangling larger-than-memory data in R</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="2024-04-big-data_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="2024-04-big-data_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="2024-04-big-data_files/libs/revealjs/dist/theme/quarto.css">
+  <link href="2024-04-big-data_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="2024-04-big-data_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="2024-04-big-data_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="2024-04-big-data_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-dark">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Wrangling larger-than-memory data in R</h1>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Renata Diaz 
+</div>
+</div>
+</div>
+
+</section>
+<section id="schedule" class="slide level2 smaller">
+<h2>⏰ Schedule ⏰</h2>
+<aside class="notes">
+<p>remember to record</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<table>
+<colgroup>
+<col style="width: 73%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Topic</th>
+<th style="text-align: left;">Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Welcome &amp; intros</td>
+<td style="text-align: left;">11:00 - 11:05</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">(Really) big data in R: the landscape</td>
+<td style="text-align: left;">11:05 - 11:10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Data storage and access with <code>arrow</code></td>
+<td style="text-align: left;">11:15 - 11:30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>dplyr</code> wrangling with <code>arrow</code></td>
+<td style="text-align: left;">11:35 - 11:50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BREAK</td>
+<td style="text-align: left;">11:50 - 12:00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>arrow</code> with <code>duckdb | 12:00 - 12:20 | |</code>duckdb` and raw SQL</td>
+<td style="text-align: left;">12:20-12:35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">When to use what</td>
+<td style="text-align: left;">12:35-12:45</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Wrap up</td>
+<td style="text-align: left;">12:45-1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<section id="welcome" class="title-slide slide level1 center">
+<h1>Welcome!</h1>
+
+</section>
+<section id="cct-data-science-team" class="slide level2">
+<h2>CCT Data Science Team</h2>
+<h4 id="supporting-reproducible-research-data-pipelines-and-software-development-in-alvsce">Supporting reproducible research, data pipelines, and software development in ALVSCE</h4>
+<div>
+<ul>
+<li class="fragment">Workshops</li>
+<li class="fragment">Drop-in hours</li>
+<li class="fragment">“Incubator” program</li>
+<li class="fragment">Longer-term collaborations</li>
+<li class="fragment">Learn more: <a href="https://datascience.cct.arizona.edu" class="uri">https://datascience.cct.arizona.edu</a></li>
+</ul>
+</div>
+</section>
+<section id="before-we-get-started" class="slide level2">
+<h2>Before we get started</h2>
+<div>
+<ul>
+<li class="fragment">These slides (and links!) are available at: NEW LINK HERE</li>
+<li class="fragment">Please make sure you have R and RStudio installed</li>
+<li class="fragment">Please install the following packages: <code>duckdb, arrow, dplyr, tidyr, dbplyr, DBI, here</code></li>
+<li class="fragment">You can download today’s data here: <a href="https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4" class="uri">https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4</a></li>
+</ul>
+</div>
+</section>
+<section id="background-assumptions" class="slide level2">
+<h2>Background assumptions</h2>
+<div>
+<ul>
+<li class="fragment">You do at least some of your data wrangling + analysis in R</li>
+<li class="fragment">You use <code>dplyr</code> and <code>tidyr</code> (and you like it!)</li>
+<li class="fragment">Some of your datasets are too large to handle efficiently in R</li>
+</ul>
+</div>
+</section>
+<section id="learning-objectives" class="slide level2">
+<h2>Learning objectives</h2>
+<div>
+<ul>
+<li class="fragment">Understand the landscape of tools available for big data in R</li>
+<li class="fragment">Store and access datasets using the <code>arrow</code> and <code>duckdb</code> packages</li>
+<li class="fragment">Scale up <code>dplyr</code> pipelines using <code>arrow</code> and <code>duckdb</code></li>
+<li class="fragment">Understand which tools are suited to which tasks, and where to look for more resources</li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="big-data-in-r" class="title-slide slide level1 center">
+<h1>Big data in R</h1>
+
+</section>
+<section id="the-abbreviated-landscape" class="slide level2">
+<h2>The (abbreviated) landscape</h2>
+<p><img data-src="options_files/figure-commonmark/unnamed-chunk-2-1.png" style="width:100.0%">{fig-alt=“A plot placing different options for data wrangling in R along axes of ease of use and size of data. dplyr and tidyr are easy to use but can only handle small datasets. External data wrangling tools, and DBI plus SQL, can handle big data but are hard to use. arrow and duckdb can handle large amounts of data and are easy to use.”}</p>
+</section>
+<section id="apache-arrow" class="slide level2">
+<h2>Apache arrow</h2>
+<p><a href="https://arrow.apache.org/" class="uri">https://arrow.apache.org/</a></p>
+
+<img data-src="images/clipboard-1025653811.png" class="r-stretch"></section>
+<section id="apache-arrow-1" class="slide level2">
+<h2>Apache arrow</h2>
+<div>
+<ul>
+<li class="fragment"><strong>Format</strong> (columnar data storage = fast!)</li>
+<li class="fragment"><strong>Libraries</strong> to interface with many programming languages/platforms</li>
+<li class="fragment">Emphasis on <strong>interoperability</strong></li>
+<li class="fragment"><code>arrow</code> libraries work with many data formats - you do not need to use parquet/arrow to get performance gains!</li>
+</ul>
+</div>
+</section>
+<section id="arrow-r-library" class="slide level2">
+<h2>arrow R library</h2>
+<p><a href="https://arrow.apache.org/docs/r/" class="uri">https://arrow.apache.org/docs/r/</a></p>
+
+<img data-src="images/clipboard-1388851838.png" class="r-stretch"></section>
+<section id="duckdb" class="slide level2">
+<h2>duckdb</h2>
+<p><a href="https://duckdb.org/" class="uri">https://duckdb.org/</a></p>
+
+<img data-src="images/clipboard-2911850815.png" class="r-stretch"></section>
+<section id="duckdb-1" class="slide level2">
+<h2>duckdb</h2>
+<div>
+<ul>
+<li class="fragment">Database format + API</li>
+<li class="fragment">“SQLite for analytics”</li>
+<li class="fragment">Complements arrow</li>
+<li class="fragment">Handles <strong>relational</strong> data more naturally than arrow</li>
+</ul>
+</div>
+</section>
+<section id="duckdb-and-r" class="slide level2">
+<h2>duckdb and R</h2>
+<p><a href="https://duckdb.org/docs/api/r.html" class="uri">https://duckdb.org/docs/api/r.html</a></p>
+
+<img data-src="images/clipboard-2016618240.png" class="r-stretch"></section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>You can use either, or both!</p>
+<p>Today we will cover arrow and duckdb separately and then show how to combine them.</p>
+</div>
+</div>
+</div>
+</section></section>
+<section id="todays-data-the-breeding-bird-survey" class="title-slide slide level1 center">
+<h1>Today’s data: the Breeding Bird Survey</h1>
+<ul>
+<li>Annual counts of birds observed along &gt;2500 monitoring routes throughout United States and Canada.</li>
+<li>These aren’t <strong>big</strong> big data, but are big enough to show performance gains.</li>
+</ul>
+</section>
+
+<section id="todays-data-the-breeding-bird-survey-1" class="title-slide slide level1 center">
+<h1>Today’s data: the Breeding Bird Survey</h1>
+<ul>
+<li>Download for today: <a href="https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4" class="uri">https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4</a></li>
+<li>Source: Ziolkowski Jr., D.J., Lutmerding, M., Aponte, V.I., and Hudson, M-A.R., 2022, North American Breeding Bird Survey Dataset 1966 - 2021: U.S. Geological Survey data release, https://doi.org/10.5066/P97WAZE5. Summarized.</li>
+</ul>
+</section>
+
+<section>
+<section id="loading-data-using-arrow" class="title-slide slide level1 center">
+<h1>Loading data using arrow</h1>
+
+</section>
+<section id="read.csv-vs.-read_csv_arrow" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>read_csv_arrow</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb1-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>( </span>
+<span id="cb1-5"><a href=""></a>             <span class="st">"data"</span>,</span>
+<span id="cb1-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb1-7"><a href=""></a></span>
+<span id="cb1-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4.33 sec elapsed</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb3-2"><a href=""></a></span>
+<span id="cb3-3"><a href=""></a>birds_arrow_csv <span class="ot">&lt;-</span></span>
+<span id="cb3-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">read_csv_arrow</span>(</span>
+<span id="cb3-5"><a href=""></a>    <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb3-6"><a href=""></a>                      <span class="st">"data"</span>,</span>
+<span id="cb3-7"><a href=""></a>                      <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb3-8"><a href=""></a></span>
+<span id="cb3-9"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.53 sec elapsed</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-read_csv_arrow-1" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>read_csv_arrow</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
+<span id="cb9-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-read_csv_arrow-2" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>read_csv_arrow</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><code>read_csv_arrow</code> is much faster than <code>read.csv</code>.</p>
+<p>Both functions <strong>read data into memory</strong> and won’t work if your data is too big for R to load.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb13-2"><a href=""></a></span>
+<span id="cb13-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb13-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>( </span>
+<span id="cb13-5"><a href=""></a>             <span class="st">"data"</span>,</span>
+<span id="cb13-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb13-7"><a href=""></a></span>
+<span id="cb13-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4.75 sec elapsed</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb15-2"><a href=""></a></span>
+<span id="cb15-3"><a href=""></a>birds_arrow_dataset <span class="ot">&lt;-</span></span>
+<span id="cb15-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb15-5"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb15-6"><a href=""></a>                         <span class="st">"data"</span>,</span>
+<span id="cb15-7"><a href=""></a>                         <span class="st">"all_routes_all_stops.csv"</span>),</span>
+<span id="cb15-8"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>)</span>
+<span id="cb15-9"><a href=""></a></span>
+<span id="cb15-10"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.03 sec elapsed</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-1" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-2" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  StateNum Route Year  AOU StopTotal
+1        4     1 2000  530        17
+2        4     1 2000  534        89
+3        4     1 2000  540        10
+4        4     1 2000  590        76
+5        4     1 2000 1200         2
+6        4     1 2000 1320         3</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Table
+6 rows x 5 columns
+$StateNum &lt;int64&gt;
+$Route &lt;int64&gt;
+$Year &lt;int64&gt;
+$AOU &lt;int64&gt;
+$StopTotal &lt;int64&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-3" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  StateNum Route Year  AOU StopTotal
+1        4     1 2000  530        17
+2        4     1 2000  534        89
+3        4     1 2000  540        10
+4        4     1 2000  590        76
+5        4     1 2000 1200         2
+6        4     1 2000 1320         3</code></pre>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+  StateNum Route  Year   AOU StopTotal
+     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;int&gt;
+1        4     1  2000   530        17
+2        4     1  2000   534        89
+3        4     1  2000   540        10
+4        4     1  2000   590        76
+5        4     1  2000  1200         2
+6        4     1  2000  1320         3</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="read.csv-vs.-open_dataset-4" class="slide level2">
+<h2><code>read.csv</code> vs.&nbsp;<code>open_dataset</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><code>open_dataset</code> connects to the data but <strong>does not pull it into memory</strong>.</p>
+<p>Computations happen with <code>arrow</code>’s C++ library.</p>
+<p>To get the <strong>results</strong> into R, use <code>collect()</code>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="hive-partitioning" class="slide level2">
+<h2>Hive partitioning</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="images/clipboard-2806566351.png"></p>
+</div><div class="column" style="width:50%;">
+<p><img data-src="images/clipboard-1412599253.png"></p>
+</div>
+</div>
+</section>
+<section id="hive-partitioning-1" class="slide level2">
+<h2>Hive partitioning</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>birds_arrow_hive <span class="ot">&lt;-</span></span>
+<span id="cb41-2"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb41-3"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb41-4"><a href=""></a>                         <span class="st">"data"</span>,</span>
+<span id="cb41-5"><a href=""></a>                         <span class="st">"hive"</span>),</span>
+<span id="cb41-6"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>,</span>
+<span id="cb41-7"><a href=""></a>    <span class="at">partitioning =</span> <span class="st">"StateNum"</span>)</span>
+<span id="cb41-8"><a href=""></a></span>
+<span id="cb41-9"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
+<span id="cb41-10"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3935870</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb43-3"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb43-4"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Route"     "Year"      "AOU"       "StopTotal" "StateNum" </code></pre>
+</div>
+</div>
+</section>
+<section id="hive-partitioning-2" class="slide level2">
+<h2>Hive partitioning</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Hive partitioning breaks a dataset into many smaller files based on one or more variables.</p>
+<p>You can recombine them with <code>open_dataset</code> and it will behave the same as one big file.</p>
+<p>This can help with portability.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="dplyr-pipelines-in-arrow" class="slide level2">
+<h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb45-2"><a href=""></a><span class="fu">library</span>(arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="core-dplyr-verbs" class="slide level2">
+<h2>Core <code>dplyr</code> verbs</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a>routes_in_arizona <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb46-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb46-5"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb46-6"><a href=""></a></span>
+<span id="cb46-7"><a href=""></a><span class="fu">head</span>(routes_in_arizona)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  StateNum Route
+     &lt;int&gt; &lt;int&gt;
+1        6     2
+2        6     9
+3        6    10
+4        6    11
+5        6    12
+6        6    13</code></pre>
+</div>
+</div>
+</section>
+<section id="mutate" class="slide level2">
+<h2><code>mutate</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a>routes_in_arizona <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb48-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">StateRoute =</span> <span class="fu">paste0</span>(StateNum, <span class="st">"_"</span>, Route)) <span class="sc">|&gt;</span></span>
+<span id="cb48-6"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb48-7"><a href=""></a></span>
+<span id="cb48-8"><a href=""></a><span class="fu">head</span>(routes_in_arizona)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  StateNum Route StateRoute
+     &lt;int&gt; &lt;int&gt; &lt;chr&gt;     
+1        6     2 6_2       
+2        6     9 6_9       
+3        6    10 6_10      
+4        6    11 6_11      
+5        6    12 6_12      
+6        6    13 6_13      </code></pre>
+</div>
+</div>
+</section>
+<section id="group_by-summarize" class="slide level2">
+<h2><code>group_by |&gt; summarize</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb50-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb50-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb50-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Year)),</span>
+<span id="cb50-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">length</span>(<span class="fu">unique</span>(AOU))) <span class="sc">|&gt;</span></span>
+<span id="cb50-7"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: Error in summarize_eval(names(exprs)[i], exprs[[i]], ctx, length(.data$group_by_vars) &gt;  : 
+  Expression length(unique(Year)) is not an aggregate expression or is not supported in Arrow
+Call collect() first to pull data into R.</code></pre>
+</div>
+</div>
+</section>
+<section id="group_by-summarize-1" class="slide level2">
+<h2><code>group_by |&gt; summarize</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb52-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb52-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb52-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb52-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Year)),</span>
+<span id="cb52-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">length</span>(<span class="fu">unique</span>(AOU))) <span class="sc">|&gt;</span></span>
+<span id="cb52-7"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: Error in summarize_eval(names(exprs)[i], exprs[[i]], ctx, length(.data$group_by_vars) &gt;  : 
+  Expression length(unique(Year)) is not an aggregate expression or is not supported in Arrow
+Call collect() first to pull data into R.</code></pre>
+</div>
+</div>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Not all functions are supported!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="group_by-summarize-2" class="slide level2">
+<h2><code>group_by |&gt; summarize</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb54-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb54-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb54-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb54-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">n_distinct</span>(Year),</span>
+<span id="cb54-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">n_distinct</span>(AOU)) <span class="sc">|&gt;</span></span>
+<span id="cb54-7"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb54-8"><a href=""></a></span>
+<span id="cb54-9"><a href=""></a><span class="fu">head</span>(birds_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+# Groups:   StateNum [1]
+  StateNum Route nyears nspecies
+     &lt;int&gt; &lt;int&gt;  &lt;int&gt;    &lt;int&gt;
+1        6     2     18       70
+2        6     9     11       67
+3        6    10      6       34
+4        6    11      6       82
+5        6    12     24       54
+6        6    13     20       58</code></pre>
+</div>
+</div>
+</section>
+<section id="join" class="slide level2">
+<h2><code>join</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb56-2"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb56-3"><a href=""></a>  <span class="fu">arrow_table</span>()</span>
+<span id="cb56-4"><a href=""></a></span>
+<span id="cb56-5"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb56-6"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb56-7"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb56-8"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-9"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
+<span id="cb56-10"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `compute.arrow_dplyr_query()`:
+! Invalid: Incompatible data types for corresponding join field keys: FieldRef.Name(StateNum) of type int64 and FieldRef.Name(StateNum) of type int32</code></pre>
+</div>
+</div>
+</section>
+<section id="join-1" class="slide level2">
+<h2><code>join</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb58-2"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb58-3"><a href=""></a>  <span class="fu">arrow_table</span>()</span>
+<span id="cb58-4"><a href=""></a></span>
+<span id="cb58-5"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb58-6"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb58-7"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb58-8"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb58-9"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
+<span id="cb58-10"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in `compute.arrow_dplyr_query()`:
+! Invalid: Incompatible data types for corresponding join field keys: FieldRef.Name(StateNum) of type int64 and FieldRef.Name(StateNum) of type int32</code></pre>
+</div>
+</div>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Arrow is strict about schemas (data types)!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="schemas" class="slide level2">
+<h2>Schemas</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="fu">schema</span>(birds_arrow_dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Schema
+StateNum: int64
+Route: int64
+Year: int64
+AOU: int64
+StopTotal: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="schemas-1" class="slide level2">
+<h2>Schemas</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a><span class="fu">schema</span>(route_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Schema
+CountryNum: int32
+StateNum: int32
+Route: int32
+RouteName: binary
+Active: int32
+Latitude: double
+Longitude: double
+Stratum: int32
+BCR: int32
+RouteTypeID: int32
+RouteTypeDetailID: int32</code></pre>
+</div>
+</div>
+</section>
+<section id="modifying-a-schema" class="slide level2">
+<h2>Modifying a schema</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a>route_schema <span class="ot">&lt;-</span> <span class="fu">schema</span>(route_info)</span>
+<span id="cb64-2"><a href=""></a>route_schema<span class="sc">$</span>StateNum <span class="ot">&lt;-</span> <span class="fu">int64</span>()</span>
+<span id="cb64-3"><a href=""></a>route_schema<span class="sc">$</span>Route <span class="ot">&lt;-</span> <span class="fu">int64</span>()</span>
+<span id="cb64-4"><a href=""></a></span>
+<span id="cb64-5"><a href=""></a></span>
+<span id="cb64-6"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb64-7"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb64-8"><a href=""></a>  <span class="fu">arrow_table</span>(<span class="at">schema =</span> route_schema)</span>
+<span id="cb64-9"><a href=""></a></span>
+<span id="cb64-10"><a href=""></a><span class="fu">schema</span>(route_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Schema
+CountryNum: int32
+StateNum: int64
+Route: int64
+RouteName: binary
+Active: int32
+Latitude: double
+Longitude: double
+Stratum: int32
+BCR: int32
+RouteTypeID: int32
+RouteTypeDetailID: int32</code></pre>
+</div>
+</div>
+</section>
+<section id="join-again" class="slide level2">
+<h2><code>join</code> again</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb66-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb66-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb66-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb66-5"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
+<span id="cb66-6"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb66-7"><a href=""></a></span>
+<span id="cb66-8"><a href=""></a><span class="fu">head</span>(arizona_routes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  StateNum Route CountryNum                              RouteName Active
+     &lt;int&gt; &lt;int&gt;      &lt;int&gt;                             &lt;arrw_bnr&gt;  &lt;int&gt;
+1        6     2        840 48, 4f, 55, 53, 45, 20, 52, 4f, 43, 4b      1
+2        6     9        840     46, 4c, 41, 47, 53, 54, 41, 46, 46      1
+3        6    10        840                 4f, 52, 41, 49, 42, 49      1
+4        6    11        840             53, 41, 57, 4d, 49, 4c, 4c      1
+5        6    12        840                 4f, 41, 54, 4d, 41, 4e      1
+6        6    13        840             57, 49, 4b, 49, 45, 55, 50      1
+# ℹ 6 more variables: Latitude &lt;dbl&gt;, Longitude &lt;dbl&gt;, Stratum &lt;int&gt;,
+#   BCR &lt;int&gt;, RouteTypeID &lt;int&gt;, RouteTypeDetailID &lt;int&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="window-functions" class="slide level2">
+<h2>Window functions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb68-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb68-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
+<span id="cb68-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
+<span id="cb68-5"><a href=""></a>  <span class="fu">collect</span>() </span>
+<span id="cb68-6"><a href=""></a></span>
+<span id="cb68-7"><a href=""></a><span class="fu">head</span>(arizona_timeseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+# Groups:   StateNum, Route [1]
+  StateNum Route  Year TotalBirds
+     &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;int&gt;
+1        6     2  1997        448
+2        6     2  1999        340
+3        6     2  2004        187
+4        6     2  2005        196
+5        6     2  2006        248
+6        6     2  2007        156</code></pre>
+</div>
+</div>
+</section>
+<section id="window-functions-1" class="slide level2">
+<h2>Window functions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb70-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb70-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
+<span id="cb70-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
+<span id="cb70-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TotalBirdsLastCensus =</span> <span class="fu">lag</span>(TotalBirds)) <span class="sc">|&gt;</span></span>
+<span id="cb70-6"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error: Expression lag(TotalBirds) not supported in Arrow
+Call collect() first to pull data into R.</code></pre>
+</div>
+</div>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Window functions (lag, lead) are not supported.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="window-functions-2" class="slide level2">
+<h2>Window functions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb72-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb72-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
+<span id="cb72-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
+<span id="cb72-5"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb72-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TotalBirdsLastCensus =</span> <span class="fu">lag</span>(TotalBirds)) </span>
+<span id="cb72-7"><a href=""></a><span class="fu">head</span>(arizona_timeseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+# Groups:   StateNum, Route [1]
+  StateNum Route  Year TotalBirds TotalBirdsLastCensus
+     &lt;int&gt; &lt;int&gt; &lt;int&gt;      &lt;int&gt;                &lt;int&gt;
+1        6     2  1997        448                   NA
+2        6     2  1999        340                  448
+3        6     2  2004        187                  340
+4        6     2  2005        196                  187
+5        6     2  2006        248                  196
+6        6     2  2007        156                  248</code></pre>
+</div>
+</div>
+</section>
+<section id="reshaping" class="slide level2">
+<h2>Reshaping</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb74-2"><a href=""></a></span>
+<span id="cb74-3"><a href=""></a>birds_wide <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb74-4"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>, Year <span class="sc">==</span> <span class="dv">1994</span>) <span class="sc">|&gt;</span></span>
+<span id="cb74-5"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb74-6"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb74-7"><a href=""></a>  <span class="fu">collect</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in UseMethod("pivot_wider"): no applicable method for 'pivot_wider' applied to an object of class "arrow_dplyr_query"</code></pre>
+</div>
+</div>
+</section>
+<section id="dplyr-pipelines-in-arrow-1" class="slide level2">
+<h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Many <code>dplyr</code> functions have arrow bindings.</li>
+<li>Some have close cousins.</li>
+<li>Some are not implemented.</li>
+<li>For details, see the <a href="https://arrow.apache.org/docs/r/articles/data_wrangling.html">data wrangling vignette</a> and list of <a href="https://arrow.apache.org/docs/r/reference/acero.html">supported dplyr functions</a> in the documentation.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>What do I do if a function isn’t supported?</strong></p>
+</div>
+<div class="callout-content">
+<p>Stay tuned!</p>
+</div>
+</div>
+</div>
+</section></section>
+<section id="break" class="title-slide slide level1 center">
+<h1>Break</h1>
+
+</section>
+
+<section>
+<section id="arrow-duckdb-stronger-together" class="title-slide slide level1 center">
+<h1><code>arrow</code> + <code>duckdb</code>: Stronger together</h1>
+
+</section>
+<section id="duckdb-a-reminder" class="slide level2">
+<h2><code>duckdb</code>: a reminder</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p><code>duckdb</code> is a <strong>database format</strong> with an <strong>R API</strong>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="duckdb-with-arrow" class="slide level2">
+<h2><code>duckdb</code> with <code>arrow</code></h2>
+<div>
+<ul>
+<li class="fragment">The <code>duckdb</code> API can implement some functions that arrow can’t.</li>
+<li class="fragment">You can pass data between <code>duckdb</code> and <code>arrow</code> to execute functions from either package with minimal additional overhead.</li>
+</ul>
+</div>
+</section>
+<section id="arrowto_duckdb" class="slide level2">
+<h2><code>arrow::to_duckdb</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb76-2"><a href=""></a></span>
+<span id="cb76-3"><a href=""></a>birds_wide <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb76-4"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb76-5"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb76-6"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">to_duckdb</span>() <span class="sc">|&gt;</span></span>
+<span id="cb76-7"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(StateNum, Route, Year), <span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb76-8"><a href=""></a>  <span class="fu">collect</span>() </span>
+<span id="cb76-9"><a href=""></a></span>
+<span id="cb76-10"><a href=""></a><span class="fu">head</span>(birds_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 73
+  StateNum Route  Year `4920` `5600` `5040` `7170` `4200` `7070` `4180` `5650`
+     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1        6     2  2005     27      5     NA     NA     NA     NA     NA     NA
+2        6     2  2013     16      2      1     NA     NA     NA     NA      1
+3        6     2  2017     37      8     NA     NA      1     NA     NA     NA
+4        6     2  2019     56      6     NA     NA     NA     NA     NA     NA
+5        6     2  2010     46      2      2     NA     NA     NA     NA     NA
+6        6     2  2014     15      2     NA     NA     NA     NA     NA     NA
+# ℹ 62 more variables: `3920` &lt;dbl&gt;, `3250` &lt;dbl&gt;, `5011` &lt;dbl&gt;, `6220` &lt;dbl&gt;,
+#   `6292` &lt;dbl&gt;, `4470` &lt;dbl&gt;, `3560` &lt;dbl&gt;, `4320` &lt;dbl&gt;, `7150` &lt;dbl&gt;,
+#   `7331` &lt;dbl&gt;, `7430` &lt;dbl&gt;, `3240` &lt;dbl&gt;, `6560` &lt;dbl&gt;, `4480` &lt;dbl&gt;,
+#   `3960` &lt;dbl&gt;, `5080` &lt;dbl&gt;, `5690` &lt;dbl&gt;, `5190` &lt;dbl&gt;, `5620` &lt;dbl&gt;,
+#   `6650` &lt;dbl&gt;, `7490` &lt;dbl&gt;, `3490` &lt;dbl&gt;, `4080` &lt;dbl&gt;, `4620` &lt;dbl&gt;,
+#   `4250` &lt;dbl&gt;, `7610` &lt;dbl&gt;, `4540` &lt;dbl&gt;, `4740` &lt;dbl&gt;, `4860` &lt;dbl&gt;,
+#   `4950` &lt;dbl&gt;, `7670` &lt;dbl&gt;, `6150` &lt;dbl&gt;, `7380` &lt;dbl&gt;, `4910` &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+</section></section>
+<section id="duckdb-as-an-alternative-to-arrow" class="title-slide slide level1 center">
+<h1><code>duckdb</code> as an alternative to <code>arrow</code></h1>
+
+</section>
+
+<section id="duckdb-alone" class="title-slide slide level1 center">
+<h1><code>duckdb</code> alone</h1>
+<div>
+<ul>
+<li class="fragment">You can use <code>duckdb</code> to wrangle data stored as csv, parquet, and many other file formats, or as a .duckdb database</li>
+<li class="fragment"><code>duckdb</code> can be configured to load data over HTTPS</li>
+<li class="fragment">Unlike <code>arrow</code>, <code>duckdb</code> naturally supports multiple related tables stored within one database</li>
+</ul>
+</div>
+</section>
+
+<section>
+<section id="duckdb-and-r-options" class="title-slide slide level1 center">
+<h1><code>duckdb</code> and <code>R</code>: options</h1>
+<div>
+<ul>
+<li class="fragment"><code>duckdb</code> integrates with the <code>DBI</code> and <code>dbplyr</code> packages to support <code>dplyr</code> verbs</li>
+<li class="fragment">The <code>duckplyr</code> package provides a more direct interface to <code>duckdb</code>, but is brand-new</li>
+</ul>
+</div>
+</section>
+<section id="opening-data-with-duckdb" class="slide level2">
+<h2>Opening data with <code>duckdb</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a><span class="fu">library</span>(duckdb)</span>
+<span id="cb78-2"><a href=""></a><span class="fu">library</span>(DBI)</span>
+<span id="cb78-3"><a href=""></a></span>
+<span id="cb78-4"><a href=""></a>a_duckdb <span class="ot">&lt;-</span> <span class="fu">duckdb</span>() </span>
+<span id="cb78-5"><a href=""></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(a_duckdb)</span>
+<span id="cb78-6"><a href=""></a></span>
+<span id="cb78-7"><a href=""></a>duckdb<span class="sc">::</span><span class="fu">duckdb_read_csv</span>(<span class="at">conn =</span> con,</span>
+<span id="cb78-8"><a href=""></a>                        <span class="at">name =</span> <span class="st">"all_routes_all_stops"</span>,</span>
+<span id="cb78-9"><a href=""></a>                        <span class="at">files =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb78-10"><a href=""></a>                                           <span class="st">"data"</span>,</span>
+<span id="cb78-11"><a href=""></a>                                           <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb78-12"><a href=""></a></span>
+<span id="cb78-13"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb78-14"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Source:   SQL [6 x 5]
+# Database: DuckDB v0.10.1 [renatadiaz@Windows 10 x64:R 4.3.1/:memory:]
+  StateNum Route  Year   AOU StopTotal
+     &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;     &lt;int&gt;
+1        4     1  2000   530        17
+2        4     1  2000   534        89
+3        4     1  2000   540        10
+4        4     1  2000   590        76
+5        4     1  2000  1200         2
+6        4     1  2000  1320         3</code></pre>
+</div>
+</div>
+</section>
+<section id="dplyr-pipelines-with-duckdb" class="slide level2">
+<h2><code>dplyr</code> pipelines with <code>duckdb</code></h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Use <code>tbl</code> and specify the table name.</p>
+<p><code>duckdb</code> and <code>dbplyr</code> translate <code>dplyr</code> verbs to database syntax.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="dplyr-pipelines-with-duckdb-1" class="slide level2">
+<h2><code>dplyr</code> pipelines with <code>duckdb</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb80-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb80-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb80-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">n_distinct</span>(Year),</span>
+<span id="cb80-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">n_distinct</span>(AOU)) <span class="sc">|&gt;</span></span>
+<span id="cb80-7"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Source:   SQL [6 x 4]
+# Database: DuckDB v0.10.1 [renatadiaz@Windows 10 x64:R 4.3.1/:memory:]
+# Groups:   StateNum
+  StateNum Route nyears nspecies
+     &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;    &lt;dbl&gt;
+1        6    12     24       54
+2        6    17     10       52
+3        6    32     24      127
+4        6    53     11       47
+5        6    56     20       60
+6        6    68     16       68</code></pre>
+</div>
+</div>
+</section>
+<section id="reshaping-with-duckdb" class="slide level2">
+<h2>Reshaping with <code>duckdb</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb82-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb82-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb82-4"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(StateNum, Route, Year), <span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb82-5"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb82-6"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 73
+  StateNum Route  Year `4740` `4920` `5738` `5880` `7170` `7331` `7430` `4080`
+     &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+1        6     2  1997     33     28     27     23     NA     NA     NA     NA
+2        6     2  1999     10     33     33     16      1      8      6     NA
+3        6     2  2004      2      9     11      7     NA      3      2      1
+4        6     2  2005      2     27     22      7     NA     NA     11     NA
+5        6     2  2006     10      6      7     13     NA      3     NA     NA
+6        6     2  2007      2      3      8     13     NA     NA     NA     NA
+# ℹ 62 more variables: `7020` &lt;int&gt;, `4910` &lt;int&gt;, `7680` &lt;int&gt;, `4813` &lt;int&gt;,
+#   `5011` &lt;int&gt;, `5520` &lt;int&gt;, `5600` &lt;int&gt;, `5620` &lt;int&gt;, `6070` &lt;int&gt;,
+#   `7030` &lt;int&gt;, `4691` &lt;int&gt;, `7380` &lt;int&gt;, `3370` &lt;int&gt;, `5900` &lt;int&gt;,
+#   `3310` &lt;int&gt;, `5690` &lt;int&gt;, `3250` &lt;int&gt;, `7490` &lt;int&gt;, `5800` &lt;int&gt;,
+#   `6150` &lt;int&gt;, `3160` &lt;int&gt;, `4320` &lt;int&gt;, `4540` &lt;int&gt;, `4950` &lt;int&gt;,
+#   `5190` &lt;int&gt;, `7510` &lt;int&gt;, `5650` &lt;int&gt;, `5730` &lt;int&gt;, `6882` &lt;int&gt;,
+#   `5960` &lt;int&gt;, `6170` &lt;int&gt;, `4200` &lt;int&gt;, `4470` &lt;int&gt;, `3600` &lt;int&gt;, …</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="raw-sql-with-duckdb" class="title-slide slide level1 center">
+<h1>Raw SQL with <code>duckdb</code></h1>
+
+</section>
+<section id="writing-raw-sql-for-duckdb" class="slide level2">
+<h2>Writing raw SQL for <code>duckdb</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb84-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb84-3"><a href=""></a>  <span class="fu">show_query</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;SQL&gt;
+SELECT *
+FROM all_routes_all_stops
+WHERE (StateNum = 6.0) AND (Route = 2.0)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a>query_text <span class="ot">&lt;-</span> <span class="st">"SELECT * FROM all_routes_all_stops WHERE (StateNum = 6.0) AND (Route = 2.0)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="evaluating-sql-in-duckdb" class="slide level2">
+<h2>Evaluating SQL in <code>duckdb</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a><span class="fu">library</span>(DBI)</span>
+<span id="cb87-2"><a href=""></a></span>
+<span id="cb87-3"><a href=""></a><span class="fu">dbGetQuery</span>(<span class="at">conn =</span> con, <span class="at">statement =</span> query_text) <span class="sc">|&gt;</span></span>
+<span id="cb87-4"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  StateNum Route Year  AOU StopTotal
+1        6     2 1997 3160        69
+2        6     2 1997 3250         5
+3        6     2 1997 4320         1
+4        6     2 1997 4540        14
+5        6     2 1997 4570         1
+6        6     2 1997 4740        33</code></pre>
+</div>
+</div>
+</section>
+<section id="disconnect-from-db" class="slide level2">
+<h2>Disconnect from db!</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a><span class="fu">dbDisconnect</span>(<span class="at">conn =</span> con, <span class="at">shutdown =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
+<section>
+<section id="in-summary" class="title-slide slide level1 center">
+<h1>In summary</h1>
+
+</section>
+<section id="choosing-your-tools" class="slide level2">
+<h2>Choosing your tools</h2>
+<table>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><code>arrow</code></th>
+<th><code>duckdb</code></th>
+<th><code>DBI</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Focus on one big table</td>
+<td>Multiple related tables</td>
+<td>Custom SQL for specialized/advanced operations</td>
+</tr>
+<tr class="even">
+<td><code>dplyr</code>-focused workflow</td>
+<td><code>dplyr</code> + additional verbs</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>High value on data interoperability</td>
+<td>.duckdb format acceptable</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4 id="you-can-use-multiple-tools-within-one-workflow">✨ You can use multiple tools within one workflow!✨</h4>
+</section></section>
+<section>
+<section id="resources" class="title-slide slide level1 center">
+<h1>Resources</h1>
+
+</section>
+<section id="arrow" class="slide level2">
+<h2><code>arrow</code></h2>
+<ul>
+<li><a href="https://arrow.apache.org/">Apache arrow</a></li>
+<li><a href="https://arrow.apache.org/docs/r/index.html">R package</a></li>
+<li><a href="https://arrow.apache.org/docs/r/reference/acero.html">Supported functions</a></li>
+<li><a href="https://posit-conf-2023.github.io/arrow/">More in-depth arrow tutorial</a></li>
+</ul>
+</section>
+<section id="duckdb-2" class="slide level2">
+<h2><code>duckdb</code></h2>
+<ul>
+<li><a href="https://duckdb.org/">DuckDB</a></li>
+<li><a href="https://duckdb.org/docs/api/r">DuckDB R API</a></li>
+<li><a href="https://cboettig.github.io/duckdbfs/">DuckDB + httpfs + duckdbfs</a> (for data access over HTTPS)</li>
+<li><a href="https://duckdblabs.github.io/duckplyr/">duckplyr</a></li>
+</ul>
+</section>
+<section id="cct-data-science-opportunities" class="slide level2">
+<h2>CCT Data Science opportunities</h2>
+<div>
+<ul>
+<li class="fragment">Drop-in hours - Tuesdays, 9-10</li>
+<li class="fragment">Incubator projects</li>
+<li class="fragment">Upcoming workshops</li>
+</ul>
+</div>
+</section>
+<section id="data-science-ua" class="slide level2">
+<h2>Data science @ UA</h2>
+<div>
+<ul>
+<li class="fragment"><a href="https://researchbazaar.arizona.edu/">Research Bazaar Arizona</a></li>
+<li class="fragment">Coffee &amp; Code</li>
+<li class="fragment">Hack Hour</li>
+<li class="fragment">UA Data Science Slack</li>
+<li class="fragment">Sign up here: <a href="https://jcoliver.github.io/uadatascience-slack/user-guide.html" class="uri">https://jcoliver.github.io/uadatascience-slack/user-guide.html</a></li>
+<li class="fragment"><a href="https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w">UA Libraries Data &amp; Viz Drop-In Hours</a></li>
+<li class="fragment">UA Data Science Institute</li>
+</ul>
+</div>
+</section></section>
+<section id="thank-you" class="title-slide slide level1 center">
+<h1>Thank you!</h1>
+<p>Thank you for attending!</p>
+<p>For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our <a href="https://datascience.cct.arizona.edu">website</a>!</p>
+<p>Please offer feedback through this survey: <a href="https://forms.gle/CxAimF4TDWCsHxz19" class="uri">https://forms.gle/CxAimF4TDWCsHxz19</a></p>
+<div class="quarto-auto-generated-content">
+<p><img src="_extensions/cct-datascience/uaz/logo.png" class="slide-logo"></p>
+<div class="footer footer-default">
+
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="2024-04-big-data_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="2024-04-big-data_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
