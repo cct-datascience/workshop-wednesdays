@@ -6,8 +6,8 @@ format:
       logo: "../logo.png"
 editor: source
 execute:
-  freeze: true
   echo: true
+  freeze: true
 ---
 
 ## ⏰ Schedule ⏰ {.smaller}
@@ -45,9 +45,9 @@ remember to record
 ## Before we get started
 
 ::: incremental
--   These slides (and links!) are available at: NEW LINK HERE
+-   These slides (and links!) are available at:  <https://viz.datascience.arizona.edu/2024-big-data/>
 -   Please make sure you have R and RStudio installed
--   Please install the following packages: `duckdb, arrow, dplyr, tidyr, dbplyr, DBI, here`
+-   Please install the following packages: `duckdb, arrow, dplyr, tidyr, dbplyr, DBI, here, tictoc`
 -   You can download today's data here: <https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4>
 :::
 
@@ -134,16 +134,27 @@ Today we will cover arrow and duckdb separately and then show how to combine the
 -   Download for today: <https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4>
 -   Source: Ziolkowski Jr., D.J., Lutmerding, M., Aponte, V.I., and Hudson, M-A.R., 2022, North American Breeding Bird Survey Dataset 1966 - 2021: U.S. Geological Survey data release, https://doi.org/10.5066/P97WAZE5. Summarized.
 
-# Loading data using arrow
+## Let's get set up
 
-## `read.csv` vs. `read_csv_arrow`
+::: incremental
+- Download data.
+- Open .Rproj
+:::
 
-```{r, echo = F}
 
+## Let's get set up
+
+```{r}
 library(tictoc)
 library(arrow)
 library(dplyr)
 ```
+
+
+# Loading data using arrow
+
+## `read.csv` vs. `read_csv_arrow`
+
 
 ::: columns
 ::: {.column width="50%"}
