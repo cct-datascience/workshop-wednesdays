@@ -418,10 +418,6 @@ Renata Diaz
           display:block!important;
       }</style></aside>
 <table>
-<colgroup>
-<col style="width: 73%">
-<col style="width: 26%">
-</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Topic</th>
@@ -450,14 +446,18 @@ Renata Diaz
 <td style="text-align: left;">11:50 - 12:00</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><code>arrow</code> with <code>duckdb | 12:00 - 12:20 | |</code>duckdb` and raw SQL</td>
-<td style="text-align: left;">12:20-12:35</td>
+<td style="text-align: left;"><code>arrow</code> with <code>duckdb</code></td>
+<td style="text-align: left;">12:00 - 12:20</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;"><code>duckdb</code> and raw SQL</td>
+<td style="text-align: left;">12:20-12:35</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">When to use what</td>
 <td style="text-align: left;">12:35-12:45</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">Wrap up</td>
 <td style="text-align: left;">12:45-1</td>
 </tr>
@@ -486,9 +486,9 @@ Renata Diaz
 <h2>Before we get started</h2>
 <div>
 <ul>
-<li class="fragment">These slides (and links!) are available at: NEW LINK HERE</li>
+<li class="fragment">These slides (and links!) are available at: <a href="https://viz.datascience.arizona.edu/2024-big-data/" class="uri">https://viz.datascience.arizona.edu/2024-big-data/</a></li>
 <li class="fragment">Please make sure you have R and RStudio installed</li>
-<li class="fragment">Please install the following packages: <code>duckdb, arrow, dplyr, tidyr, dbplyr, DBI, here</code></li>
+<li class="fragment">Please install the following packages: <code>duckdb, arrow, dplyr, tidyr, dbplyr, DBI, here, tictoc</code></li>
 <li class="fragment">You can download today’s data here: <a href="https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4" class="uri">https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4</a></li>
 </ul>
 </div>
@@ -590,6 +590,7 @@ Renata Diaz
 </ul>
 </section>
 
+<section>
 <section id="todays-data-the-breeding-bird-survey-1" class="title-slide slide level1 center">
 <h1>Today’s data: the Breeding Bird Survey</h1>
 <ul>
@@ -597,7 +598,23 @@ Renata Diaz
 <li>Source: Ziolkowski Jr., D.J., Lutmerding, M., Aponte, V.I., and Hudson, M-A.R., 2022, North American Breeding Bird Survey Dataset 1966 - 2021: U.S. Geological Survey data release, https://doi.org/10.5066/P97WAZE5. Summarized.</li>
 </ul>
 </section>
-
+<section id="lets-get-set-up" class="slide level2">
+<h2>Let’s get set up</h2>
+<div>
+<ul>
+<li class="fragment">Download data.</li>
+<li class="fragment">Open .Rproj</li>
+</ul>
+</div>
+</section>
+<section id="lets-get-set-up-1" class="slide level2">
+<h2>Let’s get set up</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tictoc)</span>
+<span id="cb1-2"><a href=""></a><span class="fu">library</span>(arrow)</span>
+<span id="cb1-3"><a href=""></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
 <section>
 <section id="loading-data-using-arrow" class="title-slide slide level1 center">
 <h1>Loading data using arrow</h1>
@@ -608,31 +625,31 @@ Renata Diaz
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">tic</span>()</span>
-<span id="cb1-2"><a href=""></a></span>
-<span id="cb1-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb1-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>( </span>
-<span id="cb1-5"><a href=""></a>             <span class="st">"data"</span>,</span>
-<span id="cb1-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
-<span id="cb1-7"><a href=""></a></span>
-<span id="cb1-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb2-2"><a href=""></a></span>
+<span id="cb2-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb2-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>( </span>
+<span id="cb2-5"><a href=""></a>             <span class="st">"data"</span>,</span>
+<span id="cb2-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb2-7"><a href=""></a></span>
+<span id="cb2-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>4.33 sec elapsed</code></pre>
+<pre><code>9.21 sec elapsed</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="fu">tic</span>()</span>
-<span id="cb3-2"><a href=""></a></span>
-<span id="cb3-3"><a href=""></a>birds_arrow_csv <span class="ot">&lt;-</span></span>
-<span id="cb3-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">read_csv_arrow</span>(</span>
-<span id="cb3-5"><a href=""></a>    <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb3-6"><a href=""></a>                      <span class="st">"data"</span>,</span>
-<span id="cb3-7"><a href=""></a>                      <span class="st">"all_routes_all_stops.csv"</span>))</span>
-<span id="cb3-8"><a href=""></a></span>
-<span id="cb3-9"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb4-2"><a href=""></a></span>
+<span id="cb4-3"><a href=""></a>birds_arrow_csv <span class="ot">&lt;-</span></span>
+<span id="cb4-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">read_csv_arrow</span>(</span>
+<span id="cb4-5"><a href=""></a>    <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb4-6"><a href=""></a>                      <span class="st">"data"</span>,</span>
+<span id="cb4-7"><a href=""></a>                      <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb4-8"><a href=""></a></span>
+<span id="cb4-9"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.53 sec elapsed</code></pre>
+<pre><code>1.3 sec elapsed</code></pre>
 </div>
 </div>
 </div>
@@ -643,26 +660,26 @@ Renata Diaz
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb5-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb7-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
-<span id="cb9-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
-<span id="cb11-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>birds_arrow_csv <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
 </div>
@@ -692,32 +709,32 @@ Renata Diaz
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a><span class="fu">tic</span>()</span>
-<span id="cb13-2"><a href=""></a></span>
-<span id="cb13-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb13-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>( </span>
-<span id="cb13-5"><a href=""></a>             <span class="st">"data"</span>,</span>
-<span id="cb13-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
-<span id="cb13-7"><a href=""></a></span>
-<span id="cb13-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb14-2"><a href=""></a></span>
+<span id="cb14-3"><a href=""></a>birds_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb14-4"><a href=""></a>  here<span class="sc">::</span><span class="fu">here</span>( </span>
+<span id="cb14-5"><a href=""></a>             <span class="st">"data"</span>,</span>
+<span id="cb14-6"><a href=""></a>             <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb14-7"><a href=""></a></span>
+<span id="cb14-8"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>4.75 sec elapsed</code></pre>
+<pre><code>11.53 sec elapsed</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">tic</span>()</span>
-<span id="cb15-2"><a href=""></a></span>
-<span id="cb15-3"><a href=""></a>birds_arrow_dataset <span class="ot">&lt;-</span></span>
-<span id="cb15-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
-<span id="cb15-5"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb15-6"><a href=""></a>                         <span class="st">"data"</span>,</span>
-<span id="cb15-7"><a href=""></a>                         <span class="st">"all_routes_all_stops.csv"</span>),</span>
-<span id="cb15-8"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>)</span>
-<span id="cb15-9"><a href=""></a></span>
-<span id="cb15-10"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">tic</span>()</span>
+<span id="cb16-2"><a href=""></a></span>
+<span id="cb16-3"><a href=""></a>birds_arrow_dataset <span class="ot">&lt;-</span></span>
+<span id="cb16-4"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb16-5"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb16-6"><a href=""></a>                         <span class="st">"data"</span>,</span>
+<span id="cb16-7"><a href=""></a>                         <span class="st">"all_routes_all_stops.csv"</span>),</span>
+<span id="cb16-8"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>)</span>
+<span id="cb16-9"><a href=""></a></span>
+<span id="cb16-10"><a href=""></a><span class="fu">toc</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.03 sec elapsed</code></pre>
+<pre><code>0.08 sec elapsed</code></pre>
 </div>
 </div>
 </div>
@@ -728,26 +745,26 @@ Renata Diaz
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb17-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
 </div>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb23-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "StateNum"  "Route"     "Year"      "AOU"       "StopTotal"</code></pre>
 </div>
@@ -760,13 +777,13 @@ Renata Diaz
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb25-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  StateNum Route Year  AOU StopTotal
 1        4     1 2000  530        17
@@ -779,13 +796,13 @@ Renata Diaz
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb31-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Table
 6 rows x 5 columns
@@ -804,13 +821,13 @@ $StopTotal &lt;int64&gt;</code></pre>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>birds_csv <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  StateNum Route Year  AOU StopTotal
 1        4     1 2000  530        17
@@ -823,14 +840,14 @@ $StopTotal &lt;int64&gt;</code></pre>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb39-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
-<span id="cb39-3"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a>birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb40-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb40-3"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
   StateNum Route  Year   AOU StopTotal
@@ -877,23 +894,23 @@ $StopTotal &lt;int64&gt;</code></pre>
 <section id="hive-partitioning-1" class="slide level2">
 <h2>Hive partitioning</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>birds_arrow_hive <span class="ot">&lt;-</span></span>
-<span id="cb41-2"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
-<span id="cb41-3"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb41-4"><a href=""></a>                         <span class="st">"data"</span>,</span>
-<span id="cb41-5"><a href=""></a>                         <span class="st">"hive"</span>),</span>
-<span id="cb41-6"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>,</span>
-<span id="cb41-7"><a href=""></a>    <span class="at">partitioning =</span> <span class="st">"StateNum"</span>)</span>
-<span id="cb41-8"><a href=""></a></span>
-<span id="cb41-9"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
-<span id="cb41-10"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a>birds_arrow_hive <span class="ot">&lt;-</span></span>
+<span id="cb42-2"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">open_dataset</span>(</span>
+<span id="cb42-3"><a href=""></a>    <span class="at">sources =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb42-4"><a href=""></a>                         <span class="st">"data"</span>,</span>
+<span id="cb42-5"><a href=""></a>                         <span class="st">"hive"</span>),</span>
+<span id="cb42-6"><a href=""></a>    <span class="at">format =</span> <span class="st">"csv"</span>,</span>
+<span id="cb42-7"><a href=""></a>    <span class="at">partitioning =</span> <span class="st">"StateNum"</span>)</span>
+<span id="cb42-8"><a href=""></a></span>
+<span id="cb42-9"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
+<span id="cb42-10"><a href=""></a>  <span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 3935870</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
-<span id="cb43-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-3"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-4"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a>birds_arrow_hive <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href=""></a>  <span class="fu">head</span>() <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb44-4"><a href=""></a>  <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Route"     "Year"      "AOU"       "StopTotal" "StateNum" </code></pre>
 </div>
@@ -920,20 +937,20 @@ $StopTotal &lt;int64&gt;</code></pre>
 <section id="dplyr-pipelines-in-arrow" class="slide level2">
 <h2><code>dplyr</code> pipelines in <code>arrow</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb45-2"><a href=""></a><span class="fu">library</span>(arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb46-2"><a href=""></a><span class="fu">library</span>(arrow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="core-dplyr-verbs" class="slide level2">
 <h2>Core <code>dplyr</code> verbs</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a>routes_in_arizona <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb46-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb46-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb46-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb46-5"><a href=""></a>  <span class="fu">collect</span>()</span>
-<span id="cb46-6"><a href=""></a></span>
-<span id="cb46-7"><a href=""></a><span class="fu">head</span>(routes_in_arizona)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>routes_in_arizona <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb47-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb47-6"><a href=""></a></span>
+<span id="cb47-7"><a href=""></a><span class="fu">head</span>(routes_in_arizona)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 2
   StateNum Route
@@ -950,14 +967,14 @@ $StopTotal &lt;int64&gt;</code></pre>
 <section id="mutate" class="slide level2">
 <h2><code>mutate</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a>routes_in_arizona <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb48-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb48-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb48-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb48-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">StateRoute =</span> <span class="fu">paste0</span>(StateNum, <span class="st">"_"</span>, Route)) <span class="sc">|&gt;</span></span>
-<span id="cb48-6"><a href=""></a>  <span class="fu">collect</span>()</span>
-<span id="cb48-7"><a href=""></a></span>
-<span id="cb48-8"><a href=""></a><span class="fu">head</span>(routes_in_arizona)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a>routes_in_arizona <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb49-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb49-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">StateRoute =</span> <span class="fu">paste0</span>(StateNum, <span class="st">"_"</span>, Route)) <span class="sc">|&gt;</span></span>
+<span id="cb49-6"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb49-7"><a href=""></a></span>
+<span id="cb49-8"><a href=""></a><span class="fu">head</span>(routes_in_arizona)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   StateNum Route StateRoute
@@ -974,13 +991,13 @@ $StopTotal &lt;int64&gt;</code></pre>
 <section id="group_by-summarize" class="slide level2">
 <h2><code>group_by |&gt; summarize</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb50-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb50-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb50-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb50-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Year)),</span>
-<span id="cb50-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">length</span>(<span class="fu">unique</span>(AOU))) <span class="sc">|&gt;</span></span>
-<span id="cb50-7"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb51-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb51-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb51-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Year)),</span>
+<span id="cb51-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">length</span>(<span class="fu">unique</span>(AOU))) <span class="sc">|&gt;</span></span>
+<span id="cb51-7"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: Error in summarize_eval(names(exprs)[i], exprs[[i]], ctx, length(.data$group_by_vars) &gt;  : 
   Expression length(unique(Year)) is not an aggregate expression or is not supported in Arrow
@@ -991,13 +1008,13 @@ Call collect() first to pull data into R.</code></pre>
 <section id="group_by-summarize-1" class="slide level2">
 <h2><code>group_by |&gt; summarize</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb52-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb52-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb52-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb52-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Year)),</span>
-<span id="cb52-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">length</span>(<span class="fu">unique</span>(AOU))) <span class="sc">|&gt;</span></span>
-<span id="cb52-7"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb53-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb53-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb53-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb53-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">length</span>(<span class="fu">unique</span>(Year)),</span>
+<span id="cb53-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">length</span>(<span class="fu">unique</span>(AOU))) <span class="sc">|&gt;</span></span>
+<span id="cb53-7"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: Error in summarize_eval(names(exprs)[i], exprs[[i]], ctx, length(.data$group_by_vars) &gt;  : 
   Expression length(unique(Year)) is not an aggregate expression or is not supported in Arrow
@@ -1021,15 +1038,15 @@ Call collect() first to pull data into R.</code></pre>
 <section id="group_by-summarize-2" class="slide level2">
 <h2><code>group_by |&gt; summarize</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb54-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb54-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb54-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb54-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">n_distinct</span>(Year),</span>
-<span id="cb54-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">n_distinct</span>(AOU)) <span class="sc">|&gt;</span></span>
-<span id="cb54-7"><a href=""></a>  <span class="fu">collect</span>()</span>
-<span id="cb54-8"><a href=""></a></span>
-<span id="cb54-9"><a href=""></a><span class="fu">head</span>(birds_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a>birds_summary <span class="ot">&lt;-</span>  birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb55-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb55-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb55-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb55-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">n_distinct</span>(Year),</span>
+<span id="cb55-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">n_distinct</span>(AOU)) <span class="sc">|&gt;</span></span>
+<span id="cb55-7"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb55-8"><a href=""></a></span>
+<span id="cb55-9"><a href=""></a><span class="fu">head</span>(birds_summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
 # Groups:   StateNum [1]
@@ -1047,16 +1064,16 @@ Call collect() first to pull data into R.</code></pre>
 <section id="join" class="slide level2">
 <h2><code>join</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb56-2"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb56-3"><a href=""></a>  <span class="fu">arrow_table</span>()</span>
-<span id="cb56-4"><a href=""></a></span>
-<span id="cb56-5"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb56-6"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb56-7"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb56-8"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb56-9"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
-<span id="cb56-10"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb57-2"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb57-3"><a href=""></a>  <span class="fu">arrow_table</span>()</span>
+<span id="cb57-4"><a href=""></a></span>
+<span id="cb57-5"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb57-6"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb57-7"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb57-8"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb57-9"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
+<span id="cb57-10"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in `compute.arrow_dplyr_query()`:
 ! Invalid: Incompatible data types for corresponding join field keys: FieldRef.Name(StateNum) of type int64 and FieldRef.Name(StateNum) of type int32</code></pre>
@@ -1066,16 +1083,16 @@ Call collect() first to pull data into R.</code></pre>
 <section id="join-1" class="slide level2">
 <h2><code>join</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb58-2"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb58-3"><a href=""></a>  <span class="fu">arrow_table</span>()</span>
-<span id="cb58-4"><a href=""></a></span>
-<span id="cb58-5"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb58-6"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb58-7"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb58-8"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb58-9"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
-<span id="cb58-10"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb59-2"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href=""></a>  <span class="fu">arrow_table</span>()</span>
+<span id="cb59-4"><a href=""></a></span>
+<span id="cb59-5"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb59-6"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb59-7"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb59-8"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb59-9"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
+<span id="cb59-10"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in `compute.arrow_dplyr_query()`:
 ! Invalid: Incompatible data types for corresponding join field keys: FieldRef.Name(StateNum) of type int64 and FieldRef.Name(StateNum) of type int32</code></pre>
@@ -1098,7 +1115,7 @@ Call collect() first to pull data into R.</code></pre>
 <section id="schemas" class="slide level2">
 <h2>Schemas</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a><span class="fu">schema</span>(birds_arrow_dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a><span class="fu">schema</span>(birds_arrow_dataset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Schema
 StateNum: int64
@@ -1112,7 +1129,7 @@ StopTotal: int64</code></pre>
 <section id="schemas-1" class="slide level2">
 <h2>Schemas</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a><span class="fu">schema</span>(route_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="fu">schema</span>(route_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Schema
 CountryNum: int32
@@ -1132,16 +1149,16 @@ RouteTypeDetailID: int32</code></pre>
 <section id="modifying-a-schema" class="slide level2">
 <h2>Modifying a schema</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a>route_schema <span class="ot">&lt;-</span> <span class="fu">schema</span>(route_info)</span>
-<span id="cb64-2"><a href=""></a>route_schema<span class="sc">$</span>StateNum <span class="ot">&lt;-</span> <span class="fu">int64</span>()</span>
-<span id="cb64-3"><a href=""></a>route_schema<span class="sc">$</span>Route <span class="ot">&lt;-</span> <span class="fu">int64</span>()</span>
-<span id="cb64-4"><a href=""></a></span>
-<span id="cb64-5"><a href=""></a></span>
-<span id="cb64-6"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb64-7"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb64-8"><a href=""></a>  <span class="fu">arrow_table</span>(<span class="at">schema =</span> route_schema)</span>
-<span id="cb64-9"><a href=""></a></span>
-<span id="cb64-10"><a href=""></a><span class="fu">schema</span>(route_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>route_schema <span class="ot">&lt;-</span> <span class="fu">schema</span>(route_info)</span>
+<span id="cb65-2"><a href=""></a>route_schema<span class="sc">$</span>StateNum <span class="ot">&lt;-</span> <span class="fu">int64</span>()</span>
+<span id="cb65-3"><a href=""></a>route_schema<span class="sc">$</span>Route <span class="ot">&lt;-</span> <span class="fu">int64</span>()</span>
+<span id="cb65-4"><a href=""></a></span>
+<span id="cb65-5"><a href=""></a></span>
+<span id="cb65-6"><a href=""></a>route_info <span class="ot">&lt;-</span> <span class="fu">read_csv_arrow</span>(here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb65-7"><a href=""></a>                                        <span class="st">"data"</span>, <span class="st">"routes.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb65-8"><a href=""></a>  <span class="fu">arrow_table</span>(<span class="at">schema =</span> route_schema)</span>
+<span id="cb65-9"><a href=""></a></span>
+<span id="cb65-10"><a href=""></a><span class="fu">schema</span>(route_info)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Schema
 CountryNum: int32
@@ -1161,14 +1178,14 @@ RouteTypeDetailID: int32</code></pre>
 <section id="join-again" class="slide level2">
 <h2><code>join</code> again</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb66-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb66-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb66-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb66-5"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
-<span id="cb66-6"><a href=""></a>  <span class="fu">collect</span>()</span>
-<span id="cb66-7"><a href=""></a></span>
-<span id="cb66-8"><a href=""></a><span class="fu">head</span>(arizona_routes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>arizona_routes <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb67-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb67-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb67-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb67-5"><a href=""></a>  <span class="fu">left_join</span>(route_info) <span class="sc">|&gt;</span></span>
+<span id="cb67-6"><a href=""></a>  <span class="fu">collect</span>()</span>
+<span id="cb67-7"><a href=""></a></span>
+<span id="cb67-8"><a href=""></a><span class="fu">head</span>(arizona_routes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
   StateNum Route CountryNum                              RouteName Active
@@ -1187,13 +1204,13 @@ RouteTypeDetailID: int32</code></pre>
 <section id="window-functions" class="slide level2">
 <h2>Window functions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb68-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb68-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
-<span id="cb68-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
-<span id="cb68-5"><a href=""></a>  <span class="fu">collect</span>() </span>
-<span id="cb68-6"><a href=""></a></span>
-<span id="cb68-7"><a href=""></a><span class="fu">head</span>(arizona_timeseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb69-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb69-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
+<span id="cb69-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
+<span id="cb69-5"><a href=""></a>  <span class="fu">collect</span>() </span>
+<span id="cb69-6"><a href=""></a></span>
+<span id="cb69-7"><a href=""></a><span class="fu">head</span>(arizona_timeseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
 # Groups:   StateNum, Route [1]
@@ -1211,12 +1228,12 @@ RouteTypeDetailID: int32</code></pre>
 <section id="window-functions-1" class="slide level2">
 <h2>Window functions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb70-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb70-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
-<span id="cb70-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
-<span id="cb70-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TotalBirdsLastCensus =</span> <span class="fu">lag</span>(TotalBirds)) <span class="sc">|&gt;</span></span>
-<span id="cb70-6"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb71-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb71-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
+<span id="cb71-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
+<span id="cb71-5"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TotalBirdsLastCensus =</span> <span class="fu">lag</span>(TotalBirds)) <span class="sc">|&gt;</span></span>
+<span id="cb71-6"><a href=""></a>  <span class="fu">collect</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error: Expression lag(TotalBirds) not supported in Arrow
 Call collect() first to pull data into R.</code></pre>
@@ -1239,13 +1256,13 @@ Call collect() first to pull data into R.</code></pre>
 <section id="window-functions-2" class="slide level2">
 <h2>Window functions</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb72-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb72-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
-<span id="cb72-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
-<span id="cb72-5"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
-<span id="cb72-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TotalBirdsLastCensus =</span> <span class="fu">lag</span>(TotalBirds)) </span>
-<span id="cb72-7"><a href=""></a><span class="fu">head</span>(arizona_timeseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href=""></a>arizona_timeseries <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb73-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb73-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route, Year) <span class="sc">|&gt;</span></span>
+<span id="cb73-4"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">TotalBirds =</span> <span class="fu">sum</span>(StopTotal)) <span class="sc">|&gt;</span></span>
+<span id="cb73-5"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb73-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">TotalBirdsLastCensus =</span> <span class="fu">lag</span>(TotalBirds)) </span>
+<span id="cb73-7"><a href=""></a><span class="fu">head</span>(arizona_timeseries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 5
 # Groups:   StateNum, Route [1]
@@ -1263,13 +1280,13 @@ Call collect() first to pull data into R.</code></pre>
 <section id="reshaping" class="slide level2">
 <h2>Reshaping</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb74-2"><a href=""></a></span>
-<span id="cb74-3"><a href=""></a>birds_wide <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb74-4"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>, Year <span class="sc">==</span> <span class="dv">1994</span>) <span class="sc">|&gt;</span></span>
-<span id="cb74-5"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
-<span id="cb74-6"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
-<span id="cb74-7"><a href=""></a>  <span class="fu">collect</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb75-2"><a href=""></a></span>
+<span id="cb75-3"><a href=""></a>birds_wide <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb75-4"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>, Year <span class="sc">==</span> <span class="dv">1994</span>) <span class="sc">|&gt;</span></span>
+<span id="cb75-5"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb75-6"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb75-7"><a href=""></a>  <span class="fu">collect</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in UseMethod("pivot_wider"): no applicable method for 'pivot_wider' applied to an object of class "arrow_dplyr_query"</code></pre>
 </div>
@@ -1347,16 +1364,16 @@ Call collect() first to pull data into R.</code></pre>
 <section id="arrowto_duckdb" class="slide level2">
 <h2><code>arrow::to_duckdb</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb76-2"><a href=""></a></span>
-<span id="cb76-3"><a href=""></a>birds_wide <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
-<span id="cb76-4"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb76-5"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
-<span id="cb76-6"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">to_duckdb</span>() <span class="sc">|&gt;</span></span>
-<span id="cb76-7"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(StateNum, Route, Year), <span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
-<span id="cb76-8"><a href=""></a>  <span class="fu">collect</span>() </span>
-<span id="cb76-9"><a href=""></a></span>
-<span id="cb76-10"><a href=""></a><span class="fu">head</span>(birds_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href=""></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb77-2"><a href=""></a></span>
+<span id="cb77-3"><a href=""></a>birds_wide <span class="ot">&lt;-</span> birds_arrow_dataset <span class="sc">|&gt;</span></span>
+<span id="cb77-4"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb77-5"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb77-6"><a href=""></a>  arrow<span class="sc">::</span><span class="fu">to_duckdb</span>() <span class="sc">|&gt;</span></span>
+<span id="cb77-7"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(StateNum, Route, Year), <span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb77-8"><a href=""></a>  <span class="fu">collect</span>() </span>
+<span id="cb77-9"><a href=""></a></span>
+<span id="cb77-10"><a href=""></a><span class="fu">head</span>(birds_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 73
   StateNum Route  Year `4920` `5600` `5040` `7170` `4200` `7070` `4180` `5650`
@@ -1365,15 +1382,15 @@ Call collect() first to pull data into R.</code></pre>
 2        6     2  2013     16      2      1     NA     NA     NA     NA      1
 3        6     2  2017     37      8     NA     NA      1     NA     NA     NA
 4        6     2  2019     56      6     NA     NA     NA     NA     NA     NA
-5        6     2  2010     46      2      2     NA     NA     NA     NA     NA
-6        6     2  2014     15      2     NA     NA     NA     NA     NA     NA
-# ℹ 62 more variables: `3920` &lt;dbl&gt;, `3250` &lt;dbl&gt;, `5011` &lt;dbl&gt;, `6220` &lt;dbl&gt;,
-#   `6292` &lt;dbl&gt;, `4470` &lt;dbl&gt;, `3560` &lt;dbl&gt;, `4320` &lt;dbl&gt;, `7150` &lt;dbl&gt;,
-#   `7331` &lt;dbl&gt;, `7430` &lt;dbl&gt;, `3240` &lt;dbl&gt;, `6560` &lt;dbl&gt;, `4480` &lt;dbl&gt;,
-#   `3960` &lt;dbl&gt;, `5080` &lt;dbl&gt;, `5690` &lt;dbl&gt;, `5190` &lt;dbl&gt;, `5620` &lt;dbl&gt;,
-#   `6650` &lt;dbl&gt;, `7490` &lt;dbl&gt;, `3490` &lt;dbl&gt;, `4080` &lt;dbl&gt;, `4620` &lt;dbl&gt;,
-#   `4250` &lt;dbl&gt;, `7610` &lt;dbl&gt;, `4540` &lt;dbl&gt;, `4740` &lt;dbl&gt;, `4860` &lt;dbl&gt;,
-#   `4950` &lt;dbl&gt;, `7670` &lt;dbl&gt;, `6150` &lt;dbl&gt;, `7380` &lt;dbl&gt;, `4910` &lt;dbl&gt;, …</code></pre>
+5        6     2  2006      6      1      1     NA      8     NA     NA     NA
+6        6     2  2008     15      2      1     NA     NA     NA      1     NA
+# ℹ 62 more variables: `3920` &lt;dbl&gt;, `4813` &lt;dbl&gt;, `5738` &lt;dbl&gt;, `6070` &lt;dbl&gt;,
+#   `7030` &lt;dbl&gt;, `4691` &lt;dbl&gt;, `5800` &lt;dbl&gt;, `7270` &lt;dbl&gt;, `7540` &lt;dbl&gt;,
+#   `3370` &lt;dbl&gt;, `7020` &lt;dbl&gt;, `6130` &lt;dbl&gt;, `3250` &lt;dbl&gt;, `5011` &lt;dbl&gt;,
+#   `6220` &lt;dbl&gt;, `6292` &lt;dbl&gt;, `4470` &lt;dbl&gt;, `3560` &lt;dbl&gt;, `4540` &lt;dbl&gt;,
+#   `4740` &lt;dbl&gt;, `4860` &lt;dbl&gt;, `4950` &lt;dbl&gt;, `7670` &lt;dbl&gt;, `6150` &lt;dbl&gt;,
+#   `7380` &lt;dbl&gt;, `4910` &lt;dbl&gt;, `5900` &lt;dbl&gt;, `3310` &lt;dbl&gt;, `3160` &lt;dbl&gt;,
+#   `5520` &lt;dbl&gt;, `7510` &lt;dbl&gt;, `4402` &lt;dbl&gt;, `6882` &lt;dbl&gt;, `6170` &lt;dbl&gt;, …</code></pre>
 </div>
 </div>
 </section></section>
@@ -1406,20 +1423,20 @@ Call collect() first to pull data into R.</code></pre>
 <section id="opening-data-with-duckdb" class="slide level2">
 <h2>Opening data with <code>duckdb</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href=""></a><span class="fu">library</span>(duckdb)</span>
-<span id="cb78-2"><a href=""></a><span class="fu">library</span>(DBI)</span>
-<span id="cb78-3"><a href=""></a></span>
-<span id="cb78-4"><a href=""></a>a_duckdb <span class="ot">&lt;-</span> <span class="fu">duckdb</span>() </span>
-<span id="cb78-5"><a href=""></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(a_duckdb)</span>
-<span id="cb78-6"><a href=""></a></span>
-<span id="cb78-7"><a href=""></a>duckdb<span class="sc">::</span><span class="fu">duckdb_read_csv</span>(<span class="at">conn =</span> con,</span>
-<span id="cb78-8"><a href=""></a>                        <span class="at">name =</span> <span class="st">"all_routes_all_stops"</span>,</span>
-<span id="cb78-9"><a href=""></a>                        <span class="at">files =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
-<span id="cb78-10"><a href=""></a>                                           <span class="st">"data"</span>,</span>
-<span id="cb78-11"><a href=""></a>                                           <span class="st">"all_routes_all_stops.csv"</span>))</span>
-<span id="cb78-12"><a href=""></a></span>
-<span id="cb78-13"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb78-14"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href=""></a><span class="fu">library</span>(duckdb)</span>
+<span id="cb79-2"><a href=""></a><span class="fu">library</span>(DBI)</span>
+<span id="cb79-3"><a href=""></a></span>
+<span id="cb79-4"><a href=""></a>a_duckdb <span class="ot">&lt;-</span> <span class="fu">duckdb</span>() </span>
+<span id="cb79-5"><a href=""></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(a_duckdb)</span>
+<span id="cb79-6"><a href=""></a></span>
+<span id="cb79-7"><a href=""></a>duckdb<span class="sc">::</span><span class="fu">duckdb_read_csv</span>(<span class="at">conn =</span> con,</span>
+<span id="cb79-8"><a href=""></a>                        <span class="at">name =</span> <span class="st">"all_routes_all_stops"</span>,</span>
+<span id="cb79-9"><a href=""></a>                        <span class="at">files =</span> here<span class="sc">::</span><span class="fu">here</span>(</span>
+<span id="cb79-10"><a href=""></a>                                           <span class="st">"data"</span>,</span>
+<span id="cb79-11"><a href=""></a>                                           <span class="st">"all_routes_all_stops.csv"</span>))</span>
+<span id="cb79-12"><a href=""></a></span>
+<span id="cb79-13"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb79-14"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Source:   SQL [6 x 5]
 # Database: DuckDB v0.10.1 [renatadiaz@Windows 10 x64:R 4.3.1/:memory:]
@@ -1454,13 +1471,13 @@ Call collect() first to pull data into R.</code></pre>
 <section id="dplyr-pipelines-with-duckdb-1" class="slide level2">
 <h2><code>dplyr</code> pipelines with <code>duckdb</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb80-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
-<span id="cb80-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
-<span id="cb80-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
-<span id="cb80-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">n_distinct</span>(Year),</span>
-<span id="cb80-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">n_distinct</span>(AOU)) <span class="sc">|&gt;</span></span>
-<span id="cb80-7"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb81-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>) <span class="sc">|&gt;</span></span>
+<span id="cb81-3"><a href=""></a>  <span class="fu">group_by</span>(StateNum, Route) <span class="sc">|&gt;</span></span>
+<span id="cb81-4"><a href=""></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span></span>
+<span id="cb81-5"><a href=""></a>  <span class="fu">summarize</span>(<span class="at">nyears =</span> <span class="fu">n_distinct</span>(Year),</span>
+<span id="cb81-6"><a href=""></a>            <span class="at">nspecies =</span> <span class="fu">n_distinct</span>(AOU)) <span class="sc">|&gt;</span></span>
+<span id="cb81-7"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># Source:   SQL [6 x 4]
 # Database: DuckDB v0.10.1 [renatadiaz@Windows 10 x64:R 4.3.1/:memory:]
@@ -1471,37 +1488,37 @@ Call collect() first to pull data into R.</code></pre>
 2        6    17     10       52
 3        6    32     24      127
 4        6    53     11       47
-5        6    56     20       60
-6        6    68     16       68</code></pre>
+5        6    68     16       68
+6        6   123     18      115</code></pre>
 </div>
 </div>
 </section>
 <section id="reshaping-with-duckdb" class="slide level2">
 <h2>Reshaping with <code>duckdb</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb82-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb82-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
-<span id="cb82-4"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(StateNum, Route, Year), <span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
-<span id="cb82-5"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
-<span id="cb82-6"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb83-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb83-3"><a href=""></a>  <span class="fu">select</span>(StateNum, Route, Year, AOU, StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb83-4"><a href=""></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(StateNum, Route, Year), <span class="at">names_from =</span> AOU, <span class="at">values_from =</span> StopTotal) <span class="sc">|&gt;</span></span>
+<span id="cb83-5"><a href=""></a>  <span class="fu">collect</span>() <span class="sc">|&gt;</span></span>
+<span id="cb83-6"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 73
-  StateNum Route  Year `4740` `4920` `5738` `5880` `7170` `7331` `7430` `4080`
+  StateNum Route  Year `5730` `6882` `5960` `6170` `4200` `4470` `3600` `4250`
      &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
-1        6     2  1997     33     28     27     23     NA     NA     NA     NA
-2        6     2  1999     10     33     33     16      1      8      6     NA
-3        6     2  2004      2      9     11      7     NA      3      2      1
-4        6     2  2005      2     27     22      7     NA     NA     11     NA
-5        6     2  2006     10      6      7     13     NA      3     NA     NA
-6        6     2  2007      2      3      8     13     NA     NA     NA     NA
-# ℹ 62 more variables: `7020` &lt;int&gt;, `4910` &lt;int&gt;, `7680` &lt;int&gt;, `4813` &lt;int&gt;,
-#   `5011` &lt;int&gt;, `5520` &lt;int&gt;, `5600` &lt;int&gt;, `5620` &lt;int&gt;, `6070` &lt;int&gt;,
-#   `7030` &lt;int&gt;, `4691` &lt;int&gt;, `7380` &lt;int&gt;, `3370` &lt;int&gt;, `5900` &lt;int&gt;,
-#   `3310` &lt;int&gt;, `5690` &lt;int&gt;, `3250` &lt;int&gt;, `7490` &lt;int&gt;, `5800` &lt;int&gt;,
-#   `6150` &lt;int&gt;, `3160` &lt;int&gt;, `4320` &lt;int&gt;, `4540` &lt;int&gt;, `4950` &lt;int&gt;,
-#   `5190` &lt;int&gt;, `7510` &lt;int&gt;, `5650` &lt;int&gt;, `5730` &lt;int&gt;, `6882` &lt;int&gt;,
-#   `5960` &lt;int&gt;, `6170` &lt;int&gt;, `4200` &lt;int&gt;, `4470` &lt;int&gt;, `3600` &lt;int&gt;, …</code></pre>
+1        6     2  1997      9     NA     NA     NA     NA     NA     NA     NA
+2        6     2  1999     25      2     NA     NA     NA     NA     NA     NA
+3        6     2  2004     19     NA      1      3     NA     NA     NA     NA
+4        6     2  2005      7     NA      1     NA     NA     NA     NA     NA
+5        6     2  2006     29     NA      1     NA      8      4     NA     NA
+6        6     2  2007     13     NA      1     NA     NA      2     NA     NA
+# ℹ 62 more variables: `6130` &lt;int&gt;, `3920` &lt;int&gt;, `3250` &lt;int&gt;, `7490` &lt;int&gt;,
+#   `5800` &lt;int&gt;, `6150` &lt;int&gt;, `4740` &lt;int&gt;, `4920` &lt;int&gt;, `5738` &lt;int&gt;,
+#   `5880` &lt;int&gt;, `7170` &lt;int&gt;, `7331` &lt;int&gt;, `7430` &lt;int&gt;, `4080` &lt;int&gt;,
+#   `7020` &lt;int&gt;, `4910` &lt;int&gt;, `7680` &lt;int&gt;, `4570` &lt;int&gt;, `6220` &lt;int&gt;,
+#   `6650` &lt;int&gt;, `7670` &lt;int&gt;, `7190` &lt;int&gt;, `7540` &lt;int&gt;, `3490` &lt;int&gt;,
+#   `4620` &lt;int&gt;, `4130` &lt;int&gt;, `7070` &lt;int&gt;, `7610` &lt;int&gt;, `3560` &lt;int&gt;,
+#   `4860` &lt;int&gt;, `6340` &lt;int&gt;, `4402` &lt;int&gt;, `7150` &lt;int&gt;, `3240` &lt;int&gt;, …</code></pre>
 </div>
 </div>
 </section></section>
@@ -1513,25 +1530,25 @@ Call collect() first to pull data into R.</code></pre>
 <section id="writing-raw-sql-for-duckdb" class="slide level2">
 <h2>Writing raw SQL for <code>duckdb</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb84-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
-<span id="cb84-3"><a href=""></a>  <span class="fu">show_query</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href=""></a><span class="fu">tbl</span>(con, <span class="st">"all_routes_all_stops"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-2"><a href=""></a>  <span class="fu">filter</span>(StateNum <span class="sc">==</span> <span class="dv">6</span>, Route <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb85-3"><a href=""></a>  <span class="fu">show_query</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;SQL&gt;
 SELECT *
 FROM all_routes_all_stops
 WHERE (StateNum = 6.0) AND (Route = 2.0)</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href=""></a>query_text <span class="ot">&lt;-</span> <span class="st">"SELECT * FROM all_routes_all_stops WHERE (StateNum = 6.0) AND (Route = 2.0)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a>query_text <span class="ot">&lt;-</span> <span class="st">"SELECT * FROM all_routes_all_stops WHERE (StateNum = 6.0) AND (Route = 2.0)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="evaluating-sql-in-duckdb" class="slide level2">
 <h2>Evaluating SQL in <code>duckdb</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href=""></a><span class="fu">library</span>(DBI)</span>
-<span id="cb87-2"><a href=""></a></span>
-<span id="cb87-3"><a href=""></a><span class="fu">dbGetQuery</span>(<span class="at">conn =</span> con, <span class="at">statement =</span> query_text) <span class="sc">|&gt;</span></span>
-<span id="cb87-4"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href=""></a><span class="fu">library</span>(DBI)</span>
+<span id="cb88-2"><a href=""></a></span>
+<span id="cb88-3"><a href=""></a><span class="fu">dbGetQuery</span>(<span class="at">conn =</span> con, <span class="at">statement =</span> query_text) <span class="sc">|&gt;</span></span>
+<span id="cb88-4"><a href=""></a>  <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  StateNum Route Year  AOU StopTotal
 1        6     2 1997 3160        69
@@ -1546,7 +1563,7 @@ WHERE (StateNum = 6.0) AND (Route = 2.0)</code></pre>
 <section id="disconnect-from-db" class="slide level2">
 <h2>Disconnect from db!</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href=""></a><span class="fu">dbDisconnect</span>(<span class="at">conn =</span> con, <span class="at">shutdown =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href=""></a><span class="fu">dbDisconnect</span>(<span class="at">conn =</span> con, <span class="at">shutdown =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section>
 <section>
@@ -1642,7 +1659,7 @@ WHERE (StateNum = 6.0) AND (Route = 2.0)</code></pre>
 <p>For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our <a href="https://datascience.cct.arizona.edu">website</a>!</p>
 <p>Please offer feedback through this survey: <a href="https://forms.gle/CxAimF4TDWCsHxz19" class="uri">https://forms.gle/CxAimF4TDWCsHxz19</a></p>
 <div class="quarto-auto-generated-content">
-<p><img src="_extensions/cct-datascience/uaz/logo.png" class="slide-logo"></p>
+<p><img src="../logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
 
 </div>
