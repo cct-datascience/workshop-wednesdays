@@ -1,4 +1,0 @@
-- source: slides.qmd
-  quarto-pub:
-    - id: b3ae085f-ecfe-4694-8fba-55cf581e9c41
-      url: 'https://cct-datascience.quarto.pub/exploring-the-wide-world-of-ggplot2-extensions'
