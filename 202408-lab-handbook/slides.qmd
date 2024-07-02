@@ -4,28 +4,139 @@ date: 2024-08-28
 author: "Eric R. Scott"
 format: revealjs
 editor: visual
+bibliography: references.bib
 ---
 
 ## Lab Handbooks
 
--   what
+-   Communicates lab ethos
 
--   why
+-   Normalize and communicate expectations
 
--   how
+-   Improve equity among lab members
+
+-   Streamline and standardize onboarding and offboarding
+
+## Lab Handbooks
+
+-   *Many* different ways to organize this information
+
+-   Suggested reading: @tendler2023
+
+-   Other good lab handbooks:
+
+    -   [Zipkin Lab](https://github.com/zipkinlab/Policies/)
+
+    -   [Bahlai Lab](https://github.com/BahlaiLab/Policies)
+
+    -   [WIN Physics Group](https://zenodo.org/records/7419211)
+
+<!--# plug supplemental to tendler paper, other group lab notebooks -->
 
 ## Quarto
 
--   what
+-   "An open-source scientific and technical publishing system"
 
--   why
+-   Edit plain text .qmd files that can be rendered to HTML, PDF, Word, Powerpoint, and more!
 
--   how
+-   Relatively simple to create a searchable, editable, online book
+
+-   "Language agnostic", but today we will work in RStudio to edit quarto documents
+
+<!--# link to past workshops on Quarto, quarto.org, etc. for learning more -->
 
 ## GitHub
 
--   what
+-   A platform for sharing files (often code)
 
--   why
+-   Enables collaboration via git, a version-control tool
 
--   how
+-   Automated deployment of rendered Quarto book to the web
+
+-   Controlled way of making our lab handbook editable
+
+-   Highly transferable skill for trainees, and generally useful for research [@braga2023]
+
+# Get Set Up with GitHub
+
+## Hello GitHub, can you hear me?
+
+Goal: get RStudio set up to work with GitHub
+
+-   Run `usethis::git_sitrep()` to check your status
+
+-   Work through any tasks in the output
+
+## GitHub organizations
+
+-   Allow you to manage team members access
+
+-   You (the PI) always have access to everyone's code pushed to the organization
+
+-   When a trainee leaves your lab, their code stays in the lab organization
+
+-   Encourage your trainees to apply to our Fall workshop series!
+
+## Create your handbook!
+
+-   go to \<URL\> and click the "Use Template" button and create a copy in your newly-created GitHub organization
+
+-   In the copy, click the green button, copy the url
+
+-   Open RStudio, new project, from version control, paste url
+
+-   Edit the README, commit, push, check GitHub
+
+# Quarto
+
+## Preview your book!
+
+-   run `quarto preview` in the terminal to see a *live* preview of your lab handbook!
+
+![](quarto_preview.png){fig-align="center"}
+
+## Anatomy of a .qmd
+
+<!--# copy slides from fall workshop series -->
+
+## Visual Editor
+
+![](visual_toolbar.png){fig-align="center"}
+
+-   Makes editing Quarto documents a lot like editing a Word doc
+
+-   Explore creating sections, lists, tables, images, callouts, and references
+
+-   Switch to source mode to debug and learn markdown
+
+## Shortcodes and \_variables.yaml
+
+-   Open index.qmd
+
+-   Quarto shortcodes look like `{{< something >}}` and get replaced on render
+
+-   There are a variety of built-in shortcodes and others available through extensions
+
+-   The only shortcodes in this book are `{{< var something >}}` and get replaced by a corresponding variable in `_variables.yml`
+
+-   Edit `_variables.yml` and see how it changes your book
+
+::: callout-note
+You do not need to use `var` shortcodes anymore and you can eventually replace them with plain text.
+:::
+
+## \_quarto.yml
+
+-   YAML works with nested `key: value` pairs.
+
+-   Nesting is indicated with indentation
+
+-   Use `_quarto.yml` to configure your book including adding new chapters and controlling chapter order.
+
+::: callout-tip
+Indentation is a common source of frustration with YAML—the wrong number of spaces can completely break things.
+:::
+
+::: notes
+Go through \_quarto.yml line-by-line
+:::
