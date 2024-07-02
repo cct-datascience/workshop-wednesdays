@@ -1,0 +1,121 @@
+---
+title: "Penguins example"
+author: "Renata Diaz"
+format: html
+editor: visual
+---
+
+```{r}
+
+# If necessary, install packages
+
+if(FALSE) {
+  install.packages("palmerpenguins")
+  install.packages("dplyr")
+  install.packages("ggplot2")
+}
+
+```
+
+```{r}
+
+# Load packages
+library(palmerpenguins)
+library(dplyr)
+library(ggplot2)
+
+data(penguins)
+```
+
+```{r}
+# Show the top of the `penguins` data frame
+
+knitr::kable(head(penguins))
+
+```
+
+```{r}
+#| echo: false
+
+# Calculate average trait measures per species per island
+
+penguins_traits <- penguins |>
+  group_by(species, island) |>
+  summarize(across(c(ends_with("mm"), ends_with("g")), function(x) mean(x, na.rm = T)))
+```
+
+```{r}
+#| label: tbl-traits
+#| tbl-cap: "Average traits by species, island"
+
+knitr::kable(penguins_traits)
+
+# Quarto challenge: Show these tables in the document and supply table legends.
+# Quarto challenge: Hide the code that produces these tables.
+```
+
+```{r}
+#| label: fig-bill-length
+#| fig-cap: "Bill length"
+
+# Plot density smooths of trait measures per species per island
+
+ggplot(penguins, aes(bill_length_mm, color = species, fill = species)) +
+  geom_density(alpha = .4) +
+  facet_wrap(vars(island), ncol = 1) +
+  theme(legend.position = "bottom") +
+  ggtitle("Bill length")
+```
+
+
+```{r}
+#| label: fig-bill-depth
+#| fig-cap: "Bill depth"
+
+ggplot(penguins, aes(bill_depth_mm, color = species, fill = species)) +
+  geom_density(alpha = .4) +
+  facet_wrap(vars(island), ncol = 1) +
+  theme(legend.position = "bottom") +
+  ggtitle("Bill depth") #
+
+```
+
+
+```{r}
+#| label: fig-flipper-length
+#| fig-cap: "Flipper length"
+
+ggplot(penguins, aes(flipper_length_mm, color = species, fill = species)) +
+  geom_density(alpha = .4) +
+  facet_wrap(vars(island), ncol = 1) +
+  theme(legend.position = "bottom") +
+  ggtitle("Flipper length")
+
+```
+
+
+```{r}
+#| label: fig-mass
+#| fig-cap: "Body mass"
+
+ggplot(penguins, aes(body_mass_g, color = species, fill = species)) +
+  geom_density(alpha = .4) +
+  facet_wrap(vars(island), ncol = 1) +
+  theme(legend.position = "bottom") +
+  ggtitle("Body mass")
+
+# Quarto challenge: Add figure labels to these plots.
+```
+
+```{r}
+# Quarto challenge: Write a short blurb about these results and reference the figures and tables.
+
+
+# Quarto challenge: Feature a picture of the penguins.
+# Artwork of the penguins (by Allison Horst) available for download here: https://allisonhorst.github.io/palmerpenguins/articles/art.html
+# Make sure to attribute Allison!
+
+```
+
+
+Look at the flippers @fig-flipper-length, @tbl-traits!

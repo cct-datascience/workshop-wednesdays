@@ -1,0 +1,219 @@
+---
+title: "Demystifying APIs for Researchers"
+subtitle: "{{< li dmgxtuzn colors='primary:#EF4056,secondary:#EF4056' trigger='loop' scale=100 >}}"
+author: "Eric R. Scott"
+date: "2024-01-24"
+format: 
+  revealjs:
+    slide-number: true
+    chalkboard: true
+    link-external-icon: true
+    link-external-newwindow: true
+    theme: 
+      - "../_extensions/cct-datascience/uaz/theme.scss"
+      - "custom.scss"
+    logo: "logo.png"
+    mermaid:
+      theme: forest
+execute: 
+  echo: true
+---
+
+## Learning Objectives
+
+-   Understand what an API (application programming interface) is
+-   Get a sense of what kinds of data are available via APIs
+-   Understand how to get data from an API into R programmatically
+
+Slides: <https://cct-datascience.quarto.pub/demystifying-apis-slides/>
+
+## What is an API {background-color="white"}
+
+![](api_slide.png){fig-align="center"}
+
+::: notes
+APIs provide a way that data can be accessed from the web via URLs.
+Allows all sorts of "clients" to access the data.
+Including web interfaces.
+:::
+
+## Getting data on the web
+
+-   Made for humans
+-   Point and click
+
+E.g. [CAS Common Chemistry](https://commonchemistry.cas.org/)
+
+1.  Search for the name of a chemical (e.g. hexanol)
+2.  Click on a result to get more info
+
+## What's missing?
+
+There's no easy way to get the results in a ready-to-analyze form!
+
+## Getting data for analysis
+
+**This is where an API is useful**
+
+-   Made for machines
+-   Programmable
+
+APIs exist for many data portals
+
+## Getting data directly from an API
+
+Every API is a little different, but here the API equivalent to <https://commonchemistry.cas.org/results?q=hexanol> is <https://commonchemistry.cas.org/api/search?q=hexanol>.
+
+(I'll show you how I figured this out in a bit)
+
+![](json_example.png){fig-align="center"}
+
+## What am I looking at?
+
+The result of https://commonchemistry.cas.org/api/search?q
+=hexanol is in a format called JSON.
+It's made of nested key: value pairs.
+For example
+
+``` json
+{
+  "count": 2,
+  "results": [
+    {
+      "rn": "111-27-3",
+      "name": "1-Hexanol",
+      "image": "<svg ...</svg>"
+    },
+    {
+      "rn": "25917-35-5",
+      "name": "Hexanol",
+      "image": "<svg ...</svg>"
+    }
+  ]
+}
+```
+
+::: notes
+JSON can be tricky to understand!
+We will be reading it into R as a list, which might be more familiar to you if you already use R.
+:::
+
+## Structure of an API request
+
+![](api_structure.png){fig-align="center"}
+
+::: callout-note
+This is a *fairly standard* API, but not all APIs take requests structured in the same way!
+You'll have to find the documentation for each particular API to figure out how to build a query.
+:::
+
+::: notes
+Different endpoints generally return different data or correspond to different databases.
+
+Sometimes you can have multiple queries in an API, but this one only takes one
+:::
+
+## How to know how to use an API
+
+Let's look at some API documentation: <https://commonchemistry.cas.org/api-overview>
+
+What endpoints are available?
+What queries can you use?
+
+::: callout-note
+This API only allows one "method"—GET.
+Other methods exist (e.g. POST), but GET is the most common.
+:::
+
+## Building an API request in R
+
+-   Reproducible queries
+
+-   Iterate over many queries
+
+-   Create re-usable functions
+
+```{r}
+library(httr2)
+```
+
+## 1. Create a request
+
+Start a request with the domain
+
+```{r}
+req_search <-
+  request("https://commonchemistry.cas.org/api") |> #<1>
+  req_url_path_append("search") |>                  #<2>
+  req_url_query(q = "hexanol")                      #<3>
+```
+
+1.  Set the base URL
+2.  Append the URL with the search endpoint
+3.  Add a query
+
+. . .
+
+```{r}
+#| message: true
+req_search
+```
+
+::: notes
+Notice the default method is GET, which is what we want.
+:::
+
+## 2. Perform the request
+
+```{r}
+#| message: true
+resp_search <- 
+  req_perform(req_search)
+resp_search
+```
+
+::: notes
+The data is in there as json.
+:::
+
+## 3. Get the results
+
+```{r}
+results_search <- 
+  resp_body_json(resp_search)
+str(results_search)
+```
+
+# Live Demo
+
+<!--# Switch over to participatory live coding working through notes.qmd in a fresh document -->
+
+## Other useful functions
+
+-   `req_throttle()` for obeying API rate limits
+
+-   `req_retry()` for automatically retrying requests that fail
+
+-   `req_oauth_auth_code()` and associated helpers for APIs that require access tokens or passwords.
+    See this [OAuth article](https://httr2.r-lib.org/articles/oauth.html).
+
+## Don't re-invent the wheel!
+
+-   Many APIs have an R package or Python library to access them.
+    Look for these before writing your own `httr2` code!
+
+-   rOpenSci has over 100 data access R packages: <https://ropensci.org/packages/data-access/>
+
+## Getting Help
+
+-   CCT Data Science drop-in hours: [datascience.cct.arizona.edu/drop-in-hours](https://datascience.cct.arizona.edu/drop-in-hours)
+
+-   Email us: [cct-datascience\@arizona.edu](mailto:cct-datascience@arizona.edu)
+
+-   Book an appointment: [datascience.cct.arizona.edu/people](https://datascience.cct.arizona.edu/people)
+
+-   Data Science Incubator program: [datascience.cct.arizona.edu/cct-data-science-incubator](https://datascience.cct.arizona.edu/cct-data-science-incubator)
+
+::: footer
+Title slide API icon by [Lordicon.com](https://lordicon.com/)
+:::

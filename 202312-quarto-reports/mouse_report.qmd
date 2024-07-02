@@ -1,0 +1,79 @@
+---
+title: "Mouse report"
+author: "Renata Diaz"
+format: 
+    # html:
+    #   code-fold: true
+    gfm: 
+      code-fold: true
+editor: visual
+bibliography: portal_ref.bib
+---
+
+```{r}
+
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+
+```
+
+# Data access
+
+These data come from the [Portal Project](https://portal.weecology.org) [@ernest2020]
+
+```{r download files}
+#| eval: false
+
+download.file("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/2023-quarto-reports/202312-quarto-reports/portal_mouse_data.csv", destfile = "mouse_data.csv")
+download.file("https://raw.githubusercontent.com/cct-datascience/CALS-workshops/2023-quarto-reports/202312-quarto-reports/portal_ref.bib", destfile = "portal_ref.bib")
+
+```
+
+```{r load mouse data}
+
+mouse_data <- read.csv("mouse_data.csv") |>
+  mutate(censusdate = as.Date(censusdate))
+
+```
+
+# Mouse abundance over time
+
+```{r}
+#| label: fig-abundances
+#| fig-cap: Abundances of different species over time.
+
+ggplot(mouse_data, aes(censusdate, abundance, color = scientificname)) +
+  geom_line() +
+  theme(legend.position = "bottom") +
+  xlab("Census date") +
+  ylab("Species abundance")
+
+```
+
+# The most mice, ever
+
+```{r}
+#| label: tbl-abundances
+#| tbl-cap: The most highly abundant species throughout the timeseries.
+
+mouse_data_ranked <- mouse_data |>
+  group_by(scientificname) |>
+  summarize(totalabundance = sum(abundance)) |>
+  ungroup() |>
+  arrange(desc(totalabundance))
+
+knitr::kable(head(mouse_data_ranked))
+
+```
+
+# A famous face
+
+![Merriam's kangaroo rat](https://github.com/cct-datascience/CALS-workshops/blob/2023-quarto-reports/202312-quarto-reports/merriams.JPG?raw=true){#fig-merriams}
+
+Merriam's kangaroo rat (@fig-merriams) is the most highly abundant species over time (@tbl-abundances).
+
+::: refs
+:::

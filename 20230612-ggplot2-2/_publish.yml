@@ -1,8 +1,0 @@
-- source: notes.qmd
-  quarto-pub:
-    - id: 7dc51935-8abd-4baa-ba93-774b084a91a0
-      url: 'https://cct-datascience.quarto.pub/crafting-publication-quality-data-visualizations-with-ggplot2'
-- source: slides.qmd
-  quarto-pub:
-    - id: eda576ac-0312-436c-9de1-7b92bc5a828a
-      url: 'https://cct-datascience.quarto.pub/ggplot2-part2-slides'

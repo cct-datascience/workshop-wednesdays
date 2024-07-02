@@ -1,0 +1,867 @@
+---
+title: "Wrangling larger-than-memory data in R"
+author: "Renata Diaz"
+format: 
+  uaz-revealjs:
+      logo: "../logo.png"
+editor: source
+execute:
+  echo: true
+  freeze: true
+---
+
+## ⏰ Schedule ⏰ {.smaller}
+
+::: notes
+remember to record
+:::
+
+| Topic                                    | Time          |
+|:-----------------------------------------|:--------------|
+| Welcome & intros                         | 11:00 - 11:05 |
+| (Really) big data in R: the landscape    | 11:05 - 11:10 |
+| Data storage and access with `arrow`     | 11:15 - 11:30 |
+| `dplyr` wrangling with `arrow`           | 11:35 - 11:50 |
+| BREAK                                    | 11:50 - 12:00 |
+| `arrow` with `duckdb` | 12:00 - 12:20 |
+| `duckdb` and raw SQL                   | 12:20-12:35   |
+| When to use what                         | 12:35-12:45   |
+| Wrap up                  | 12:45-1      |
+
+# Welcome!
+
+## CCT Data Science Team
+
+#### Supporting reproducible research, data pipelines, and software development in ALVSCE
+
+::: incremental
+-   Workshops
+-   Drop-in hours
+-   "Incubator" program
+-   Longer-term collaborations
+-   Learn more: <https://datascience.cct.arizona.edu>
+:::
+
+## Before we get started
+
+::: incremental
+-   These slides (and links!) are available at:  <https://viz.datascience.arizona.edu/2024-big-data/>
+-   Please make sure you have R and RStudio installed
+-   Please install the following packages: `duckdb, arrow, dplyr, tidyr, dbplyr, DBI, here, tictoc`
+-   You can download today's data here: <https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4>
+:::
+
+## Background assumptions
+
+::: incremental
+-   You do at least some of your data wrangling + analysis in R
+-   You use `dplyr` and `tidyr` (and you like it!)
+-   Some of your datasets are too large to handle efficiently in R
+:::
+
+## Learning objectives
+
+::: incremental
+-   Understand the landscape of tools available for big data in R
+-   Store and access datasets using the `arrow` and `duckdb` packages
+-   Scale up `dplyr` pipelines using `arrow` and `duckdb`
+-   Understand which tools are suited to which tasks, and where to look for more resources
+:::
+
+# Big data in R
+
+## The (abbreviated) landscape
+
+![](options_files/figure-commonmark/unnamed-chunk-2-1.png){width="100%"}{fig-alt="A plot placing different options for data wrangling in R along axes of ease of use and size of data. dplyr and tidyr are easy to use but can only handle small datasets. External data wrangling tools, and DBI plus SQL, can handle big data but are hard to use. arrow and duckdb can handle large amounts of data and are easy to use."}
+
+## Apache arrow
+
+<https://arrow.apache.org/>
+
+![](images/clipboard-1025653811.png)
+
+## Apache arrow
+
+::: incremental
+-   **Format** (columnar data storage = fast!)
+-   **Libraries** to interface with many programming languages/platforms
+-   Emphasis on **interoperability**
+-   `arrow` libraries work with many data formats - you do not need to use parquet/arrow to get performance gains!
+:::
+
+## arrow R library
+
+<https://arrow.apache.org/docs/r/>
+
+![](images/clipboard-1388851838.png)
+
+## duckdb
+
+<https://duckdb.org/>
+
+![](images/clipboard-2911850815.png)
+
+## duckdb
+
+::: incremental
+-   Database format + API
+-   "SQLite for analytics"
+-   Complements arrow
+-   Handles **relational** data more naturally than arrow
+:::
+
+## duckdb and R
+
+<https://duckdb.org/docs/api/r.html>
+
+![](images/clipboard-2016618240.png)
+
+## 
+
+::: callout-important
+You can use either, or both!
+
+Today we will cover arrow and duckdb separately and then show how to combine them.
+:::
+
+# Today's data: the Breeding Bird Survey
+
+-   Annual counts of birds observed along \>2500 monitoring routes throughout United States and Canada.
+-   These aren't **big** big data, but are big enough to show performance gains.
+
+# Today's data: the Breeding Bird Survey
+
+-   Download for today: <https://arizona.box.com/s/vrnnys684ttsmnunnw3y8u817jttpre4>
+-   Source: Ziolkowski Jr., D.J., Lutmerding, M., Aponte, V.I., and Hudson, M-A.R., 2022, North American Breeding Bird Survey Dataset 1966 - 2021: U.S. Geological Survey data release, https://doi.org/10.5066/P97WAZE5. Summarized.
+
+## Let's get set up
+
+::: incremental
+- Download data.
+- Open .Rproj
+:::
+
+
+## Let's get set up
+
+```{r}
+library(tictoc)
+library(arrow)
+library(dplyr)
+```
+
+
+# Loading data using arrow
+
+## `read.csv` vs. `read_csv_arrow`
+
+
+::: columns
+::: {.column width="50%"}
+```{r, cache = TRUE, echo = TRUE, include = T}
+
+tic()
+
+birds_csv <- read.csv(
+  here::here( 
+             "data",
+             "all_routes_all_stops.csv"))
+
+toc()
+
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+
+tic()
+
+birds_arrow_csv <-
+  arrow::read_csv_arrow(
+    file = here::here(
+                      "data",
+                      "all_routes_all_stops.csv"))
+
+toc()
+
+```
+:::
+:::
+
+## `read.csv` vs. `read_csv_arrow`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  colnames()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_csv |>
+  nrow()
+
+birds_arrow_csv |>
+  colnames()
+
+```
+:::
+:::
+
+## `read.csv` vs. `read_csv_arrow`
+
+::: callout-important
+`read_csv_arrow` is much faster than `read.csv`.
+
+Both functions **read data into memory** and won't work if your data is too big for R to load.
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r, cache = TRUE, echo = TRUE, include = T}
+
+tic()
+
+birds_csv <- read.csv(
+  here::here( 
+             "data",
+             "all_routes_all_stops.csv"))
+
+toc()
+
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+
+tic()
+
+birds_arrow_dataset <-
+  arrow::open_dataset(
+    sources = here::here(
+                         "data",
+                         "all_routes_all_stops.csv"),
+    format = "csv")
+
+toc()
+
+```
+:::
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  colnames()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_dataset |>
+  nrow()
+
+birds_arrow_dataset |>
+  colnames()
+
+```
+:::
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  head()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_dataset |>
+  nrow()
+
+birds_arrow_dataset |>
+  head()
+
+```
+:::
+:::
+
+
+## `read.csv` vs. `open_dataset`
+
+::: columns
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_csv |>
+  nrow()
+
+birds_csv |>
+  head()
+```
+:::
+
+::: {.column width="50%"}
+```{r,  echo = TRUE, include = T}
+
+birds_arrow_dataset |>
+  nrow()
+
+birds_arrow_dataset |>
+  head() |>
+  collect()
+
+```
+:::
+:::
+
+## `read.csv` vs. `open_dataset`
+
+::: callout-important
+`open_dataset` connects to the data but **does not pull it into memory**.
+
+Computations happen with `arrow`'s C++ library.
+
+To get the **results** into R, use `collect()`.
+:::
+
+## Hive partitioning
+
+::: columns
+
+::: {.column width="50%"}
+
+![](images/clipboard-2806566351.png)
+
+:::
+
+::: {.column width="50%"}
+
+
+![](images/clipboard-1412599253.png)
+
+:::
+:::
+
+## Hive partitioning
+
+```{r, echo = T}
+
+birds_arrow_hive <-
+  arrow::open_dataset(
+    sources = here::here(
+                         "data",
+                         "hive"),
+    format = "csv",
+    partitioning = "StateNum")
+
+birds_arrow_hive |>
+  nrow()
+
+
+birds_arrow_hive |>
+  head() |>
+  collect() |>
+  colnames()
+
+```
+
+## Hive partitioning
+
+:::callout-important
+
+Hive partitioning breaks a dataset into many smaller files based on one or more variables.
+
+You can recombine them with `open_dataset` and it will behave the same as one big file.
+
+This can help with portability.
+
+:::
+
+## `dplyr` pipelines in `arrow`
+
+```{r}
+library(dplyr)
+library(arrow)
+
+
+```
+
+## Core `dplyr` verbs
+
+```{r}
+
+routes_in_arizona <- birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  select(StateNum, Route) |>
+  distinct() |>
+  collect()
+
+head(routes_in_arizona)
+
+```
+
+## `mutate`
+
+```{r}
+
+routes_in_arizona <- birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  select(StateNum, Route) |>
+  distinct() |>
+  mutate(StateRoute = paste0(StateNum, "_", Route)) |>
+  collect()
+
+head(routes_in_arizona)
+
+```
+
+
+## `group_by |> summarize`
+
+```{r, error = T}
+
+birds_summary <-  birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  group_by(StateNum, Route) |>
+  distinct() |>
+  summarize(nyears = length(unique(Year)),
+            nspecies = length(unique(AOU))) |>
+  collect()
+
+
+```
+
+
+
+## `group_by |> summarize`
+
+```{r, error = T}
+
+birds_summary <-  birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  group_by(StateNum, Route) |>
+  distinct() |>
+  summarize(nyears = length(unique(Year)),
+            nspecies = length(unique(AOU))) |>
+  collect()
+
+
+```
+
+
+:::callout-important
+Not all functions are supported!
+:::
+
+## `group_by |> summarize`
+
+```{r}
+
+birds_summary <-  birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  group_by(StateNum, Route) |>
+  distinct() |>
+  summarize(nyears = n_distinct(Year),
+            nspecies = n_distinct(AOU)) |>
+  collect()
+
+head(birds_summary)
+
+```
+
+## `join`
+
+```{r, error = TRUE}
+
+route_info <- read_csv_arrow(here::here(
+                                        "data", "routes.csv")) |>
+  arrow_table()
+
+arizona_routes <- birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  select(StateNum, Route) |>
+  distinct() |>
+  left_join(route_info) |>
+  collect()
+
+```
+
+
+## `join`
+
+```{r, error = TRUE}
+
+route_info <- read_csv_arrow(here::here(
+                                        "data", "routes.csv")) |>
+  arrow_table()
+
+arizona_routes <- birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  select(StateNum, Route) |>
+  distinct() |>
+  left_join(route_info) |>
+  collect()
+
+```
+
+:::callout-important
+Arrow is strict about schemas (data types)!
+:::
+
+## Schemas
+
+```{r}
+schema(birds_arrow_dataset)
+
+```
+
+## Schemas
+
+```{r}
+schema(route_info)
+
+```
+
+
+## Modifying a schema
+
+```{r}
+route_schema <- schema(route_info)
+route_schema$StateNum <- int64()
+route_schema$Route <- int64()
+
+
+route_info <- read_csv_arrow(here::here(
+                                        "data", "routes.csv")) |>
+  arrow_table(schema = route_schema)
+
+schema(route_info)
+
+```
+
+## `join` again
+
+```{r}
+
+
+arizona_routes <- birds_arrow_dataset |>
+  filter(StateNum == 6) |>
+  select(StateNum, Route) |>
+  distinct() |>
+  left_join(route_info) |>
+  collect()
+
+head(arizona_routes)
+
+```
+
+
+## Window functions
+
+```{r, error = TRUE}
+
+arizona_timeseries <- birds_arrow_dataset |>
+  filter(StateNum == 6, Route == 2) |>
+  group_by(StateNum, Route, Year) |>
+  summarize(TotalBirds = sum(StopTotal)) |>
+  collect() 
+
+head(arizona_timeseries)
+
+```
+
+
+## Window functions
+
+```{r, error = TRUE}
+
+arizona_timeseries <- birds_arrow_dataset |>
+  filter(StateNum == 6, Route == 2) |>
+  group_by(StateNum, Route, Year) |>
+  summarize(TotalBirds = sum(StopTotal)) |>
+  mutate(TotalBirdsLastCensus = lag(TotalBirds)) |>
+  collect()
+
+```
+
+:::callout-important
+
+Window functions (lag, lead) are not supported.
+
+:::
+
+## Window functions
+
+```{r, error = TRUE}
+
+arizona_timeseries <- birds_arrow_dataset |>
+  filter(StateNum == 6, Route == 2) |>
+  group_by(StateNum, Route, Year) |>
+  summarize(TotalBirds = sum(StopTotal)) |>
+  collect() |>
+  mutate(TotalBirdsLastCensus = lag(TotalBirds)) 
+head(arizona_timeseries)
+
+```
+
+## Reshaping
+
+```{r, error = T}
+library(tidyr)
+
+birds_wide <- birds_arrow_dataset |>
+  filter(StateNum == 6, Route == 2, Year == 1994) |>
+  select(StateNum, Route, Year, AOU, StopTotal) |>
+  pivot_wider(names_from = AOU, values_from = StopTotal) |>
+  collect() 
+
+```
+
+## `dplyr` pipelines in `arrow`
+
+:::callout-important
+
+* Many `dplyr` functions have arrow bindings.
+* Some have close cousins.
+* Some are not implemented.
+* For details, see the [data wrangling vignette](https://arrow.apache.org/docs/r/articles/data_wrangling.html) and list of [supported dplyr functions](https://arrow.apache.org/docs/r/reference/acero.html) in the documentation. 
+
+:::
+
+:::callout-tip
+
+## What do I do if a function isn't supported?
+
+Stay tuned! 
+
+:::
+# Break
+
+# `arrow` + `duckdb`: Stronger together
+
+## `duckdb`: a reminder
+
+::: callout-note
+`duckdb` is a **database format** with an **R API**.
+:::
+
+## `duckdb` with `arrow`
+::: incremental
+
+* The `duckdb` API can implement some functions that arrow can't.
+* You can pass data between `duckdb` and `arrow` to execute functions from either package with minimal additional overhead. 
+
+:::
+
+## `arrow::to_duckdb`
+
+
+```{r, error = T}
+library(tidyr)
+
+birds_wide <- birds_arrow_dataset |>
+  filter(StateNum == 6, Route == 2) |>
+  select(StateNum, Route, Year, AOU, StopTotal) |>
+  arrow::to_duckdb() |>
+  pivot_wider(id_cols = c(StateNum, Route, Year), names_from = AOU, values_from = StopTotal) |>
+  collect() 
+
+head(birds_wide)
+
+```
+
+# `duckdb` as an alternative to `arrow`
+
+# `duckdb` alone
+
+::: incremental
+* You can use `duckdb` to wrangle data stored as csv, parquet, and many other file formats, or as a .duckdb database
+* `duckdb` can be configured to load data over HTTPS
+* Unlike `arrow`, `duckdb` naturally supports multiple related tables stored within one database
+:::
+
+# `duckdb` and `R`: options
+
+::: incremental
+
+* `duckdb` integrates with the `DBI` and `dbplyr` packages to support `dplyr` verbs
+* The `duckplyr` package provides a more direct interface to `duckdb`, but is brand-new
+:::
+
+## Opening data with `duckdb`
+
+```{r}
+
+library(duckdb)
+library(DBI)
+
+a_duckdb <- duckdb() 
+con <- dbConnect(a_duckdb)
+
+duckdb::duckdb_read_csv(conn = con,
+                        name = "all_routes_all_stops",
+                        files = here::here(
+                                           "data",
+                                           "all_routes_all_stops.csv"))
+
+tbl(con, "all_routes_all_stops") |>
+  head()
+
+```
+
+## `dplyr` pipelines with `duckdb`
+
+:::callout-important
+
+Use `tbl` and specify the table name.
+
+`duckdb` and `dbplyr` translate `dplyr` verbs to database syntax.
+
+:::
+
+## `dplyr` pipelines with `duckdb`
+
+
+```{r}
+tbl(con, "all_routes_all_stops") |>
+  filter(StateNum == 6) |>
+  group_by(StateNum, Route) |>
+  distinct() |>
+  summarize(nyears = n_distinct(Year),
+            nspecies = n_distinct(AOU)) |>
+  head()
+
+```
+## Reshaping with `duckdb`
+
+```{r, error = T}
+
+tbl(con, "all_routes_all_stops") |>
+  filter(StateNum == 6, Route == 2) |>
+  select(StateNum, Route, Year, AOU, StopTotal) |>
+  pivot_wider(id_cols = c(StateNum, Route, Year), names_from = AOU, values_from = StopTotal) |>
+  collect() |>
+  head()
+
+
+```
+
+
+# Raw SQL with `duckdb`
+
+## Writing raw SQL for `duckdb`
+
+```{r}
+tbl(con, "all_routes_all_stops") |>
+  filter(StateNum == 6, Route == 2) |>
+  show_query()
+
+query_text <- "SELECT * FROM all_routes_all_stops WHERE (StateNum = 6.0) AND (Route = 2.0)"
+
+```
+
+## Evaluating SQL in `duckdb`
+
+```{r}
+library(DBI)
+
+dbGetQuery(conn = con, statement = query_text) |>
+  head()
+
+```
+
+
+## Disconnect from db!
+
+```{r}
+
+dbDisconnect(conn = con, shutdown = TRUE)
+
+```
+
+# In summary
+
+## Choosing your tools
+
+| `arrow`                             | `duckdb`                  | `DBI`                           |
+|------------------------|------------------------|------------------------|
+| Focus on one big table              | Multiple related tables   | Custom SQL for specialized/advanced operations |
+| `dplyr`-focused workflow            | `dplyr` + additional verbs       |                                 |
+| High value on data interoperability | .duckdb format acceptable |                                 |
+
+#### ✨ You can use multiple tools within one workflow!✨
+
+# Resources
+
+## `arrow`
+
+* [Apache arrow](https://arrow.apache.org/)
+* [R package](https://arrow.apache.org/docs/r/index.html)
+* [Supported functions](https://arrow.apache.org/docs/r/reference/acero.html)
+* [More in-depth arrow tutorial](https://posit-conf-2023.github.io/arrow/)
+
+## `duckdb`
+
+* [DuckDB](https://duckdb.org/)
+* [DuckDB R API](https://duckdb.org/docs/api/r)
+* [DuckDB + httpfs + duckdbfs](https://cboettig.github.io/duckdbfs/) (for data access over HTTPS)
+* [duckplyr](https://duckdblabs.github.io/duckplyr/)
+
+## CCT Data Science opportunities
+
+::: incremental
+-   Drop-in hours - Tuesdays, 9-10
+-   Incubator projects
+-   Upcoming workshops
+:::
+
+## Data science \@ UA
+
+::: incremental
+-   [Research Bazaar Arizona](https://researchbazaar.arizona.edu/)
+-   Coffee & Code
+-   Hack Hour
+-   UA Data Science Slack
+-   Sign up here: <https://jcoliver.github.io/uadatascience-slack/user-guide.html>
+-   [UA Libraries Data & Viz Drop-In Hours](https://libcal.library.arizona.edu/event/10712327?_gl=1*23qnh9*_ga*MTcwMzYxNDQwNC4xNjk4MTYyODA2*_ga_7PV3540XS3*MTcwMTgwODgyNy44My4xLjE3MDE4MDk0OTUuMjkuMC4w)
+-   UA Data Science Institute
+:::
+
+# Thank you!
+
+Thank you for attending!
+
+For details on drop-in hours, upcoming workshops, and Incubator Program offerings from CCT-Data Science, see our [website](https://datascience.cct.arizona.edu)!
+
+Please offer feedback through this survey: <https://forms.gle/CxAimF4TDWCsHxz19>

@@ -1,0 +1,239 @@
+---
+title: "Demystifying APIs for Researchers: Live-Coding"
+subtitle: "Playing around with the commonchemistry API"
+author: "Eric R. Scott"
+format: 
+  html:
+    toc: true
+editor: visual
+---
+
+These are notes for the participatory live-coding portion of a workshop.
+Slides are here: <https://cct-datascience.quarto.pub/demystifying-apis-slides/>
+
+```{r}
+library(httr2)
+library(tidyverse) #used later on for wrangling results
+```
+
+## Search
+
+### Build the query
+
+```{r}
+req_search <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("search") |> 
+  req_url_query(q = "caffeine")
+req_search
+```
+
+### Perform the request
+
+```{r}
+resp_search <- 
+  req_search |> 
+  req_perform()
+resp_search
+```
+
+### Get the results as a list
+
+```{r}
+caffeine_search <- 
+  resp_search |> resp_body_json()
+caffeine_search
+```
+
+There's only one result here, so we'll simplify this list a bit by just pulling out the first (only) element of the results.
+
+```{r}
+caffeine <- caffeine_search[["results"]][[1]]
+caffeine
+```
+
+### Convert to data frame
+
+We can convert this to a data frame or tibble.
+
+```{r}
+as_tibble(caffeine)
+```
+
+## Detail
+
+Now let's get more information with the `/detail` endpoint
+
+### Build the query
+
+We can pass the registry number directly from our first query into this one.
+
+```{r}
+req_detail <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("detail") |> 
+  req_url_query(cas_rn = caffeine$rn)
+req_detail
+```
+
+### Perform the request
+
+```{r}
+resp_detail <-
+  req_detail |> 
+  req_perform()
+resp_detail
+```
+
+### Get the results
+
+```{r}
+caffeine_detail <- 
+  resp_detail |>
+  resp_body_json()
+caffeine_detail
+```
+
+### Wrangle the results
+
+Lists are hard to work with!
+Let's try to turn this into a tibble.
+
+```{r}
+#| error: true
+as_tibble(caffeine_detail)
+```
+
+The list isn't a nice rectangle, so it can't be easily converted into a tibble.
+
+We can take subsets of the list where all elements are the same length and make those into data frames
+
+One way to "drill down" into lists is with `purrr::pluck()`
+
+```{r}
+caffeine_detail |> pluck("name")
+caffeine_detail |> pluck(1)
+caffeine_detail |> pluck("experimentalProperties", 1, "property")
+```
+
+We can instead use `purrr::keep()` to supply a *function* to determine which elements to extract.
+For example, let's take all the elements with length == 1 and turn those into a data frame.
+
+```{r}
+caffeine_basics <- caffeine_detail |> 
+  purrr::keep(\(x) length(x) == 1) |> 
+  as_tibble()
+```
+
+This uses an **anonymous function**, `\(x) length(x) == 1`, which is saying "for list element `x`, is the length of `x` 1?".
+`keep()` iterates like a for loop where `x` is representing `caffeine_detail[[1]]` through `caffeine_detail[[15]]`.
+
+::: callout-tip
+## Bonus
+
+Now that we have a data frame, we can make a table with `gt` that displays the SVG data as an image of the molecule!
+
+```{r}
+library(gt)
+gt(caffeine_basics) |> 
+  fmt_markdown(columns = c(image, molecularFormula)) #molecular formula was also HTML
+```
+
+Nice!
+This isn't a `gt` workshop, but there is a **lot** you can do with `gt` to make publication quality tables.
+:::
+
+## Iterating
+
+The *true* power of accessing APIs programatically is that we can iterate!
+For example, we can take a list of chemicals, search for the registry number for all of them, get the results for all of them, and turn it into a single output table.
+
+::: callout-important
+Many APIs have a **rate limit** that limits how quickly you can make requests (e.g. 10 per minute).
+Sometimes this rate limit is documented on the API website, sometimes you'll just get errors if you make too many requests (surprise!).
+Slow down your requests with `req_throttle()`.
+:::
+
+```{r}
+chemical_names <- c("caffeine", "vanillin", "bergamotene") #vanilla earl grey anyone?
+```
+
+All queries will start like this
+
+```{r}
+req_search_base <-
+  request("https://commonchemistry.cas.org/api") |> 
+  req_url_path_append("search")
+```
+
+Then we want to generate queries for each of the chemicals by plugging the elements of `chemical_names` into `req_url_query(q = <chemical_name>)`.
+We can do that with `map()` from the `purr` package.
+The first argument is the thing to iterate over—`chemical_names` in our case.
+The second argument is a function to perform.
+Here I've again used R's "shortcut" for creating an anonymous function: `\(arg_name) do_things_to(arg_name)`
+
+```{r}
+req_list <- 
+  map(chemical_names, \(x) req_search_base |> req_url_query(q = x))
+req_list
+```
+
+So now we have a list of three queries.
+We can use `map()` again to perform all of them.
+This time, we don't even need the anonymous function because `req_perform()` just takes the request as it's first unnamed argument.
+
+```{r}
+resp_list <- map(req_list, req_perform)
+resp_list
+```
+
+And again, we can use `map` to extract all the results
+
+```{r}
+map(resp_list, resp_body_json)
+```
+
+Now here it's gotten a little complicated because we now have a list of lists.
+So instead of just `map()`ing `resp_body_json()`, let's do some data extraction *inside* of `map()`.
+It's usually easiest to figure out how to do this by first testing it out on just a single element.
+
+```{r}
+resp_list[[1]] |> 
+  resp_body_json() |> 
+  pluck("results", 1) |> #equivalent to x[[results]][[1]]
+  as_tibble()
+```
+
+Then we can put this code inside an anonymous function `\(x)` and replace `resp_list[[1]]` with `x`
+
+```{r}
+df_list <- map(resp_list, \(x) {
+  x |> 
+    resp_body_json() |> 
+    pluck("results", 1) |> #equivalent to x[[results]][[1]]
+    as_tibble()
+})
+
+```
+
+Now we have a list of tibbles that we can combine with `list_rbind()`
+
+```{r}
+search_results <- list_rbind(df_list)
+search_results
+```
+
+::: callout-tip
+## Bonus
+
+We can do the cool `gt` thing with multiple rows now
+
+```{r}
+gt(search_results) |> 
+  fmt_markdown(columns = image)
+```
+:::
+
+## Try it on your own!
+
+As an exercise, use the three CAS registry numbers in `search_results` to search the `detail/` endpoint and make a table of chemical representations (InChI, InChIKey, SMILES, and canonical SMILES) for each molecule.
