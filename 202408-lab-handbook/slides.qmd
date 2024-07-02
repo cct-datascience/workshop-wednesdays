@@ -1,0 +1,31 @@
+---
+title: "Creating a Lab Group Handbook with Quarto"
+date: 2024-08-28
+author: "Eric R. Scott"
+format: revealjs
+editor: visual
+---
+
+## Lab Handbooks
+
+-   what
+
+-   why
+
+-   how
+
+## Quarto
+
+-   what
+
+-   why
+
+-   how
+
+## GitHub
+
+-   what
+
+-   why
+
+-   how

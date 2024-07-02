@@ -8,7 +8,11 @@ bibliography: references.bib
 
 The goal of this workshop is to provide a framework (Quarto book hosted on GitHub) for labs to create their own editable lab handbooks.
 
-The workshop will consist of an introductory lecture/discussion section and a hands-on section where participants create a lab organization (if applicable), create a repo from a template, edit it and check that it deploys.
+The workshop will consist of:
+- an introductory lecture/discussion section briefly discussing the reasons for having a lab handbook, and relevant literature
+- a hands-on setup section where participants will get set up with GitHub, create a GitHub organization (if applicable), and use the template to create their own repo
+- explanation of how it all works—how to edit .qmd files with the visual editor, YAML, shortcodes, publishing to GitHub Pages, etc.
+- time to make some edits.
 
 ## Learning objectives
 
@@ -34,37 +38,6 @@ The workshop will consist of an introductory lecture/discussion section and a ha
     -   GitHub is useful for researchers (link to @braga2023)
     -   On GitHub, edits are versioned along with a required comment and can be explored and reverted
     -   Set up to automatically deploy to a website so can be easily shared to group members and recruits
-
-## What goes in template repo
-
--   Quarto book
-
--   "Edit this page" button enabled
-
--   Placeholders for lab logo, lab mission statement
-
--   PR & issue templates
-
--   workflow to automate deployment to github pages
-
--   Contribution Guide
-
-    -   From GitHub
-
-        -   Pros: no setup needed other than a GitHub account
-
-        -   Cons: no visual editor, preview isn't 100% accurate
-
-        -   Good for simple edits that are just changes to text
-
-    -   Fork/Clone and edit in RStudio or VSCode
-
-        -   Pros: full access to Quarto visual editor and all its features, preview entire book with `quarto preview`
-
-        -   Cons: need to setup git, GitHub PAT, and use workflow from `usethis` to clone and make PR
-
--   UA resources page
-
-    -   links to things like how to report research misconduct and harassment
-
-    -   link to <https://datascience.cct.arizona.edu/>
+- Getting started with git/GitHub using `usethis` (can re-cycle slides/notes from fall workshop series)
+  - `usethis::git_sitrep()`
+  - Shouldn't need a PAT since we won't do any PR stuff
