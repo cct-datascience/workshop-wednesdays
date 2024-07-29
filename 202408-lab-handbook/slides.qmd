@@ -26,6 +26,8 @@ bibliography: references.bib
 
 ## Lab Handbook
 
+From @tendler2023:
+
 -   Communicates lab ethos
 
 -   Normalizes and communicates expectations
@@ -33,8 +35,6 @@ bibliography: references.bib
 -   Improves equity among lab members
 
 -   Streamlines and standardizes onboarding and offboarding
-
--   Holds "institutional knowledge"
 
 ::: notes
 Tendler et al. describes some scenarios that all result from there being no central go-to place for information about lab expectations:
@@ -55,8 +55,6 @@ It then falls on the PI or a new lab member to figure out where their data is, h
 
 ::: nonincremental
 -   *Many* different ways to organize this information
-
--   Suggested reading: @tendler2023
 
 -   Other good lab handbooks:
 
@@ -79,6 +77,8 @@ These are all great examples, especially for inspiration for the content, but to
 
 -   Combines prose, code, and code output into a variety of output formats
 
+. . .
+
 ![](rstudio-qmd-how-it-works.png){fig-align="center"}
 
 ## {{< iconify fa6-brands:github >}} GitHub
@@ -95,19 +95,15 @@ These are all great examples, especially for inspiration for the content, but to
 
 -   It *is* a time investment to learn these tools
 
--   Git and Quarto both generally useful for research
+-   Useful in [academia](https://quarto.org/docs/blog/posts/2023-05-22-quarto-for-academics/) and highly transferable skills [@braga2023]
 
--   Both are highly transferable skills for trainees [@braga2023]
+-   Example uses:
 
--   Can be used for:
+    -   [Reproducible manuscripts](https://quarto.org/docs/manuscripts/)
 
-    -   Reproducible manuscripts
-
-    -   Collaboration (on code, data, manuscripts)
+    -   Collaboration (on code, data, manuscripts, etc.)
 
     -   Setting up a course website
-
-    -   [So much more](https://quarto.org/docs/blog/posts/2023-05-22-quarto-for-academics/)!
 
 # Get Set Up with GitHub
 
@@ -129,17 +125,33 @@ Goal: get RStudio set up to work with git and GitHub
 ## GitHub organizations
 
 ::: nonincremental
+-   A central place for all the lab's projects
+
 -   Allow you to manage team members access
 
--   You (the PI) always have access to everyone's code pushed to the organization
-
--   When a trainee leaves your lab, their code stays in the lab organization
+-   When a member leaves your lab, their code stays in the lab organization
 :::
 
-::: callout-note
-## BTW
+::: callout-tip
+Learn more about GitHub organizations and how to create one: <https://docs.github.com/en/organizations>
+:::
 
-Encourage trainees in your lab to apply to our [Fall reproducibility workshop series](https://datascience.cct.arizona.edu/events/fall-2024-workshop-series-reproducibility-and-data-science-r)!
+## Create a GitHub organization (optional)
+
+::: columns
+::: column
+![](github_new_org.png){fig-align="center" width="283"}
+:::
+
+::: column
+::: nonincremental
+-   Click the "+" button in the upper right and choose "New Organization"
+
+-   Choose a plan (the free plan is likely all you need)
+
+-   Follow the prompts to create your organization
+:::
+:::
 :::
 
 ## Create your handbook
@@ -235,16 +247,16 @@ Check **Help \> Markdown quick reference** in RStudio
 
 ## Shortcodes
 
+::: callout-note
+You don't *need* to use shortcodes, but there are some already in the template.
+:::
+
 ::: nonincremental
 -   Shortcodes look like `{{< something something >}}` and get replaced on render
 
 -   For an example, see `contributing.qmd`
 
 -   Some shortcodes are built-in (like the [`meta` shortcode](https://quarto.org/docs/authoring/variables.html#meta)) and some are from [extensions](https://quarto.org/docs/extensions/) (like the [`fa` shortcode](https://github.com/quarto-ext/fontawesome))
-:::
-
-::: callout-note
-You don't *need* to use shortcodes, but there are some already in the template.
 :::
 
 ## Visual Editor
