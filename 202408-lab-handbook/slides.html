@@ -11,7 +11,7 @@
 <script src="slides_files/libs/quarto-contrib/iconify-2.1.0/iconify-icon.min.js"></script>
 <script src="slides_files/libs/quarto-contrib/kbd/kbd.js"></script>
 <link href="slides_files/libs/quarto-contrib/kbd/kbd.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.554">
+  <meta name="generator" content="quarto-1.5.56">
 
   <meta name="author" content="Eric R. Scott">
   <meta name="dcterms.date" content="2024-08-28">
@@ -46,7 +46,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -592,8 +592,7 @@ Eric R. Scott
 <li><p>Follow the prompts to create your organization</p></li>
 </ul>
 </div>
-</div>
-</div>
+</div></div>
 </section>
 <section id="create-your-handbook" class="slide level2">
 <h2>Create your handbook</h2>
@@ -695,13 +694,6 @@ Eric R. Scott
 </section>
 <section id="shortcodes" class="slide level2">
 <h2>Shortcodes</h2>
-<div>
-<ul>
-<li><p>Shortcodes look like <code>{{&lt; something something &gt;}}</code> and get replaced on render</p></li>
-<li><p>For an example, see <code>contributing.qmd</code></p></li>
-<li><p>Some shortcodes are built-in (like the <a href="https://quarto.org/docs/authoring/variables.html#meta"><code>meta</code> shortcode</a>) and some are from <a href="https://quarto.org/docs/extensions/">extensions</a> (like the <a href="https://github.com/quarto-ext/fontawesome"><code>fa</code> shortcode</a>)</p></li>
-</ul>
-</div>
 <div class="callout callout-note callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -714,6 +706,13 @@ Eric R. Scott
 <p>You don’t <em>need</em> to use shortcodes, but there are some already in the template.</p>
 </div>
 </div>
+</div>
+<div>
+<ul>
+<li><p>Shortcodes look like <code>{{&lt; something something &gt;}}</code> and get replaced on render</p></li>
+<li><p>For an example, see <code>contributing.qmd</code></p></li>
+<li><p>Some shortcodes are built-in (like the <a href="https://quarto.org/docs/authoring/variables.html#meta"><code>meta</code> shortcode</a>) and some are from <a href="https://quarto.org/docs/extensions/">extensions</a> (like the <a href="https://github.com/quarto-ext/fontawesome"><code>fa</code> shortcode</a>)</p></li>
+</ul>
 </div>
 </section>
 <section id="visual-editor" class="slide level2">
@@ -800,8 +799,7 @@ Eric R. Scott
 <li>Remove all <code>.callout-important</code> boxes—these are just prompts to give ideas for content</li>
 </ul>
 </div>
-</div>
-</div>
+</div></div>
 </section>
 <section id="publish-your-wip-book" class="slide level2">
 <h2>Publish your (WIP) book</h2>
@@ -848,7 +846,7 @@ Tendler, Benjamin C, Maddie Welland, Karla L Miller, and The WIN Handbook Team. 
 </div>
 </div>
 <div class="quarto-auto-generated-content">
-<p><img src="_extensions/cct-datascience/uaz/uaz-logo.png" class="slide-logo"></p>
+<p><img src="logo.png" class="slide-logo"></p>
 <div class="footer footer-default">
 
 </div>
@@ -1096,18 +1094,7 @@ Tendler, Benjamin C, Maddie Welland, Karla L Miller, and The WIN Handbook Team. 
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1139,7 +1126,29 @@ Tendler, Benjamin C, Maddie Welland, Karla L Miller, and The WIN Handbook Team. 
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
         var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
         var mailtoRegex = new RegExp(/^mailto:/);
           var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -1147,7 +1156,7 @@ Tendler, Benjamin C, Maddie Welland, Karla L Miller, and The WIN Handbook Team. 
             return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
         // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
         for (var i=0; i<links.length; i++) {
           const link = links[i];
           if (!isInternal(link.href)) {

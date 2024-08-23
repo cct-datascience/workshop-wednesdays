@@ -6,6 +6,7 @@ format:
   # revealjs: default
   uaz-revealjs:
    incremental: true
+logo: "logo.png"
 editor: visual
 bibliography: references.bib
 ---
