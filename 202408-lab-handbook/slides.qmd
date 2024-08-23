@@ -123,6 +123,11 @@ Goal: get RStudio set up to work with git and GitHub
 
 -   Run `usethis::git_sitrep()` and follow steps
 
+::: notes
+They DO need a PAT because they are going to push changes to their repo.
+Have them set this up!
+:::
+
 ## GitHub organizations
 
 ::: nonincremental
@@ -246,20 +251,6 @@ For example:
 
 Check **Help \> Markdown quick reference** in RStudio
 
-## Shortcodes
-
-::: callout-note
-You don't *need* to use shortcodes, but there are some already in the template.
-:::
-
-::: nonincremental
--   Shortcodes look like `{{< something something >}}` and get replaced on render
-
--   For an example, see `contributing.qmd`
-
--   Some shortcodes are built-in (like the [`meta` shortcode](https://quarto.org/docs/authoring/variables.html#meta)) and some are from [extensions](https://quarto.org/docs/extensions/) (like the [`fa` shortcode](https://github.com/quarto-ext/fontawesome))
-:::
-
 ## Visual Editor
 
 ![](visual_toolbar.png){fig-align="center"}
@@ -272,6 +263,20 @@ You don't *need* to use shortcodes, but there are some already in the template.
 -   Open the "add anything" menu with {{< kbd mac=cmd-/ win=ctrl-/ >}}
 
 -   Save changes, practice commit & push
+:::
+
+## Shortcodes
+
+::: callout-note
+You don't *need* to use shortcodes, but there are some already in the template.
+:::
+
+::: nonincremental
+-   Shortcodes look like `{{< something something >}}` and get replaced on render with *something* (text, icons, videos, etc. depending on the shortcode)
+
+-   For an example, see `contributing.qmd`
+
+-   Some shortcodes are built-in (like the [`meta` shortcode](https://quarto.org/docs/authoring/variables.html#meta)) and some are from [extensions](https://quarto.org/docs/extensions/) (like the [`fa` shortcode](https://github.com/quarto-ext/fontawesome))
 :::
 
 ## \_quarto.yml
@@ -333,15 +338,29 @@ In content (all .qmd files)
 
 ## Publish your (WIP) book
 
+In the terminal...
+
 ::: nonincremental
--   In the terminal, double-check that you're in the project directory
+-   Stop the `quarto preview` process
+-   Run `quarto render`
 -   Run `quarto publish gh-pages`
--   When successful, it'll create `_publish.yml`—commit and push this file
+-   When successful, it should open up in your web browser!
 :::
 
-::: callout-note
-After manually publishing this first time, you *should* (🤞) be able to just push changes to GitHub and it will automatically re-publish your book
+::: notes
+You might want to mention that before this publishing, the GH action will run and fail and email them—they can ignore these emails.
+In the future, the emails will tell them when something goes wrong.
+
+I initially got the error `RPC failed; HTTP 400 curl 22 The requested URL returned error: 400 send-pack: unexpected disconnect while reading sideband packet` and needed to run `git config http.postBuffer 524288000` to increase buffer size to 500MB
 :::
+
+## Automatic Publishing
+
+-   After manually publishing this first time, you *should* (🤞) be able to just push changes to GitHub and it will automatically re-publish your book!
+
+-   This happens because of a GitHub action included in `.github/`
+
+-   Try another round of edit, save, commit, push and then check the "Actions" tab of your GitHub repository.
 
 ## Resources
 

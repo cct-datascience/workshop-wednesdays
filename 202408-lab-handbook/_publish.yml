@@ -1,0 +1,4 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: cfab3f72-e210-452c-8320-78926b5eb765
+      url: 'https://cct-datascience.quarto.pub/creating-a-lab-group-handbook-with-quarto'

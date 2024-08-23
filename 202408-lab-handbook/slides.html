@@ -551,6 +551,19 @@ Eric R. Scott
 </ul></li>
 <li class="fragment"><p>Run <code>usethis::git_sitrep()</code> and follow steps</p></li>
 </ul>
+<aside class="notes">
+<p>They DO need a PAT because they are going to push changes to their repo. Have them set this up!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="github-organizations" class="slide level2">
 <h2>GitHub organizations</h2>
@@ -692,6 +705,18 @@ Eric R. Scott
 </div>
 <p>Check <strong>Help &gt; Markdown quick reference</strong> in RStudio</p>
 </section>
+<section id="visual-editor" class="slide level2">
+<h2>Visual Editor</h2>
+
+<img data-src="visual_toolbar.png" class="quarto-figure quarto-figure-center r-stretch"><div>
+<ul>
+<li><p>Makes editing Quarto documents a lot like editing a Word doc</p></li>
+<li><p>Explore creating sections, lists, tables, images, callouts, and references</p></li>
+<li><p>Open the “add anything” menu with <kbd aria-hidden="true" data-mac="cmd-/" data-windows="ctrl-/"></kbd><span class="visually-hidden"></span></p></li>
+<li><p>Save changes, practice commit &amp; push</p></li>
+</ul>
+</div>
+</section>
 <section id="shortcodes" class="slide level2">
 <h2>Shortcodes</h2>
 <div class="callout callout-note callout-titled callout-style-default">
@@ -709,21 +734,9 @@ Eric R. Scott
 </div>
 <div>
 <ul>
-<li><p>Shortcodes look like <code>{{&lt; something something &gt;}}</code> and get replaced on render</p></li>
+<li><p>Shortcodes look like <code>{{&lt; something something &gt;}}</code> and get replaced on render with <em>something</em> (text, icons, videos, etc. depending on the shortcode)</p></li>
 <li><p>For an example, see <code>contributing.qmd</code></p></li>
 <li><p>Some shortcodes are built-in (like the <a href="https://quarto.org/docs/authoring/variables.html#meta"><code>meta</code> shortcode</a>) and some are from <a href="https://quarto.org/docs/extensions/">extensions</a> (like the <a href="https://github.com/quarto-ext/fontawesome"><code>fa</code> shortcode</a>)</p></li>
-</ul>
-</div>
-</section>
-<section id="visual-editor" class="slide level2">
-<h2>Visual Editor</h2>
-
-<img data-src="visual_toolbar.png" class="quarto-figure quarto-figure-center r-stretch"><div>
-<ul>
-<li><p>Makes editing Quarto documents a lot like editing a Word doc</p></li>
-<li><p>Explore creating sections, lists, tables, images, callouts, and references</p></li>
-<li><p>Open the “add anything” menu with <kbd aria-hidden="true" data-mac="cmd-/" data-windows="ctrl-/"></kbd><span class="visually-hidden"></span></p></li>
-<li><p>Save changes, practice commit &amp; push</p></li>
 </ul>
 </div>
 </section>
@@ -803,26 +816,37 @@ Eric R. Scott
 </section>
 <section id="publish-your-wip-book" class="slide level2">
 <h2>Publish your (WIP) book</h2>
+<p>In the terminal…</p>
 <div>
 <ul>
-<li>In the terminal, double-check that you’re in the project directory</li>
+<li>Stop the <code>quarto preview</code> process</li>
+<li>Run <code>quarto render</code></li>
 <li>Run <code>quarto publish gh-pages</code></li>
-<li>When successful, it’ll create <code>_publish.yml</code>—commit and push this file</li>
+<li>When successful, it should open up in your web browser!</li>
 </ul>
 </div>
-<div class="callout callout-note callout-titled callout-style-default">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Note</strong></p>
-</div>
-<div class="callout-content">
-<p>After manually publishing this first time, you <em>should</em> (🤞) be able to just push changes to GitHub and it will automatically re-publish your book</p>
-</div>
-</div>
-</div>
+<aside class="notes">
+<p>You might want to mention that before this publishing, the GH action will run and fail and email them—they can ignore these emails. In the future, the emails will tell them when something goes wrong.</p>
+<p>I initially got the error <code>RPC failed; HTTP 400 curl 22 The requested URL returned error: 400 send-pack: unexpected disconnect while reading sideband packet</code> and needed to run <code>git config http.postBuffer 524288000</code> to increase buffer size to 500MB</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="automatic-publishing" class="slide level2">
+<h2>Automatic Publishing</h2>
+<ul>
+<li class="fragment"><p>After manually publishing this first time, you <em>should</em> (🤞) be able to just push changes to GitHub and it will automatically re-publish your book!</p></li>
+<li class="fragment"><p>This happens because of a GitHub action included in <code>.github/</code></p></li>
+<li class="fragment"><p>Try another round of edit, save, commit, push and then check the “Actions” tab of your GitHub repository.</p></li>
+</ul>
 </section>
 <section id="resources" class="slide level2">
 <h2>Resources</h2>
