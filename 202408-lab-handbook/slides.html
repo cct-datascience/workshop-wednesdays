@@ -716,6 +716,19 @@ Eric R. Scott
 <li><p>Save changes, practice commit &amp; push</p></li>
 </ul>
 </div>
+<aside class="notes">
+<p>Have everyone edit index.qmd, save, and see the changes</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="shortcodes" class="slide level2">
 <h2>Shortcodes</h2>
@@ -734,7 +747,7 @@ Eric R. Scott
 </div>
 <div>
 <ul>
-<li><p>Shortcodes look like <code>{{&lt; something something &gt;}}</code> and get replaced on render with <em>something</em> (text, icons, videos, etc. depending on the shortcode)</p></li>
+<li><p><a href="https://quarto.org/docs/authoring/shortcodes.html">Shortcodes</a> look like <code>{{&lt; something something &gt;}}</code> and get replaced on render with <em>something</em> (text, icons, videos, etc. depending on the shortcode)</p></li>
 <li><p>For an example, see <code>contributing.qmd</code></p></li>
 <li><p>Some shortcodes are built-in (like the <a href="https://quarto.org/docs/authoring/variables.html#meta"><code>meta</code> shortcode</a>) and some are from <a href="https://quarto.org/docs/extensions/">extensions</a> (like the <a href="https://github.com/quarto-ext/fontawesome"><code>fa</code> shortcode</a>)</p></li>
 </ul>
@@ -776,10 +789,26 @@ Eric R. Scott
           display:block!important;
       }</style></aside>
 </section>
+<section id="add-a-new-chapter" class="slide level2">
+<h2>Add a new chapter</h2>
+<ul>
+<li class="fragment"><p>Create a new .qmd file</p></li>
+<li class="fragment"><p>Give it a title with a level 1 header (<code># Title</code>)</p></li>
+<li class="fragment"><p>Add that chapter to <code>_quarto.yml</code></p></li>
+<li class="fragment"><p>(Optionally) link to it in other chapters with <code>[link text](filename.qmd)</code></p></li>
+</ul>
+</section>
 <section id="complete-list-of-edits" class="slide level2 smaller">
 <h2>Complete (?) list of edits</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
+<p>In <code>README.md</code></p>
+<div>
+<ul>
+<li>Edit to be about your book</li>
+<li>Include links to template, your lab website, etc.</li>
+</ul>
+</div>
 <p>In <code>_quarto.yml</code></p>
 <div>
 <ul>
@@ -788,13 +817,6 @@ Eric R. Scott
 <li><code>book: author:</code></li>
 <li><code>book: date:</code></li>
 <li>Possibly re-order or add new <code>chapters:</code></li>
-</ul>
-</div>
-<p>In <code>README.md</code></p>
-<div>
-<ul>
-<li>Edit to be about your book</li>
-<li>Include links to template, your lab website, etc.</li>
 </ul>
 </div>
 </div><div class="column" style="width:50%;">

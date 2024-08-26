@@ -265,6 +265,10 @@ Check **Help \> Markdown quick reference** in RStudio
 -   Save changes, practice commit & push
 :::
 
+::: notes
+Have everyone edit index.qmd, save, and see the changes
+:::
+
 ## Shortcodes
 
 ::: callout-note
@@ -272,7 +276,7 @@ You don't *need* to use shortcodes, but there are some already in the template.
 :::
 
 ::: nonincremental
--   Shortcodes look like `{{< something something >}}` and get replaced on render with *something* (text, icons, videos, etc. depending on the shortcode)
+-   [Shortcodes](https://quarto.org/docs/authoring/shortcodes.html) look like `{{< something something >}}` and get replaced on render with *something* (text, icons, videos, etc. depending on the shortcode)
 
 -   For an example, see `contributing.qmd`
 
@@ -297,10 +301,28 @@ Indentation is a common source of frustration with YAML—the wrong number of sp
 Go through \_quarto.yml line-by-line
 :::
 
+## Add a new chapter
+
+-   Create a new .qmd file
+
+-   Give it a title with a level 1 header (`# Title`)
+
+-   Add that chapter to `_quarto.yml`
+
+-   (Optionally) link to it in other chapters with `[link text](filename.qmd)`
+
 ## Complete (?) list of edits {.smaller}
 
 ::: columns
 ::: {.column width="50%"}
+
+In `README.md`
+
+::: nonincremental
+-   Edit to be about your book
+-   Include links to template, your lab website, etc.
+:::
+
 In `_quarto.yml`
 
 ::: nonincremental
@@ -311,12 +333,7 @@ In `_quarto.yml`
 -   Possibly re-order or add new `chapters:`
 :::
 
-In `README.md`
 
-::: nonincremental
--   Edit to be about your book
--   Include links to template, your lab website, etc.
-:::
 :::
 
 ::: {.column width="50%"}
