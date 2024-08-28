@@ -199,6 +199,21 @@ Run `quarto preview` in the terminal to see a *live* preview of your lab handboo
 -   Links to view and edit source code and report issues on GitHub (these are not "hooked up" yet—we will fix this together)
 :::
 
+## Take a Break
+
+```{r}
+#| echo: false
+
+countdown::countdown(
+    minutes = 10, 
+    font_size = "10rem",
+    start_immediately = TRUE,
+    left = 0,
+    right = 0
+  )
+
+```
+
 ## Anatomy of a .qmd
 
 ```` {.markdown code-line-numbers="|1-7|9-15|10-11|17-19|21-23|" filename="myreport.qmd"}
