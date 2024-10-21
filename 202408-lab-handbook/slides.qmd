@@ -144,12 +144,12 @@ Learn more about GitHub organizations and how to create one: <https://docs.githu
 
 ## Create a GitHub organization (optional)
 
-::: columns
+:::::: columns
 ::: column
 ![](github_new_org.png){fig-align="center" width="283"}
 :::
 
-::: column
+:::: column
 ::: nonincremental
 -   Click the "+" button in the upper right and choose "New Organization"
 
@@ -157,8 +157,8 @@ Learn more about GitHub organizations and how to create one: <https://docs.githu
 
 -   Follow the prompts to create your organization
 :::
-:::
-:::
+::::
+::::::
 
 ## Create your handbook
 
@@ -198,6 +198,21 @@ Run `quarto preview` in the terminal to see a *live* preview of your lab handboo
 -   Table of contents for book (left) and within pages (right)
 -   Links to view and edit source code and report issues on GitHub (these are not "hooked up" yet—we will fix this together)
 :::
+
+## Take a Break
+
+```{r}
+#| echo: false
+
+countdown::countdown(
+    minutes = 10, 
+    font_size = "10rem",
+    start_immediately = TRUE,
+    left = 0,
+    right = 0
+  )
+
+```
 
 ## Anatomy of a .qmd
 
@@ -313,8 +328,8 @@ Go through \_quarto.yml line-by-line
 
 ## Complete (?) list of edits {.smaller}
 
-::: columns
-::: {.column width="50%"}
+::::::::: columns
+::::: {.column width="50%"}
 In `README.md`
 
 ::: nonincremental
@@ -331,9 +346,9 @@ In `_quarto.yml`
 -   `book: date:`
 -   Possibly re-order or add new `chapters:`
 :::
-:::
+:::::
 
-::: {.column width="50%"}
+::::: {.column width="50%"}
 In `code-of-conduct.qmd`
 
 ::: nonincremental
@@ -347,8 +362,8 @@ In content (all .qmd files)
 -   Edit and add content!
 -   Remove all `.callout-important` boxes—these are just prompts to give ideas for content
 :::
-:::
-:::
+:::::
+:::::::::
 
 ## Publish your (WIP) book
 

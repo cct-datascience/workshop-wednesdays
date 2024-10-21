@@ -409,6 +409,8 @@
       margin-right: 0; 
     }
   </style>
+  <link href="slides_files/libs/countdown-0.4.0/countdown.css" rel="stylesheet">
+  <script src="slides_files/libs/countdown-0.4.0/countdown.js"></script>
 </head>
 <body class="quarto-dark">
   <div class="reveal">
@@ -645,6 +647,17 @@ Eric R. Scott
 <li>Table of contents for book (left) and within pages (right)</li>
 <li>Links to view and edit source code and report issues on GitHub (these are not “hooked up” yet—we will fix this together)</li>
 </ul>
+</div>
+</section>
+<section id="take-a-break" class="slide level2">
+<h2>Take a Break</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="countdown" id="timer_ebc04ee7" data-update-every="1" data-start-immediately="true" tabindex="0" style="right:0;bottom:0;left:0;font-size:10rem;">
+<div class="countdown-controls"><button class="countdown-bump-down">−</button><button class="countdown-bump-up">+</button></div>
+<code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
+</div>
 </div>
 </section>
 <section id="anatomy-of-a-.qmd" class="slide level2">
@@ -1108,6 +1121,44 @@ Tendler, Benjamin C, Maddie Welland, Karla L Miller, and The WIN Handbook Team. 
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
