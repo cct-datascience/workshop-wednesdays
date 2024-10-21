@@ -1,0 +1,394 @@
+---
+title: "Creating a Lab Group Handbook with Quarto"
+date: 2024-08-28
+author: "Eric R. Scott"
+format: 
+  # revealjs: default
+  uaz-revealjs:
+   incremental: true
+logo: "logo.png"
+editor: visual
+bibliography: references.bib
+---
+
+## Learning Objectives
+
+::: nonincremental
+-   Understand the purpose of and benefits of a lab group handbook
+
+-   Gain a basic understanding of what Quarto can do
+
+-   Get set up using GitHub if you aren't already
+
+-   Create a repository from a template on GitHub
+
+-   Edit Quarto markdown documents and YAML configurations to customize your group's handbook
+:::
+
+## Lab Handbook
+
+From @tendler2023:
+
+-   Communicates lab ethos
+
+-   Normalizes and communicates expectations
+
+-   Improves equity among lab members
+
+-   Streamlines and standardizes onboarding and offboarding
+
+::: notes
+Tendler et al. describes some scenarios that all result from there being no central go-to place for information about lab expectations:
+
+1.  New lab member sees everyone else as highly productive, puts high expectations on themselves, and works long hours and weekends even though the PI does not expect or want this
+
+2.  Trainee feels uncomfortable about traveling to a particular country for a conference, but doesn't know where or how to raise those concerns
+
+3.  Technician is upset they were not included as a co-author on a paper
+
+4.  PI notices someone is not motivated, but not sure how to start a conversation while being sensitive to their privacy and wellbeing
+
+I'll add another scenario: Lab member leaves after collecting data for an experiment, in the middle of analysis and before writing up.
+It then falls on the PI or a new lab member to figure out where their data is, how to interpret and run the code, and write up the manuscript
+:::
+
+## Lab Handbook
+
+::: nonincremental
+-   *Many* different ways to organize this information
+
+-   Other good lab handbooks:
+
+    -   [Zipkin Lab](https://github.com/zipkinlab/Policies/)
+
+    -   [Bahlai Lab](https://github.com/BahlaiLab/Policies)
+
+    -   [WIN Physics Group](https://zenodo.org/records/7419211)
+:::
+
+::: notes
+These are all great examples, especially for inspiration for the content, but today we're going to make something *cooler* than all of them using Quarto.
+:::
+
+## {{< iconify simple-icons:quarto >}} Quarto
+
+-   "An open-source scientific and technical publishing system"
+
+-   The successor to RMarkdown (but don't worry if you've never used RMarkdown!)
+
+-   Combines prose, code, and code output into a variety of output formats
+
+. . .
+
+![](rstudio-qmd-how-it-works.png){fig-align="center"}
+
+## {{< iconify fa6-brands:github >}} GitHub
+
+-   A platform for sharing files (often code)
+
+-   Enables collaboration via git, a version-control tool
+
+-   Automated deployment of rendered Quarto book to the web
+
+-   Controlled way of merging edits and contributions to your book
+
+## Do I really have time for this?
+
+-   It *is* a time investment to learn these tools
+
+-   Useful in [academia](https://quarto.org/docs/blog/posts/2023-05-22-quarto-for-academics/) and highly transferable skills [@braga2023]
+
+-   Example uses:
+
+    -   [Reproducible manuscripts](https://quarto.org/docs/manuscripts/)
+
+    -   Collaboration (on code, data, manuscripts, etc.)
+
+    -   Setting up a course website
+
+# Get Set Up with GitHub
+
+## Hello GitHub, can you hear me?
+
+Goal: get RStudio set up to work with git and GitHub
+
+-   In RStudio: tools \> Global Options \> Git/SVN
+
+-   Check that "Git executable:" isn't blank
+
+-   If it is, you may need to find/install git
+
+    -   [Windows](https://happygitwithr.com/install-git#install-git-windows)
+    -   [macOS](https://happygitwithr.com/install-git#macos)
+
+-   Run `usethis::git_sitrep()` and follow steps
+
+::: notes
+They DO need a PAT because they are going to push changes to their repo.
+Have them set this up!
+:::
+
+## GitHub organizations
+
+::: nonincremental
+-   A central place for all the lab's projects
+
+-   Allow you to manage team members access
+
+-   When a member leaves your lab, their code stays in the lab organization
+:::
+
+::: callout-tip
+Learn more about GitHub organizations and how to create one: <https://docs.github.com/en/organizations>
+:::
+
+## Create a GitHub organization (optional)
+
+::: columns
+::: column
+![](github_new_org.png){fig-align="center" width="283"}
+:::
+
+::: column
+::: nonincremental
+-   Click the "+" button in the upper right and choose "New Organization"
+
+-   Choose a plan (the free plan is likely all you need)
+
+-   Follow the prompts to create your organization
+:::
+:::
+:::
+
+## Create your handbook
+
+![](use-template.png){fig-align="center"}
+
+-   Go to our [template on GitHub](https://github.com/cct-datascience/group-handbook-template) and click the "Use Template" button
+
+-   (Optional) choose your newly-created GitHub organization under "Owner"
+
+-   Give your repo a name, e.g. "scott-lab-handbook"
+
+## Open your handbook in RStudio
+
+![](code-btn.png){fig-align="center"}
+
+Next you need to *clone* your repository locally, so you can work on it on your computer
+
+-   In ***your*** repo on GitHub, click the green "\< \> Code" button, copy the url
+
+-   In RStudio, new project \> from version control \> paste url
+
+-   Edit the README, commit, push, and check GitHub
+
+# Quarto
+
+## Preview your book!
+
+Run `quarto preview` in the terminal to see a *live* preview of your lab handbook!
+
+![](quarto_preview.png){fig-align="center"}
+
+## Your book features
+
+::: nonincremental
+-   Search bar
+-   Dark mode switch
+-   Table of contents for book (left) and within pages (right)
+-   Links to view and edit source code and report issues on GitHub (these are not "hooked up" yet—we will fix this together)
+:::
+
+## Anatomy of a .qmd
+
+```` {.markdown code-line-numbers="|1-7|9-15|10-11|17-19|21-23|" filename="myreport.qmd"}
+---
+title: "My Report"
+author: "Eric Scott"
+format: 
+  html:
+    toc: true
+---
+
+```{{r}}
+#| label: load-packages
+#| include: false
+
+library(tidyverse)
+library(gapminder)
+```
+
+## Data
+
+My data source is the [gapminder](https://www.gapminder.org/) dataset.
+
+```{{r}}
+head(gapminder)
+```
+````
+
+::: notes
+If this looks familiar to RMarkdown users, that's because Quarto was built on lessons learned from developing RMarkdown.
+It includes all the features of RMarkdown and more.
+:::
+
+## Markdown Basics
+
+Markdown is a "markup language" that let's you write plain text to indicate formatting.
+For example:
+
+::: nonincremental
+-   `**bold text**` becomes **bold text**
+
+-   `~~strikethrough~~` becomes ~~strikethrough~~
+
+-   `$E = mc^2$` becomes $E = mc^2$
+
+-   `[link](https://www.google.com)` becomes [link](https://www.google.com)
+
+-   `` `code()` `` becomes `code()`
+:::
+
+Check **Help \> Markdown quick reference** in RStudio
+
+## Visual Editor
+
+![](visual_toolbar.png){fig-align="center"}
+
+::: nonincremental
+-   Makes editing Quarto documents a lot like editing a Word doc
+
+-   Explore creating sections, lists, tables, images, callouts, and references
+
+-   Open the "add anything" menu with {{< kbd mac=cmd-/ win=ctrl-/ >}}
+
+-   Save changes, practice commit & push
+:::
+
+::: notes
+Have everyone edit index.qmd, save, and see the changes
+:::
+
+## Shortcodes
+
+::: callout-note
+You don't *need* to use shortcodes, but there are some already in the template.
+:::
+
+::: nonincremental
+-   [Shortcodes](https://quarto.org/docs/authoring/shortcodes.html) look like `{{< something something >}}` and get replaced on render with *something* (text, icons, videos, etc. depending on the shortcode)
+
+-   For an example, see `contributing.qmd`
+
+-   Some shortcodes are built-in (like the [`meta` shortcode](https://quarto.org/docs/authoring/variables.html#meta)) and some are from [extensions](https://quarto.org/docs/extensions/) (like the [`fa` shortcode](https://github.com/quarto-ext/fontawesome))
+:::
+
+## \_quarto.yml
+
+::: nonincremental
+-   YAML works with nested `key: value` pairs.
+
+-   Nesting is indicated with indentation
+
+-   Use `_quarto.yml` to configure your book including adding new chapters and controlling chapter order.
+:::
+
+::: callout-tip
+Indentation is a common source of frustration with YAML—the wrong number of spaces can completely break things.
+:::
+
+::: notes
+Go through \_quarto.yml line-by-line
+:::
+
+## Add a new chapter
+
+-   Create a new .qmd file
+
+-   Give it a title with a level 1 header (`# Title`)
+
+-   Add that chapter to `_quarto.yml`
+
+-   (Optionally) link to it in other chapters with `[link text](filename.qmd)`
+
+## Complete (?) list of edits {.smaller}
+
+::: columns
+::: {.column width="50%"}
+In `README.md`
+
+::: nonincremental
+-   Edit to be about your book
+-   Include links to template, your lab website, etc.
+:::
+
+In `_quarto.yml`
+
+::: nonincremental
+-   `book: title:`
+-   `book: repo-url`
+-   `book: author:`
+-   `book: date:`
+-   Possibly re-order or add new `chapters:`
+:::
+:::
+
+::: {.column width="50%"}
+In `code-of-conduct.qmd`
+
+::: nonincremental
+-   Replace `GROUP_NAME`, `PI_NAME`, and `PI_EMAIL`
+-   Double-check links to UA policies
+:::
+
+In content (all .qmd files)
+
+::: nonincremental
+-   Edit and add content!
+-   Remove all `.callout-important` boxes—these are just prompts to give ideas for content
+:::
+:::
+:::
+
+## Publish your (WIP) book
+
+In the terminal...
+
+::: nonincremental
+-   Stop the `quarto preview` process
+-   Run `quarto render`
+-   Run `quarto publish gh-pages`
+-   When successful, it should open up in your web browser!
+:::
+
+::: notes
+You might want to mention that before this publishing, the GH action will run and fail and email them—they can ignore these emails.
+In the future, the emails will tell them when something goes wrong.
+
+I initially got the error `RPC failed; HTTP 400 curl 22 The requested URL returned error: 400 send-pack: unexpected disconnect while reading sideband packet` and needed to run `git config http.postBuffer 524288000` to increase buffer size to 500MB
+:::
+
+## Automatic Publishing
+
+-   After manually publishing this first time, you *should* (🤞) be able to just push changes to GitHub and it will automatically re-publish your book!
+
+-   This happens because of a GitHub action included in `.github/`
+
+-   Try another round of edit, save, commit, push and then check the "Actions" tab of your GitHub repository.
+
+## Resources
+
+::: nonincremental
+-   [Quarto.org](https://quarto.org/), especially the section on [books](https://quarto.org/docs/books/).
+
+-   The #quarto channel on [UA Data Science Slack](https://jcoliver.github.io/uadatascience-slack/)
+
+-   [CCT drop-in hours](https://datascience.cct.arizona.edu/events/weekly-drop-hours-alvsce-researchers)
+
+-   [Happy Git With R](https://happygitwithr.com/)
+:::
+
+## References
+
+::: {#refs}
+:::
