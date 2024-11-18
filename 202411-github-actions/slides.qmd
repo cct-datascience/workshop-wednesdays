@@ -70,13 +70,43 @@ format: uaz-revealjs
 
     ![](images/Screenshot 2024-11-18 at 3.01.38 PM.png)
 
-3.  For "Owner" choose your own GitHub username and choose a repository name (e.g. "github-actions-workshop"). **Important: make the repository public!**
+3.  For "Owner" choose your own GitHub username and choose a repository name (e.g. "github-actions-workshop").
+    **Important: make the repository public!**
 
 ## Run your first action
 
 In the "Actions" tab, find the "hello_world" example and click "Run workflow"
 
 ![](images/Screenshot 2024-11-18 at 3.06.57 PM.png)
+
+## Workflow components
+
+```{.yml code-line-numbers="|1-3|4-5|6|7-14|8|10-11|13-14|"}
+on: #<1>
+  workflow_dispatch
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup R 
+        uses: r-lib/actions/setup-r@v2 #installs R
+      
+      - name: Run my code
+        run: Rscript mycode.R 
+```
+
+::: notes
+1. Triggering event(s) = workflow_dispatch
+2. Jobs, in this case only one—`hello-world`
+3. Runner for the job, in this case `ubuntu-latest`
+4. Steps to run sequentially on that runner
+5. actions/checkout is an "action"---pre-packaged re-usable workflow.  This one gets the contents of your repository
+6. Another "action".  This one installs R
+7. Running a shell command, in this case, source the mycode.R script
+:::
 
 ## Workflow components: events
 
@@ -111,6 +141,7 @@ Each **job** may contain multiple **steps**.
 
 ::: center
 ```{mermaid}
+%%| fig-align: center
 flowchart TD
     c["Event"]-->ubuntu
     c --> mac
