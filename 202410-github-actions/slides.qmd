@@ -1,28 +1,155 @@
 ---
 title: "GitHub Actions for Automating Scientific Workflows"
 author: "Eric R. Scott"
-format: revealjs
+format: uaz-revealjs
 ---
 
-<!--# Borrow heavily from US-RSE workshop slides -->
+## Workshop Links
 
-## Quarto
+-   These slides
 
-Quarto enables you to weave together content and executable code into a finished presentation.
-To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+-   [GitHub Repository](https://github.com/cct-datascience/github-actions-for-research)
 
-## Bullets
+. . .
 
-When you click the **Render** button a document will be generated that includes:
+### Acknowledgments:
 
--   Content authored with markdown
--   Output from executable code
+-   Heavily inspired by Workshop delivered at US-RSE by Valentina Staneva, Quinn (George) Brencher, and Scott Henderson ([slides](https://docs.google.com/presentation/d/1brXVUg-1e8_XxfYxGMWciB5UCtqXhDtocSV3WR5m49w/edit#slide=id.g24aa3036f10_0_214), [repo](https://github.com/uwescience/GitHubActionsTutorial-USRSE24), [documentation](https://githubactionstutorial-usrse24.readthedocs.io/en/latest/intro.html)).
 
-## Code
+## Learning Objectives
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code.
-You can embed code like this:
+-   Understand the role of GitHub Actions workflows in (research) software development
 
-```{r}
-1 + 1
+-   Know how to trigger workflows in several different ways and determine which trigger is useful for different scientific applications
+
+-   Be able to export and access data created by workflows in a variety of ways
+
+-   Use GitHub actions for distributed computing
+
+## Vocabulary
+
+-   **git**: version control program for tracking and managing changes in files
+
+-   **Repository**: a folder, tracked by git, with your code and data in it
+
+-   **GitHub**: a cloud platform for syncing git repositories, publishing websites, running automated workflows (this workshop), and more
+
+## What is GitHub Actions?
+
+::: incremental
+-   Run basically any workflow on a virtual machine(s) in the cloud in a way that integrates with GitHub
+
+-   Easily incorporate workflows for common, complex tasks created by others
+
+-   Designed for continuous integration & delivery (CI/CD)—software development practices that translate to scientific code and data.
+:::
+
+## Continuous Integration
+
+-   Automate integrating changes in code or data into the main version of your project in a safe way.
+    For example:
+
+    -   When data is updated, run some data validation checks
+
+    -   Before incorporating changes from a collaborator, make sure their code adheres to a particular style
+
+## Continuous Delivery
+
+-   "Delivery" is basically any way you make your data, code, or code outputs available to view or download.
+    For example:
+
+    -   Every month, archive a new version of the data with Zenodo and get a new DOI
+
+    -   When code or data is updated, re-render a report for collaborators
+
+## Workshop setup
+
+1.  Go to [template repository](https://github.com/cct-datascience/github-actions-for-research)
+
+2.  Click the green "Use this template" button and select "create new repository"
+
+    ![](images/Screenshot 2024-11-18 at 3.01.38 PM.png)
+
+3.  For "Owner" choose your own GitHub username and choose a repository name (e.g. "github-actions-workshop"). **Important: make the repository public!**
+
+## Run your first action
+
+In the "Actions" tab, find the "hello_world" example and click "Run workflow"
+
+![](images/Screenshot 2024-11-18 at 3.06.57 PM.png)
+
+## Workflow components: events
+
+Workflows are triggered by **events** that occur in your GitHub repository:
+
+Common events:
+
+-   `push`: triggered whenever changes are made to your repository
+
+-   `pull_request`: runs on a "pull request"—a common way of making changes to a repository
+
+-   `workflow dispatch`: creates a "run workflow" button that you can click on GitHub
+
+-   `schedule`: E.g. run on the first Monday of every month.
+
+## Workflow components: runners
+
+Workflows contain one or more **jobs** that run on virtual machines, called runners.
+
+You can use thes GitHub provided runners for free
+
+| Virtual Machine | CPU Cores | RAM   | Storage |
+|-----------------|-----------|-------|---------|
+| Ubuntu Linux    | 4         | 16 GB | 14 GB   |
+| Windows         | 4         | 16 GB | 14 GB   |
+| macOS (M1)      | 3         | 7 GB  | 14 GB   |
+
+## Workflow components: jobs
+
+Each **job** may contain multiple **steps**.
+**Steps** can be either run a script or an **action**.
+
+::: center
+```{mermaid}
+flowchart TD
+    c["Event"]-->ubuntu
+    c --> mac
+        subgraph ubuntu [runs-on: ubuntu-latest]
+        subgraph Job
+            direction TB
+            a1["Step 1: Checkout Repo"]--> a2["Step2: Install R"]
+            a2 --> a3["Step 3: Run Script"]
+            a3 --> a4["..."]
+        end
+        end
+        subgraph mac [runs-on: macos-latest]
+        subgraph Job2
+            direction TB
+            b1["Step 1: Checkout Repo"]--> b2["Step2: Install R"]
+            b2 --> b3["Step 3: Run Script"]
+            b3 --> b4["..."]
+        end
+        end
+
 ```
+:::
+
+## Workflow components: actions
+
+**P**re-packaged workflows for common complex tasks.
+
+Common actions:
+
+-   [actions/checkout](https://github.com/actions/checkout): almost every workflow starts with this—it gets the files in your repository onto the runner
+
+-   [r-lib/actions/setup-r](https://github.com/r-lib/actions/tree/v2-branch/setup-r): installs a specified version of R
+
+-   [actions/setup-python](https://github.com/actions/setup-python): installs a specified version of Python
+
+-   [r-lib/actions/setup-renv](https://github.com/r-lib/actions/tree/v2-branch/setup-renv): if your project uses `renv`, it will install the R packages in the `renv.lock` file in your repository
+
+## Example: data validation as a test
+
+## Example: rendering a report to GitHub pages
+
+## Example: download data and save to Box
