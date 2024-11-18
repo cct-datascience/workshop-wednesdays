@@ -44,9 +44,12 @@ $blockquote-border-color: $ua-red !default;
 $blockquote-bg: $ua-coolgray !default;
 $blockquote-color: #555 !default; //text color slightly grey
 
-
 // logo
 $logo-height: 3.5rem !default;
+
+// mermaid
+$mermaid-node-bg-color: $ua-white !default;
+$mermaid-fg-color: $ua-midnight !default;
 
 /*-- scss:rules --*/
 
@@ -117,3 +120,4 @@ blockquote::after{
   /*Reset to make sure*/
   content: "";
 }
+
