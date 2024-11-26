@@ -1,16 +1,18 @@
 ---
 title: "GitHub Actions for Automating Scientific Workflows"
 author: "Eric R. Scott"
+date: "2024-12-04"
+date-format: long
 format: uaz-revealjs
+logo: logo.png
 ---
 
 ```{=html}
 <!--# TODO:
 
-change logo
+embiggen logo
 publish
 add link to published slides
-add date to title slide
 -->
 ```
 
