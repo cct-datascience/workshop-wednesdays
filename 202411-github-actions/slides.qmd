@@ -10,17 +10,9 @@ format:
 logo: logo.png
 ---
 
-```{=html}
-<!--# TODO:
-
-publish
-add link to published slides
--->
-```
-
 ## Workshop Links
 
--   These slides
+-   [These slides](https://cct-datascience.quarto.pub/github-actions-for-automating-scientific-workflows/#/title-slide)
 
 -   [GitHub Repository](https://github.com/cct-datascience/github-actions-for-research)
 
@@ -121,6 +113,33 @@ jobs:
 6.  Another "action". This one installs R
 7.  Running a shell command, in this case, source the mycode.R script
 :::
+
+## Hello World example {.smaller}
+
+``` yaml
+on:
+  workflow_dispatch
+
+name: "01-Hello World!"
+
+jobs:
+  hello-world:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup R 
+        uses: r-lib/actions/setup-r@v2 #installs R
+      
+      # the `Rscript` shell command runs an R script.  With the `-e` flag it runs an R expression
+      - name: Install R packages
+        run: |
+          Rscript -e "install.packages('cowsay')" 
+        
+      - name: Say Hello
+        run: |
+          Rscript R/hello.R
+```
 
 ## Workflow components: events
 
