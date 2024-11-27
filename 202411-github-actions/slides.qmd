@@ -3,14 +3,16 @@ title: "GitHub Actions for Automating Scientific Workflows"
 author: "Eric R. Scott"
 date: "2024-12-04"
 date-format: long
-format: uaz-revealjs
+format: 
+  uaz-revealjs:
+    theme:
+      - custom.scss
 logo: logo.png
 ---
 
 ```{=html}
 <!--# TODO:
 
-embiggen logo
 publish
 add link to published slides
 -->
@@ -123,8 +125,6 @@ jobs:
 ## Workflow components: events
 
 Workflows are triggered by **events** that occur in your GitHub repository:
-
-Common events:
 
 -   `push`: triggered whenever changes are made to your repository
 
@@ -286,4 +286,10 @@ jobs:
 
 -   US-RSE '24 tutorial: [GitHub Actions for Scientific Data Workflows](https://githubactionstutorial-usrse24.readthedocs.io/en/latest/intro.html)
 
--   
+## CCT Data Science
+
+-   Virtual [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) every Wednesday from 2-3pm
+
+-   [Data science incubator](https://datascience.cct.arizona.edu/incubator)
+
+-   Join our [email list](https://forms-a.trellis.arizona.edu/f/CampaignSubscription?tfa_4=7016R000001VAlU)
