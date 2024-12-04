@@ -10,6 +10,7 @@ format:
     theme:
       - custom.scss
 logo: logo.png
+code-annotations: hover
 ---
 
 ## Workshop Links
@@ -72,32 +73,29 @@ logo: logo.png
 
 Workflows are defined with [YAML](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) files placed in `.github/workflows/`
 
-``` {.yml code-line-numbers="|1-3|4-5|6|7-14|8|10-11|13-14|"}
-on: 
-  workflow_dispatch
+``` {.yml code-copy=false}
+on:  #<1>
+  workflow_dispatch #<1>
 
-jobs:
-  hello-world:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+jobs: #<2>
+  hello-world: #<2>
+    runs-on: ubuntu-latest #<3>
+    steps: #<4>
+      - uses: actions/checkout@v4 #<5>
       
-      - name: Setup R 
-        uses: r-lib/actions/setup-r@v2 #installs R
+      - name: Setup R #<6>
+        uses: r-lib/actions/setup-r@v2 #installs R #<6>
       
-      - name: Run my code
-        run: Rscript mycode.R 
+      - name: Run my code #<7>
+        run: Rscript mycode.R #<7>
 ```
-
-::: notes
-1.  Triggering event(s) = workflow_dispatch
-2.  Jobs, in this case only one—`hello-world`
-3.  Runner for the job, in this case `ubuntu-latest`
-4.  Steps to run sequentially on that runner
-5.  actions/checkout is an "action"---pre-packaged re-usable workflow. This one gets the contents of your repository
-6.  Another "action". This one installs R
-7.  Running a shell command, in this case, source the mycode.R script
-:::
+1. Triggering event(s)—`workflow_dispatch` = a button on GitHub
+2. Jobs, in this case only one—`hello-world`
+3. Runner for the job—in this case the latest release of Ubuntu Linux
+4. Steps to run sequentially on the runner
+5. An "action" to get the files in your repository onto the runner
+6. An "action" to install R on the runner
+7. A shell command to source the `mycode.R` script
 
 ## Workshop setup
 
