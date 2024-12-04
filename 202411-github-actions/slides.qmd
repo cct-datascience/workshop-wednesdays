@@ -73,7 +73,7 @@ code-annotations: hover
 
 Workflows are defined with [YAML](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) files placed in `.github/workflows/`
 
-``` {.yml code-copy=false}
+``` {.yml code-copy="false"}
 on:  #<1>
   workflow_dispatch #<1>
 
@@ -89,13 +89,14 @@ jobs: #<2>
       - name: Run my code #<7>
         run: Rscript mycode.R #<7>
 ```
-1. Triggering event(s)—`workflow_dispatch` = a button on GitHub
-2. Jobs, in this case only one—`hello-world`
-3. Runner for the job—in this case the latest release of Ubuntu Linux
-4. Steps to run sequentially on the runner
-5. An "action" to get the files in your repository onto the runner
-6. An "action" to install R on the runner
-7. A shell command to source the `mycode.R` script
+
+1.  Triggering event(s)—`workflow_dispatch` = a button on GitHub
+2.  Jobs, in this case only one—`hello-world`
+3.  Runner for the job—in this case the latest release of Ubuntu Linux
+4.  Steps to run sequentially on the runner
+5.  An "action" to get the files in your repository onto the runner
+6.  An "action" to install R on the runner
+7.  A shell command to source the `mycode.R` script
 
 ## Workshop setup
 
@@ -192,6 +193,12 @@ Common actions:
 -   [actions/setup-python](https://github.com/actions/setup-python): installs a specified version of Python
 
 -   [r-lib/actions/setup-renv](https://github.com/r-lib/actions/tree/v2-branch/setup-renv): if your project uses [renv](https://rstudio.github.io/renv/articles/renv.html), it will install the R packages in the `renv.lock` file in your repository
+
+## Finding Actions
+
+-   Find additional actions in the [marketplace](https://github.com/marketplace?type=actions).
+
+-   Try searching the web for "\<thing you want to do\> GitHub action"
 
 ## Workflow components: variables
 
