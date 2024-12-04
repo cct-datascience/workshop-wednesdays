@@ -136,7 +136,7 @@ Now that we have a data frame, we can make a table with `gt` that displays the S
 ```{r}
 library(gt)
 gt(caffeine_basics) |> 
-  fmt_markdown(columns = c(image, molecularFormula)) #molecular formula was also HTML
+  fmt_markdown(columns = c(images, molecularFormula)) #molecular formula was also HTML
 ```
 
 Nice!
@@ -230,7 +230,7 @@ We can do the cool `gt` thing with multiple rows now
 
 ```{r}
 gt(search_results) |> 
-  fmt_markdown(columns = image)
+  fmt_markdown(columns = images)
 ```
 :::
 
