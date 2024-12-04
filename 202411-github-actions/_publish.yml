@@ -1,0 +1,4 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: b01a30b2-b690-4443-b427-f012af34b6bd
+      url: https://cct-datascience.quarto.pub/github-actions-for-automating-scientific-workflows

@@ -1,0 +1,307 @@
+---
+title: "GitHub Actions for Automating Scientific Workflows"
+author: "Eric R. Scott"
+date: "2024-12-04"
+date-format: long
+format: 
+  uaz-revealjs:
+    link-external-icon: true
+    link-external-newwindow: true
+    theme:
+      - custom.scss
+logo: logo.png
+code-annotations: hover
+---
+
+## Workshop Links
+
+-   [These slides](https://cct-datascience.quarto.pub/github-actions-for-automating-scientific-workflows/#/title-slide)
+
+-   [GitHub Repository](https://github.com/cct-datascience/github-actions-for-research)
+
+. . .
+
+### Acknowledgments:
+
+-   Heavily inspired by a workshop delivered at [US-RSE](https://us-rse.org/) by Valentina Staneva, Quinn Brencher, and Scott Henderson ([slides](https://docs.google.com/presentation/d/1brXVUg-1e8_XxfYxGMWciB5UCtqXhDtocSV3WR5m49w/edit#slide=id.g24aa3036f10_0_214), [repo](https://github.com/uwescience/GitHubActionsTutorial-USRSE24), [documentation](https://githubactionstutorial-usrse24.readthedocs.io/en/latest/intro.html)).
+
+## Learning Objectives
+
+-   Understand the role of GitHub Actions workflows in (research) software development
+
+-   Know how to trigger workflows in several different ways and determine which trigger is useful for different scientific applications
+
+-   Be able to export and access data created by workflows in a variety of ways
+
+-   Use GitHub actions for distributed computing
+
+## Vocabulary
+
+-   **Repository**: a folder with your code and data in it with changes tracked by git
+
+-   **GitHub**: a cloud platform for syncing git repositories, publishing websites, running automated workflows (this workshop), and more
+
+## What is GitHub Actions?
+
+::: incremental
+-   Run basically any workflow on a virtual machine(s) in the cloud in a way that integrates with GitHub
+
+-   Easily incorporate workflows for common, complex tasks created by others
+
+-   Designed for continuous integration & delivery (CI/CD)—software development practices that translate to scientific code and data.
+:::
+
+## Continuous Integration
+
+-   Automate integrating changes in code or data into the main version of your project in a safe way.
+    For example:
+
+    -   When data is updated, run some data validation checks
+
+    -   Before incorporating changes from a collaborator, make sure their code adheres to a particular style
+
+## Continuous Delivery
+
+-   "Delivery" is basically any way you make your data, code, or code outputs available to view or download.
+    For example:
+
+    -   Every month, archive a new version of the data with Zenodo and get a new DOI
+
+    -   When code or data is updated, re-render a report for collaborators
+
+## Workflow overview
+
+Workflows are defined with [YAML](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) files placed in `.github/workflows/`
+
+``` {.yml code-copy="false"}
+on:  #<1>
+  workflow_dispatch #<1>
+
+jobs: #<2>
+  hello-world: #<2>
+    runs-on: ubuntu-latest #<3>
+    steps: #<4>
+      - uses: actions/checkout@v4 #<5>
+      
+      - name: Setup R #<6>
+        uses: r-lib/actions/setup-r@v2 #installs R #<6>
+      
+      - name: Run my code #<7>
+        run: Rscript mycode.R #<7>
+```
+
+1.  Triggering event(s)—`workflow_dispatch` = a button on GitHub
+2.  Jobs, in this case only one—`hello-world`
+3.  Runner for the job—in this case the latest release of Ubuntu Linux
+4.  Steps to run sequentially on the runner
+5.  An "action" to get the files in your repository onto the runner
+6.  An "action" to install R on the runner
+7.  A shell command to source the `mycode.R` script
+
+## Workshop setup
+
+1.  Go to [template repository](https://github.com/cct-datascience/github-actions-for-research)
+
+2.  Click the green "Use this template" button and select "create new repository"
+
+    ![](images/use_template.png)
+
+3.  For "Owner" choose your own GitHub username.
+
+::: {.callout-note appearance="simple"}
+To use actions that publish to GitHub pages, your repository must be public!
+:::
+
+## Run your first action
+
+In the "Actions" tab, find the "hello_world" example and click "Run workflow"
+
+![](images/run_workflow.png)
+
+## A note on `renv` 📦
+
+[renv](https://rstudio.github.io/renv/index.html) analyzes your code and creates a `renv.lock` file with information on:
+
+-   What R packages your code uses
+-   What versions of those packages are installed
+-   Where they were installed from (CRAN, Bioconductor, r-universe, GitHub, etc.)
+
+This can be used with [r-lib/actions/setup-renv](https://rstudio.github.io/renv/articles/ci.html) to install all the required R packages.
+
+## Workflow components: events
+
+Workflows are triggered by [**events**](https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows) that occur in your GitHub repository and defined under `on:`
+
+-   `push`: triggered whenever changes are made to your repository
+
+-   `pull_request`: runs on a "pull request"—a common way of making changes to a repository
+
+-   `workflow_dispatch`: creates a "run workflow" button that you can click on GitHub
+
+-   `schedule`: E.g. run on the first Monday of every month.
+
+## Workflow components: runners
+
+Workflows contain one or more **jobs** that run on virtual machines, called [runners](https://docs.github.com/en/actions/writing-workflows/choosing-where-your-workflow-runs/choosing-the-runner-for-a-job).
+
+You can use GitHub provided runners for free
+
+| `runs-on:`       | OS           | CPUs | RAM   | Storage |
+|------------------|--------------|------|-------|---------|
+| `ubuntu-latest`  | Ubuntu Linux | 4    | 16 GB | 14 GB   |
+| `windows-latest` | Windows      | 4    | 16 GB | 14 GB   |
+| `macos-latest`   | macOS (M1)   | 3    | 7 GB  | 14 GB   |
+
+## Workflow components: jobs {.smaller}
+
+Each [**job**](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/using-jobs-in-a-workflow) may contain multiple **steps**.
+**Steps** can be either run a [script](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/adding-scripts-to-your-workflow) or an [**action**](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/using-pre-written-building-blocks-in-your-workflow).
+
+```{mermaid}
+%%| fig-align: center
+%%| fig-height: 2
+%%{init:{'flowchart':{'nodeSpacing': 15, 'rankSpacing': 10}}}%%
+flowchart TD
+    c["Event"]-->ubuntu
+    c --> mac
+        subgraph ubuntu [runs-on: ubuntu-latest]
+        subgraph Job 1
+            direction TB
+            a1["Step 1: Checkout"]--> a2["Step 2: Install R"]
+            a2--> a3["Step 3: Run R Script"]
+        end
+        end
+        subgraph mac [runs-on: macos-latest]
+        subgraph Job 2
+            direction TB
+            b1["Step 1: Checkout"]--> b2["Step 2: Install Python"]
+            b2--> b3["Step 3: Run Python Script"]
+        end
+        end
+```
+
+## Workflow components: actions
+
+[Actions](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/using-pre-written-building-blocks-in-your-workflow) are pre-packaged workflows for common complex tasks.
+
+Common actions:
+
+-   [actions/checkout](https://github.com/actions/checkout): gets the files in your repository
+
+-   [r-lib/actions/setup-r](https://github.com/r-lib/actions/tree/v2-branch/setup-r): installs R
+
+-   [actions/setup-python](https://github.com/actions/setup-python): installs Python
+
+-   [r-lib/actions/setup-renv](https://github.com/r-lib/actions/tree/v2-branch/setup-renv): if your project uses [renv](https://rstudio.github.io/renv/articles/renv.html), installs the R packages in `renv.lock`
+
+## Finding Actions
+
+-   Find additional actions in the [marketplace](https://github.com/marketplace?type=actions).
+
+-   Try searching the web for "\<thing you want to do\> GitHub action"
+
+## Workflow components: variables
+
+-   [Environment variables](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables) can be set in workflows with
+
+    ``` {.yaml filename="action.yaml"}
+    env:
+      VARIABLE_NAME: "variable"
+    ```
+
+    and accessed in R code with
+
+    ``` {.r filename="script.R"}
+    Sys.getenv("VARIABLE_NAME")
+    ```
+
+-   [Secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) can be stored in GitHub and accessed in workflows with
+
+    ``` {.yaml filename="action.yaml"}
+    key: ${{ secrets.SECRET_VAR }}
+    ```
+
+## Matrix variables
+
+A [matrix strategy](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/running-variations-of-jobs-in-a-workflow) can be used for iteration to spawn parallel runners.
+
+``` {.yaml filename="action.yaml"}
+jobs:
+  myjob:
+    strategy:
+      matrix:
+        letters: ["A", "B", "C"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+      - name: Print letters
+        run: Rscript -e "print(Sys.getenv('ALPHABET'))"
+        env:
+          ALPHABET: ${{ matrix.letters }}
+```
+
+## Example: data validation script
+
+`validate.yaml`
+
+-   Runs `R/validate.R` which either errors or doesn't
+-   Pros: simple
+-   Cons: fails fast (only the *first* error is reported)
+
+## Example: data validation tests
+
+`testthat.yaml`
+
+-   Runs `testthat.R` which uses the `testthat` R package
+
+-   Pros: all tests are run even with multiple errors
+
+-   Cons: more complicated setup, `testthat` is usually for R *packages*
+
+## Example: rendering a report to markdown
+
+`render_readme.yaml`
+
+-   Renders a .Qmd (Quarto) file to "github flavored markdown" which is rendered into html by GitHub
+
+-   Pros: relatively simple with `quarto-actions/render` action
+
+-   Cons: must commit results in order to see them—could cause git confusion!
+    GFM doesn't support all Quarto HTML features
+
+## Example: rendering a report to GitHub pages
+
+`validation_report.yaml`
+
+-   Renders a validation report to a webpage served on GitHub
+
+-   Pros: all Quarto HTML features supported, full-fledged website you can send to your collaborators
+
+-   Cons: must run `quarto publish gh-pages` locally once before the action works, repository must be **public**
+
+## Example: parallel computing
+
+`matrix.yaml`
+
+-   Uses the `matrix:` key to iterate over multiple weather stations, pull data, fit a model, and combine model summaries
+
+-   Pros: Scheduling a task like this is easier on GitHub actions than, say, the HPC
+
+-   Cons: Limitations on number of concurrent runners and computational power of runners
+
+## Resources
+
+-   [GitHub Actions documentation](https://docs.github.com/en/actions)
+
+-   [Actions marketplace](https://github.com/marketplace?type=actions)
+
+-   US-RSE '24 tutorial: [GitHub Actions for Scientific Data Workflows](https://githubactionstutorial-usrse24.readthedocs.io/en/latest/intro.html)
+
+## CCT Data Science
+
+-   Virtual [drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) every Wednesday from 2-3pm
+
+-   [Data science incubator](https://datascience.cct.arizona.edu/incubator)
+
+-   Join our [email list](https://forms-a.trellis.arizona.edu/f/CampaignSubscription?tfa_4=7016R000001VAlU)
