@@ -1,0 +1,14 @@
+/*-- scss:defaults --*/
+$logo-height: 4rem;
+
+/*-- scss:rules --*/
+
+// reduce size of inline code to better match text
+.reveal p code {
+  font-size: 85%;
+}
+
+// set background of tar_visnetwork()
+div.cell-output-display {
+  background: white !important;
+}
