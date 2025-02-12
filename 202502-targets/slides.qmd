@@ -173,7 +173,8 @@ To install a demo `targets` pipeline, run the following R code and follow the pr
 ``` r
 usethis::use_course("cct-datascience/targets-demo")
 ```
-. . . 
+
+. . .
 
 In this new project, try the following:
 
@@ -303,7 +304,6 @@ Run `use_targets()` and open the `_targets.R` file it generates
 library(targets)
 use_targets()
 ```
-
 :::
 
 ## 2. Package dependencies
@@ -312,7 +312,6 @@ use_targets()
 ## Exercise
 
 Figure out what packages are needed and add them to `tar_option_set()` in `_targets.R`.
-
 
 ```{r}
 #| filename: _targets.R
@@ -327,7 +326,6 @@ tar_option_set(
   format = "rds"
 )
 ```
-
 :::
 
 ::: callout-tip
@@ -403,13 +401,11 @@ fit_model <- function(data_clean) {
 ## Exercise
 
 Convert the code in `01-read_wrangle_data.R` into a function that takes the file path to the raw data as an argument and returns the cleaned `maples` data frame.
-
 :::
 
 ```{r}
 countdown(minutes = 8, color_background = "#001C48")
 ```
-
 
 ## 4. Create targets
 
@@ -580,35 +576,18 @@ tar_plan(                                    #<- alternative to list()
 
 -   E.g. defining a target with `tar_stan_mcmc()` actually generates multiple targets that wrangle data, run the MCMC, create a table of posterior draws, etc.
 
-## Parallel computation
+## Geospatial targets
 
-<!--# TODO update to show `crew` and `crew.cluster` -->
+[![](https://raw.githubusercontent.com/njtierney/geotargets/master/man/figures/logo.png){fig-align="center" width="200"}](https://njtierney.github.io/geotargets/)
 
-In the workflow below, the three models and the three plot targets can all be run independently at the same time.
+`geotargets` provides helpers to use geospatial packages like `terra` and `stars` with `targets`
 
-![](img/pipeline_graph.png){fig-align="center" width="722"}
-
--   `tar_make_future()` uses the `future` package and `tar_make_clustermq()` uses the `clustermq` package to run targets in parallel!
-
--   Detailed discussion of pros and cons of both are in [the manual](https://books.ropensci.org/targets/hpc.html)
-
-::: notes
-Demo by creating 3 dummy targets with Sys.sleep(5) and running with tar_make() vs. tar_make_clustermq().\
-
-\
-The refactor exercise is NOT a good example for this because the overhead for both clustermq and future (especially future) makes the pipeline take \*longer\* to run in paralell.
-Something to discuss?
-:::
-
-## Branching
-
-> Sometimes, a pipeline contains more targets than a user can comfortably type by hand.
-> For projects with hundreds of targets, branching can make the code in \_targets.R shorter and more concise.
+## Iteration
 
 ::: incremental
--   Branching lets you break repetitive tasks into separate targets for increased speed from parallelization
+-   Iterate targets over a list of inputs with [dynamic branching](https://books.ropensci.org/targets/dynamic.html)—useful for large tasks where it would be cumbersome to write out individual targets
 
--   E.g. fitting model to bootstraps of data
+-   E.g. fitting model to 100 bootstraps of data
 :::
 
 . . .
@@ -618,7 +597,7 @@ Something to discuss?
 #| echo: true
 #| code-line-numbers: "1-6|7-13"
 
-  #creates list of bootstrapped dataframes
+  #creates list of 100 bootstrapped dataframes
   tar_target(
     data_boot,
     purrr::map(1:100, ~sample_frac(data, size = 1, replace = TRUE)),
@@ -639,26 +618,28 @@ Use the demo repo to demo this!
 Show `tar_visnetwork()` and `tar_make()` and `tar_read(lm_boot, branches = 1)`
 :::
 
+## Parallel computation
+
+In the workflow below, the three models and the three plot targets can all be run independently at the same time.
+
+![](img/pipeline_graph.png){fig-align="center" width="722"}
+
+-   Provide a "controller" created by the `crew` package to `tar_option_set()` to run in parallel using multiple workers.
+
+-   E.g. to use 3 multiple R sessions locally:
+
+    ``` r
+    tar_option_set(
+      controller = crew::crew_controller_local(workers = 3)
+    )
+    ```
+
 ## High Performance Computing
 
-<!--# TODO update to use `crew.cluster` and point to UAHPC demo repo -->
+[![](https://wlandau.github.io/crew.cluster/logo.svg){fig-align="center" width="279"}](https://wlandau.github.io/crew.cluster/)
 
--   *Relatively* easy to get a targets pipeline working on an HPC
-
--   Targets are run on persistent (`clustermq`) or transient (`future`) SLURM jobs and results collected
-
--   Best option at UAZ (IMO) is to use [Open On Demand](https://ood.hpc.arizona.edu/)
-
-    -   Runs RStudio in a browser window using the HPC
-
-    -   Select number of cores ≥ number of workers
-
-    -   Use either `tar_make_clustermq()` or `tar_make_future()`
-
-::: callout-warning
-Running `use_targets()` on an Open On Demand session won't get the setup quite right.
-Use `options(clustermq.scheduler = "multicore")` or `future::plan(future.callr::callr)` just as we did above.
-:::
+-   [`crew.cluster`](https://wlandau.github.io/crew.cluster/) provides additional "controllers" for HPC including `crew_controller_slurm()`.
+-   Check out this [template repository](https://github.com/cct-datascience/targets-uahpc) with code that you can use to run a `targets` workflow on the UA HPC
 
 ## Cloud Storage
 
@@ -695,7 +676,9 @@ Use `options(clustermq.scheduler = "multicore")` or `future::plan(future.callr::
 Things to consider:
 
 ::: incremental
--   Benefits of paralellization
+-   Are intermediates R objects or files (as opposed to, say, in-place modifications to a database)?
+
+-   Benefits of parallelization
 
 -   Your collaborators
 
