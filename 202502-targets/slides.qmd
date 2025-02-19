@@ -7,6 +7,9 @@ format:
     fontsize: 2em
     logo: "img/logo.png"
     theme: "custom.scss"
+    code-link: true
+    code-copy: true
+    code-line-numbers: false
 editor: visual
 ---
 
@@ -497,22 +500,25 @@ tar_meta(fields = error, complete_only = TRUE)
 
 ## Debugging targets
 
-<!--# TODO: change this to talk about `tar_workspace()` -->
+When a target errors, you can load a "workspace" with all the functions, data, and packages needed to reproduce the error interactively.
 
-If the error is in a function you wrote:
+Enable this with:
 
-1.  Use `tar_load(target_name)` to load necessary targets into environment
-2.  Use `tar_load_global()` to load functions and settings
-3.  Test your function in the console
-4.  Test function line by line
+``` r
+tar_option_set(
+  workspace_on_error = TRUE
+)
+```
+
+Then, load the workspace with `tar_workspace(<NAME OF TARGET>)`
 
 ```{r}
 #| echo: true
 #| eval: false
 
-tar_load_global()
-tar_load(data_clean)
-
+#load upstream target `data_clean` and `fit_model()` function into global environment
+tar_workspace(linear_model) 
+#try interactively
 fit_model(data_clean)
 ```
 
@@ -526,6 +532,8 @@ fit_model(data_clean)
 
 . . .
 
+Can you spot the source of the error?
+
 ```{r}
 #| filename: fit_model.R
 #| echo: true
@@ -537,38 +545,35 @@ fit_model <- function(data_clean) {
 }
 ```
 
-```{r}
-#| error: true
-fit_model(data_clean)
-```
-
 ## Tarchetypes
 
-<!--# TODO: show tar_assign() -->
-
-<!--# Maybe move this to end of Part 3 and expand a bit? -->
-
-The `tarchetypes` package includes shortcuts and helpers to make `targets` easier to write and use.
+Alternative ways to define the targets `list()`:
 
 ```{r}
 #| filename: _targets.R
 #| eval: false
 #| echo: true
-#| code-line-numbers: "2|6|7|8|9|10"
-library(targets)
-library(tarchetypes)
 
-tar_options_set()
-tar_source()
-tar_plan(                                    #<- alternative to list()
-  tar_file(data_raw, "mydata.csv"),          #<- shortcut tar_* functions
-  data = read_csv(data_raw),                 #<- target_name = command
-  report = tar_render(report, "report.Rmd"), #<- render RMarkdown or Quarto
-  model = fit_model(data),                   #<- trailing comma is OK!
+tarchetypes::tar_plan(
+  tar_file(data_file, "data.csv"),
+  data = read_csv(data_file),
+  model = fit_model(data),
 )
 ```
 
-<!-- At this point, maybe more time for debugging?? -->
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+
+tarchetypes::tar_assign({      
+  data_file <- tar_file("data.csv")
+  data <- 
+    read_csv(data_raw) |>
+    filter(year >= 2020) |> 
+    tar_target()
+})
+```
 
 # Part 4: A Taste of What's Possible
 
