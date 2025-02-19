@@ -10,7 +10,21 @@ format:
 editor: visual
 ---
 
-<!--# TODO brief slide on what our group does -->
+## CCT Data Science
+
+<https://datascience.cct.arizona.edu/>
+
+We offer:
+
+-   Workshops
+
+-   Drop-in hours support
+
+-   Incubator projects for ALVSCE
+
+-   Collaboration on funded projects
+
+[Join our mailing list!](https://forms-a.trellis.arizona.edu/f/CampaignSubscription?tfa_4=7016R000001VAlU)
 
 ## Before we get started
 
@@ -562,11 +576,11 @@ tar_plan(                                    #<- alternative to list()
 
 ::::: columns
 ::: column
-[![](https://docs.ropensci.org/stantargets/logo.svg){fig-align="center" width="250"}](https://docs.ropensci.org/stantargets/)
+[![](https://docs.ropensci.org/stantargets/logo.svg){fig-align="center" width="242"}](https://docs.ropensci.org/stantargets/)
 :::
 
 ::: column
-[![](https://docs.ropensci.org/jagstargets/logo.svg){fig-align="center" width="250"}](https://docs.ropensci.org/jagstargets/)
+[![](https://docs.ropensci.org/jagstargets/logo.svg){fig-align="center" width="242"}](https://docs.ropensci.org/jagstargets/)
 :::
 :::::
 
@@ -578,7 +592,7 @@ tar_plan(                                    #<- alternative to list()
 
 ## Geospatial targets
 
-[![](https://raw.githubusercontent.com/njtierney/geotargets/master/man/figures/logo.png){fig-align="center" width="200"}](https://njtierney.github.io/geotargets/)
+[![](https://raw.githubusercontent.com/njtierney/geotargets/master/man/figures/logo.png){fig-align="center" width="242"}](https://njtierney.github.io/geotargets/)
 
 `geotargets` provides helpers to use geospatial packages like `terra` and `stars` with `targets`
 
@@ -626,7 +640,7 @@ In the workflow below, the three models and the three plot targets can all be ru
 
 -   Provide a "controller" created by the `crew` package to `tar_option_set()` to run in parallel using multiple workers.
 
--   E.g. to use 3 multiple R sessions locally:
+-   E.g. to use 3 concurrent R sessions on your computer:
 
     ``` r
     tar_option_set(
@@ -636,7 +650,7 @@ In the workflow below, the three models and the three plot targets can all be ru
 
 ## High Performance Computing
 
-[![](https://wlandau.github.io/crew.cluster/logo.svg){fig-align="center" width="279"}](https://wlandau.github.io/crew.cluster/)
+[![](https://wlandau.github.io/crew.cluster/logo.svg){fig-align="center" width="243"}](https://wlandau.github.io/crew.cluster/)
 
 -   [`crew.cluster`](https://wlandau.github.io/crew.cluster/) provides additional "controllers" for HPC including `crew_controller_slurm()`.
 -   Check out this [template repository](https://github.com/cct-datascience/targets-uahpc) with code that you can use to run a `targets` workflow on the UA HPC
@@ -687,11 +701,9 @@ Things to consider:
 
 ## Targets in the wild
 
-<!--# TODO update these with more recent examples -->
-
 **"Real life" examples of `targets` workflows:**
 
--   <https://github.com/BrunaLab/lagged-ipms> (uses HPC to run dynamic branches in parallel)
+-   <https://github.com/usa-npn/cales-thermal-calendars> (uses `geotargets` and `crew.cluster` to run on UA HPC)
 -   <https://github.com/odaniel1/track-cycling> (uses `stantargets`)
 -   <https://github.com/ecohealthalliance/mpx-diagnosis> (medium complexity)
 -   <https://github.com/noamross/reprotemplate> (nice template for reproducibility that uses `targets`)
@@ -704,10 +716,10 @@ Things to consider:
 
 -   `targets` discussion board: <https://github.com/ropensci/targets/discussions>
 
--   [CCT Data Science Team office hours](https://datascience.cals.arizona.edu/office-hours) every Tuesday morning
+-   [CCT Data Science Team drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) every Wednesday afternoon
 
 -   [Make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help
 
--   Sign up for our [mailing list](https://app.e2ma.net/app2/audience/signup/1965047/1923145/) to be notified about future workshops
+-   Sign up for our [mailing list](https://forms-a.trellis.arizona.edu/f/CampaignSubscription?tfa_4=7016R000001VAlU) to be notified about future workshops
 
 [^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.
