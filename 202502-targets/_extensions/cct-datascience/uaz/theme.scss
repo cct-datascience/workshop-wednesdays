@@ -1,0 +1,164 @@
+/*-- scss:defaults --*/
+
+// fonts
+$font-family-sans-serif: "Proxima Nova", Calibri, sans-serif !default;
+$font-family-monospace: Menlo, SFMono-Regular, Monaco, Consolas, Liberation Mono, Courier New, monospace !default;
+
+// colors from https://brand.arizona.edu/applying-the-brand/colors
+// primary
+$ua-red: #AB0520;
+$ua-blue: #0C234B;
+
+// neutral colors
+$ua-white: #FFFFFF;
+$ua-warmgray: #F4EDE5;
+$ua-coolgray: #E2E9EB;
+
+// complimentary colors
+$ua-midnight:#001C48;
+$ua-azurite: #1E5288;
+$ua-oasis: #378DBD;
+$ua-chili: #8B0015;
+
+// highlight & accent colors
+$ua-bloom: #EF4056;
+$ua-sky: #81D3EB;
+$ua-leaf: #70B865;
+$ua-river: #007D84;
+$ua-mesa: #A95C42;
+
+// set slide colors
+$body-bg: $ua-azurite !default; 
+$body-color: $ua-coolgray !default; 
+$link-color: $ua-bloom !default; //also controls tabset links, highlight color, and hover over code line numbers color
+$code-block-bg: $ua-midnight !default; //background of code boxes
+$code-bg: $ua-midnight !default; //background of inline code
+$code-color: $ua-coolgray !default; //color of inline code
+$tabset-border-color: $ua-coolgray !default;
+
+// headings
+$presentation-heading-color: $ua-coolgray !default;
+
+// blockquotes
+$blockquote-border-color: $ua-red !default;
+$blockquote-bg: $ua-coolgray !default;
+$blockquote-color: #555 !default; //text color slightly grey
+
+// logo
+$logo-height: 3.5rem !default;
+
+// mermaid
+$mermaid-node-bg-color: $ua-white !default;
+$mermaid-fg-color: $ua-midnight !default;
+
+/*-- scss:rules --*/
+
+//set code output background same as code background
+.reveal pre code {
+  background-color: $code-block-bg; 
+}
+
+//reduce size of inline code to better match text
+.reveal p code {
+  font-size: 85%; 
+}
+
+//add space between code and output
+.reveal div.sourceCode {
+  margin-bottom: 5px !important;
+}
+
+.reveal div.cell-output {
+  margin-bottom: 10px !important;
+}
+
+// move logo above slide background image
+.reveal img.slide-logo {
+  z-index: 1;
+}
+
+// make logo slightly bigger
+.reveal .slide-logo {
+  max-height: $logo-height !important;
+}
+
+//make blockquotes fancier
+blockquote{
+  display:block !important;
+  background: $blockquote-bg !important;
+  color: $blockquote-color !important; 
+  padding: 15px 20px 15px 45px !important;
+  margin: 0 0 20px !important;
+  position: relative !important;
+  
+  
+  /*Borders - (Optional)*/
+  border-left: 15px solid $blockquote-border-color !important; 
+  border-right: 2px solid $blockquote-border-color !important;
+  
+  /*Box Shadow - (Optional)*/
+  -moz-box-shadow: 2px 2px 15px darken($body-bg, 15%) !important;
+  -webkit-box-shadow: 2px 2px 15px darken($body-bg, 15%) !important;
+  box-shadow: 2px 2px 15px darken($body-bg, 15%) !important;
+}
+
+blockquote::before{
+  content: "\201C"; /*Unicode for Left Double Quote*/
+  
+  /*Font*/
+  font-size: 75px;
+  font-weight: bold;
+  color: lighten($blockquote-color, 35%); 
+  
+  /*Positioning*/
+  position: absolute;
+  left: 10px;
+  top:5px;
+}
+
+blockquote::after{
+  /*Reset to make sure*/
+  content: "";
+}
+
+//make callouts look better
+
+//tip
+.reveal div.callout.callout-tip{
+  border-left-color: $ua-leaf;
+}
+.reveal div.callout.callout-tip.callout-style-default .callout-title{
+  background-color: lighten($ua-leaf, 10);
+}
+
+//note
+.reveal div.callout.callout-note{
+  border-left-color: $ua-sky;
+}
+.reveal div.callout.callout-note.callout-style-default .callout-title{
+  background-color: lighten($ua-sky, 10);
+}
+
+//important
+.reveal div.callout.callout-important{
+  border-left-color: $ua-bloom;
+}
+.reveal div.callout.callout-important.callout-style-default .callout-title{
+  background-color: lighten($ua-bloom, 10);
+}
+
+//caution 
+.reveal div.callout.callout-caution{
+  border-left-color: darken(#fd7e14, 10);
+}
+.reveal div.callout.callout-caution.callout-style-default .callout-title{
+  background-color: lighten(#fd7e14, 20);
+}
+
+//warning
+.reveal div.callout.callout-warning{
+  border-left-color: darken(#ffc107, 5);
+}
+.reveal div.callout.callout-warning.callout-style-default .callout-title{
+  background-color: lighten(#ffc107, 20);
+}

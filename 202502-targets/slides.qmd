@@ -1,0 +1,774 @@
+---
+title: "Managing complicated research workflows in R with {targets}"
+author: Eric R. Scott
+date: 2025-02-26
+format: 
+  uaz-revealjs:
+    fontsize: 2em
+    logo: "img/logo.png"
+    theme: "custom.scss"
+    code-link: true
+    code-copy: true
+    code-line-numbers: false
+editor: visual
+---
+
+## CCT Data Science
+
+<https://datascience.cct.arizona.edu/>
+
+We offer:
+
+-   Workshops
+
+-   Drop-in hours support
+
+-   Incubator projects for ALVSCE
+
+-   Collaboration on funded projects
+
+[Join our mailing list!](https://forms-a.trellis.arizona.edu/f/CampaignSubscription?tfa_4=7016R000001VAlU)
+
+## Before we get started
+
+```{r}
+#| include: false
+# needed for the *slides* to render
+library(countdown)
+library(targets)
+```
+
+You'll need the following R packages today:
+
+```{r}
+#| eval: false
+#| echo: true
+
+#For making `targets` work:
+library(targets)
+library(tarchetypes)
+library(visNetwork)
+library(crew)
+
+#For our data wrangling and analysis:
+library(dplyr)
+library(ggplot2)
+library(janitor)
+library(car)
+library(broom)
+
+#for installing demos and course materials:
+library(usethis)
+
+```
+
+::: notes
+To paste into chat\
+`install.packages(c("targets", "tarchetypes", "visNetwork", "crew", "dplyr", "ggplot2", "janitor", "car", "broom", "usethis"))`
+:::
+
+## Learning Objectives
+
+::: incremental
+-   Understand what problems `targets` (and workflow managers in general) solve
+
+-   Be able to set up a simple project using `targets`, view the dependency graph, and run the workflow
+
+-   Write a (good enough) custom R function
+
+-   Have an awareness of the possibilities: parallelization, cloud storage, iteration, Bayesian analyses, geospatial targets
+
+-   Know where to go for help with `targets`
+:::
+
+# Part 1: Context
+
+## Moving Toward Reproducibility
+
+Working toward reproducible analyses benefits:
+
+-   You in the future
+
+-   Your collaborators
+
+-   The greater community
+
+![Image from: Illustrations from the Openscapes blog Tidy Data for reproducibility, efficiency, and collaboration by Julia Lowndes and Allison Horst](img/horst-repro.jpg){fig-alt="Cute fuzzy monsters putting rectangular data tables onto a conveyor belt. Along the conveyor belt line are different automated “stations” that update the data, reading “WRANGLE”, “VISUALIZE”, and “MODEL”. A monster at the end of the conveyor belt is carrying away a table that reads “Complete analysis.”" fig-align="center"}
+
+::: notes
+How many have taken a workshop on reproduciblity?
+:::
+
+##  {#scenario1-1}
+
+![](img/scenario1-1.png){fig-align="center"}
+
+::: notes
+Scenario 1:
+
+You have your files organized and numbered in the order they should be run!
+Great!
+Note that 02-models.R takes hours to run, so you'd like to avoid re-running that as much as possible.
+:::
+
+##  {#scenario1-2}
+
+![](img/scenario1-2.png){fig-align="center"}
+
+::: notes
+Ok, it's fine, we prepared for this!
+:::
+
+##  {#scenario1-3}
+
+![](img/scenario1-3.png){fig-align="center"}
+
+::: notes
+The problem is it is unclear which steps in the workflow are actually affected by the change in the upstream field data.
+You can't tell if that change is even making it to the models and plots your R code creates.
+:::
+
+##  {#scenario1-4}
+
+![](img/scenario1-4.png){fig-align="center"}
+
+::: notes
+And the process inevitably repeats.
+:::
+
+##  {#scenario2-1}
+
+![](img/scenario2-1.png){fig-align="center"}
+
+::: notes
+Scenario 2: Same starting point as scenario 1
+:::
+
+##  {#scenario2-2}
+
+![](img/scenario2-2.png){fig-align="center"}
+
+::: notes
+...but then it gets complicated.
+You need to bring in additional data sources, collaborators are interested in comparing multiple methods of analyzing your data, you end up creating more plots and tables, etc.
+:::
+
+##  {#scenario2-3}
+
+![](img/scenario2-3.png){fig-align="center"}
+
+::: notes
+Now your numbering system starts to become less useful.
+When you need to update something, it's hard to remember which scripts exactly you need to re-run because it's not obvious how they are related anymore.
+:::
+
+## Workflow management
+
+::::: columns
+::: {.column width="70%"}
+-   Automatically detect dependencies
+
+-   Run your entire analysis with one master command
+
+-   Skip steps that don't need to be re-run
+
+-   Scaleable
+:::
+
+::: {.column width="30%"}
+![](https://docs.ropensci.org/targets/logo.svg){fig-align="center" width="193"}
+:::
+:::::
+
+![](img/pipeline_graph.png){fig-align="center" width="722"}
+
+::: notes
+Similar to `make`, `nextflow` (language agnostic), or `snakemake` (for Python)\
+scaleable = able to run with multiple cores, on HPC, using cloud storage
+:::
+
+# Part 2: Demonstration
+
+## Demo
+
+To install a demo `targets` pipeline, run the following R code and follow the prompts:
+
+``` r
+usethis::use_course("cct-datascience/targets-demo")
+```
+
+::: notes
+The workflow is defined in the `_targets.R` file.
+We will talk about how to make this file in detail in a bit, but for now I just want you to try visualizing and running the workflow.
+:::
+
+. . .
+
+In this new project, try the following:
+
+```{r}
+#| eval: false
+#| echo: true
+library(targets)
+tar_visnetwork() # view dependency graph
+tar_make() # run the pipeline
+tar_visnetwork()
+tar_read(lm_full) # view the "lm_full" target
+```
+
+::: notes
+You could also run `tar_make()` a second time to see that all the steps get skipped because they are up to date.
+:::
+
+. . .
+
+Now, in `R/fit_models.R`, change the response variable from `flipper_length_mm` to `bill_length_mm` and run `tar_visnetwork()` again.
+
+::: notes
+Notice that only steps "downstream" from the model are out of date.
+If you run `tar_make()` again, only those steps are re-run.
+
+Ask for questions!
+:::
+
+## Working with targets
+
+-   The result of each step is stored as an R object[^1] in `_targets/`
+
+-   Everything that happens to make that target is written as a function
+
+    ```{r}
+    #| fig-height: 4 
+    tar_dir({
+      tar_script({
+        tar_option_set()
+        read_wrangle_data <- function(data_file) {
+          1
+        }
+        fit_model <- function(data) {
+          2
+        }
+        make_table <- function(data, model) {
+          3
+        }
+        list(
+          tar_target(data_file, ""),
+          tar_target(data, read_wrangle_data(data_file)),
+          tar_target(model, fit_model(data)),
+          tar_target(table, make_table(data, model))
+        )
+      })
+      tar_make(reporter = "silent")
+      tar_visnetwork()
+    })
+    ```
+
+## Anatomy of a targets project
+
+1.  `_targets.R`
+    -   Configure and define workflow
+2.  `R/`
+    -   R script(s) with custom functions
+3.  `_targets/`
+    1.  Generated by `tar_make()`
+
+    2.  Contains targets saved as R objects
+
+    3.  Should ***not*** be tracked in version control
+
+::: notes
+Investigate these in the demo project if you haven't already
+:::
+
+# Part 3: Refactoring Exercise
+
+## Refactoring a project to use targets
+
+> **refactor**
+>
+> /rēˈfaktər/
+>
+> *verb*
+>
+> 1.  restructure (the source code of an application or piece of software) so as to improve operation without altering functionality.
+
+First, let's start with a "traditional" R analysis project.
+Download and take a look around:
+
+``` r
+usethis::use_course("cct-datascience/targets-refactor")
+```
+
+```{r}
+countdown(minutes = 3, right = "33.33%", color_background = "#001C48")
+```
+
+## Refactoring a project to use targets
+
+::: incremental
+1.  `use_targets()` to set up infrastructure including `_targets.R`
+2.  Add package dependencies to `tar_option_set()`
+3.  Convert R script(s) to functions
+4.  Write targets
+5.  Run `tar_make()`
+6.  Debug
+:::
+
+. . .
+
+**We're going to walk through this process together**
+
+## 1. `use_targets()`
+
+::: callout-note
+## Exercise
+
+Run `use_targets()` and open the `_targets.R` file it generates
+
+```{r}
+#| eval: false
+#| echo: true
+library(targets)
+use_targets()
+```
+:::
+
+::: notes
+Let's take a moment to look through `_targets.R` together
+:::
+
+## 2. Package dependencies
+
+::: callout-note
+## Exercise
+
+Figure out what packages are needed and add them to `tar_option_set()` in `_targets.R`.
+
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+tar_option_set(
+  packages = c(
+    "tidyverse",
+    "lubridate",
+    #add more packages here
+    ),
+  format = "rds"
+)
+```
+:::
+
+::: callout-tip
+This would be a good time to install any necessary packages with `install.packages()` also!
+:::
+
+```{r}
+countdown(minutes = 2, color_background = "#001C48")
+```
+
+## Custom functions in R
+
+Functions in R are created with the `function()` function
+
+```{r}
+#| echo: true
+add_ten <-        #name of function
+  function(x) {   #argument names and defaults defined here
+    x + 10        #what the function does
+  }
+
+add_ten(x = 13)
+```
+
+. . .
+
+Using multiple arguments:
+
+```{r}
+#| echo: true
+to_fractional_power <- 
+  function(x, numerator, denominator) {
+    power <- numerator / denominator
+    x^power
+  }
+to_fractional_power(27, 1, 3)
+```
+
+. . .
+
+::: callout-important
+The last line of a function must *return* something, so don't end a function by assigning results with `<-`!
+:::
+
+## "Good enough" functions for targets
+
+-   Use a naming convention (verbs are good)
+-   Make the function arguments the same as target names
+-   Document!
+
+**WORSE:**
+
+``` r
+m1 <- function(x) {
+  lm(stem_length ~ watershed, data = x)
+}
+```
+
+**BETTER:**
+
+``` r
+# Fit linear model to explain stem lenght as a function of watershed treatment
+# data_clean = a tibble; the `data_clean` target
+fit_model <- function(data_clean) {
+  lm(stem_length ~ watershed, data = data_clean)
+}
+```
+
+## 3. Create functions
+
+::: callout-note
+## Exercise
+
+Convert the code in `01-read_wrangle_data.R` into a function that takes the file path to the raw data as an argument and returns the cleaned `maples` data frame.
+:::
+
+```{r}
+#| echo: true
+add_ten <-        #name of function
+  function(x) {   #argument names and defaults defined here
+    x + 10        #what the function does
+  }
+```
+
+```{r}
+countdown(minutes = 8, color_background = "#001C48")
+```
+
+## Defining the workflow
+
+Steps in the workflow are defined by the `tar_target()` function inside of the `list()` at the end of `_targets.R`
+
+```{r}
+#| echo: true
+#| eval: false
+#| filename: _targets.R
+list(
+  tar_target(name = file, command = "data/penguins_raw.csv", format = "file"),
+  tar_target(name = data, command = get_data(file))
+)
+```
+
+. . .
+
+-   Usually you only need to use the first two arguments, `name` for the name of the target, and `command` for what that target does
+
+-   Targets that are files (or create files) need the additional argument `format = "file"` (for files on disk) or `format = "url"` (for files on the web)
+
+::: notes
+Using `format = "file"` causes `targets` to track changes to the file itself.
+In this example, if you edited the CSV file, both the `file` and `data` targets would be invalidated and need to be re-run.
+:::
+
+. . .
+
+::: callout-tip
+A common mistake is to leave a trailing comma after the last target.
+This will result in the error: `Error running targets::tar_make() Last error: argument 5 is empty`
+:::
+
+## Naming targets
+
+-   Use a naming convention (nouns are good)
+
+-   Use concise but descriptive target names
+
+**WORSE:**
+
+-   `data1`, `data2`, `data3`
+-   `histogram_by_site_plot`
+
+**BETTER:**
+
+-   `data_file`, `data_raw`, `data_clean`
+
+-   `plot_hist_site`
+
+## 4. Create Targets
+
+::: callout-note
+## Exercise
+
+Create targets for the input CSV file and the results of your data wrangling function in `_targets.R`.
+Remember to use `format = "file"` in the target for the CSV file.
+
+Check your progress by running `tar_visnetwork()` and `tar_make()`.
+
+Once you've gotten those first two targets working, try creating functions and targets for additional steps in the analysis.
+:::
+
+```{r}
+#| echo: true
+#| eval: false
+#| filename: _targets.R
+list(
+  tar_target(name = file, command = "data/penguins_raw.csv", format = "file"),
+  tar_target(name = data, command = get_data(file))
+)
+```
+
+```{r}
+countdown(minutes = 10, color_background = "#001C48")
+```
+
+## Debugging targets
+
+-   Errors in `tar_make()` are sometimes uninformative because code is run in a separate R session
+-   Use `tar_meta()` to access error messages
+
+```{r}
+#| eval: false
+#| echo: true
+tar_meta(fields = error, complete_only = TRUE)
+```
+
+::: notes
+depending on time, you could simulate an error in the `read_wrangle_maples()` function to demo `tar_meta()` and workspaces (next slide).
+:::
+
+## Debugging targets
+
+When a target errors, you can load a "workspace" with all the functions, data, and packages needed to reproduce the error interactively.
+
+Enable this with:
+
+``` r
+tar_option_set(
+  workspace_on_error = TRUE
+)
+```
+
+Then, load the workspace with `tar_workspace(<NAME OF TARGET>)`
+
+```{r}
+#| echo: true
+#| eval: false
+
+#load upstream target `data_clean` and `fit_model()` function into global environment
+tar_workspace(linear_model) 
+#try interactively
+fit_model(data_clean)
+```
+
+```{r}
+#| error: true
+fit_model <- function(data_clean) {
+  lm(y ~ x + z, data = df_cleaned)
+}
+fit_model(data_clean)
+```
+
+. . .
+
+Can you spot the source of the error?
+
+```{r}
+#| filename: fit_model.R
+#| echo: true
+#| error: true
+
+fit_model <- function(data_clean) {
+  lm(y ~ x + z, data = df_cleaned)
+}
+```
+
+## Alternative workflow definitions
+
+`tarchetypes` provides alternatives to `list()` for defining workflow.
+
+`tar_plan()` allows a `name = command()` shortcut
+
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+
+tarchetypes::tar_plan(
+  tar_file(data_file, "data.csv"),
+  data = read.csv(data_file),
+  model = fit_model(data),
+)
+```
+
+`tar_assign()` allows the assignment operator (`<-`) and works well with pipes (`%>%` or `|>`).
+
+```{r}
+#| filename: _targets.R
+#| eval: false
+#| echo: true
+
+tarchetypes::tar_assign({      
+  data_file <- tar_file("data.csv")
+  data <- 
+    read.csv(data_file) |>
+    filter(year >= 2020) |> 
+    tar_target()
+  model <- 
+    lm(y ~ x + z, data = data) |> 
+    tar_target()
+})
+```
+
+# Part 4: A Taste of What's Possible
+
+## Bayesian analyses with targets
+
+::::: columns
+::: column
+[![](https://docs.ropensci.org/stantargets/logo.svg){fig-align="center" width="242"}](https://docs.ropensci.org/stantargets/)
+:::
+
+::: column
+[![](https://docs.ropensci.org/jagstargets/logo.svg){fig-align="center" width="242"}](https://docs.ropensci.org/jagstargets/)
+:::
+:::::
+
+"target factories" for Bayesian analyses
+
+-   Simplify analyses by automatically creating targets for multiple steps
+
+-   E.g. defining a target with `tar_stan_mcmc()` actually generates multiple targets that wrangle data, run the MCMC, create a table of posterior draws, etc.
+
+## Geospatial targets
+
+[![](https://raw.githubusercontent.com/njtierney/geotargets/master/man/figures/logo.png){fig-align="center" width="242"}](https://njtierney.github.io/geotargets/)
+
+`geotargets` provides helpers to use geospatial packages like `terra` and `stars` with `targets`
+
+## Iteration
+
+::: incremental
+-   Iterate targets over a list of inputs with [dynamic branching](https://books.ropensci.org/targets/dynamic.html)—useful for large tasks where it would be cumbersome to write out individual targets
+
+-   E.g. fitting model to 100 bootstraps of data
+:::
+
+. . .
+
+```{r}
+#| eval: false
+#| echo: true
+#| code-line-numbers: "1-6|7-13"
+
+  #creates list of 100 bootstrapped dataframes
+  tar_target(
+    data_boot,
+    purrr::map(1:100, ~sample_frac(data, size = 1, replace = TRUE)),
+    iteration = "list"
+  ),
+  # Fit model to each data frame, save results as a list
+  tar_target(
+    lm_boot,
+    fit_lm_full(data_boot),
+    pattern = map(data_boot),
+    iteration = "list"
+  ),
+
+```
+
+::: notes
+Use the demo repo to demo this!
+Show `tar_visnetwork()` and `tar_make()` and `tar_read(lm_boot, branches = 1)`
+:::
+
+## Parallel computation
+
+In the workflow below, the three models and the three plot targets can all be run independently at the same time.
+
+![](img/pipeline_graph.png){fig-align="center" width="722"}
+
+-   Provide a "controller" created by the `crew` package to `tar_option_set()` to run in parallel using multiple workers.
+
+-   E.g. to use 3 concurrent R sessions on your computer:
+
+    ``` r
+    tar_option_set(
+      controller = crew::crew_controller_local(workers = 3)
+    )
+    ```
+
+## High Performance Computing
+
+[![](https://wlandau.github.io/crew.cluster/logo.svg){fig-align="center" width="243"}](https://wlandau.github.io/crew.cluster/)
+
+-   [`crew.cluster`](https://wlandau.github.io/crew.cluster/) provides additional "controllers" for HPC including `crew_controller_slurm()`.
+-   Check out this [template repository](https://github.com/cct-datascience/targets-uahpc) with code that you can use to run a `targets` workflow on the UA HPC
+
+## Cloud Storage
+
+-   By default, the `_targets/` store is on your computer and not shared with collaborators
+
+-   Collaborators will have to run `tar_make()` to reproduce the workflow, which might not be convenient if some targets take days or weeks to run
+
+![](img/cloud-1.png){fig-alt="Diagram describing how the _targets/ folder is stored locally and not synced to GitHub (only _targets.R and the R folder are on GitHub).  A collaborator therefore doesn't have the _targets folder and needs to run tar_make() on their computer." fig-align="center"}
+
+::: notes
+-   `_targets/` folder is by default on **your** hard drive
+
+-   Your collaborator can reproduce the whole workflow from the start with `tar_make()`, but what if that takes *days* and all they want to do is make changes at the end of the workflow?
+
+-   Solution: store \_targets/ in the cloud with [Amazon Web Services](https://books.ropensci.org/targets/data.html#aws-setup) or [Google Cloud](https://books.ropensci.org/targets/data.html#gcp-setup)
+
+-   BONUS: targets stored in this way can be *versioned,* so if you roll back your `_targets.R` to a previous version, you don't have to re-run all the targets.
+:::
+
+## Cloud Storage
+
+-   Optionally, `_targets/` can be stored in the cloud ([Amazon Web Services](https://books.ropensci.org/targets/data.html#aws-setup) or [Google Cloud](https://books.ropensci.org/targets/data.html#gcp-setup) S3 buckets)
+
+-   These stores can be versioned, so you can roll back your `_targets.R` and not have to re-compute targets.
+
+![](img/cloud-2.png){fig-alt="Variation of previous diagram but now with _targets/ stored in a cloud that is accessible to both computers" fig-align="center"}
+
+## Wrap-up
+
+**When to use `targets`?**
+
+. . .
+
+Things to consider:
+
+::: incremental
+-   Are intermediates R objects or files (as opposed to, say, in-place modifications to a database)?
+
+-   Benefits of parallelization
+
+-   Your collaborators
+
+-   Your comfort using `targets`
+:::
+
+## Targets in the wild
+
+**"Real life" examples of `targets` workflows:**
+
+-   <https://github.com/usa-npn/cales-thermal-calendars> (uses `geotargets` and `crew.cluster` to run on UA HPC)
+-   <https://github.com/njtierney/icebreaker> (simple example with `geotargets`)
+-   <https://github.com/ecohealthalliance/mpx-diagnosis> (medium complexity)
+-   <https://github.com/idem-lab/map-ir-pipeline/blob/main/_targets.R> (uses dynamic branching and other advanced features)
+
+## Where to go for help
+
+-   `targets` manual: <https://books.ropensci.org/targets/>
+
+-   `targets` reference: <https://docs.ropensci.org/targets/>
+
+-   `targets` discussion board: <https://github.com/ropensci/targets/discussions>
+
+-   [CCT Data Science Team drop-in hours](https://datascience.cct.arizona.edu/drop-in-hours) every Wednesday afternoon
+
+-   [Make an appointment with Eric](https://calendar.google.com/calendar/appointments/schedules/AcZssZ0xpzu3Nlo0FCIAjFFktPFzyl5Aup9-1yErSy9y8_Iq2P6DWisiYc8PhUnn6l5z74D3OtgTRPSm) to discuss this content and get troubleshooting help
+
+-   Sign up for our [mailing list](https://forms-a.trellis.arizona.edu/f/CampaignSubscription?tfa_4=7016R000001VAlU) to be notified about future workshops
+
+[^1]: The default is to save targets as .rds files, but [other options](https://books.ropensci.org/targets/performance.html#efficient-storage-formats) are available.

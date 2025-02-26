@@ -1,0 +1,4 @@
+- source: slides.qmd
+  quarto-pub:
+    - id: d55028a9-daad-4ec6-b2f2-e0ddb21c7da8
+      url: https://cct-datascience.quarto.pub/targets-2025
