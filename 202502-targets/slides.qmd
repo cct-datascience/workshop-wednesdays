@@ -51,7 +51,8 @@ library(visNetwork)
 library(crew)
 
 #For our data wrangling and analysis:
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 library(janitor)
 library(car)
 library(broom)
@@ -60,6 +61,11 @@ library(broom)
 library(usethis)
 
 ```
+
+::: notes
+To paste into chat\
+`install.packages(c("targets", "tarchetypes", "visNetwork", "crew", "dplyr", "ggplot2", "janitor", "car", "broom", "usethis"))`
+:::
 
 ## Learning Objectives
 
@@ -191,6 +197,11 @@ To install a demo `targets` pipeline, run the following R code and follow the pr
 usethis::use_course("cct-datascience/targets-demo")
 ```
 
+::: notes
+The workflow is defined in the `_targets.R` file.
+We will talk about how to make this file in detail in a bit, but for now I just want you to try visualizing and running the workflow.
+:::
+
 . . .
 
 In this new project, try the following:
@@ -202,23 +213,22 @@ library(targets)
 tar_visnetwork() # view dependency graph
 tar_make() # run the pipeline
 tar_visnetwork()
-tar_read(aic_tab) # view the "aic_tab" target
+tar_read(lm_full) # view the "lm_full" target
 ```
+
+::: notes
+You could also run `tar_make()` a second time to see that all the steps get skipped because they are up to date.
+:::
 
 . . .
 
 Now, in `R/fit_models.R`, change the response variable from `flipper_length_mm` to `bill_length_mm` and run `tar_visnetwork()` again.
 
 ::: notes
+Notice that only steps "downstream" from the model are out of date.
+If you run `tar_make()` again, only those steps are re-run.
+
 Ask for questions!
-
-Might also demo:
-
--   `tar_glimpse()` vs. `tar_visnetwork()`
-
--   `tar_load()` vs. `tar_read()`
-
--   inspect the contents of `R/`
 :::
 
 ## Working with targets
@@ -323,6 +333,10 @@ use_targets()
 ```
 :::
 
+::: notes
+Let's take a moment to look through `_targets.R` together
+:::
+
 ## 2. Package dependencies
 
 ::: callout-note
@@ -359,7 +373,6 @@ Functions in R are created with the `function()` function
 
 ```{r}
 #| echo: true
-#| code-line-numbers: "1-6|1|2|3|4|5-6"
 add_ten <-        #name of function
   function(x) {   #argument names and defaults defined here
     x + 10        #what the function does
@@ -424,9 +437,9 @@ Convert the code in `01-read_wrangle_data.R` into a function that takes the file
 countdown(minutes = 8, color_background = "#001C48")
 ```
 
-## 4. Create targets
+## Defining the workflow
 
-Targets are defined by the `tar_target()` function inside of the `list()` at the end of `_targets.R`
+Steps in the workflow are defined by the `tar_target()` function inside of the `list()` at the end of `_targets.R`
 
 ```{r}
 #| echo: true
@@ -443,6 +456,11 @@ list(
 -   Usually you only need to use the first two arguments, `name` for the name of the target, and `command` for what that target does
 
 -   Targets that are files (or create files) need the additional argument `format = "file"` (for files on disk) or `format = "url"` (for files on the web)
+
+::: notes
+Using `format = "file"` causes `targets` to track changes to the file itself.
+In this example, if you edited the CSV file, both the `file` and `data` targets would be invalidated and need to be re-run.
+:::
 
 . . .
 
@@ -468,20 +486,18 @@ This will result in the error: `Error running targets::tar_make() Last error: ar
 
 -   `plot_hist_site`
 
-## Pair-programming Exercise
+## 4. Create Targets
 
--   Breakout groups of 2
--   One person shares screen and "drives"
--   The other person "navigates"
+::: callout-note
+## Exercise
 
-::: callout-tip
-Try starting with a target for the path to the data file.
-Remember to use `format = "file"` in `tar_target()`.
+Create targets for the input CSV file and the results of your data wrangling function in `_targets.R`.
+Remember to use `format = "file"` in the target for the CSV file.
 
-Check your progress by running `tar_visnetwork()` and `tar_make()` frequently!
+Check your progress by running `tar_visnetwork()` and `tar_make()`.
+
+Once you've gotten those first two targets working, try creating functions and targets for additional steps in the analysis.
 :::
-
-<!-- hmm.. will the navigator feel like they miss out because they won't have a copy of the code at the end?  We can share the "solution" with everyone -->
 
 ```{r}
 countdown(minutes = 10, color_background = "#001C48")
@@ -497,6 +513,10 @@ countdown(minutes = 10, color_background = "#001C48")
 #| echo: true
 tar_meta(fields = error, complete_only = TRUE)
 ```
+
+::: notes
+depending on time, you could simulate an error in the `read_wrangle_maples()` function to demo `tar_meta()` and workspaces (next slide).
+:::
 
 ## Debugging targets
 
@@ -538,16 +558,17 @@ Can you spot the source of the error?
 #| filename: fit_model.R
 #| echo: true
 #| error: true
-#| code-line-numbers: "2"
 
 fit_model <- function(data_clean) {
   lm(y ~ x + z, data = df_cleaned)
 }
 ```
 
-## Tarchetypes
+## Alternative workflow definitions
 
-Alternative ways to define the targets `list()`:
+Alternative ways to define the targets `list()` are provided by `tarchetypes`.
+
+`tar_plan()` allows a `name = command()` shortcut
 
 ```{r}
 #| filename: _targets.R
@@ -556,10 +577,12 @@ Alternative ways to define the targets `list()`:
 
 tarchetypes::tar_plan(
   tar_file(data_file, "data.csv"),
-  data = read_csv(data_file),
+  data = read.csv(data_file),
   model = fit_model(data),
 )
 ```
+
+`tar_assign()` lets you use the assignment operator (`<-`) and works well with pipes (`%>%` or `|>`).
 
 ```{r}
 #| filename: _targets.R
@@ -569,8 +592,11 @@ tarchetypes::tar_plan(
 tarchetypes::tar_assign({      
   data_file <- tar_file("data.csv")
   data <- 
-    read_csv(data_raw) |>
+    read.csv(data_file) |>
     filter(year >= 2020) |> 
+    tar_target()
+  model <- 
+    lm(y ~ x + z, data = data) |> 
     tar_target()
 })
 ```
@@ -709,9 +735,9 @@ Things to consider:
 **"Real life" examples of `targets` workflows:**
 
 -   <https://github.com/usa-npn/cales-thermal-calendars> (uses `geotargets` and `crew.cluster` to run on UA HPC)
--   <https://github.com/odaniel1/track-cycling> (uses `stantargets`)
+-   <https://github.com/njtierney/icebreaker> (simple example with `geotargets`)
 -   <https://github.com/ecohealthalliance/mpx-diagnosis> (medium complexity)
--   <https://github.com/noamross/reprotemplate> (nice template for reproducibility that uses `targets`)
+-   <https://github.com/idem-lab/map-ir-pipeline/blob/main/_targets.R> (uses dynamic branching and other advanced features)
 
 ## Where to go for help
 
