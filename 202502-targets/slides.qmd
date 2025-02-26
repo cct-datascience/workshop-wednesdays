@@ -434,6 +434,14 @@ Convert the code in `01-read_wrangle_data.R` into a function that takes the file
 :::
 
 ```{r}
+#| echo: true
+add_ten <-        #name of function
+  function(x) {   #argument names and defaults defined here
+    x + 10        #what the function does
+  }
+```
+
+```{r}
 countdown(minutes = 8, color_background = "#001C48")
 ```
 
@@ -498,6 +506,16 @@ Check your progress by running `tar_visnetwork()` and `tar_make()`.
 
 Once you've gotten those first two targets working, try creating functions and targets for additional steps in the analysis.
 :::
+
+```{r}
+#| echo: true
+#| eval: false
+#| filename: _targets.R
+list(
+  tar_target(name = file, command = "data/penguins_raw.csv", format = "file"),
+  tar_target(name = data, command = get_data(file))
+)
+```
 
 ```{r}
 countdown(minutes = 10, color_background = "#001C48")
