@@ -566,7 +566,7 @@ fit_model <- function(data_clean) {
 
 ## Alternative workflow definitions
 
-Alternative ways to define the targets `list()` are provided by `tarchetypes`.
+`tarchetypes` provides alternatives to `list()` for defining workflow.
 
 `tar_plan()` allows a `name = command()` shortcut
 
@@ -582,7 +582,7 @@ tarchetypes::tar_plan(
 )
 ```
 
-`tar_assign()` lets you use the assignment operator (`<-`) and works well with pipes (`%>%` or `|>`).
+`tar_assign()` allows the assignment operator (`<-`) and works well with pipes (`%>%` or `|>`).
 
 ```{r}
 #| filename: _targets.R
